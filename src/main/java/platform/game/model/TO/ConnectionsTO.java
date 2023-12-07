@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ConnectionsTO {
     private int seq;     // c_seq, int NOT NULL
     private int uSeq;     // u_seq, int NOT NULL

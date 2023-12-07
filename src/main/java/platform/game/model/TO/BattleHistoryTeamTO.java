@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BattleHistoryTeamTO {
     private int seq;       // bth_seq, int NOT NULL
     private int tSeq;         // t_seq, int NOT NULL

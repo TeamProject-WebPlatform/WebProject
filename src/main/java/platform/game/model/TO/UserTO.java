@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UserTO {
     private int seq;          // u_seq, int NOT NULL
     private String name;      // u_name, varchar(10) NOT NULL

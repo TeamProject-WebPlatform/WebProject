@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ItemsTO {
     private int seq;     // i_seq, int NOT NULL
     private Integer price; // i_price, int NOT NULL

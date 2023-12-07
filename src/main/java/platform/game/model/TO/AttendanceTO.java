@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AttendanceTO {
     private int uSeq;         // u_seq, int NOT NULL
     private String lastDate;  // a_lastDate, datetime NOT NULL

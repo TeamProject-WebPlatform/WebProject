@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UserRankingInfoTO {
     private int uSeq;      // u_seq, int NOT NULL 유저seq
     private Integer rank1;  // ur_rank1, int NOT NULL

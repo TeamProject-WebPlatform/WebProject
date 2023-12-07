@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ReportTO {
     private int seq;         // r_seq, int NOT NULL
     private int uSeq1;        // u_seq1, int NOT NULL

@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BoardPostTO {
     private int seq;            // p_seq, int NOT NULL
     private int bSeq;            // b_seq, int NOT NULL 게시판seq

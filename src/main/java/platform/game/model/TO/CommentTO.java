@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CommentTO {
     private int seq;           // c_seq, int NOT NULL
     private int pSeq;           // p_seq, int NOT NULL

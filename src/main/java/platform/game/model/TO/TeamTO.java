@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class TeamTO {
     private int seq;           // t_seq, int NOT NULL
     private String members;    // t_members, varchar(100) NOT NULL
