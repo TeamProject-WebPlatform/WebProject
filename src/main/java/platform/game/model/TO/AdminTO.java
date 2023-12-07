@@ -1,5 +1,10 @@
 package platform.game.model.TO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AdminTO {
     private int seq;        // a_seq, int NOT NULL
     private String auth;    // a_auth, char(6) NOT NULL
