@@ -16,20 +16,33 @@
         <title>마이페이지</title>
     </head>
     <body>
+        
         <!-- QRcode -->
-<!--
-        <form action="/mypage/qrcode/create", method="get">
+        <!-- <form action="/mypage/qrcode/create", method="get">
             <input type="text" name="url" />
             <button type="submit">create</button>
-        </form>
--->
+        </form> -->
 
-        <div class="starter-template">
-            <div th:utext="${contents}"></div>
+        <div class="web" style="display: flex;">
+            <div class="profile">
+                <div class="img">
+                    <img src="../img/doyun.png" alt="profile">
+                </div>
+                <div class="name">
+
+                </div>
+                <div class="link">
+
+                </div>
+                <hr>
+            </div>
+            <div class="starter-template">
+                <div th:utext="${contents}"></div>
+            </div>
         </div>
 
         <!-- 에디터를 적용할 요소 (컨테이너) -->
-        <div id="content"></div>
+        <!-- <div id="content"></div> -->
 
         <!-- TUI 에디터 JS CDN -->
         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
