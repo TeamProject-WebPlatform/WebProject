@@ -58,6 +58,14 @@
 			<version>3.0.3</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Markdown to HTML -->
+		<!-- https://mvnrepository.com/artifact/org.aya-prover/commonmark -->
+		<dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.21.0</version>
+        </dependency>
 	</dependencies>
 
 	<build>
