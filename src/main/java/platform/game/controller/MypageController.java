@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,11 +26,32 @@ import platform.game.action.MypageAction;
 
 @RestController
 @ComponentScan(basePackages = {"platform.game.action","platform.game.env.config"})
-public class MypageController {
-
+@RequestMapping("/mypage")
+public class MyPageController {
+    
+    private MypageAction mypageAction = new MypageAction();
     // 파일을 업로드할 디렉터리 경로
     // private final String uploadDir = Paths.get("tempImg/img").toString();
     private final String uploadDir = Paths.get("C:", "tempImg", "img").toString();
+
+    @GetMapping("/{userid}")
+    public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
+        String markdownValueFormLocal = null;
+
+        try {
+            markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( userid );
+        } catch (Exception e) {
+            System.out.println( "[에러] MainController : " + e.getMessage() );
+        }
+
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(markdownValueFormLocal);
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+
+        model.addAttribute("contents", renderer.render(document));
+
+        return new ModelAndView("mypage");
+    }
 
     @PostMapping("/tui-editor/image-upload")
     public String uploadEditorImage(@RequestParam final MultipartFile image) {
