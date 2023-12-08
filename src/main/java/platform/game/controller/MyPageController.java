@@ -18,24 +18,4 @@ import platform.game.action.MypageAction;
 @RequestMapping("/mypage")
 public class MyPageController {
     
-    private MypageAction mypageAction = new MypageAction();
-    
-    @GetMapping("/{userid}")
-    public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
-        String markdownValueFormLocal = null;
-
-        try {
-            markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( userid );
-        } catch (Exception e) {
-            System.out.println( "[에러] MainController : " + e.getMessage() );
-        }
-
-        Parser parser = Parser.builder().build();
-        Node document = parser.parse(markdownValueFormLocal);
-        HtmlRenderer renderer = HtmlRenderer.builder().build();
-
-        model.addAttribute("contents", renderer.render(document));
-
-        return new ModelAndView("mypage");
-    }
 }
