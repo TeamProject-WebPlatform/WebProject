@@ -1,18 +1,16 @@
 package platform.game.model.TO;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ItemsTO {
-    private int seq;     // i_seq, int NOT NULL
-    private Integer price; // i_price, int NOT NULL
-    private Integer period; // i_period, int NOT NULL
+    private int i_seq;     // i_seq, int NOT NULL
+    private int price; // price, int NOT NULL
+    private int period; // period, int NOT NULL
 
 }
 // CREATE TABLE `Items` (
 // 	`i_seq`	    int	NOT NULL,
-// 	`i_price`	int	NOT NULL,
-// 	`i_period`	int	NOT NULL
+// 	`price`	    int	NOT NULL,
+// 	`period`	int	NOT NULL
 // );

@@ -1,17 +1,15 @@
 package platform.game.model.TO;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class TeamTO {
-    private int seq;           // t_seq, int NOT NULL
-    private String members;    // t_members, varchar(100) NOT NULL
-    private String name;       // t_name, varchar(100) NOT NULL
+    private int t_seq;          // t_seq, int NOT NULL
+    private String members;     // members, varchar(100) NOT NULL
+    private String name;        // name, varchar(100) NOT NULL
 }
 // CREATE TABLE `Team` (
 // 	`t_seq`	    int	            NOT NULL,
-// 	`t_members`	varchar(100)	NOT NULL,
-// 	`t_name`	varchar(100)	NOT NULL
+// 	`members`	varchar(100)	NOT NULL,
+// 	`name`	    varchar(100)	NOT NULL
 // );

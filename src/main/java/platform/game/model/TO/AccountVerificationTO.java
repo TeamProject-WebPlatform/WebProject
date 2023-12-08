@@ -1,14 +1,12 @@
 package platform.game.model.TO;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class AccountVerificationTO {
-    private int seq; // v_seq, int NOT NULL 
-    private int uSeq; // u_seq, int NOT NULL 유저seq
-    private int gSeq; // g_seq, int NOT NULL 게임seq
+    private int v_seq; // v_seq, int NOT NULL 
+    private int u_seq; // u_seq, int NOT NULL 유저seq
+    private int g_seq; // g_seq, int NOT NULL 게임seq
 
 }
 
