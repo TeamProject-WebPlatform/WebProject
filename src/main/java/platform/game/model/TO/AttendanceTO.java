@@ -1,20 +1,18 @@
 package platform.game.model.TO;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class AttendanceTO {
-    private int uSeq;         // u_seq, int NOT NULL
-    private String lastDate;  // a_lastDate, datetime NOT NULL
-    private Integer totalDate; // a_totalDate, int NOT NULL
-    private Integer streakDate; // a_streakDate, int NOT NULL
+    private int u_seq;         // u_seq, int NOT NULL
+    private String lastDate;  // lastDate, datetime NOT NULL
+    private int totalDate;   // totalDate, int NOT NULL
+    private int streakDate;  // streakDate, int NOT NULL
 
 }
 // CREATE TABLE `Attendance` (
 // 	`u_seq`	        int	        NOT NULL,
-// 	`a_lastDate`	datetime	NOT NULL,
-// 	`a_totalDate`	int	        NOT NULL,
-// 	`a_streakDate`	int	        NOT NULL
+// 	`lastDate`	    datetime	NOT NULL,
+// 	`totalDate`	    int	        NOT NULL,
+// 	`streakDate`	int	        NOT NULL
 // );

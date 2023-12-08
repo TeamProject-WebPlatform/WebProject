@@ -1,14 +1,12 @@
 package platform.game.model.TO;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class UserItemsTO {
-    private int seq; // ui_seq, int NOT NULL
-    private int uSeq;  // u_seq, int NOT NULL
-    private int iSeq;  // i_seq, int NOT NULL
+    private int ui_seq; // ui_seq, int NOT NULL
+    private int u_seq;  // u_seq, int NOT NULL
+    private int i_seq;  // i_seq, int NOT NULL
 }
 // CREATE TABLE `UserItems` (
 // 	`ui_seq`	int	NOT NULL,

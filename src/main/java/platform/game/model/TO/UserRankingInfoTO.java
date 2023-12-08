@@ -1,15 +1,13 @@
 package platform.game.model.TO;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class UserRankingInfoTO {
     private int u_seq;      // u_seq, int NOT NULL 유저seq
-    private Integer rank1;  // rank1, int NOT NULL
-    private Integer rank2;  // rank2, int NOT NULL
-    private Integer rank3;  // rank3, int NOT NULL
+    private int rank1;      // rank1, int NOT NULL
+    private int rank2;      // rank2, int NOT NULL
+    private int rank3;      // rank3, int NOT NULL
 }
 
 // CREATE TABLE `UserRankingInfo` (
