@@ -16,11 +16,18 @@
         <title>마이페이지</title>
     </head>
     <body>
+        <!-- QRcode -->
+<!--
+        <form action="/mypage/qrcode/create", method="get">
+            <input type="text" name="url" />
+            <button type="submit">create</button>
+        </form>
+-->
 
         <div class="starter-template">
             <div th:utext="${contents}"></div>
         </div>
-                
+
         <!-- 에디터를 적용할 요소 (컨테이너) -->
         <div id="content"></div>
 
