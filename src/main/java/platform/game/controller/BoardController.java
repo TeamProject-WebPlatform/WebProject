@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @ComponentScan(basePackages = {"platform.game.action"})
 //@GetMapping("/board")
 public class BoardController {
-
+    //영진 브랜치 테스트
     @GetMapping("/asd")
     public ModelAndView main(){
         return new ModelAndView("index");
