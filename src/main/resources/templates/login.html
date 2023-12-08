@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/login_Style.css">
+    <script src="./js/login.js"></script>
+    <title>Document</title>
+    <script>
+        window.onload = function () {
+            const frmLogin = document.frmLogin;
+            const navLogin = document.querySelector('#navigation li[name=login]');
+            setLoginPage();
+            frmLogin.reset();
+            navLogin.click();
+        }
+    </script>
+</head>
+<body>
+    <div id="frmLogin">
+        <form  method="post" name="frmLogin">
+            <div id="login-header">
+                <div>
+                    <strong class="title">User Login</strong>
+                    <div>
+                        <button type="button" id="btn-close" value="cancel">❌</button>
+                    </div>
+                </div>
+            </div>
+            <nav id="nav" class="nav">
+                <ul id="navigation">
+                    <li name="login">LOGIN</li>
+                    <li name="signup">SIGNUP</li>
+                </ul>
+            </nav>
+            <div id="login-contents">
+                <div>
+                    <label for="id" class="login signup">
+                        <div class="label">ID:</div>
+                        <div class="verifyContraints" name="id-fail" style="display: none;">❗</div>
+                        <div class="verifyContraints" name="id-pass" style="display: none;">✔</div>
+                        <input type="text" id="id" name="id" logintype="login" oninput="verifyIdContraints()"/>
+                    </label>
+    
+                    <label for="password" class="login signup">
+                        <div class="label">PW:</div>
+                        <div class="verifyContraints" name="pw-fail" style="display: none;">❗</div>
+                        <div class="verifyContraints" name="pw-pass" style="display: none;">✔</div>
+                        <input type="password" id="password" name="password" logintype="login" oninput="comparePassword();verifyPasswordContraints();" />
+                    </label>
+    
+                    <label for="passwordCheck" class="signup">
+                        <div class="label">PWCHECK:</div>
+                        <div class="verifyContraints" name="pwc-fail" style="display: none;">❗</div>
+                        <div class="verifyContraints" name="pwc-pass" style="display: none;">✔</div>
+                        <input type="password" id="passwordCheck" name="passwordCheck" oninput="comparePassword()" />
+                    </label>
+    
+                    <label for="nickname" class="signup">
+                        <div class="label">NICKNAME:</div>
+                        <div class="verifyContraints" name="nck-fail" style="display: none;">❗</div>
+                        <div class="verifyContraints" name="nck-pass" style="display: none;">✔</div>
+                        <input type="text" id="nickname" name="nickname" oninput="verifyNicknameContraints()"/>
+                    </label>
+                </div>
+            </div>
+            <div id="login-footer">
+                <button id="btn-login" class="login">LOG IN</button>
+                <button id="btn-signup" class="signup">SIGN UP</button>
+            </div>
+        </form>
+    </div>
+    
+</body>
+</html>
