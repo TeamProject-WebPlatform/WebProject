@@ -63,7 +63,16 @@ const setLoginPage = function(){
     btnLogin.addEventListener('click', async function (e) {
         e.preventDefault();
         try {
-            const response = await fetch(`/user/login?id=${inputId.value}&password=${inputPassword.value}`);
+            const response = await fetch(`/login/signin_ok`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: inputId.value,
+                    password: inputPassword.value,
+                })
+            });
             if (!response.ok) {
                 throw new Error('서버 응답이 실패했습니다.');
             }
@@ -97,7 +106,18 @@ const setLoginPage = function(){
         }
         
         try {
-            const response = await fetch(`/user/signup?id=${inputId.value}&password=${inputPassword.value}&nickname=${inputNickname.value}`);
+            console.log(inputId.value);
+            const response = await fetch(`/login/signup_ok`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: inputId.value,
+                    password: inputPassword.value,
+                    nickname: inputNickname.value,
+                })
+            });
             if (!response.ok) {
                 throw new Error('서버 응답이 실패했습니다.');
             }
