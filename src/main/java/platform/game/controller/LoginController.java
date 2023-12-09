@@ -57,7 +57,12 @@ public class LoginController {
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
         UserTO to = userDAO.getUserTObyIDandPass(userSignin.getId(), userSignin.getPassword());
-        
+        if(to!=null){
+            System.out.println("로그인 성공");
+            System.out.println("UserTO : "+to.toString());
+        }else{
+            System.out.println("로그인 실패");
+        }
         return flag;
     }
 }
