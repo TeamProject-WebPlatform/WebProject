@@ -23,4 +23,8 @@ public class BoardController {
     public ModelAndView fight(){
         return new ModelAndView("list");
     }
+    @GetMapping("show")
+    public ModelAndView show(){
+        return new ModelAndView("show");
+    }
 }

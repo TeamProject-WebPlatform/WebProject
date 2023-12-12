@@ -1,8 +1,27 @@
 @charset "utf-8";
 
+:root{
+    --bg-black-900:#ffffff;
+    --bg-black-100:#353535;
+    /* --bg-black-50:#2b2c2f; */
+    /* --bg-black-50:rgb(53, 70, 90); */
+    --bg-black-gradient: linear-gradient(rgb(9, 12, 21)10%,rgb(26, 35, 52)30%, rgb(71, 92, 123)60%,rgb(143,167,191)90%,rgb(185, 208, 226)100%);
+    --bg-opacity: rgba(43,44,47,0.5);
+    --text-black-900:#ffffff;
+    --text-black-700:#ffffff;
+    --text-black-600:#ffffff;
+    --outer-shadow: 3px 3px 3px #222327, -3px -3px  3px #363636;
+    --outer-shadow-0: 0 0 0 #222327, 0 0 0 #363636;
+    --inner-shadow: inset 3px 3px 3px #222327, inset -3px -3px 3px #363636;
+    --inner-shadow-0: inset 0 0 0 #222327, inset 0 0 0 #363636;
+}
+
+
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    outline: none;
 }
 
 li{
@@ -13,6 +32,29 @@ a{
     text-decoration: none;
     color:inherit;
 }
+
+.row{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.outer-shadow{
+    box-shadow: var(--outer-shadow);
+}
+
+.inner-shadow{
+    box-shadow: var(--inner-shadow);
+}
+
+.hover-in-shadow{
+    position: relative;
+    z-index: 1;
+}
+.hover-in-shadow:hover{
+    box-shadow: var(--outer-shadow-0);
+}
+
 body{
     font: '돋음', dotum, sans-serif;
     font-size: 14px;
@@ -22,14 +64,16 @@ body{
 #web{
     width: 100%;
     min-height: 100vh;
-    background-size : cover;
     background-image: url('../img/mainBG.jpg');
+    background-size : cover;
     border: 1px solid red;
 }
 header{
     width: 100%;
     margin: 0 auto;
     border: 1px solid red;
+    position: relative;
+    /* margin-bottom: 3%; */
 }
 header::after{
     content:"";
@@ -40,8 +84,10 @@ header::after{
 header > h1{
     width: 300px;
     height: 70px;
-    margin: 0 auto;
-    outline: 1px dotted red;
+    /* margin: 0 auto; */
+    margin-top: 1%;
+    margin-left: 1%;
+    /* outline: 1px dotted red; */
     float: left;
 }
 #login{
@@ -55,24 +101,30 @@ header > h1{
     font-size: 30px;
     margin-right: 15px;
 }
+/* 네비게이션 메뉴 */
 nav{
-    width: 1050px;
+    /* position: absolute; */
+    width: 1280px;
+    /* top: 100%;
+    left: 16.5%; */
+
     margin: 0 auto;
-    margin-top: 50px;
-    border: 1px dotted red;
+    margin-top: 4%;
+    /* border: 1px dotted red; */
 }
-nav::after{
+/* nav::after{
     content:"";
     display: block;
     clear: both;
-}
+} */
 nav > ul{
-    width: 1050px;
+    width: 1280px;
     /* height: 10vh; */
-    margin: 0 auto;
+    /* margin: 0 auto; */
     
-    float: left;
-    outline: 1px solid black;
+    /* float: left; */
+    outline: 1px dotted red;
+    justify-content: center;
 }
 nav > ul > li{
     width: 200px;
@@ -82,40 +134,55 @@ nav > ul > li{
     text-align: center;
     line-height: 50px;
     box-sizing: border-box;
-    margin-left: 50px;
+    margin-left: 45px;
     outline:1px solid black;
     position: relative;
     border-bottom: 1px solid white ;
-    float: left;
+    /* float: left; */
+    /* flex: 1 1 auto; */
 }
 
-section{
-    width: 100%;
-    /* border: 1px solid red; */
+.content{
+    border: 1px solid red;
+    background-color: rgba(255, 255, 255, .5);
+    flex: 1 0 0;
 }
 
-section > div{
-    width: 1920px;
-    margin: 0 auto;
-    outline: 1px solid red;
-}
-section > div > div{
-    opacity: 0.3;
-    display: inline-block;
-}
 
 .list{
-    width: 1280px;
-    outline: 1px solid red;
-    /* top: 0 ; */
+    width: 1380px;
+    margin: 0 auto;
+    border: 1px solid red;
+    position: relative;
 }
-.advertisement{
-    vertical-align:top; 
-    outline: 1px solid red;
+.list::before{
+    position: absolute;
+    top:0;
+    left: -300px;
+    text-align: center;
+    color: black;
+    width: 300px;
+    height: 100vh;
+    content:"광고";
+    display: block;
+    clear: both;
+    background-color: rgba(0, 0, 0, .5);
+}
+.list::after{
+    position: absolute;
+    top:0;
+    right: -300px;
+    text-align: center;
+    color: black;
+    width: 300px;
+    height: 100vh;
+    content:"광고";
+    /* display: block; */
+    clear: both;
+    background-color: rgba(0, 0, 0, .5);
 }
 
-li { list-style:none; }
-
+/* 게시판 스타일 */
 .contents_sub { width:100%; margin:0; }
 .contents_sub table { width:100%; border-collapse:collapse; }
 .contents_sub table img { padding-top:2px; }
