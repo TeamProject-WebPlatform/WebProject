@@ -19,7 +19,7 @@ public class MainController {
     }
     @GetMapping("/show")
     public ModelAndView show(){
-        return new ModelAndView("show");
+        return new ModelAndView("shop");
     }
 
     
