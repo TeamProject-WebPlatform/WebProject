@@ -9,9 +9,17 @@ import org.springframework.web.servlet.ModelAndView;
 @ComponentScan(basePackages = {"platform.game.action","platform.game.env.config"})
 public class MainController {
 
-    @GetMapping("/")
-    public ModelAndView main(){
+    @GetMapping("/home")
+    public ModelAndView home(){
         return new ModelAndView("index");
+    }
+    @GetMapping("/list")
+    public ModelAndView list(){
+        return new ModelAndView("list");
+    }
+    @GetMapping("/show")
+    public ModelAndView show(){
+        return new ModelAndView("show");
     }
 
     
