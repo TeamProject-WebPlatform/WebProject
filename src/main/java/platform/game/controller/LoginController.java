@@ -224,6 +224,27 @@ public class LoginController {
         }
         return "정보 없음";
     }
+    @GetMapping("/steam/myGameList")
+    public String steamMyGameList(String steamID){
+        //http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=B52D1A3402E850E0F56BE12E89F145C6&steamid=76561198272883644&format=json
+        try{
+            String body = WebClient.create("http://api.steampowered.com")
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/IPlayerService/GetOwnedGames/v0001")
+                        .queryParam("key", steamWebApiKey)
+                        .queryParam("steamid", steamID)
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+            return body;
+        }catch(Exception e){
+            System.err.println(e);
+        }
+        return "정보 없음";
+    }
     @GetMapping("/steam/myGameAchievement")
     public String steamMyGameAchievement(String steamID,String gameID){
         //http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=440&key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&steamid=76561197972495328
