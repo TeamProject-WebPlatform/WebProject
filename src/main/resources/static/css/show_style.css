@@ -143,33 +143,19 @@ nav > ul > li{
 }
 
 .content{
-    /* width: 100%; */
-    margin: 0 auto;
-    border: 1px solid red;
+    width: 100%;
+    /* border: 1px solid red; */
     background-color: rgba(255, 255, 255, .5);
     /* opacity: .5; */
-    flex: 1 0 0;
     /* height: 100vh; */
 }
-
-
-.main, .list{
-    max-width: 1280px;
-    border: 1px solid red;
-
-}
-
-.main, .aside, .list { 
-    /* flex: 1 0 0; */
+.show{
+    width: 1980px;
     margin: 0 auto;
-    /* border: 1px solid red; */
-    justify-content: center;
-    /* text-align: center; */
-    border: 1px solid red;
-
+    flex: 1 0 0;
 }
 
-.aside, .showlist{ 
+.showlist{ 
     min-width: 250px;
     border: 1px solid red;
 }
@@ -186,13 +172,28 @@ nav > ul > li{
     margin-top: 3vh;
     border: 1px solid red;
 }
-
+/* 아이템 샵 메인 */
 .showmain{
-    min-width: 1260px;
-    max-width: 1260px;
+    min-width: 1380px;
+    max-width: 1380px;
     /* max-width: 1360px; */
+    position: relative;
     border: 1px solid red;
+}
 
+/* 광고 */
+.showmain::after{
+    position: absolute;
+    top:0;
+    right: -300px;
+    text-align: center;
+    color: black;
+    width: 300px;
+    height: 100vh;
+    content:"광고";
+    /* display: block; */
+    clear: both;
+    background-color: rgba(0, 0, 0, .5);
 }
 
 .show-aside{
