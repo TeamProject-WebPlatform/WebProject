@@ -126,15 +126,8 @@ public class LoginController {
 
         // System.err.println("openidIdentity:"+openidIdentity);
         // System.err.println("openidClaimedId:"+openidClaimedId);
-        
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(openidIdentity);
-        String username;
-        if (matcher.find()) {
-            username = matcher.group();
-        } else {
-            throw new IllegalArgumentException();
-        }
+        String[] tmp = openidIdentity.split("/");
+        String username = tmp[tmp.length-1];
 
         SecurityUser user = SecurityUser.builder()
                 .username(username)
@@ -166,16 +159,9 @@ public class LoginController {
     }
 
     @GetMapping("/steam/check")
-    @ResponseBody
-    public String steamLoginCheck() {
+    public ModelAndView steamLoginCheck() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SecurityUser user = (SecurityUser) authentication.getPrincipal();
-        return user.getUsername();
-    }
-
-    @GetMapping("/session")
-    @ResponseBody
-    public String session(HttpSession httpSession) {
-        return httpSession.getId();
+        return new ModelAndView("steamWebAPI");
     }
 }
