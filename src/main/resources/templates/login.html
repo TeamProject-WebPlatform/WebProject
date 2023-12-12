@@ -72,36 +72,9 @@
                 <button id="btn-signup" class="signup">SIGN UP</button>
             </div>
         </form>
-        <button onclick="SteamLogin()">Steam Login</button>
-        <script>
-            async function SteamLogin() {
-                const url = 'https://steamcommunity.com/openid/login';
-
-                // Parameters for the POST request
-                const params = new URLSearchParams();
-                params.append('openid.ns', 'http://specs.openid.net/auth/2.0');
-                params.append('openid.claimed_id', 'http://specs.openid.net/auth/2.0/identifier_select');
-                params.append('openid.identity', 'http://specs.openid.net/auth/2.0/identifier_select');
-                params.append('openid.return_to', 'http://localhost:8080');
-                params.append('openid.realm', 'http://localhost:8080');
-                params.append('openid.mode', 'checkid_setup');
-
-                // Fetch options for the POST request
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: params.toString(),
-                };
-
-                // Make the POST request
-                fetch(url, requestOptions)
-                    .then(response => response.text())
-                    .then(data => console.log(data))
-                    .catch(error => console.error('Error:', error));
-            }
-        </script>
+        <a href="https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.return_to=http://localhost:8080/login/steam/callback&openid.realm=http://localhost:8080&openid.mode=checkid_setup">
+            Steam Login
+        </a>
     </div>
 
 </body>
