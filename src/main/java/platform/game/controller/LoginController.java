@@ -1,25 +1,24 @@
 package platform.game.controller;
 
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
+
 import java.io.IOException;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +28,6 @@ import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
 import platform.game.model.TO.UserTO;
 import platform.game.security.SecurityUser;
-import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @RestController
 @ComponentScan(basePackages = {"platform.game.action","platform.game.env.config","platform.game.model"})
@@ -39,6 +37,8 @@ public class LoginController {
 
     @Autowired
     UserDAO userDAO;
+    @Value("${steamWebApiKey}")
+    String steamWebApiKey;
 
     @GetMapping("")
     public ModelAndView login(){
@@ -162,6 +162,88 @@ public class LoginController {
     public ModelAndView steamLoginCheck() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SecurityUser user = (SecurityUser) authentication.getPrincipal();
-        return new ModelAndView("steamWebAPI");
+        String steamID = user.getUsername();
+        ModelAndView mav = new ModelAndView("steamWebAPI");
+        
+       
+        
+        mav.addObject("steamID", steamID);
+        return mav;
+    }
+    @GetMapping("/steam/playerSummary")
+    public String steamPlayerSummary(String steamID){
+        String body = WebClient.create("http://api.steampowered.com")
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/ISteamUser/GetPlayerSummaries/v0002")
+                        .queryParam("key", steamWebApiKey)
+                        .queryParam("steamids", steamID)
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        return body;
+    }
+    @GetMapping("/steam/gameNews")
+    public String steamGameNews(String gameID){
+        //http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=440&count=3&maxlength=300&format=json
+        String body = WebClient.create("http://api.steampowered.com")
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/ISteamNews/GetNewsForApp/v0002")
+                        .queryParam("appid", gameID)
+                        .queryParam("count", 5) // 뉴스 개수
+                        .queryParam("maxlength", 300) // 뉴스 길이  
+                        .queryParam("format", "json")
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        return body;
+    }
+    @GetMapping("/steam/gameAchievement")
+    public String steamGameAchievement(String gameID){
+        //http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=76561198272883644&format=json
+        try{
+            String body = WebClient.create("http://api.steampowered.com")
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002")
+                        .queryParam("gameid", gameID)
+                        .queryParam("format", "json")
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+            return body;
+        }catch(Exception e){
+            System.err.println(e);
+        }
+        return "정보 없음";
+    }
+    @GetMapping("/steam/myGameAchievement")
+    public String steamMyGameAchievement(String steamID,String gameID){
+        //http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=440&key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&steamid=76561197972495328
+        try{
+            String body = WebClient.create("http://api.steampowered.com")
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/ISteamUserStats/GetPlayerAchievements/v0001")
+                        .queryParam("appid", gameID)
+                        .queryParam("key", steamWebApiKey)
+                        .queryParam("steamids", steamID)
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+            return body;
+        }catch(Exception e){
+            System.err.println(e);
+        }
+        return "정보 없음";
     }
 }
