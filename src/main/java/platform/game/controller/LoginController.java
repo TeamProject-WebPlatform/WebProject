@@ -7,10 +7,16 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,16 +24,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.web.reactive.function.client.WebClient;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import platform.game.action.KakaoAction;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
 import platform.game.model.TO.UserTO;
+import platform.game.model.TO.KakaoTO.OAuthTokenTO;
 import platform.game.security.SecurityUser;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -162,6 +176,63 @@ public class LoginController {
     public ModelAndView steamLoginCheck() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SecurityUser user = (SecurityUser) authentication.getPrincipal();
+        System.out.println(user.getUsername());
         return new ModelAndView("steamWebAPI");
+    }
+
+    /* 카카오톡 로그인 버튼(이메일 받아오기) */
+    //카카오톡 콜백 컨트롤러(코드 받아오기)
+    @GetMapping("/kakao/callback")
+    public void kakaoCallback(String code, HttpServletResponse response){//데이터 리턴해주는 컨트롤러 함수
+
+        String client_id = "6c633b1da1bdc67e6071145ed5723fec";
+
+        RestTemplate restTemplate = new RestTemplate();
+        
+        //헤더 오브젝트 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        //바디 오브젝트 생성
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", client_id);
+        params.add("redirect_uri", "http://localhost:8080/login/kakao/callback");
+        params.add("code", code);
+
+        //헤더와 바디를 하나로 합침
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+
+        //http 요청 - post방식
+        ResponseEntity<String> res = restTemplate.exchange(
+            "https://kauth.kakao.com/oauth/token",
+            HttpMethod.POST,
+            kakaoTokenRequest,
+            String.class
+        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        OAuthTokenTO oAuthToken = null;
+        
+        try {
+            oAuthToken = objectMapper.readValue(res.getBody(), OAuthTokenTO.class);    
+        } catch (JsonMappingException e) {
+            System.out.println("카카오톡 로그인 에러1 : " + e.getMessage());
+        } catch (JsonProcessingException e){
+            System.out.println("카카오톡 로그인 에러2 : " + e.getMessage());
+        }
+
+        //System.out.println("카카오 토큰 : " + oAuthToken.getAccess_token());
+        //ResponseEntity<String> end = userDAO.getKakaoToken(oAuthToken.getAccess_token());
+        //return "카카오 토큰 요청 완료(토큰에 대한 응답값) : " + response;
+        //return end.getBody();
+
+        KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
+
+        try{
+            response.sendRedirect("http://localhost:8080/");
+        }catch(IOException e){
+            System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+        }
     }
 }
