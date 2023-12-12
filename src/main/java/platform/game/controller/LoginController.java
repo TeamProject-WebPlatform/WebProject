@@ -42,55 +42,59 @@ import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
 import platform.game.model.TO.UserTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
+import platform.game.security.CreateToken;
 import platform.game.security.SecurityUser;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @RestController
-@ComponentScan(basePackages = {"platform.game.action","platform.game.env.config","platform.game.model"})
+@ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model" })
 @RequestMapping("/login")
 public class LoginController {
-    //로그인과 회원가입
+    // 로그인과 회원가입
 
     @Autowired
     UserDAO userDAO;
 
     @GetMapping("")
-    public ModelAndView login(){
+    public ModelAndView login() {
         return new ModelAndView("login");
     }
 
     // 회원가입 요청
     @PostMapping("/signup_ok")
-    public int handleSignup(@RequestBody UserSignTO userSignup){
+    public int handleSignup(@RequestBody UserSignTO userSignup) {
         int flag = 2;
-        System.out.println("id : "+userSignup.getId());
-        System.out.println("password : "+userSignup.getPassword());
-        System.out.println("nickname : "+userSignup.getNickname());
-        
+        System.out.println("id : " + userSignup.getId());
+        System.out.println("password : " + userSignup.getPassword());
+        System.out.println("nickname : " + userSignup.getNickname());
+
         // jwt로 암호화
         // db에 조회
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
+        CreateToken createToken = new CreateToken();
+        createToken.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
 
         return flag;
     }
+
     // 로그인 요청
     @PostMapping("/signin_ok")
-    public int handleSigninin(@RequestBody UserSignTO userSignin){
+    public int handleSigninin(@RequestBody UserSignTO userSignin) {
         int flag = 2;
-        System.out.println("id : "+userSignin.getId());
-        System.out.println("password : "+userSignin.getPassword());
-        System.out.println("nickname : "+userSignin.getNickname());
-        
+        System.out.println("id : " + userSignin.getId());
+        System.out.println("password : " + userSignin.getPassword());
+        System.out.println("nickname : " + userSignin.getNickname());
+
         // jwt로 암호화
         // db에 조회
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
         UserTO to = userDAO.getUserTObyIDandPass(userSignin.getId(), userSignin.getPassword());
-        if(to!=null){
+        if (to != null) {
             System.out.println("로그인 성공");
-            System.out.println("UserTO : "+to.toString());
-        }else{
+            System.out.println("UserTO : " + to.toString());
+        } else {
             System.out.println("로그인 실패");
         }
         return flag;
@@ -110,8 +114,7 @@ public class LoginController {
             @RequestParam(value = "openid.signed") String openidSigned,
             @RequestParam(value = "openid.sig") String openidSig,
             HttpServletRequest request,
-            HttpServletResponse response
-    ) {
+            HttpServletResponse response) {
         String body = WebClient.create("https://steamcommunity.com")
                 .get()
                 .uri(uriBuilder -> uriBuilder
@@ -126,29 +129,27 @@ public class LoginController {
                         .queryParam("openid.assoc_handle", openidAssocHandle)
                         .queryParam("openid.signed", openidSigned)
                         .queryParam("openid.sig", openidSig)
-                        .build()
-                )
+                        .build())
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
 
         boolean isTrue = Objects.requireNonNull(body).contains("true");
 
-//         1. findBySteamId(steamId)
-//         2. 없으면 회원가입 Member or 로그인
-//         security 객체를 만들고 session에 저장
+        // 1. findBySteamId(steamId)
+        // 2. 없으면 회원가입 Member or 로그인
+        // security 객체를 만들고 session에 저장
 
         // System.err.println("openidIdentity:"+openidIdentity);
         // System.err.println("openidClaimedId:"+openidClaimedId);
         String[] tmp = openidIdentity.split("/");
-        String username = tmp[tmp.length-1];
+        String username = tmp[tmp.length - 1];
 
         SecurityUser user = SecurityUser.builder()
                 .username(username)
                 .build();
 
-        Authentication authentication =
-                new OAuth2AuthenticationToken(user, user.getAuthorities(), "steam");
+        Authentication authentication = new OAuth2AuthenticationToken(user, user.getAuthorities(), "steam");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         HttpSession session = request.getSession(false);
@@ -165,9 +166,9 @@ public class LoginController {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         response.addCookie(cookie);
-        try{
+        try {
             response.sendRedirect("http://localhost:8080/login/steam/check");
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("LoginController.steamLogin : 리다이렉션 실패");
         }
     }
@@ -181,57 +182,57 @@ public class LoginController {
     }
 
     /* 카카오톡 로그인 버튼(이메일 받아오기) */
-    //카카오톡 콜백 컨트롤러(코드 받아오기)
+    // 카카오톡 콜백 컨트롤러(코드 받아오기)
     @GetMapping("/kakao/callback")
-    public void kakaoCallback(String code, HttpServletResponse response){//데이터 리턴해주는 컨트롤러 함수
+    public void kakaoCallback(String code, HttpServletResponse response) {// 데이터 리턴해주는 컨트롤러 함수
 
         String client_id = "6c633b1da1bdc67e6071145ed5723fec";
 
         RestTemplate restTemplate = new RestTemplate();
-        
-        //헤더 오브젝트 생성
+
+        // 헤더 오브젝트 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        //바디 오브젝트 생성
+        // 바디 오브젝트 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", client_id);
         params.add("redirect_uri", "http://localhost:8080/login/kakao/callback");
         params.add("code", code);
 
-        //헤더와 바디를 하나로 합침
+        // 헤더와 바디를 하나로 합침
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
 
-        //http 요청 - post방식
+        // http 요청 - post방식
         ResponseEntity<String> res = restTemplate.exchange(
-            "https://kauth.kakao.com/oauth/token",
-            HttpMethod.POST,
-            kakaoTokenRequest,
-            String.class
-        );
+                "https://kauth.kakao.com/oauth/token",
+                HttpMethod.POST,
+                kakaoTokenRequest,
+                String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
         OAuthTokenTO oAuthToken = null;
-        
+
         try {
-            oAuthToken = objectMapper.readValue(res.getBody(), OAuthTokenTO.class);    
+            oAuthToken = objectMapper.readValue(res.getBody(), OAuthTokenTO.class);
         } catch (JsonMappingException e) {
             System.out.println("카카오톡 로그인 에러1 : " + e.getMessage());
-        } catch (JsonProcessingException e){
+        } catch (JsonProcessingException e) {
             System.out.println("카카오톡 로그인 에러2 : " + e.getMessage());
         }
 
-        //System.out.println("카카오 토큰 : " + oAuthToken.getAccess_token());
-        //ResponseEntity<String> end = userDAO.getKakaoToken(oAuthToken.getAccess_token());
-        //return "카카오 토큰 요청 완료(토큰에 대한 응답값) : " + response;
-        //return end.getBody();
+        // System.out.println("카카오 토큰 : " + oAuthToken.getAccess_token());
+        // ResponseEntity<String> end =
+        // userDAO.getKakaoToken(oAuthToken.getAccess_token());
+        // return "카카오 토큰 요청 완료(토큰에 대한 응답값) : " + response;
+        // return end.getBody();
 
         KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
 
-        try{
+        try {
             response.sendRedirect("http://localhost:8080/");
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
         }
     }
