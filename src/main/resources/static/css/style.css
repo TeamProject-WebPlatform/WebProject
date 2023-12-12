@@ -1,8 +1,27 @@
 @charset "utf-8";
 
+:root{
+    --bg-black-900:#ffffff;
+    --bg-black-100:#353535;
+    /* --bg-black-50:#2b2c2f; */
+    /* --bg-black-50:rgb(53, 70, 90); */
+    --bg-black-gradient: linear-gradient(rgb(9, 12, 21)10%,rgb(26, 35, 52)30%, rgb(71, 92, 123)60%,rgb(143,167,191)90%,rgb(185, 208, 226)100%);
+    --bg-opacity: rgba(43,44,47,0.5);
+    --text-black-900:#ffffff;
+    --text-black-700:#ffffff;
+    --text-black-600:#ffffff;
+    --outer-shadow: 3px 3px 3px #222327, -3px -3px  3px #363636;
+    --outer-shadow-0: 0 0 0 #222327, 0 0 0 #363636;
+    --inner-shadow: inset 3px 3px 3px #222327, inset -3px -3px 3px #363636;
+    --inner-shadow-0: inset 0 0 0 #222327, inset 0 0 0 #363636;
+}
+
+
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    outline: none;
 }
 
 li{
@@ -13,6 +32,33 @@ a{
     text-decoration: none;
     color:inherit;
 }
+
+.row{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.justify-content-between{
+    justify-content: space-between;
+}
+
+.outer-shadow{
+    box-shadow: var(--outer-shadow);
+}
+
+.inner-shadow{
+    box-shadow: var(--inner-shadow);
+}
+
+.hover-in-shadow{
+    position: relative;
+    z-index: 1;
+}
+.hover-in-shadow:hover{
+    box-shadow: var(--outer-shadow-0);
+}
+
 body{
     font: '돋음', dotum, sans-serif;
     font-size: 14px;
@@ -21,14 +67,17 @@ body{
 }
 #web{
     width: 100%;
+    min-height: 100vh;
     background-image: url('../img/mainBG.jpg');
-    background-size : contain;
+    background-size : cover;
     border: 1px solid red;
 }
 header{
     width: 100%;
     margin: 0 auto;
     border: 1px solid red;
+    position: relative;
+    margin-bottom: 3%;
 }
 header::after{
     content:"";
@@ -55,9 +104,12 @@ header > h1{
     margin-right: 15px;
 }
 nav{
+    position: absolute;
     width: 1050px;
-    margin: 0 auto;
-    margin-top: 50px;
+    top: 100%;
+    left: 25%;
+    /* margin: 0 auto; */
+    /* margin-top: 50px; */
     border: 1px dotted red;
 }
 nav::after{
@@ -71,7 +123,7 @@ nav > ul{
     margin: 0 auto;
     
     float: left;
-    outline: 1px solid black;
+    outline: 1px dotted red;
 }
 nav > ul > li{
     width: 200px;
@@ -88,17 +140,27 @@ nav > ul > li{
     float: left;
 }
 
-section{
+.content{
     width: 100%;
-    /* border: 1px solid red; */
+    margin: 0 auto;
+    border: 1px solid red;
+    background-color: rgba(255, 255, 255, .5);
+    /* height: 100vh; */
 }
 
-section > div{
-    width: 1920px;
-    margin: 0 auto;
-    outline: 1px solid red;
+
+.main{
+    min-width: 860px;
+    border: 1px solid red;
+
 }
-section > div > div{
-    opacity: 0.3;
-    display: inline-block;
+.main, .aside-1, .aside-2 { 
+    flex: 1 0 0;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.aside-1, .aside-2 { 
+    max-width: 320px;
+    border: 1px solid red;
 }

@@ -13,5 +13,4 @@ public interface SqlMapperInter {
     public UserTO getUserTObyIDandPass(String id,String password);
 
     
-    
 }

@@ -21,8 +21,9 @@ body{
 }
 #web{
     width: 100%;
+    min-height: 100vh;
+    background-size : cover;
     background-image: url('../img/mainBG.jpg');
-    background-size : contain;
     border: 1px solid red;
 }
 header{
