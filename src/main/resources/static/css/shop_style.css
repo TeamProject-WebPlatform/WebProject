@@ -149,13 +149,13 @@ nav > ul > li{
     /* opacity: .5; */
     /* height: 100vh; */
 }
-.show{
+.shop{
     width: 1980px;
     margin: 0 auto;
     flex: 1 0 0;
 }
 
-.showlist{ 
+.shoplist{ 
     min-width: 250px;
     border: 1px solid red;
 }
@@ -173,7 +173,7 @@ nav > ul > li{
     border: 1px solid red;
 }
 /* 아이템 샵 메인 */
-.showmain{
+.shopmain{
     min-width: 1380px;
     max-width: 1380px;
     /* max-width: 1360px; */
@@ -182,7 +182,7 @@ nav > ul > li{
 }
 
 /* 광고 */
-.showmain::after{
+.shopmain::after{
     position: absolute;
     top:0;
     right: -300px;
@@ -196,7 +196,7 @@ nav > ul > li{
     background-color: rgba(0, 0, 0, .5);
 }
 
-.show-aside{
+.shop-aside{
     min-width: 200px;
     border: 1px solid red;
 
