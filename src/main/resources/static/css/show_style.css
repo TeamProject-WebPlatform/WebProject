@@ -144,7 +144,7 @@ nav > ul > li{
 
 .content{
     /* width: 100%; */
-    /* margin: 0 auto; */
+    margin: 0 auto;
     border: 1px solid red;
     background-color: rgba(255, 255, 255, .5);
     /* opacity: .5; */
@@ -154,34 +154,68 @@ nav > ul > li{
 
 
 .main, .list{
-    width: 1380px;
+    max-width: 1280px;
+    border: 1px solid red;
+
+}
+
+.main, .aside, .list { 
+    /* flex: 1 0 0; */
+    margin: 0 auto;
+    /* border: 1px solid red; */
+    justify-content: center;
+    /* text-align: center; */
+    border: 1px solid red;
+
+}
+
+.aside, .showlist{ 
+    min-width: 250px;
+    border: 1px solid red;
+}
+
+.main_item{
+    max-width: 150px;
+    height: 40vh;
     margin: 0 auto;
     border: 1px solid red;
-    position: relative;
-}
-.main::before{
-    position: absolute;
-    top:0;
-    left: -300px;
+    font-size: 20px;
     text-align: center;
-    color: black;
-    width: 300px;
-    height: 100vh;
-    content:"광고";
-    display: block;
-    clear: both;
-    background-color: rgba(0, 0, 0, .5);
 }
-.main::after{
-    position: absolute;
-    top:0;
-    right: -300px;
-    text-align: center;
-    color: black;
-    width: 300px;
-    height: 100vh;
-    content:"광고";
-    /* display: block; */
-    clear: both;
-    background-color: rgba(0, 0, 0, .5);
+.main_item > li{
+    margin-top: 3vh;
+    border: 1px solid red;
 }
+
+.showmain{
+    min-width: 1260px;
+    max-width: 1260px;
+    /* max-width: 1360px; */
+    border: 1px solid red;
+
+}
+
+.show-aside{
+    min-width: 200px;
+    border: 1px solid red;
+
+}
+
+.item{
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #000000;
+}
+.item > img{
+    width: 200px;
+}
+
+.itemlist{
+    /* max-width: 1370px; */
+    margin: 0 auto;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+
+}
+
