@@ -6,38 +6,45 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
+import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 
-public class Token {
+@Component
+public class JwtManager {
+    Key key = null;
+    Long lifetime = 1000 * 60 * 60L; // 토큰 유효시간 1시간
 
-    // 테스트용 jwt 생성 코드
-    public String createToken(String id, String password, String nickname) {
+    @Value("${jwt.secret}")
+    String secret;
+
+    public JwtManager(){
+        key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+    public String createToken(String id, String password) {
         // header
         Claims header = Jwts.claims();
         header.put("alg", "HS256");
-
         // payload
         Claims payload = Jwts.claims();
         payload.put("id", id);
         payload.put("password", password);
-        payload.put("nickname", nickname);
-
-        Long expiredTime = 1000 * 60L * 60L; // 토큰 유효시간 1시간 임시 설정
+        // 유효기간
+        Long expiredTime = lifetime; 
 
         Date date = new Date();
         date.setTime(date.getTime() + expiredTime); // 토큰 만료시간 설정
-
-        Key key = Keys // 시크릿 키 추후 env.properties에 설정 필요
-                .hmacShaKeyFor("asdlfkjsalkdfjlskadjflksjdlksajdflksajdlkfajsldkfj".getBytes(StandardCharsets.UTF_8));
 
         // 토큰 builder
         String jwt = Jwts.builder()
@@ -51,15 +58,23 @@ public class Token {
         // return
         return jwt;
     }
-
-    private Key getKey() {
-        byte[] key = Decoders.BASE64.decode("asdlfkjsalkdfjlskadjflksjdlksajdflksajdlkfajsldkfj");
-        return Keys.hmacShaKeyFor(key);
-    }
-
     // jwt 특정 값 리턴 테스트용 코드
     public void extractToken(String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
         System.out.println(decodedJWT.getClaim("password").toString());
+    }
+
+    public void validateToken(String token){
+        try{
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            System.out.println("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+             System.out.println("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+             System.out.println("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+             System.out.println("JWT 토큰이 잘못되었습니다.");
+        }
     }
 }
