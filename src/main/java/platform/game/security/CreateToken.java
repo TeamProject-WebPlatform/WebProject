@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -39,7 +40,6 @@ public class CreateToken {
                 .setExpiration(date)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
         // return
         System.out.println(jwt);
     }
