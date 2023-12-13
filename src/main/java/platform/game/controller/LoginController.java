@@ -77,7 +77,7 @@ public class LoginController {
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
 
-        // 토큰 생성 및 복호화 테스트
+        // 토큰 생성 및 복호화 테스트 추후 수정 필요
         Token createToken = new Token();
         String token = createToken.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
         System.out.println(token);
