@@ -303,7 +303,7 @@ public class LoginController {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", client_id);
-        params.add("redirect_uri", domain+":8080/login/kakao/callback");
+        params.add("redirect_uri", domain+"/login/kakao/callback");
         params.add("code", code);
 
         //헤더와 바디를 하나로 합침
