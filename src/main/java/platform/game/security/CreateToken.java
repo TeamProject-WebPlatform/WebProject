@@ -23,7 +23,7 @@ public class CreateToken {
         payload.put("password", password);
         payload.put("nickname", nickname);
 
-        Long expiredTime = 1000 * 60L * 60L; // 토큰 유효시간 1시간 설정
+        Long expiredTime = 1000 * 60L * 60L; // 토큰 유효시간 1시간 임시 설정
 
         Date date = new Date();
         date.setTime(date.getTime() + expiredTime); // 토큰 만료시간 설정
