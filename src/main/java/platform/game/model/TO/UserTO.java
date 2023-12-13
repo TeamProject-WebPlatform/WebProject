@@ -12,8 +12,6 @@ public class UserTO {
     private int point;    // point, int NOT NULL
     private int exp;      // exp, int NOT NULL
     private int level;    // level, int NOT NULL
-    private int oauth;        // oauth, int NOT NULL
-    // 0 : 우리 웹, 1 : 카카오, 2 : 스팀 ...
 }
 
 // CREATE TABLE `User` (
