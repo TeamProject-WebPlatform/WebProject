@@ -39,11 +39,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import platform.game.action.KakaoAction;
+import platform.game.jwt.Token;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
 import platform.game.model.TO.UserTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
-import platform.game.security.CreateToken;
 import platform.game.security.SecurityUser;
 
 @RestController
@@ -76,8 +76,12 @@ public class LoginController {
         // db에 조회
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
-        CreateToken createToken = new CreateToken();
-        createToken.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
+
+        // 토큰 생성 및 복호화 테스트
+        Token createToken = new Token();
+        String token = createToken.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
+        System.out.println(token);
+        createToken.extractToken(token);
 
         return flag;
     }
