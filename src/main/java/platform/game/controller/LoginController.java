@@ -14,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -39,6 +40,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import platform.game.action.KakaoAction;
+import platform.game.jwt.Securitypw;
 import platform.game.jwt.Token;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
@@ -47,7 +49,8 @@ import platform.game.model.TO.KakaoTO.OAuthTokenTO;
 import platform.game.security.SecurityUser;
 
 @RestController
-@ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model" })
+@ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model",
+        "platform.game.jwt" })
 @RequestMapping("/login")
 public class LoginController {
     // 로그인과 회원가입
@@ -58,6 +61,9 @@ public class LoginController {
     String steamWebApiKey;
     @Value("${domain}")
     String domain;
+
+    @Autowired
+    private Securitypw securitypw;
 
     @GetMapping("")
     public ModelAndView login() {
@@ -78,10 +84,15 @@ public class LoginController {
         // 결과 flag에 int로 저장
 
         // 토큰 생성 및 복호화 테스트 추후 수정 필요
+
         Token createToken = new Token();
         String token = createToken.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
         System.out.println(token);
         createToken.extractToken(token);
+
+        // spring_security password 암호화 테스트
+        String ep = securitypw.encode(userSignup.getPassword());
+        System.out.println(ep);
 
         return flag;
     }
