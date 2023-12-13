@@ -39,8 +39,9 @@ public class MyPageController {
     
     private MypageAction mypageAction = new MypageAction();
     // 파일을 업로드할 디렉터리 경로
-    // private final String uploadDir = Paths.get("tempImg/img").toString();
-    private final String uploadDir = Paths.get("C:", "tempImg", "img").toString();
+    String currentPath = Paths.get("").toAbsolutePath().toString();
+    private final String uploadDir = Paths.get(currentPath, "src/main/resources/static/tempImg", "img").toString();
+    // private final String uploadDir = Paths.get("C:", "tempImg", "img").toString();
 
     @GetMapping("/{userid}")
     public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
