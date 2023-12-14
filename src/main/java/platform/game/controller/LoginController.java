@@ -65,7 +65,7 @@ public class LoginController {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @GetMapping("")
+    @RequestMapping("")
     public ModelAndView login(){
         return new ModelAndView("login");
     }
