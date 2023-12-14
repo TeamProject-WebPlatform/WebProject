@@ -171,7 +171,7 @@ const setLoginPage = function(){
             }
             const flag = await response.json();
             console.log(flag);
-            switch (flag.flag){
+            switch (flag){
                 case 1:
                     console.log("아이디 없음");
                     break;
