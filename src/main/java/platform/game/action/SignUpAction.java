@@ -3,6 +3,7 @@ package platform.game.action;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import platform.game.jwt.SecurityPassword;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.MemberTO;
 import platform.game.model.TO.UserSignTO;
@@ -14,8 +15,6 @@ public class SignUpAction {
     private UserDAO userDAO;
 
     public int signUp(UserSignTO userSignup) {
-        System.out.println("엑션 signUp(UserSignTO userSignup) 호출");
-        System.out.println("UserSignTO 값 : " + userSignup);
 
         //회원번호 불러오기
         int lastMemberId = userDAO.getLastMemberId();
@@ -24,7 +23,12 @@ public class SignUpAction {
         MemberTO to = new MemberTO();
         to.setMember_id(member_id);
         to.setUserid(userSignup.getId());
-        to.setPassword(userSignup.getPassword());
+
+        // 비밀번호 암호화
+        SecurityPassword securityPassword = new SecurityPassword();
+        String password = securityPassword.encode(userSignup.getPassword());
+
+        to.setPassword(password);
         to.setNickname(userSignup.getNickname());
         to.setEmail(userSignup.getEmail());
 

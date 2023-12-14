@@ -5,7 +5,7 @@ import lombok.Data;
 public class MemberTO {
     private int member_id;          // member_id, int NOT NULL
     private String userid;        // id, varchar(20) NOT NULL
-    private String password;  // password, varchar(12) NOT NULL
+    private String password;  // password, varchar(70) NOT NULL
     private String email;      // email, varchar(50) NOT NULL
     private String date;      // date, datetime NOT NULL
     private int point;    // point, int NOT NULL
@@ -19,7 +19,7 @@ public class MemberTO {
 // CREATE TABLE member (
 //     member_id INT NOT NULL PRIMARY KEY,
 //     userid VARCHAR(20) NOT NULL DEFAULT '',
-//     password VARCHAR(12) NOT NULL DEFAULT '',
+//     password VARCHAR(70) NOT NULL DEFAULT '',
 //     email VARCHAR(50) NOT NULL DEFAULT '',
 //     date DATETIME DEFAULT CURRENT_TIMESTAMP,
 //     point INT NOT NULL DEFAULT 0,

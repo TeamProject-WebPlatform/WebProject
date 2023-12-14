@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import platform.game.jwt.SecurityPassword;
 import platform.game.mapper.SqlMapperInter;
 import platform.game.model.TO.MemberTO;
 
@@ -17,9 +18,15 @@ public class UserDAO {
     public int getMemberTObyIDandPass(String userid, String password){
         int flag = 1;
 
-        int result = mapper.getMemberTObyIDandPass(userid, password);
+        //암호화된 password 가져오기
+        String s_password = mapper.searchMember(userid);
 
-        if(result == 1){
+        SecurityPassword securityPassword = new SecurityPassword();
+        boolean pwcheck = securityPassword.matches(password, s_password);
+
+        //int result = mapper.getMemberTObyIDandPass(userid, password);
+
+        if(pwcheck){
             flag = 0; //성공
         }
 
@@ -28,12 +35,11 @@ public class UserDAO {
 
     //회원가입
     public int setMember(MemberTO to){
-        //System.out.println("DAO 호출");
         int flag = 1;
         int result = mapper.setMember(to.getMember_id(), to.getUserid(), to.getPassword(), to.getEmail(), to.getNickname());
         //System.out.println("flag 값 : " + flag);
 
-        if (result != 0) {
+        if (result == 1) {
             //회원번호 가이드 DB에 마지막 회원번호 입력
             mapper.setMemberId(to.getMember_id());
             flag = 0;

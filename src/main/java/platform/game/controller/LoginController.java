@@ -67,23 +67,15 @@ public class LoginController {
     // 회원가입 요청
     @PostMapping("/signup_ok")
     public int handleSignup(@RequestBody UserSignTO userSignup) {
-
-        System.out.println("컨트롤러 handleSignup 호출");
-
         int flag = 2;
+        
         System.out.println("id : " + userSignup.getId());
         System.out.println("password : " + userSignup.getPassword());
         System.out.println("nickname : " + userSignup.getNickname());
 
-        // jwt로 암호화
-        // db에 조회
-        // 아이디, 닉네임 중복체크
-        // 결과 flag에 int로 저장
-
-
         flag = signUpAction.signUp(userSignup);
 
-        if (flag == 1) {//성공
+        if (flag == 0) {//성공
             System.out.println("회원가입 성공");
         }else{
             System.out.println("회원가입 실패");
@@ -98,24 +90,24 @@ public class LoginController {
         int flag = 2;
         System.out.println("id : " + userSignin.getId());
         System.out.println("password : " + userSignin.getPassword());
-        System.out.println("nickname : " + userSignin.getNickname());
 
         // jwt로 암호화
         // db에 조회
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
         // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        String token = jwtManager.createToken(userSignin.getId(), userSignin.getPassword());
-        System.out.println(token);
-        try{Thread.sleep(5000);}catch(Exception e){}
-        System.out.println("5초 지남");
-        boolean s = jwtManager.validateToken(token);
-        System.out.println("테스트 : "+s);
+        // String token = jwtManager.createToken(userSignin.getId(), userSignin.getPassword());
+        // System.out.println(token);
+        // try{Thread.sleep(5000);}catch(Exception e){}
+        // System.out.println("5초 지남");
+        // boolean s = jwtManager.validateToken(token);
+        // System.out.println("테스트 : "+s);
 
         flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
 
         if (flag == 0) {
             System.out.println("로그인 성공");
+            
             return new ModelAndView("index");
         } else {
             System.out.println("로그인 실패");

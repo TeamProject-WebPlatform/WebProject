@@ -9,6 +9,11 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"platform.game.model"})
 public interface SqlMapperInter {
     
+
+    //사용자 아이디 암호화된 비밀번호 불러오기
+    @Select("select password from member where userid=#{userid}")
+    public String searchMember(String userid);
+
     //로그인 쿼리문
     @Select("select * from member where userid = #{userid} and password=#{password}")
     public int getMemberTObyIDandPass(String userid, String password);
