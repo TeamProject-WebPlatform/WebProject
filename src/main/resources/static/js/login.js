@@ -11,7 +11,7 @@ const setLoginPage = function(){
     const inputPassword = document.getElementById('password');
     const inputPasswordCheck = document.getElementById('passwordCheck');
     const inputNickname = document.getElementById('nickname');
-    const inputEmail = document.getElementById('emailCheck');
+    const inputEmail = document.getElementById('email');
     const idPass = document.querySelector('.verifyContraints[name=id-pass]');
     const idFail = document.querySelector('.verifyContraints[name=id-fail]');
     const pwPass = document.querySelector('.verifyContraints[name=pw-pass]');
@@ -163,7 +163,7 @@ const setLoginPage = function(){
                 },
                 body: JSON.stringify({
                     nickname: inputNickname.value,
-                    mail: inputEmail.value,
+                    email: inputEmail.value,
                 })
             });
             if (!response.ok) {
@@ -335,7 +335,7 @@ const verifyNicknameContraints = function(){
 
 const EmailCheck = function(){
     document.getElementById( 'btn-email' ).onclick = function() {
-        if( document.getElementById('emailCheck').value == '' ) {
+        if( document.getElementById('email').value == '' ) {
         // if( inputEmail.value.trim() == '' ) {
             alert( '이메일을 입력해주세요.' );
             return;
