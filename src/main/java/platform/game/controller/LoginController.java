@@ -1,7 +1,5 @@
 package platform.game.controller;
 
-import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -12,10 +10,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,34 +26,35 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import platform.game.action.KakaoAction;
+import platform.game.jwt.JwtManager;
+import platform.game.jwt.SecurityPassword;
 import platform.game.action.SignUpAction;
-import platform.game.jwt.Token;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.MemberTO;
 import platform.game.model.TO.UserSignTO;
 import platform.game.model.TO.KakaoTO.KakaoProfileTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
-import platform.game.security.SecurityUser;
 
 @RestController
-@ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model" })
+@ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model",
+        "platform.game.jwt" })
 @RequestMapping("/login")
 public class LoginController {
     // 로그인과 회원가입
 
     @Autowired
     UserDAO userDAO;
-    @Value("${steamWebApiKey}")
-    String steamWebApiKey;
+    @Autowired
+    JwtManager jwtManager;
     @Value("${domain}")
     String domain;
+
+    @Autowired
+    private SecurityPassword securityPassword;
 
     @Autowired
     private SignUpAction signUpAction;
@@ -76,6 +71,15 @@ public class LoginController {
         System.out.println("컨트롤러 handleSignup 호출");
 
         int flag = 2;
+        System.out.println("id : " + userSignup.getId());
+        System.out.println("password : " + userSignup.getPassword());
+        System.out.println("nickname : " + userSignup.getNickname());
+
+        // jwt로 암호화
+        // db에 조회
+        // 아이디, 닉네임 중복체크
+        // 결과 flag에 int로 저장
+
 
         flag = signUpAction.signUp(userSignup);
 
@@ -100,9 +104,15 @@ public class LoginController {
         // db에 조회
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
-        flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
+        // 토큰 생성 및 복호화 테스트 추후 수정 필요
+        String token = jwtManager.createToken(userSignin.getId(), userSignin.getPassword());
+        System.out.println(token);
+        try{Thread.sleep(5000);}catch(Exception e){}
+        System.out.println("5초 지남");
+        boolean s = jwtManager.validateToken(token);
+        System.out.println("테스트 : "+s);
 
-        //ModelAndView modelAndView = new ModelAndView();
+        flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
 
         if (flag == 0) {
             System.out.println("로그인 성공");
@@ -116,7 +126,7 @@ public class LoginController {
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------
     @GetMapping("/steam/callback")
-    public void steamLogin(
+    public ModelAndView steamLogin(
             @RequestParam(value = "openid.ns") String openidNs,
             @RequestParam(value = "openid.mode") String openidMode,
             @RequestParam(value = "openid.op_endpoint") String openidOpEndpoint,
@@ -149,157 +159,23 @@ public class LoginController {
                 .block();
 
         boolean isTrue = Objects.requireNonNull(body).contains("true");
-
-        // 1. findBySteamId(steamId)
-        // 2. 없으면 회원가입 Member or 로그인
-        // security 객체를 만들고 session에 저장
-
-        // System.err.println("openidIdentity:"+openidIdentity);
-        // System.err.println("openidClaimedId:"+openidClaimedId);
-        String[] tmp = openidIdentity.split("/");
-        String username = tmp[tmp.length - 1];
-
-        SecurityUser user = SecurityUser.builder()
-                .username(username)
-                .build();
-
-        Authentication authentication = new OAuth2AuthenticationToken(user, user.getAuthorities(), "steam");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
+        if (isTrue) { 
+            // 인증 성공 username : 스팀아이디
+            ModelAndView mav = new ModelAndView("steamWebAPI");
+            String[] tmp = openidIdentity.split("/");
+            String username = tmp[tmp.length - 1];
+            mav.addObject("steamID", username);
+            return mav;
+        }else{
+            return new ModelAndView("login");
         }
 
-        // 새로운 세션 생성
-        session = request.getSession(true);
-        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-
-        // 세션 ID를 쿠키에 설정
-        Cookie cookie = new Cookie("JSESSIONID", session.getId());
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        try {
-            response.sendRedirect(domain + "/login/steam/check");
-        } catch (IOException e) {
-            System.out.println("LoginController.steamLogin : 리다이렉션 실패");
-        }
-    }
-
-    @GetMapping("/steam/check")
-    public ModelAndView steamLoginCheck() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SecurityUser user = (SecurityUser) authentication.getPrincipal();
-        String steamID = user.getUsername();
-        ModelAndView mav = new ModelAndView("steamWebAPI");
-
-        mav.addObject("steamID", steamID);
-        return mav;
-    }
-
-    @GetMapping("/steam/playerSummary")
-    public String steamPlayerSummary(String steamID) {
-        String body = WebClient.create("http://api.steampowered.com")
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/ISteamUser/GetPlayerSummaries/v0002")
-                        .queryParam("key", steamWebApiKey)
-                        .queryParam("steamids", steamID)
-                        .build())
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-        return body;
-    }
-
-    @GetMapping("/steam/gameNews")
-    public String steamGameNews(String gameID) {
-        // http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=440&count=3&maxlength=300&format=json
-        String body = WebClient.create("http://api.steampowered.com")
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/ISteamNews/GetNewsForApp/v0002")
-                        .queryParam("appid", gameID)
-                        .queryParam("count", 5) // 뉴스 개수
-                        .queryParam("maxlength", 300) // 뉴스 길이
-                        .queryParam("format", "json")
-                        .build())
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-        return body;
-    }
-
-    @GetMapping("/steam/gameAchievement")
-    public String steamGameAchievement(String gameID) {
-        // http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=76561198272883644&format=json
-        try {
-            String body = WebClient.create("http://api.steampowered.com")
-                    .get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002")
-                            .queryParam("gameid", gameID)
-                            .queryParam("format", "json")
-                            .build())
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
-            return body;
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        return "정보 없음";
-    }
-
-    @GetMapping("/steam/myGameList")
-    public String steamMyGameList(String steamID) {
-        // http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=B52D1A3402E850E0F56BE12E89F145C6&steamid=76561198272883644&format=json
-        try {
-            String body = WebClient.create("http://api.steampowered.com")
-                    .get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/IPlayerService/GetOwnedGames/v0001")
-                            .queryParam("key", steamWebApiKey)
-                            .queryParam("steamid", steamID)
-                            .build())
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
-            return body;
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        return "정보 없음";
-    }
-
-    @GetMapping("/steam/myGameAchievement")
-    public String steamMyGameAchievement(String steamID, String gameID) {
-        // http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=440&key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&steamid=76561197972495328
-        try {
-            String body = WebClient.create("http://api.steampowered.com")
-                    .get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/ISteamUserStats/GetPlayerAchievements/v0001")
-                            .queryParam("appid", gameID)
-                            .queryParam("key", steamWebApiKey)
-                            .queryParam("steamids", steamID)
-                            .build())
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
-            return body;
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        return "정보 없음";
     }
 
     /* 카카오톡 로그인 버튼(이메일 받아오기) */
     // 카카오톡 콜백 컨트롤러(코드 받아오기)
     @GetMapping("/kakao/callback")
     public void kakaoCallback(String code, HttpServletResponse response) {// 데이터 리턴해주는 컨트롤러 함수
-
         String client_id = "6c633b1da1bdc67e6071145ed5723fec";
 
         RestTemplate restTemplate = new RestTemplate();
@@ -336,35 +212,39 @@ public class LoginController {
             System.out.println("카카오톡 로그인 에러2 : " + e.getMessage());
         }
 
-        // System.out.println("카카오 토큰 : " + oAuthToken.getAccess_token());
-        // ResponseEntity<String> end = userDAO.getKakaoToken(oAuthToken.getAccess_token());
-        // return "카카오 토큰 요청 완료(토큰에 대한 응답값) : " + response;
-        // return end.getBody();
+        KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
 
-        MemberTO to = new MemberTO();
-        //제이슨 파일에서 이메일을 받아옴
-        to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
-
-        System.out.println("controller email : " + to.getEmail());
-
-        //받은 이메일이 디비에 있는 이메일인지 확인
-        int flag = userDAO.setSosialMemberCheck(to);
-        System.out.println("controller flag : " + flag);
-        
-        //flag가 0이면 통과
-        if (flag == 0) {
-            try {
-                response.sendRedirect(domain);
-            } catch (IOException e) {
-                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-            }
-        }else{
-            try {
-                //회원가입 화면으로 이동 혹은 다시 로그인 화면으로 이동
-                response.sendRedirect(domain + "login");
-            } catch (IOException e) {
-                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-            }
+        try {
+            response.sendRedirect(domain);
+        } catch (IOException e) {
+            System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
         }
+
+
+        // MemberTO to = new MemberTO();
+        // //제이슨 파일에서 이메일을 받아옴
+        // to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
+
+        // System.out.println("controller email : " + to.getEmail());
+
+        // //받은 이메일이 디비에 있는 이메일인지 확인
+        // //int flag = userDAO.setSosialMemberCheck(to);
+        // //System.out.println("controller flag : " + flag);
+        
+        // //flag가 0이면 통과
+        // if (flag == 0) {
+        //     try {
+        //         response.sendRedirect(domain);
+        //     } catch (IOException e) {
+        //         System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+        //     }
+        // }else{
+        //     try {
+        //         //회원가입 화면으로 이동 혹은 다시 로그인 화면으로 이동
+        //         response.sendRedirect(domain + "login");
+        //     } catch (IOException e) {
+        //         System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+        //     }
+        // }
     }
 }

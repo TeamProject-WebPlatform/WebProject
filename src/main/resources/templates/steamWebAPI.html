@@ -7,19 +7,19 @@
 <script th:inline="javascript">
     let steamID = /*[[${steamID}]]*/'0';
     function getPlayerSummary(steamID){
-        location.href="/login/steam/playerSummary?steamID="+steamID
+        location.href="/steamapi/playerSummary?steamID="+steamID
     }
     function getGameNews(gameID){
-        location.href="/login/steam/gameNews?gameID="+gameID;
+        location.href="/steamapi/gameNews?gameID="+gameID;
     }
     function getGameAchievement(gameID){
-        location.href="/login/steam/gameAchievement?gameID="+gameID;
+        location.href="/steamapi/gameAchievement?gameID="+gameID;
     }
     function getMyGameAchievement(steamID,gameID){
-        location.href="/login/steam/myGameAchievement?steamID="+steamID+"&gameID="+gameID;
+        location.href="/steamapi/myGameAchievement?steamID="+steamID+"&gameID="+gameID;
     }
     function getMyGameList(steamID){
-        location.href="/login/steam/myGameList?steamID="+steamID;
+        location.href="/steamapi/myGameList?steamID="+steamID;
     }
 </script>
 <body>
