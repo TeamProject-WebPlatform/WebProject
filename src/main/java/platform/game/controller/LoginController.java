@@ -159,7 +159,7 @@ public class LoginController {
             mav.addObject("steamID", username);
             return mav;
         }else{
-            return new ModelAndView("login");
+            return new ModelAndView("error");
         }
 
     }
