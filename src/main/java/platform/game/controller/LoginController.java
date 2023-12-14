@@ -97,7 +97,8 @@ public class LoginController {
 	public int mail_ok( @RequestBody UserSignTO userSignup) {
 		int flag = 2;
 		//System.out.println("javaMailSender : " + javaMailSender);
-		
+		createNumber();
+        
 		String toEmail = userSignup.getEmail();
 		String toName = userSignup.getNickname();
 		String subject = userSignup.getNickname() + "님의 인증번호 입니다";
