@@ -2,7 +2,13 @@ package platform.game.jwt;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -13,7 +19,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+@Service
 public class Token {
+
+    @Value("${SecretKey}")
+    private String secretKey;
 
     // 테스트용 jwt 생성 코드
     public String createToken(String id, String password, String nickname) {
@@ -32,8 +42,8 @@ public class Token {
         Date date = new Date();
         date.setTime(date.getTime() + expiredTime); // 토큰 만료시간 설정
 
-        Key key = Keys // 시크릿 키 추후 env.properties에 설정 필요
-                .hmacShaKeyFor("asdlfkjsalkdfjlskadjflksjdlksajdflksajdlkfajsldkfj".getBytes(StandardCharsets.UTF_8));
+        String keyBase64encoded = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
+        SecretKey secretkey = Keys.hmacShaKeyFor(keyBase64encoded.getBytes(StandardCharsets.UTF_8));
 
         // 토큰 builder
         String jwt = Jwts.builder()
@@ -41,7 +51,7 @@ public class Token {
                 .setClaims(payload)
                 .setSubject("test")
                 .setExpiration(date)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .signWith(secretkey, SignatureAlgorithm.HS256)
                 .compact();
 
         // return
@@ -49,7 +59,7 @@ public class Token {
     }
 
     private Key getKey() {
-        byte[] key = Decoders.BASE64.decode("asdlfkjsalkdfjlskadjflksjdlksajdflksajdlkfajsldkfj");
+        byte[] key = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(key);
     }
 

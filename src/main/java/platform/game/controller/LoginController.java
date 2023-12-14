@@ -56,6 +56,8 @@ public class LoginController {
 
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    Token token;
     @Value("${steamWebApiKey}")
     String steamWebApiKey;
     @Value("${domain}")
@@ -83,10 +85,9 @@ public class LoginController {
         // 결과 flag에 int로 저장
 
         // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        Token createToken = new Token();
-        String token = createToken.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
-        System.out.println(token);
-        createToken.extractToken(token);
+        String tok = token.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
+        System.out.println(tok);
+        token.extractToken(tok);
 
         // spring_security password 암호화 테스트
         String ep = securityPassword.encode(userSignup.getPassword());
