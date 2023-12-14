@@ -1,6 +1,8 @@
 package platform.game.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,6 +13,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -33,6 +37,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
+import jakarta.mail.Message.RecipientType;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -54,6 +62,9 @@ public class LoginController {
     @Autowired
     UserDAO userDAO;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
     @GetMapping("")
     public ModelAndView login(){
         return new ModelAndView("login");
@@ -66,6 +77,7 @@ public class LoginController {
         System.out.println("id : "+userSignup.getId());
         System.out.println("password : "+userSignup.getPassword());
         System.out.println("nickname : "+userSignup.getNickname());
+        System.out.println("email : "+userSignup.getEmail());
         
         // jwt로 암호화
         // db에 조회
@@ -74,6 +86,61 @@ public class LoginController {
 
         return flag;
     }
+    // 이메일 인증 요청
+    private static int number;
+    
+    public static void createNumber(){
+        number = (int)(Math.random() * (90000)) + 100000;// (int) Math.random() * (최댓값-최소값+1) + 최소값
+    }
+
+	@PostMapping( "/mail_ok" )
+	public int mail_ok( @RequestBody UserSignTO userSignup) {
+		int flag = 2;
+		//System.out.println("javaMailSender : " + javaMailSender);
+		
+		String toEmail = userSignup.getEmail();
+		String toName = userSignup.getNickname();
+		String subject = userSignup.getNickname() + "님의 인증번호 입니다";
+		String content = "<h1>"+userSignup.getNickname()+"님의 인증 번호는 <span>"+number+"</span> 입니다.</h1>";
+		
+        System.out.println(toEmail);
+        System.out.println(toName);
+        System.out.println(subject);
+        System.out.println(content);
+		// this.sendMail1(toEmail, toName, subject, content);
+		this.sendMail(toEmail, toName, subject, content);
+		
+		return flag;
+	}
+
+
+    public void sendMail(String toEmail, String toName, String subject, String content) {
+		try {
+			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+			mimeMessage.addRecipient(
+					RecipientType.TO,
+					new InternetAddress(toEmail, toName, "utf-8"));
+			mimeMessage.setSubject(subject,"utf-8");
+			mimeMessage.setText(content, "utf-8", "html");
+			
+			mimeMessage.setSentDate(new Date());
+			
+			javaMailSender.send(mimeMessage);
+			
+			System.out.println("전송완료");
+			
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
     // 로그인 요청
     @PostMapping("/signin_ok")
     public int handleSigninin(@RequestBody UserSignTO userSignin){

@@ -11,6 +11,4 @@ import platform.game.model.TO.UserTO;
 public interface SqlMapperInter {
     @Select("select * from user where id = #{id} and password=#{password}")
     public UserTO getUserTObyIDandPass(String id,String password);
-
-    
 }

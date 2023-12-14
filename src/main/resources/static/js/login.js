@@ -3,6 +3,7 @@ const setLoginPage = function(){
     const navSignup = document.querySelector('#navigation li[name=signup]');
     const btnLogin = document.getElementById('btn-login');
     const btnSingup = document.getElementById('btn-signup');
+    const btnemail = document.getElementById('btn-email');
     const frmLogin = document.frmLogin;
     const pwcFail = document.querySelector('.verifyContraints[name=pwc-fail]');
     const pwcPass = document.querySelector('.verifyContraints[name=pwc-pass]');
@@ -10,6 +11,7 @@ const setLoginPage = function(){
     const inputPassword = document.getElementById('password');
     const inputPasswordCheck = document.getElementById('passwordCheck');
     const inputNickname = document.getElementById('nickname');
+    const inputEmail = document.getElementById('emailCheck');
     const idPass = document.querySelector('.verifyContraints[name=id-pass]');
     const idFail = document.querySelector('.verifyContraints[name=id-fail]');
     const pwPass = document.querySelector('.verifyContraints[name=pw-pass]');
@@ -71,6 +73,7 @@ const setLoginPage = function(){
                 body: JSON.stringify({
                     id: inputId.value,
                     password: inputPassword.value,
+                    mail: inputEmail.value
                 })
             });
             if (!response.ok) {
@@ -83,6 +86,9 @@ const setLoginPage = function(){
                     break;
                 case 2:
                     console.log("비번 오류");
+                    break;
+                case 3:
+                    console.log("이메일 없음");
                     break;
                 case 0:
                     window.location.href = "/";
@@ -145,7 +151,42 @@ const setLoginPage = function(){
     inputPasswordCheck.addEventListener('oninput',function(){
         
     })
-
+    
+    // 이메일 체크
+    btnemail.addEventListener('click', async function (e) {
+        e.preventDefault();
+        try {
+            const response = await fetch(`/login/mail_ok`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nickname: inputNickname.value,
+                    mail: inputEmail.value,
+                })
+            });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            switch (flag.flag){
+                case 1:
+                    console.log("아이디 없음");
+                    break;
+                case 2:
+                    console.log("비번 오류");
+                    break;
+                case 0:
+                    window.location.href = "/";
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    });
 }
 const showLoginWidget = function () {
     const signupContents = document.querySelectorAll('.signup');
@@ -289,4 +330,31 @@ const verifyNicknameContraints = function(){
     nckFail.style.display="none";
     nckPass.style.display="";
     return true;
-}
+};
+
+const EmailCheck = function(){
+    document.getElementById( 'btn-email' ).onclick = function() {
+        if( document.getElementById('emailCheck').value == '' ) {
+        // if( inputEmail.value.trim() == '' ) {
+            alert( '이메일을 입력해주세요.' );
+            return;
+        }else{
+            alert('인증번호를 전송하였습니다.');
+            document.getElementById('mail_number').style.display="block";
+        }
+        document.frmLogin.submit();
+    };
+
+};
+
+const confirmNumber = function(){
+    const number1 = document.getElementById('Confirm').value;
+    const number2 = document.getElementById('number').value;
+
+    if(number1 == number2){
+        alert("인증되었습니다.");
+    }else{
+        alert("번호가 다릅니다.");
+    }
+    
+};

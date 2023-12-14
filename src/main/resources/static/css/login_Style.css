@@ -1,8 +1,8 @@
 #frmLogin {
     border: 3px solid black;
     padding: 0px;
-    width: 400px;
-    height: 300px;
+    width: 600px;
+    /* height: 300px; */
 }
 
 #frmLogin form {
@@ -72,7 +72,7 @@
 
 #frmLogin #login-contents {
     padding: 5px;
-    height: 155px;
+    /* height: 155px; */
 }
 
 #frmLogin #login-contents div:first-child label {
@@ -100,7 +100,7 @@
 #btn-signup {
     width: calc(100% - 10px);
     height: 40px;
-    padding: 5px;
+    padding: 10px;
     font-size: 20px;
 }
 
