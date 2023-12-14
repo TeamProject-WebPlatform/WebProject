@@ -34,7 +34,6 @@ import platform.game.jwt.JwtManager;
 import platform.game.jwt.SecurityPassword;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
-import platform.game.model.TO.UserTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
 
 @RestController
@@ -47,7 +46,7 @@ public class LoginController {
     @Autowired
     UserDAO userDAO;
     @Autowired
-    JwtManager jwtManager;    
+    JwtManager jwtManager;
     @Value("${domain}")
     String domain;
 
@@ -72,11 +71,6 @@ public class LoginController {
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
 
-        // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        JwtManager createToken = new JwtManager();
-        String token = createToken.createToken(userSignup.getId(), userSignup.getPassword());
-        System.out.println(token);
-        createToken.extractToken(token);
 
         return flag;
     }
@@ -93,13 +87,22 @@ public class LoginController {
         // db에 조회
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
-        UserTO to = userDAO.getUserTObyIDandPass(userSignin.getId(), userSignin.getPassword());
-        if (to != null) {
-            System.out.println("로그인 성공");
-            System.out.println("UserTO : " + to.toString());
-        } else {
-            System.out.println("로그인 실패");
-        }
+        // 토큰 생성 및 복호화 테스트 추후 수정 필요
+        String token = jwtManager.createToken(userSignin.getId(), userSignin.getPassword());
+        System.out.println(token);
+        try{Thread.sleep(5000);}catch(Exception e){}
+        System.out.println("5초 지남");
+        boolean s = jwtManager.validateToken(token);
+        System.out.println("테스트 : "+s);
+
+        // 현종이 DB에 현재 문제있음
+        // UserTO to = userDAO.getUserTObyIDandPass(userSignin.getId(), userSignin.getPassword());
+        // if (to != null) {
+        //     System.out.println("로그인 성공");
+        //     System.out.println("UserTO : " + to.toString());
+        // } else {
+        //     System.out.println("로그인 실패");
+        // }
         return flag;
     }
 
