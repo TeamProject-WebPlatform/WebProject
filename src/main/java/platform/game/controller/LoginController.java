@@ -39,10 +39,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import platform.game.action.KakaoAction;
+import platform.game.action.SignUpAction;
 import platform.game.jwt.Token;
 import platform.game.model.DAO.UserDAO;
+import platform.game.model.TO.MemberTO;
 import platform.game.model.TO.UserSignTO;
-import platform.game.model.TO.UserTO;
+import platform.game.model.TO.KakaoTO.KakaoProfileTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
 import platform.game.security.SecurityUser;
 
@@ -59,6 +61,9 @@ public class LoginController {
     @Value("${domain}")
     String domain;
 
+    @Autowired
+    private SignUpAction signUpAction;
+
     @GetMapping("")
     public ModelAndView login() {
         return new ModelAndView("login");
@@ -67,28 +72,25 @@ public class LoginController {
     // 회원가입 요청
     @PostMapping("/signup_ok")
     public int handleSignup(@RequestBody UserSignTO userSignup) {
+
+        System.out.println("컨트롤러 handleSignup 호출");
+
         int flag = 2;
-        System.out.println("id : " + userSignup.getId());
-        System.out.println("password : " + userSignup.getPassword());
-        System.out.println("nickname : " + userSignup.getNickname());
 
-        // jwt로 암호화
-        // db에 조회
-        // 아이디, 닉네임 중복체크
-        // 결과 flag에 int로 저장
+        flag = signUpAction.signUp(userSignup);
 
-        // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        Token createToken = new Token();
-        String token = createToken.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
-        System.out.println(token);
-        createToken.extractToken(token);
+        if (flag == 1) {//성공
+            System.out.println("회원가입 성공");
+        }else{
+            System.out.println("회원가입 실패");
+        }
 
         return flag;
     }
 
-    // 로그인 요청
+    // 로그인 요청(웹사이트 - default)
     @PostMapping("/signin_ok")
-    public int handleSigninin(@RequestBody UserSignTO userSignin) {
+    public ModelAndView handleSigninin(@RequestBody UserSignTO userSignin) {
         int flag = 2;
         System.out.println("id : " + userSignin.getId());
         System.out.println("password : " + userSignin.getPassword());
@@ -98,14 +100,18 @@ public class LoginController {
         // db에 조회
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
-        UserTO to = userDAO.getUserTObyIDandPass(userSignin.getId(), userSignin.getPassword());
-        if (to != null) {
+        flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
+
+        //ModelAndView modelAndView = new ModelAndView();
+
+        if (flag == 0) {
             System.out.println("로그인 성공");
-            System.out.println("UserTO : " + to.toString());
+            return new ModelAndView("index");
         } else {
             System.out.println("로그인 실패");
         }
-        return flag;
+
+		return new ModelAndView("index");
     }
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------
@@ -331,17 +337,34 @@ public class LoginController {
         }
 
         // System.out.println("카카오 토큰 : " + oAuthToken.getAccess_token());
-        // ResponseEntity<String> end =
-        // userDAO.getKakaoToken(oAuthToken.getAccess_token());
+        // ResponseEntity<String> end = userDAO.getKakaoToken(oAuthToken.getAccess_token());
         // return "카카오 토큰 요청 완료(토큰에 대한 응답값) : " + response;
         // return end.getBody();
 
-        KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
+        MemberTO to = new MemberTO();
+        //제이슨 파일에서 이메일을 받아옴
+        to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
 
-        try {
-            response.sendRedirect(domain);
-        } catch (IOException e) {
-            System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+        System.out.println("controller email : " + to.getEmail());
+
+        //받은 이메일이 디비에 있는 이메일인지 확인
+        int flag = userDAO.setSosialMemberCheck(to);
+        System.out.println("controller flag : " + flag);
+        
+        //flag가 0이면 통과
+        if (flag == 0) {
+            try {
+                response.sendRedirect(domain);
+            } catch (IOException e) {
+                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+            }
+        }else{
+            try {
+                //회원가입 화면으로 이동 혹은 다시 로그인 화면으로 이동
+                response.sendRedirect(domain + "login");
+            } catch (IOException e) {
+                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+            }
         }
     }
 }

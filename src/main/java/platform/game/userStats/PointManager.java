@@ -3,12 +3,12 @@ package platform.game.userStats;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-import platform.game.model.TO.UserTO;
+import platform.game.model.TO.MemberTO;
 
 @Component
 @ComponentScan(basePackages = {"platform.game.model"})
 public class PointManager {
-    static int addPoint(UserTO to, int amount){ 
+    static int addPoint(MemberTO to, int amount){ 
         if(to==null) return 0;
         if(amount<0) return to.getPoint();
 
@@ -19,7 +19,7 @@ public class PointManager {
     }
     // 남은 포인트 값 return, 
     // 남은 포인트보다 큰 값이 들어오면 -1 return
-    static int removePoint(UserTO to, int amount){
+    static int removePoint(MemberTO to, int amount){
         if(to==null) return 0;
         if(amount<0) return to.getPoint();
 
