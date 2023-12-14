@@ -31,22 +31,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.action.KakaoAction;
 import platform.game.jwt.JwtManager;
-import platform.game.jwt.JwtManager;
+import platform.game.jwt.SecurityPassword;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
 import platform.game.model.TO.UserTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
 
 @RestController
-@ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model" })
+@ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model",
+        "platform.game.jwt" })
 @RequestMapping("/login")
 public class LoginController {
     // 로그인과 회원가입
 
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    JwtManager jwtManager;
     @Value("${domain}")
     String domain;
+
+    @Autowired
+    private SecurityPassword securityPassword;
 
     @GetMapping("")
     public ModelAndView login() {
@@ -67,10 +73,10 @@ public class LoginController {
         // 결과 flag에 int로 저장
 
         // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        JwtManager createToken = new JwtManager();
-        String token = createToken.createToken(userSignup.getId(), userSignup.getPassword());
-        System.out.println(token);
-        createToken.extractToken(token);
+        // JwtManager createToken = new JwtManager();
+        // String token = createToken.createToken(userSignup.getId(), userSignup.getPassword());
+        // System.out.println(token);
+        // createToken.extractToken(token);
 
         return flag;
     }

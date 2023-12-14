@@ -5,12 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"platform.game.controller","platform.game.env.config"})
+@ComponentScan(basePackages = { "platform.game.controller", "platform.game.env.config" })
 public class ServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceApplication.class, args);
 	}
-
 
 }
