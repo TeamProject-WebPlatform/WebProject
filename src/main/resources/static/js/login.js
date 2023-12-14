@@ -3,7 +3,7 @@ const setLoginPage = function(){
     const navSignup = document.querySelector('#navigation li[name=signup]');
     const btnLogin = document.getElementById('btn-login');
     const btnSingup = document.getElementById('btn-signup');
-    const btnemail = document.getElementById('btn-email');
+    const btnEmail = document.getElementById('btn-email');
     const frmLogin = document.frmLogin;
     const pwcFail = document.querySelector('.verifyContraints[name=pwc-fail]');
     const pwcPass = document.querySelector('.verifyContraints[name=pwc-pass]');
@@ -153,7 +153,7 @@ const setLoginPage = function(){
     })
     
     // 이메일 체크
-    btnemail.addEventListener('click', async function (e) {
+    btnEmail.addEventListener('click', async function (e) {
         e.preventDefault();
         try {
             const response = await fetch(`/login/mail_ok`,{
@@ -170,6 +170,7 @@ const setLoginPage = function(){
                 throw new Error('서버 응답이 실패했습니다.');
             }
             const flag = await response.json();
+            console.log(flag);
             switch (flag.flag){
                 case 1:
                     console.log("아이디 없음");
@@ -349,8 +350,7 @@ const EmailCheck = function(){
 
 const confirmNumber = function(){
     const number1 = document.getElementById('Confirm').value;
-    const number2 = document.getElementById('number').value;
-
+    const number2 = docmentu.getElementById('number').value;
     if(number1 == number2){
         alert("인증되었습니다.");
     }else{
