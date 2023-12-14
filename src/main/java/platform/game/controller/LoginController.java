@@ -32,8 +32,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import platform.game.action.KakaoAction;
 import platform.game.jwt.JwtManager;
 import platform.game.jwt.SecurityPassword;
+import platform.game.action.SignUpAction;
 import platform.game.model.DAO.UserDAO;
+import platform.game.model.TO.MemberTO;
 import platform.game.model.TO.UserSignTO;
+import platform.game.model.TO.KakaoTO.KakaoProfileTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
 
 @RestController
@@ -53,6 +56,9 @@ public class LoginController {
     @Autowired
     private SecurityPassword securityPassword;
 
+    @Autowired
+    private SignUpAction signUpAction;
+
     @GetMapping("")
     public ModelAndView login() {
         return new ModelAndView("login");
@@ -62,48 +68,52 @@ public class LoginController {
     @PostMapping("/signup_ok")
     public int handleSignup(@RequestBody UserSignTO userSignup) {
         int flag = 2;
+        
         System.out.println("id : " + userSignup.getId());
         System.out.println("password : " + userSignup.getPassword());
         System.out.println("nickname : " + userSignup.getNickname());
 
-        // jwt로 암호화
-        // db에 조회
-        // 아이디, 닉네임 중복체크
-        // 결과 flag에 int로 저장
+        flag = signUpAction.signUp(userSignup);
 
+        if (flag == 0) {//성공
+            System.out.println("회원가입 성공");
+        }else{
+            System.out.println("회원가입 실패");
+        }
 
         return flag;
     }
 
-    // 로그인 요청
+    // 로그인 요청(웹사이트 - default)
     @PostMapping("/signin_ok")
-    public int handleSigninin(@RequestBody UserSignTO userSignin) {
+    public ModelAndView handleSigninin(@RequestBody UserSignTO userSignin) {
         int flag = 2;
         System.out.println("id : " + userSignin.getId());
         System.out.println("password : " + userSignin.getPassword());
-        System.out.println("nickname : " + userSignin.getNickname());
 
         // jwt로 암호화
         // db에 조회
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
         // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        String token = jwtManager.createToken(userSignin.getId(), userSignin.getPassword());
-        System.out.println(token);
-        try{Thread.sleep(5000);}catch(Exception e){}
-        System.out.println("5초 지남");
-        boolean s = jwtManager.validateToken(token);
-        System.out.println("테스트 : "+s);
+        // String token = jwtManager.createToken(userSignin.getId(), userSignin.getPassword());
+        // System.out.println(token);
+        // try{Thread.sleep(5000);}catch(Exception e){}
+        // System.out.println("5초 지남");
+        // boolean s = jwtManager.validateToken(token);
+        // System.out.println("테스트 : "+s);
 
-        // 현종이 DB에 현재 문제있음
-        // UserTO to = userDAO.getUserTObyIDandPass(userSignin.getId(), userSignin.getPassword());
-        // if (to != null) {
-        //     System.out.println("로그인 성공");
-        //     System.out.println("UserTO : " + to.toString());
-        // } else {
-        //     System.out.println("로그인 실패");
-        // }
-        return flag;
+        flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
+
+        if (flag == 0) {
+            System.out.println("로그인 성공");
+            
+            return new ModelAndView("index");
+        } else {
+            System.out.println("로그인 실패");
+        }
+
+		return new ModelAndView("index");
     }
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------
@@ -149,7 +159,7 @@ public class LoginController {
             mav.addObject("steamID", username);
             return mav;
         }else{
-            return new ModelAndView("login");
+            return new ModelAndView("error");
         }
 
     }
@@ -194,12 +204,6 @@ public class LoginController {
             System.out.println("카카오톡 로그인 에러2 : " + e.getMessage());
         }
 
-        // System.out.println("카카오 토큰 : " + oAuthToken.getAccess_token());
-        // ResponseEntity<String> end =
-        // userDAO.getKakaoToken(oAuthToken.getAccess_token());
-        // return "카카오 토큰 요청 완료(토큰에 대한 응답값) : " + response;
-        // return end.getBody();
-
         KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
 
         try {
@@ -207,5 +211,32 @@ public class LoginController {
         } catch (IOException e) {
             System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
         }
+
+
+        // MemberTO to = new MemberTO();
+        // //제이슨 파일에서 이메일을 받아옴
+        // to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
+
+        // System.out.println("controller email : " + to.getEmail());
+
+        // //받은 이메일이 디비에 있는 이메일인지 확인
+        // //int flag = userDAO.setSosialMemberCheck(to);
+        // //System.out.println("controller flag : " + flag);
+        
+        // //flag가 0이면 통과
+        // if (flag == 0) {
+        //     try {
+        //         response.sendRedirect(domain);
+        //     } catch (IOException e) {
+        //         System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+        //     }
+        // }else{
+        //     try {
+        //         //회원가입 화면으로 이동 혹은 다시 로그인 화면으로 이동
+        //         response.sendRedirect(domain + "login");
+        //     } catch (IOException e) {
+        //         System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+        //     }
+        // }
     }
 }
