@@ -34,7 +34,6 @@ import platform.game.jwt.JwtManager;
 import platform.game.jwt.SecurityPassword;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
-import platform.game.model.TO.UserTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
 
 @RestController
