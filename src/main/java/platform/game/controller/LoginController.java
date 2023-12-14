@@ -84,16 +84,16 @@ public class LoginController {
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
 
-        // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        String tok = token.createToken(userSignup.getId(), userSignup.getPassword(), userSignup.getNickname());
-        System.out.println(tok);
-        token.extractToken(tok);
+        // 토큰 생성 및 복호화 테스트
+        // String tok = token.createToken(userSignup.getId(), userSignup.getPassword(),
+        // userSignup.getNickname());
+        // System.out.println(tok);
 
         // spring_security password 암호화 테스트
-        String ep = securityPassword.encode(userSignup.getPassword());
-        boolean dd = securityPassword.matches(userSignup.getPassword(), ep);
-        System.out.println(ep);
-        System.out.println(dd);
+        // String ep = securityPassword.encode(userSignup.getPassword());
+        // boolean dd = securityPassword.matches(userSignup.getPassword(), ep);
+        // System.out.println(ep);
+        // System.out.println(dd);
 
         return flag;
     }
