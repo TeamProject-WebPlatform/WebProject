@@ -73,10 +73,10 @@ public class LoginController {
         // 결과 flag에 int로 저장
 
         // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        // JwtManager createToken = new JwtManager();
-        // String token = createToken.createToken(userSignup.getId(), userSignup.getPassword());
-        // System.out.println(token);
-        // createToken.extractToken(token);
+        JwtManager createToken = new JwtManager();
+        String token = createToken.createToken(userSignup.getId(), userSignup.getPassword());
+        System.out.println(token);
+        createToken.extractToken(token);
 
         return flag;
     }
