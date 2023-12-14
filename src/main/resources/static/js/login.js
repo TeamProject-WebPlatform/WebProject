@@ -87,9 +87,6 @@ const setLoginPage = function(){
                 case 2:
                     console.log("비번 오류");
                     break;
-                case 3:
-                    console.log("이메일 없음");
-                    break;
                 case 0:
                     window.location.href = "/";
                     break;
@@ -343,7 +340,7 @@ const EmailCheck = function(){
             alert('인증번호를 전송하였습니다.');
             document.getElementById('mail_number').style.display="block";
         }
-        document.frmLogin.submit();
+        // document.frmLogin.submit();
     };
 
 };

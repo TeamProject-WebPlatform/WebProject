@@ -98,11 +98,11 @@ public class LoginController {
 		int flag = 2;
 		//System.out.println("javaMailSender : " + javaMailSender);
 		createNumber();
-        
+
 		String toEmail = userSignup.getEmail();
 		String toName = userSignup.getNickname();
-		String subject = userSignup.getNickname() + "님의 인증번호 입니다";
-		String content = "<h1>"+userSignup.getNickname()+"님의 인증 번호는 <span>"+number+"</span> 입니다.</h1>";
+		String subject = toName + "님의 인증번호 입니다";
+		String content = "<h1>"+toName+"님의 인증 번호는 <span>"+number+"</span> 입니다.</h1>";
 		
         System.out.println(toEmail);
         System.out.println(toName);
