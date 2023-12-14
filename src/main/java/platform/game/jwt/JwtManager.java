@@ -7,7 +7,9 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -21,14 +23,12 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 
 @Component
+@ComponentScan(basePackages={"platform.game.env.config"})
 public class JwtManager {
     Key key = null;
-    Long lifetime = 1000 * 60 * 60L; // 토큰 유효시간 1시간
+    Long lifetime = 1000L; // 토큰 유효시간 1시간
 
-    @Value("${jwt.secret}")
-    String secret;
-
-    public JwtManager(){
+    public JwtManager(@Value("${jwt.secret}") String secret){
         key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
     public String createToken(String id, String password) {
@@ -64,22 +64,19 @@ public class JwtManager {
     }
 
     public boolean validateToken(String token){
-        // try{
-        //     Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        // } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-        //     System.out.println("잘못된 JWT 서명입니다.");
-        // } catch (ExpiredJwtException e) {
-        //      System.out.println("만료된 JWT 토큰입니다.");
-        // } catch (UnsupportedJwtException e) {
-        //      System.out.println("지원되지 않는 JWT 토큰입니다.");
-        // } catch (IllegalArgumentException e) {
-        //      System.out.println("JWT 토큰이 잘못되었습니다.");
-        // }
+        try{
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            System.out.println("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+             System.out.println("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+             System.out.println("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+             System.out.println("JWT 토큰이 잘못되었습니다.");
+        }
+        return false;
 
-        return Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration()
-                .before(new Date());
     }
 }
