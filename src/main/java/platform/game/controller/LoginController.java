@@ -46,6 +46,8 @@ public class LoginController {
 
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    JwtManager jwtManager;    
     @Value("${domain}")
     String domain;
 
