@@ -2,6 +2,7 @@ package platform.game.action;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,8 +15,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import platform.game.model.TO.MemberTO;
+
 public class KakaoAction {
-    public static ResponseEntity<String> getKakaoToken(String access_token){
+
+    public static String getKakaoToken(String access_token){
 
         //System.out.println("getKakaoToken(String access_token) 호출");
         RestTemplate restTemplate = new RestTemplate();
@@ -50,15 +54,14 @@ public class KakaoAction {
         }
 
         //System.out.println(kakaoProfileTO.getKakaoAccount().getEmail());
-        
+        String email = "";
         if (responseMap != null) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) responseMap.get("kakao_account");
             if (kakaoAccount != null) {
-                String email = (String) kakaoAccount.get("email");
-                System.out.println("이메일: " + email);
+                email = kakaoAccount.get("email").toString();
+                //System.out.println("엑션 email : " + kakaoAccount.get("email"));
             }
         }
-
-        return response;
+        return email;
     }
 }
