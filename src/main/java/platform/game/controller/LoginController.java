@@ -86,7 +86,7 @@ public class LoginController {
 
     // 로그인 요청(웹사이트 - default)
     @PostMapping("/signin_ok")
-    public ModelAndView handleSigninin(@RequestBody UserSignTO userSignin) {
+    public int handleSigninin(@RequestBody UserSignTO userSignin) {
         int flag = 2;
         System.out.println("id : " + userSignin.getId());
         System.out.println("password : " + userSignin.getPassword());
@@ -104,16 +104,7 @@ public class LoginController {
         // System.out.println("테스트 : "+s);
 
         flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
-
-        if (flag == 0) {
-            System.out.println("로그인 성공");
-            
-            return new ModelAndView("index");
-        } else {
-            System.out.println("로그인 실패");
-        }
-
-		return new ModelAndView("index");
+        return flag;
     }
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------

@@ -77,7 +77,7 @@ const setLoginPage = function(){
                 throw new Error('서버 응답이 실패했습니다.');
             }
             const flag = await response.json();
-            switch (flag.flag){
+            switch (flag){
                 case 1:
                     console.log("아이디 없음");
                     break;
@@ -122,7 +122,7 @@ const setLoginPage = function(){
                 throw new Error('서버 응답이 실패했습니다.');
             }
             const flag = await response.json();
-            switch (flag.flag){
+            switch (flag){
                 case 1:
                     console.log("아이디 중복");
                     break;
