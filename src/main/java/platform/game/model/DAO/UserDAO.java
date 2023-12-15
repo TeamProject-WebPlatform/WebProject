@@ -4,9 +4,9 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import platform.game.jwt.SecurityPassword;
 import platform.game.mapper.SqlMapperInter;
 import platform.game.model.TO.MemberTO;
+import platform.game.module.jwt.SecurityPassword;
 
 @Repository
 @MapperScan(basePackages = {"platform.game.mapper"})

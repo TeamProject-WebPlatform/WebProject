@@ -30,18 +30,16 @@ import org.springframework.web.reactive.function.client.WebClient;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.action.KakaoAction;
-import platform.game.jwt.JwtManager;
-import platform.game.jwt.SecurityPassword;
 import platform.game.action.SignUpAction;
 import platform.game.model.DAO.UserDAO;
-import platform.game.model.TO.MemberTO;
 import platform.game.model.TO.UserSignTO;
-import platform.game.model.TO.KakaoTO.KakaoProfileTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
+import platform.game.module.jwt.JwtManager;
+import platform.game.module.jwt.SecurityPassword;
 
 @RestController
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model",
-        "platform.game.jwt" })
+        "platform.game.module.*" })
 @RequestMapping("/login")
 public class LoginController {
     // 로그인과 회원가입

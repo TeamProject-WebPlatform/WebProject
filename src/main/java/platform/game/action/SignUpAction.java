@@ -3,10 +3,10 @@ package platform.game.action;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import platform.game.jwt.SecurityPassword;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.MemberTO;
 import platform.game.model.TO.UserSignTO;
+import platform.game.module.jwt.SecurityPassword;
 
 @Component
 public class SignUpAction {

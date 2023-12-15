@@ -1,4 +1,4 @@
-package platform.game.jwt;
+package platform.game.module.jwt;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
