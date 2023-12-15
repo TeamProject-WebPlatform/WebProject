@@ -37,6 +37,7 @@ public class JwtManager {
         Claims payload = Jwts.claims();
         payload.put("id", id);
         payload.put("password", password);
+        payload.put("role", "USER");
         // 유효기간
         Long expiredTime = lifetime;
 
@@ -48,6 +49,7 @@ public class JwtManager {
                 .setHeader(header)
                 .setClaims(payload)
                 .setSubject("test")
+                // .claim("role", "USER")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredTime))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -57,9 +59,9 @@ public class JwtManager {
     }
 
     // jwt 특정 값 리턴 테스트용 코드
-    public String extractToken(String token) {
+    public String extractToken(String tag, String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaim("password").toString();
+        return decodedJWT.getClaim(tag).toString();
     }
 
     // 토큰 유효성 검사

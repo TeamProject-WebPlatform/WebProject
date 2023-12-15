@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.action.KakaoAction;
@@ -66,16 +67,16 @@ public class LoginController {
     @PostMapping("/signup_ok")
     public int handleSignup(@RequestBody UserSignTO userSignup) {
         int flag = 2;
-        
+
         System.out.println("id : " + userSignup.getId());
         System.out.println("password : " + userSignup.getPassword());
         System.out.println("nickname : " + userSignup.getNickname());
 
         flag = signUpAction.signUp(userSignup);
 
-        if (flag == 0) {//성공
+        if (flag == 0) {// 성공
             System.out.println("회원가입 성공");
-        }else{
+        } else {
             System.out.println("회원가입 실패");
         }
 
@@ -84,7 +85,7 @@ public class LoginController {
 
     // 로그인 요청(웹사이트 - default)
     @PostMapping("/signin_ok")
-    public int handleSigninin(@RequestBody UserSignTO userSignin) {
+    public int handleSigninin(@RequestBody UserSignTO userSignin, HttpServletResponse response) {
         int flag = 2;
         System.out.println("id : " + userSignin.getId());
         System.out.println("password : " + userSignin.getPassword());
@@ -94,7 +95,8 @@ public class LoginController {
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
         // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        // String token = jwtManager.createToken(userSignin.getId(), userSignin.getPassword());
+        // String token = jwtManager.createToken(userSignin.getId(),
+        // userSignin.getPassword());
         // System.out.println(token);
         // try{Thread.sleep(5000);}catch(Exception e){}
         // System.out.println("5초 지남");
@@ -102,6 +104,30 @@ public class LoginController {
         // System.out.println("테스트 : "+s);
 
         flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
+        String s_password = userDAO.getMemberTObySecurityPassword(userSignin.getId());
+
+        if (flag == 0) {
+            System.out.println("로그인 성공");
+            String token = jwtManager.createToken(userSignin.getId(), s_password);
+            System.out.println(token);
+
+            // 쿠키 생성
+            Cookie cookie = new Cookie("jwtTokenCookie", token);
+
+            // 쿠키를 안전하게 설정하기 위해 secure 및 httpOnly 설정
+            // cookie.setSecure(true); // HTTPS 프로토콜 사용 여부
+            // cookie.setHttpOnly(true); // JavaScript를 통한 접근 금지
+
+            // 쿠키의 속성 설정 (예: 유효 시간, 경로 등)
+            cookie.setMaxAge(3600); // 60 * 60 1시간 동안 유효
+            // cookie.setDomain("localhost");
+            cookie.setPath("/");    // 모든 경로에서 접근 가능
+
+            // 쿠키를 응답 헤더에 추가
+            response.addCookie(cookie);
+        } else {
+            System.out.println("로그인 실패");
+        }
         return flag;
     }
 
@@ -140,17 +166,30 @@ public class LoginController {
                 .block();
 
         boolean isTrue = Objects.requireNonNull(body).contains("true");
-        if (isTrue) { 
+        if (isTrue) {
             // 인증 성공 username : 스팀아이디
-            ModelAndView mav = new ModelAndView("steamWebAPI");
+            //ModelAndView mav = new ModelAndView("steamWebAPI");
             String[] tmp = openidIdentity.split("/");
             String username = tmp[tmp.length - 1];
-            mav.addObject("steamID", username);
-            return mav;
+
+            //스팀 로그인 DB 확인
+            //스팀에서 받아온 아이디가 디비에 등록이 되어있는지 확인하는 코드
+            MemberTO to = new MemberTO();
+            to.setUserid(username);
+            int flag = userDAO.setSteamMemberCheck(to);
+
+            if(flag == 0){ // 바로 로그인
+                return new ModelAndView("index");
+            }else if(flag == 1){
+                System.out.println("계정이 없습니다.");
+                signUpAction.steamsignUp(to);
+            }
+            //mav.addObject("steamID", username);
+            //return mav;
         }else{
             return new ModelAndView("error");
         }
-
+        return new ModelAndView("index");
     }
 
     /* 카카오톡 로그인 버튼(이메일 받아오기) */
@@ -195,37 +234,30 @@ public class LoginController {
 
         KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
 
-        try {
-            response.sendRedirect(domain);
-        } catch (IOException e) {
-            System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+        //카카오에서 받아온 이메일 주소가 디비에 등록이 되어있는지 확인하는 코드
+        MemberTO to = new MemberTO();
+        //제이슨 파일에서 이메일을 받아옴
+        to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
+
+        //받은 이메일이 디비에 있는 이메일인지 확인
+        int flag = userDAO.setKakaoMemberCheck(to);
+
+        //flag가 0이면 통과
+        if (flag == 0) { // 바로 로그인
+            try {
+                //홈페이지로 돌아가는 구문
+                response.sendRedirect(domain);
+            } catch (IOException e) {
+                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+            }
+        }else if(flag == 1){ // 계정 생성 후 이동
+            signUpAction.kakaosignUp(to);
+            try {
+                //홈페이지로 돌아가는 구문
+                response.sendRedirect(domain);
+            } catch (IOException e) {
+                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+            }
         }
-
-
-        // MemberTO to = new MemberTO();
-        // //제이슨 파일에서 이메일을 받아옴
-        // to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
-
-        // System.out.println("controller email : " + to.getEmail());
-
-        // //받은 이메일이 디비에 있는 이메일인지 확인
-        // //int flag = userDAO.setSosialMemberCheck(to);
-        // //System.out.println("controller flag : " + flag);
-        
-        // //flag가 0이면 통과
-        // if (flag == 0) {
-        //     try {
-        //         response.sendRedirect(domain);
-        //     } catch (IOException e) {
-        //         System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-        //     }
-        // }else{
-        //     try {
-        //         //회원가입 화면으로 이동 혹은 다시 로그인 화면으로 이동
-        //         response.sendRedirect(domain + "login");
-        //     } catch (IOException e) {
-        //         System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-        //     }
-        // }
     }
 }

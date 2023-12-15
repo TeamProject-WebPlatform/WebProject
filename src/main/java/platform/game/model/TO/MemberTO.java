@@ -2,7 +2,7 @@ package platform.game.model.TO;
 
 import lombok.Data;
 @Data
-public class MemberTO {
+public class MemberTO{
     private int member_id;          // member_id, int NOT NULL
     private String userid;        // id, varchar(20) NOT NULL
     private String password;  // password, varchar(70) NOT NULL
@@ -14,6 +14,7 @@ public class MemberTO {
     private String nickname;  // nickname, varchar(10) NOT NULL
     private int mail_cert;  //mail_cert, int NOT NULL
     private int authority;  //authority, int NOT NULL
+
 }
 
 // CREATE TABLE member (

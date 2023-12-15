@@ -14,6 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import platform.game.model.Authorization.LoginService;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import jakarta.servlet.DispatcherType;
 
 @Configuration
 @EnableWebSecurity
@@ -23,26 +26,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/**").permitAll()
-                .requestMatchers("/login_admin").permitAll()
-                .requestMatchers("/superadmin","/admin").hasRole("SUPERADMIN")
-                .requestMatchers("/admin").hasRole("ADMIN")
-        );
-        http.formLogin(login -> login
-                .loginPage("/login_admin")
-                .defaultSuccessUrl("/admin")
-                .usernameParameter("id"));
-                
-        http.logout(logout-> logout
-                .logoutSuccessUrl("/login_admin")
-                .invalidateHttpSession(true)); // 세션 날리기
-
-        http.exceptionHandling(handling -> handling
-                .accessDeniedPage("/accessDenied"));
-
-        http.userDetailsService(loginService);
+        http.csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/login/**").permitAll()
+                .requestMatchers("/board/**").permitAll()
+            )
+            .formLogin((formLogin)-> formLogin 
+                .loginPage("/login") 
+                .loginProcessingUrl("/signin_ok")
+                .defaultSuccessUrl("/", true).permitAll()
+            )
+            .logout((logout) -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+            );
         return http.build();
     }
 
