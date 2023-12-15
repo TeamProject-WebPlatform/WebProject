@@ -13,12 +13,12 @@ import platform.game.model.TO.MemberTO;
 public class UserDAO {
     @Autowired
     private SqlMapperInter mapper;
-    
-    //로그인
-    public int getMemberTObyIDandPass(String userid, String password){
+
+    // 로그인
+    public int getMemberTObyIDandPass(String userid, String password) {
         int flag = 1;
 
-        //암호화된 password 가져오기
+        // 암호화된 password 가져오기
         String s_password = mapper.searchMember(userid);
 
         SecurityPassword securityPassword = new SecurityPassword();
@@ -30,8 +30,14 @@ public class UserDAO {
         return flag;
     }
 
-    //회원가입
-    public int setMember(MemberTO to){
+    // security_password 반환
+    public String getMemberTObySecurityPassword(String userid) {
+        String s_password = mapper.searchMember(userid);
+        return s_password;
+    }
+
+    // 회원가입
+    public int setMember(MemberTO to) {
         int flag = 1;
         int result = mapper.setMember(to.getMember_id(), to.getUserid(), to.getPassword(), to.getEmail(), to.getNickname());
 

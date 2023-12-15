@@ -68,16 +68,16 @@ public class LoginController {
     @PostMapping("/signup_ok")
     public int handleSignup(@RequestBody UserSignTO userSignup) {
         int flag = 2;
-        
+
         System.out.println("id : " + userSignup.getId());
         System.out.println("password : " + userSignup.getPassword());
         System.out.println("nickname : " + userSignup.getNickname());
 
         flag = signUpAction.signUp(userSignup);
 
-        if (flag == 0) {//성공
+        if (flag == 0) {// 성공
             System.out.println("회원가입 성공");
-        }else{
+        } else {
             System.out.println("회원가입 실패");
         }
 
@@ -96,7 +96,8 @@ public class LoginController {
         // 아이디, 닉네임 중복체크
         // 결과 flag에 int로 저장
         // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        // String token = jwtManager.createToken(userSignin.getId(), userSignin.getPassword());
+        // String token = jwtManager.createToken(userSignin.getId(),
+        // userSignin.getPassword());
         // System.out.println(token);
         // try{Thread.sleep(5000);}catch(Exception e){}
         // System.out.println("5초 지남");
@@ -104,6 +105,15 @@ public class LoginController {
         // System.out.println("테스트 : "+s);
 
         flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
+        String s_password = userDAO.getMemberTObySecurityPassword(userSignin.getId());
+
+        if (flag == 0) {
+            System.out.println("로그인 성공");
+            String token = jwtManager.createToken(userSignin.getId(), s_password);
+            System.out.println(token);
+        } else {
+            System.out.println("로그인 실패");
+        }
         return flag;
     }
 
@@ -142,7 +152,7 @@ public class LoginController {
                 .block();
 
         boolean isTrue = Objects.requireNonNull(body).contains("true");
-        if (isTrue) { 
+        if (isTrue) {
             // 인증 성공 username : 스팀아이디
             //ModelAndView mav = new ModelAndView("steamWebAPI");
             String[] tmp = openidIdentity.split("/");
