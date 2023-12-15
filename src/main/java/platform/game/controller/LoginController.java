@@ -33,6 +33,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import platform.game.action.KakaoAction;
 import platform.game.action.SignUpAction;
 import platform.game.model.DAO.UserDAO;
+import platform.game.model.TO.MemberTO;
 import platform.game.model.TO.UserSignTO;
 import platform.game.model.TO.KakaoTO.OAuthTokenTO;
 import platform.game.module.jwt.JwtManager;

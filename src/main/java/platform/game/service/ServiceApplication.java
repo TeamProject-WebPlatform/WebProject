@@ -7,9 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "platform.game.*" })
-@EnableJpaRepositories(basePackages = {"platform.game.*"})
-@EntityScan(basePackages = {"platform.game.*"})
+@ComponentScan(basePackages = { "platform.game.controller","platform.game.env.config" })
 public class ServiceApplication {
 
 	public static void main(String[] args) {

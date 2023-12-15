@@ -23,7 +23,7 @@ import io.jsonwebtoken.security.Keys;
 @ComponentScan(basePackages = { "platform.game.env.config" })
 public class JwtManager {
     Key key = null;
-    Long lifetime = 1000L; // 토큰 유효시간 1시간
+    Long lifetime = 1000 * 60 * 60L; // 토큰 유효시간 1시간
 
     public JwtManager(@Value("${jwt.secret}") String secret) {
         key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
@@ -37,6 +37,7 @@ public class JwtManager {
         Claims payload = Jwts.claims();
         payload.put("id", id);
         payload.put("password", password);
+        payload.put("role", "USER");
         // 유효기간
         Long expiredTime = lifetime;
 
@@ -57,9 +58,11 @@ public class JwtManager {
     }
 
     // jwt 특정 값 리턴 테스트용 코드
-    public String extractToken(String token) {
+    public String extractToken(String tag, String token) {
+        // DecodedJWT decodedJWT = JWT.decode(token);
+        // return decodedJWT.getClaim("password").toString();
         DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaim("password").toString();
+        return decodedJWT.getClaim(tag).toString();
     }
 
     public boolean validateToken(String token) {

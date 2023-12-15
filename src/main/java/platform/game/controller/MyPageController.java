@@ -33,7 +33,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
 import platform.game.action.MypageAction;
-import platform.game.jwt.JwtManager;
+import platform.game.module.jwt.JwtManager;
 
 @RestController
 @ComponentScan(basePackages = {"platform.game.action","platform.game.env.config","platform.game.jwt"})

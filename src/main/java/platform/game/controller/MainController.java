@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.security" })
 public class MainController {
-    @PostMapping("/")
+    @RequestMapping("/")
     public ModelAndView main() {
         return new ModelAndView("index");
     }
