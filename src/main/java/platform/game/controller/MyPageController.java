@@ -136,9 +136,17 @@ public class MyPageController {
     }
 
     @RequestMapping("/check-cookie")
-    public String checkCookie(@CookieValue(name = "jwtToken", defaultValue = "defaultValue") String myCookieValue) {
-        String userID = jwtManager.extractToken(myCookieValue);
-        System.out.println( userID );
+    public String checkCookie(@CookieValue(name = "jwtTokenCookie", defaultValue = "defaultValue") String myCookieValue) {
+        System.out.println( "checkCookie()");
+
+        String valueID = jwtManager.extractToken("id", myCookieValue);
+        String valuePW = jwtManager.extractToken("password", myCookieValue);
+        String valueRo = jwtManager.extractToken("role", myCookieValue);
+
+        System.out.println( "토큰에서 받아온 ID" + valueID );
+        System.out.println( "토큰에서 받아온 PW" + valuePW );
+        System.out.println( "토큰에서 받아온 Ro" + valueRo );
+
         return "Value of myCookie: " + myCookieValue;
     }
 }

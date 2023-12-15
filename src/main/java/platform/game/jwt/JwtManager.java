@@ -59,9 +59,9 @@ public class JwtManager {
     }
 
     // jwt 특정 값 리턴 테스트용 코드
-    public String extractToken(String token) {
+    public String extractToken(String tag, String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaim("id").toString();
+        return decodedJWT.getClaim(tag).toString();
     }
 
     // 토큰 유효성 검사
