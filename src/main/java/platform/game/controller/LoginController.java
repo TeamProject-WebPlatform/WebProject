@@ -170,15 +170,28 @@ public class LoginController {
         boolean isTrue = Objects.requireNonNull(body).contains("true");
         if (isTrue) {
             // 인증 성공 username : 스팀아이디
-            ModelAndView mav = new ModelAndView("steamWebAPI");
+            //ModelAndView mav = new ModelAndView("steamWebAPI");
             String[] tmp = openidIdentity.split("/");
             String username = tmp[tmp.length - 1];
-            mav.addObject("steamID", username);
-            return mav;
-        } else {
+
+            //스팀 로그인 DB 확인
+            //스팀에서 받아온 아이디가 디비에 등록이 되어있는지 확인하는 코드
+            MemberTO to = new MemberTO();
+            to.setUserid(username);
+            int flag = userDAO.setSteamMemberCheck(to);
+
+            if(flag == 0){ // 바로 로그인
+                return new ModelAndView("index");
+            }else if(flag == 1){
+                System.out.println("계정이 없습니다.");
+                signUpAction.steamsignUp(to);
+            }
+            //mav.addObject("steamID", username);
+            //return mav;
+        }else{
             return new ModelAndView("error");
         }
-
+        return new ModelAndView("index");
     }
 
     /* 카카오톡 로그인 버튼(이메일 받아오기) */
@@ -223,36 +236,30 @@ public class LoginController {
 
         KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
 
-        try {
-            response.sendRedirect(domain);
-        } catch (IOException e) {
-            System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+        //카카오에서 받아온 이메일 주소가 디비에 등록이 되어있는지 확인하는 코드
+        MemberTO to = new MemberTO();
+        //제이슨 파일에서 이메일을 받아옴
+        to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
+
+        //받은 이메일이 디비에 있는 이메일인지 확인
+        int flag = userDAO.setKakaoMemberCheck(to);
+
+        //flag가 0이면 통과
+        if (flag == 0) { // 바로 로그인
+            try {
+                //홈페이지로 돌아가는 구문
+                response.sendRedirect(domain);
+            } catch (IOException e) {
+                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+            }
+        }else if(flag == 1){ // 계정 생성 후 이동
+            signUpAction.kakaosignUp(to);
+            try {
+                //홈페이지로 돌아가는 구문
+                response.sendRedirect(domain);
+            } catch (IOException e) {
+                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+            }
         }
-
-        // MemberTO to = new MemberTO();
-        // //제이슨 파일에서 이메일을 받아옴
-        // to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
-
-        // System.out.println("controller email : " + to.getEmail());
-
-        // //받은 이메일이 디비에 있는 이메일인지 확인
-        // //int flag = userDAO.setSosialMemberCheck(to);
-        // //System.out.println("controller flag : " + flag);
-
-        // //flag가 0이면 통과
-        // if (flag == 0) {
-        // try {
-        // response.sendRedirect(domain);
-        // } catch (IOException e) {
-        // System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-        // }
-        // }else{
-        // try {
-        // //회원가입 화면으로 이동 혹은 다시 로그인 화면으로 이동
-        // response.sendRedirect(domain + "login");
-        // } catch (IOException e) {
-        // System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-        // }
-        // }
     }
 }
