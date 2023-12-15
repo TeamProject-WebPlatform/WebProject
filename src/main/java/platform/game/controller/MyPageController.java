@@ -10,11 +10,13 @@ import java.util.UUID;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +33,10 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
 import platform.game.action.MypageAction;
+import platform.game.jwt.JwtManager;
 
 @RestController
-@ComponentScan(basePackages = {"platform.game.action","platform.game.env.config"})
+@ComponentScan(basePackages = {"platform.game.action","platform.game.env.config","platform.game.jwt"})
 @RequestMapping("/mypage")
 public class MyPageController {
     
@@ -42,6 +45,9 @@ public class MyPageController {
     String currentPath = Paths.get("").toAbsolutePath().toString();
     private final String uploadDir = Paths.get(currentPath, "src/main/resources/static/tempImg", "img").toString();
     // private final String uploadDir = Paths.get("C:", "tempImg", "img").toString();
+
+    @Autowired
+    JwtManager jwtManager;
 
     @GetMapping("/{userid}")
     public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
@@ -127,5 +133,12 @@ public class MyPageController {
                     .contentType(MediaType.IMAGE_PNG)
                     .body(out.toByteArray());
         }
+    }
+
+    @RequestMapping("/check-cookie")
+    public String checkCookie(@CookieValue(name = "jwtToken", defaultValue = "defaultValue") String myCookieValue) {
+        String userID = jwtManager.extractToken(myCookieValue);
+        System.out.println( userID );
+        return "Value of myCookie: " + myCookieValue;
     }
 }

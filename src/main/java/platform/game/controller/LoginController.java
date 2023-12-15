@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.action.KakaoAction;
@@ -86,7 +87,7 @@ public class LoginController {
 
     // 로그인 요청(웹사이트 - default)
     @PostMapping("/signin_ok")
-    public int handleSigninin(@RequestBody UserSignTO userSignin) {
+    public int handleSigninin(@RequestBody UserSignTO userSignin, HttpServletResponse response) {
         int flag = 2;
         System.out.println("id : " + userSignin.getId());
         System.out.println("password : " + userSignin.getPassword());
@@ -111,6 +112,21 @@ public class LoginController {
             System.out.println("로그인 성공");
             String token = jwtManager.createToken(userSignin.getId(), s_password);
             System.out.println(token);
+
+            // 쿠키 생성
+            Cookie cookie = new Cookie("jwtToken", token);
+            cookie.setMaxAge(3600); // 쿠키의 유효 시간 (초 단위)
+
+            // 쿠키를 안전하게 설정하기 위해 secure 및 httpOnly 설정
+            // cookie.setSecure(true); // HTTPS 프로토콜 사용 여부
+            // cookie.setHttpOnly(true); // JavaScript를 통한 접근 금지
+
+            // 쿠키의 속성 설정 (예: 유효 시간, 경로 등)
+            cookie.setMaxAge(3600); // 60 * 60 1시간 동안 유효
+            cookie.setPath("/");    // 모든 경로에서 접근 가능
+
+            // 쿠키를 응답 헤더에 추가
+            response.addCookie(cookie);
         } else {
             System.out.println("로그인 실패");
         }
