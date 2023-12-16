@@ -292,4 +292,3 @@ const verifyNicknameContraints = function(){
     nckPass.style.display="";
     return true;
 };
-
