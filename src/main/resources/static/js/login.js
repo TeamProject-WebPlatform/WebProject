@@ -3,7 +3,6 @@ const setLoginPage = function(){
     const navSignup = document.querySelector('#navigation li[name=signup]');
     const btnLogin = document.getElementById('btn-login');
     const btnSingup = document.getElementById('btn-signup');
-    const btnEmail = document.getElementById('btn-email');
     const frmLogin = document.frmLogin;
     const pwcFail = document.querySelector('.verifyContraints[name=pwc-fail]');
     const pwcPass = document.querySelector('.verifyContraints[name=pwc-pass]');
@@ -40,7 +39,7 @@ const setLoginPage = function(){
     navSignup.addEventListener('click', function () {
         showSignupWidget();
         frmLogin.reset();
-       
+
         inputId.setAttribute('logintype','signup');
         inputPassword.setAttribute('logintype','signup');
         
@@ -48,7 +47,7 @@ const setLoginPage = function(){
         inputPassword.placeholder="10~20 with letter + number";
         inputPasswordCheck.placeholder="";
         inputNickname.placeholder="4~10 only with letter,number";
-       
+
         navLogin.style.color = 'black';
         navSignup.style.color = 'white';
         
@@ -125,7 +124,7 @@ const setLoginPage = function(){
                 throw new Error('서버 응답이 실패했습니다.');
             }
             const flag = await response.json();
-            switch (flag.flag){
+            switch (flag){
                 case 1:
                     console.log("아이디 중복");
                     break;
@@ -142,6 +141,7 @@ const setLoginPage = function(){
             console.error('DB 호출 중 오류가 발생했습니다.', error);
         }
     });
+
     inputPassword.addEventListener('oninput',function(){
         //comparePassword();
     })
@@ -330,28 +330,3 @@ const verifyNicknameContraints = function(){
     return true;
 };
 
-const EmailCheck = function(){
-    document.getElementById( 'btn-email' ).onclick = function() {
-        if( document.getElementById('email').value == '' ) {
-        // if( inputEmail.value.trim() == '' ) {
-            alert( '이메일을 입력해주세요.' );
-            return;
-        }else{
-            alert('인증번호를 전송하였습니다.');
-            document.getElementById('mail_number').style.display="block";
-        }
-        // document.frmLogin.submit();
-    };
-
-};
-
-const confirmNumber = function(){
-    const number1 = document.getElementById('Confirm').value;
-    const number2 = docmentu.getElementById('number').value;
-    if(number1 == number2){
-        alert("인증되었습니다.");
-    }else{
-        alert("번호가 다릅니다.");
-    }
-    
-};
