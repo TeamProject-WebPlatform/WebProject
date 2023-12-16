@@ -109,7 +109,8 @@ public class LoginController {
         System.out.println(toName);
         System.out.println(subject);
         System.out.println(content);
-		// this.sendMail1(toEmail, toName, subject, content);
+        
+		// 모델에 number 값을 추가
         model.addAttribute("number", number);
 		mailAction.sendMail(toEmail, toName, subject, content);
 		
