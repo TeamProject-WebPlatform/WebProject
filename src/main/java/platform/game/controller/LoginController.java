@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import platform.game.action.KakaoAction;
+import platform.game.action.MailAction;
 import platform.game.model.DAO.UserDAO;
 import platform.game.model.TO.UserSignTO;
 import platform.game.model.TO.UserTO;
@@ -86,61 +88,34 @@ public class LoginController {
 
         return flag;
     }
-    // 이메일 인증 요청
-    private static int number;
     
-    public static void createNumber(){
-        number = (int)(Math.random() * (90000)) + 100000;// (int) Math.random() * (최댓값-최소값+1) + 최소값
-    }
-
+    // 이메일 인증 요청
 	@PostMapping( "/mail_ok" )
-	public int mail_ok( @RequestBody UserSignTO userSignup) {
+	public int mail_ok( @RequestBody UserSignTO userSignup, Model model ) {
+        MailAction mailAction = new MailAction(javaMailSender);
 		int flag = 2;
 		//System.out.println("javaMailSender : " + javaMailSender);
-		createNumber();
+		userSignup.createNumber();
 
 		String toEmail = userSignup.getEmail();
 		String toName = userSignup.getNickname();
+        int number = userSignup.getNumber();
+
 		String subject = toName + "님의 인증번호 입니다";
-		String content = "<h1>"+toName+"님의 인증 번호는 <span>"+number+"</span> 입니다.</h1>";
+		String content = "<h1>"+toName+"님의 인증 번호는 <br><span>"+number+"</span> 입니다.</h1>";
 		
+        System.out.println(number);
         System.out.println(toEmail);
         System.out.println(toName);
         System.out.println(subject);
         System.out.println(content);
 		// this.sendMail1(toEmail, toName, subject, content);
-		this.sendMail(toEmail, toName, subject, content);
+        model.addAttribute("number", number);
+		mailAction.sendMail(toEmail, toName, subject, content);
 		
 		return flag;
 	}
 
-
-    public void sendMail(String toEmail, String toName, String subject, String content) {
-		try {
-			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-			mimeMessage.addRecipient(
-					RecipientType.TO,
-					new InternetAddress(toEmail, toName, "utf-8"));
-			mimeMessage.setSubject(subject,"utf-8");
-			mimeMessage.setText(content, "utf-8", "html");
-			
-			mimeMessage.setSentDate(new Date());
-			
-			javaMailSender.send(mimeMessage);
-			
-			System.out.println("전송완료");
-			
-		} catch (MailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
     // 로그인 요청
     @PostMapping("/signin_ok")

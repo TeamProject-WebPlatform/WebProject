@@ -68,20 +68,18 @@
 
                     <label for="email" class="signup">
                         <div class="label">E-Mail:</div>
-                        <div class="verifyContraints" name="nck-fail" style="display: none;">❗</div>
-                        <div class="verifyContraints" name="nck-pass" style="display: none;">✔</div>
-                        <input type="text" id="email" name="email" oninput="EmailCheck()" />
+                        <input type="text" id="email" name="email" />
                         <input type="button" id="btn-email" class="E-mail" value="인증번호"></input>
+                        <input type="text" id="Confirm" name="Confirm" th:value="${number}"/>
                     </label>
 
                     <label for="email" class="signup">
                         <div id="mail_number" name="mail_number" style="display: none">
                             <input type="text" name="number" id="number" placeholder="인증번호 입력" />
-                            <input type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">이메일 인증</input>
+                            <input type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()" style="width: 10px;">이메일 인증</input>
                         </div>
                         <input type="button" id="btn-email" class="E-mail" style="display: none" value="인증번호"></input>
                     </label>
-                    <!-- <input type="text" id="Confirm" name="Confirm" value=th:text="${#email}.value"> -->
                 </div>
             </div>
             <div id="login-footer">
