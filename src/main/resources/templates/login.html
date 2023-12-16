@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/login_Style.css">
     <script src="./js/login.js"></script>
+    <script src="./js/mail.js"></script>
     <title>Document</title>
     <script>
         window.onload = function () {
@@ -69,14 +70,14 @@
                     <label for="email" class="signup">
                         <div class="label">E-Mail:</div>
                         <input type="text" id="email" name="email" />
-                        <input type="button" id="btn-email" class="E-mail" value="인증번호"></input>
-                        <input type="text" id="Confirm" name="Confirm" th:value="${number}"/>
+                        <input type="button" id="btn-email" class="btn-email" value="인증번호"></input>
+                        <!-- <input type="text" id="Confirm" name="Confirm" th:value="${number}"/> -->
                     </label>
 
                     <label for="email" class="signup">
                         <div id="mail_number" name="mail_number" style="display: none">
                             <input type="text" name="number" id="number" placeholder="인증번호 입력" />
-                            <input type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()" style="width: 10px;">이메일 인증</input>
+                            <input type="button" name="confirmBtn" id="confirmBtn" style="width: 10px;">이메일 인증</input>
                         </div>
                         <input type="button" id="btn-email" class="E-mail" style="display: none" value="인증번호"></input>
                     </label>

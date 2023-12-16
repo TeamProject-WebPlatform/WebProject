@@ -148,43 +148,6 @@ const setLoginPage = function(){
     inputPasswordCheck.addEventListener('oninput',function(){
         
     })
-
-    // 이메일 체크
-    btnEmail.addEventListener('click', async function (e) {
-        e.preventDefault();
-        try {
-            const response = await fetch(`/login/mail_ok`,{
-                method:'POST',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    nickname: inputNickname.value,
-                    email: inputEmail.value,
-                })
-            });
-            if (!response.ok) {
-                throw new Error('서버 응답이 실패했습니다.');
-            }
-            const flag = await response.json();
-            console.log(flag);
-            switch (flag){
-                case 1:
-                    console.log("아이디 없음");
-                    break;
-                case 2:
-                    console.log("비번 오류");
-                    break;
-                case 0:
-                    window.location.href = "/";
-                    break;
-                default:
-                    break;
-            }
-        } catch (error) {
-            console.error('DB 호출 중 오류가 발생했습니다.', error);
-        }
-    });
 }
 const showLoginWidget = function () {
     const signupContents = document.querySelectorAll('.signup');
