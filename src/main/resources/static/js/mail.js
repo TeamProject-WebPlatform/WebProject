@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function(){
             alert( '이메일을 입력해주세요.' );
             return;
         }else{
+            alert('인증번호를 전송하였습니다.');
             inputEmail.readOnly=true;
             inputEmail.style.backgroundColor = 'rgb(192, 192, 192)';
             document.getElementById('mail_number').style.display="block";
@@ -29,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 }
                 const number = await response.json();
                 document.getElementById('confirm').value = number;
-                alert('인증번호를 전송하였습니다.');
                 switch (number){
                     case 1:
                         console.log("닉네임 없음");
