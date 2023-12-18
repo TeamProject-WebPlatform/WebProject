@@ -91,7 +91,7 @@ public class LoginController {
     
     // 이메일 인증 요청
 	@PostMapping( "/mail_ok" )
-	public String mail_ok( @RequestBody UserSignTO userSignup, Model model ) {
+	public int mail_ok( @RequestBody UserSignTO userSignup) {
         MailAction mailAction = new MailAction(javaMailSender);
 		// int flag = 2;
 		//System.out.println("javaMailSender : " + javaMailSender);
@@ -109,12 +109,11 @@ public class LoginController {
         System.out.println(toName);
         System.out.println(subject);
         System.out.println(content);
-        
-		// 모델에 number 값을 추가
-        model.addAttribute("number", number);
+        // 모델에 number 값을 추가
+
 		mailAction.sendMail(toEmail, toName, subject, content);
-		
-		return "/login/mail_ok";
+
+		return number;
         // return flag;
 	}
 

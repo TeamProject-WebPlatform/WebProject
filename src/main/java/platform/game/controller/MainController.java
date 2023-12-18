@@ -21,10 +21,4 @@ public class MainController {
     public ModelAndView show(){
         return new ModelAndView("shop");
     }
-    @GetMapping("/mail_ok")
-    public ModelAndView mail_ok(){
-        return new ModelAndView("login");
-    }
-
-    
 }

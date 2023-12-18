@@ -8,11 +8,10 @@ document.addEventListener('DOMContentLoaded', function(){
             alert( '이메일을 입력해주세요.' );
             return;
         }else{
-            alert('인증번호를 전송하였습니다.');
             inputEmail.readOnly=true;
             inputEmail.style.backgroundColor = 'rgb(192, 192, 192)';
             document.getElementById('mail_number').style.display="block";
-
+            
             e.preventDefault();
             try {
                 const response = await fetch(`/login/mail_ok`,{
@@ -28,8 +27,10 @@ document.addEventListener('DOMContentLoaded', function(){
                 if (!response.ok) {
                     throw new Error('서버 응답이 실패했습니다.');
                 }
-                const flag = await response.json();
-                switch (flag){
+                const number = await response.json();
+                document.getElementById('confirm').value = number;
+                alert('인증번호를 전송하였습니다.');
+                switch (number){
                     case 1:
                         console.log("닉네임 없음");
                         break;
@@ -47,14 +48,18 @@ document.addEventListener('DOMContentLoaded', function(){
             };
         }
     });
-    const confirmNumber = function(){
-        const number1 = document.getElementById('Confirm').value;
-        const number2 = docmentu.getElementById('number').value;
-        if(number1 == number2){
-            alert("인증되었습니다.");
-        }else{
-            alert("번호가 다릅니다.");
-        }
-    };
     
+    document.getElementById( 'confirmBtn' ).addEventListener('click', function () {
+        if( document.frmLogin.number.value.trim() == '' ) {
+            // if( inputEmail.value.trim() == '' ) {
+                alert( '인증번호를 입력하세요.' );
+                return;
+        }else if(document.frmLogin.number.value.trim() == document.frmLogin.confirm.value.trim()){
+            alert('인증되었습니다.');
+            return;
+        }else{
+            alert('번호가 다릅니다.');
+            return;
+        }
+    });
 });
