@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 return;
         }else if(document.frmLogin.number.value.trim() == document.frmLogin.confirm.value.trim()){
             alert('인증되었습니다.');
+            document.getElementById('btn-signup').disabled = false;
             return;
         }else{
             alert('번호가 다릅니다.');
