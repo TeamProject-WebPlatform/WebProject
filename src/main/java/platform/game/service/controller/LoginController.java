@@ -24,6 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import org.springframework.ui.Model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -35,6 +40,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.service.action.KakaoAction;
+import platform.game.service.action.MailAction;
 import platform.game.service.action.SignUpAction;
 import platform.game.service.entity.AuthRequest;
 import platform.game.service.entity.Member;
@@ -59,7 +65,8 @@ public class LoginController {
     JwtManager jwtManager;
     @Value("${domain}")
     String domain;
-
+    @Autowired
+    private JavaMailSender javaMailSender;
     @Autowired
     private SecurityPassword securityPassword;
 
@@ -85,6 +92,7 @@ public class LoginController {
         System.out.println("id : " + userSignup.getId());
         System.out.println("password : " + userSignup.getPassword());
         System.out.println("nickname : " + userSignup.getNickname());
+        System.out.println("email : "+userSignup.getEmail());
 
         flag = signUpAction.signUp(userSignup);
 
@@ -96,7 +104,33 @@ public class LoginController {
 
         return flag;
     }
+        // 이메일 인증 요청
+	@PostMapping( "/mail_ok" )
+	public int mail_ok( @RequestBody UserSignTO userSignup) {
+        MailAction mailAction = new MailAction(javaMailSender);
+		// int flag = 2;
+		//System.out.println("javaMailSender : " + javaMailSender);
+		userSignup.createNumber();
 
+		String toEmail = userSignup.getEmail();
+		String toName = userSignup.getNickname();
+        int number = userSignup.getNumber();
+
+		String subject = toName + "님의 인증번호 입니다";
+		String content = "<h1>"+toName+"님의 인증 번호는 <br><span>"+number+"</span> 입니다.</h1>";
+		
+        System.out.println(number);
+        System.out.println(toEmail);
+        System.out.println(toName);
+        System.out.println(subject);
+        System.out.println(content);
+        // 모델에 number 값을 추가
+
+		mailAction.sendMail(toEmail, toName, subject, content);
+
+		return number;
+        // return flag;
+	}
     // 로그인 요청(웹사이트 - default)
     @PostMapping("/generateToken") 
     public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
