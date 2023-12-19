@@ -94,7 +94,7 @@ public class LoginController {
         System.out.println("nickname : " + userSignup.getNickname());
         System.out.println("email : "+userSignup.getEmail());
 
-        flag = signUpAction.signUp(userSignup);
+        //flag = signUpAction.signUp(userSignup);
 
         if (flag == 0) {// 성공
             System.out.println("회원가입 성공");

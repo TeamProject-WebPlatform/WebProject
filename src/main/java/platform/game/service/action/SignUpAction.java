@@ -1,11 +1,14 @@
 package platform.game.service.action;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.MemberTO;
 import platform.game.service.model.TO.UserSignTO;
+import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.service.jwt.SecurityPassword;
 
 @Component
@@ -13,15 +16,28 @@ public class SignUpAction {
 
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private MemberInfoRepository memRepo; 
 
     public int signUp(UserSignTO userSignup) {
         //회원번호 불러오기
         String signin_type = "default";
-        int lastMemberId = userDAO.getLastMemberId(signin_type);
-        int member_id = lastMemberId + 1;
+        int startNum  = 1;
+        Long id = 0l;
 
+        Optional<Integer> maxId = memRepo.findMaxMemId(String.valueOf(startNum));
+        if(maxId.isPresent()){
+            // 신규
+            id = Long.parseLong(startNum+"00"+1);
+        }else{
+            String tmp = String.valueOf(maxId.get()).substring(3);
+            id = Long.parseLong(tmp);
+            id += 1;
+            id = Long.parseLong(startNum + "00" + id);
+        }
+        
         MemberTO to = new MemberTO();
-        to.setMember_id(member_id);
+        //to.setMember_id(id);
         to.setUserid(userSignup.getId());
 
         // 비밀번호 암호화
