@@ -70,9 +70,7 @@ const setLoginPage = function(){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    // id: inputId.value,
                     memUserid: inputId.value,
-                    // password: inputPassword.value,
                     memPw: inputPassword.value,
                 })
             });

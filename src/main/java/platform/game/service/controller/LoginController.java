@@ -98,92 +98,13 @@ public class LoginController {
     }
 
     // 로그인 요청(웹사이트 - default)
-    @PostMapping("/signin_ok")
-    public int handleSigninin(@RequestBody UserSignTO userSignin, HttpServletResponse response) {
-        int flag = 2;
-        System.out.println("id : " + userSignin.getId());
-        System.out.println("password : " + userSignin.getPassword());
-
-        // jwt로 암호화
-        // db에 조회
-        // 아이디, 닉네임 중복체크
-        // 결과 flag에 int로 저장
-        // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        // String token = jwtManager.createToken(userSignin.getId(),
-        // userSignin.getPassword());
-        // System.out.println(token);
-        // try{Thread.sleep(5000);}catch(Exception e){}
-        // System.out.println("5초 지남");
-        // boolean s = jwtManager.validateToken(token);
-        // System.out.println("테스트 : "+s);
-
-        flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
-        String s_password = userDAO.getMemberTObySecurityPassword(userSignin.getId());
-
-        if (flag == 0) {
-            System.out.println("로그인 성공");
-            String token = jwtManager.createToken(userSignin.getId(), s_password);
-            System.out.println(token);
-
-            // 쿠키 생성
-            Cookie cookie = new Cookie("jwtTokenCookie", token);
-
-            // 쿠키를 안전하게 설정하기 위해 secure 및 httpOnly 설정
-            // cookie.setSecure(true); // HTTPS 프로토콜 사용 여부
-            // cookie.setHttpOnly(true); // JavaScript를 통한 접근 금지
-
-            // 쿠키의 속성 설정 (예: 유효 시간, 경로 등)
-            cookie.setMaxAge(3600); // 60 * 60 1시간 동안 유효
-            // cookie.setDomain("localhost");
-            cookie.setPath("/");    // 모든 경로에서 접근 가능
-
-            // 쿠키를 응답 헤더에 추가
-            response.addCookie(cookie);
-        } else {
-            System.out.println("로그인 실패");
-        }
-        return flag;
-    }
-
     @PostMapping("/generateToken") 
-    // public ResponseEntity<String> authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
-    // public int authenticateAndGetToken(@RequestBody UserSignTO authRequest, HttpServletResponse response) { 
     public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
-        System.out.println("/generateToken");
-
-        // System.out.println("id : " + authRequest.getUsername());
-        System.out.println("id : " + authRequest.getMemUserid());
-        System.out.println("password : " + authRequest.getMemPw());
-
-        // userinfo 테이블 업데이트
-        // signUpAction.setUserInfo();
-/*
-        int flag = userDAO.getMemberTObyIDandPass(authRequest.getId(), authRequest.getPassword());
-        if (flag == 0) {
-            System.out.println("로그인 성공");
-            String token = jwtService.generateToken(authRequest.getId(), authRequest.getPassword()); 
-
-            Cookie cookie = new Cookie("jwtTokenCookie", token);
-            cookie.setMaxAge(3600);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-        } else {
-            System.out.println("로그인 실패");
-        }
-        return flag;
-*/
-// /*
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw())); 
         if (authentication.isAuthenticated()) { 
-            System.out.println( "확인확인확인확인확인확인확인");
-            // 비밀번호 암호화
-            // String s_password = userDAO.getMemberTObySecurityPassword(authRequest.getId());
             String password = securityPassword.encode(authRequest.getMemPw());
-            // String token = jwtService.generateToken(authRequest.getId(), authRequest.getPassword()); 
             String token = jwtService.generateToken(authRequest.getMemUserid(), password); 
-            // response.addHeader("Authorization", "Bearer " + token);
 
-            // 쿠키 생성
             Cookie cookie = new Cookie("jwtTokenCookie", token);
             cookie.setMaxAge(3600);
             cookie.setPath("/");
@@ -193,7 +114,6 @@ public class LoginController {
         } else { 
             return 2;
         } 
-// */
     }
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------

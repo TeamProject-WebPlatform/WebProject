@@ -52,19 +52,6 @@ public class UserDAO {
         }
     }
 
-    public int setUserInfo() {
-        int flag = 1;
-        int result = mapper.setUserInfo();
-
-        if (result != 0) {
-            flag = 0;
-            return flag; // 성공 시 0 반환
-        } else {
-            flag = 1;
-            return flag; // 실패 시 1 반환
-        }
-    }
-
     //회원정보 뒷자리 불러오기
     public int getLastMemberId(String signin_type) {
         return mapper.getLastMemberId(signin_type);
