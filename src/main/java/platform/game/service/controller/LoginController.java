@@ -10,6 +10,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,11 +36,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.service.action.KakaoAction;
 import platform.game.service.action.SignUpAction;
+import platform.game.service.entity.AuthRequest;
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.MemberTO;
 import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.OAuthTokenTO;
 import platform.game.service.service.jwt.JwtManager;
+import platform.game.service.service.jwt.JwtService;
 import platform.game.service.service.jwt.SecurityPassword;
 
 @RestController
@@ -58,6 +64,12 @@ public class LoginController {
 
     @Autowired
     private SignUpAction signUpAction;
+
+    // JWT Login
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtService jwtService; 
 
     @GetMapping("")
     public ModelAndView login() {
@@ -130,6 +142,55 @@ public class LoginController {
             System.out.println("로그인 실패");
         }
         return flag;
+    }
+
+    @PostMapping("/generateToken") 
+    // public ResponseEntity<String> authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
+    public int authenticateAndGetToken(@RequestBody UserSignTO authRequest, HttpServletResponse response) { 
+        System.out.println("/generateToken");
+
+        // System.out.println("id : " + authRequest.getUsername());
+        System.out.println("id : " + authRequest.getId());
+        System.out.println("password : " + authRequest.getPassword());
+
+        // userinfo 테이블 업데이트
+        // signUpAction.setUserInfo();
+/*
+        int flag = userDAO.getMemberTObyIDandPass(authRequest.getId(), authRequest.getPassword());
+        if (flag == 0) {
+            System.out.println("로그인 성공");
+            String token = jwtService.generateToken(authRequest.getId(), authRequest.getPassword()); 
+
+            Cookie cookie = new Cookie("jwtTokenCookie", token);
+            cookie.setMaxAge(3600);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        } else {
+            System.out.println("로그인 실패");
+        }
+        return flag;
+*/
+// /*
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getId(), authRequest.getPassword())); 
+        if (authentication.isAuthenticated()) { 
+            // 비밀번호 암호화
+            // String s_password = userDAO.getMemberTObySecurityPassword(authRequest.getId());
+            String password = securityPassword.encode(authRequest.getPassword());
+            // String token = jwtService.generateToken(authRequest.getId(), authRequest.getPassword()); 
+            String token = jwtService.generateToken(authRequest.getId(), password); 
+            // response.addHeader("Authorization", "Bearer " + token);
+
+            // 쿠키 생성
+            Cookie cookie = new Cookie("jwtTokenCookie", token);
+            cookie.setMaxAge(3600);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            
+            return 0;
+        } else { 
+            return 2;
+        } 
+// */
     }
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------

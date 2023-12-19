@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -50,6 +51,7 @@ public class MyPageController {
     JwtManager jwtManager;
 
     @GetMapping("/{userid}")
+    @PreAuthorize("hasAuthority('ROLE_USER')") 
     public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
         String markdownValueFormLocal = null;
 

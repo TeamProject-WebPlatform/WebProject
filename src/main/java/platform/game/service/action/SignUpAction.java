@@ -39,6 +39,11 @@ public class SignUpAction {
         return flag;
     }
 
+    public int setUserInfo() {
+        int result = userDAO.setUserInfo();
+        return result;
+    }
+
     //카카오 로그인시 자동 회원가입
     public int kakaosignUp(MemberTO to){
         //카카오 마지막 회원번호 불러오기

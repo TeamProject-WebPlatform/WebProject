@@ -33,6 +33,10 @@ public interface SqlMapperInter {
     @Insert("update member_id_guide set last_member_id = #{last_member_id} where signin_type = #{signin_type}")
     public int setMemberId(int last_member_id, String signin_type);
 
+    // MemberTO -> UserInfo Copy
+    @Insert("INSERT INTO userinfo (name, password, roles) SELECT userid, password, roles FROM member;")
+    public int setUserInfo();
+
     // 회원가입DB 입력문구(웹사이트 회원가입)
     @Insert("INSERT INTO member (member_id, userid, password, email, nickname) " +
             "VALUES(#{member_id},#{userid},#{password}, #{email}, #{nickname})")

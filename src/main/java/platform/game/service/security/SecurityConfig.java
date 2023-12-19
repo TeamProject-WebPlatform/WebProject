@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
                 .requestMatchers("/auth/user/**").authenticated()
                 .requestMatchers("/auth/admin/**").authenticated()
+                .requestMatchers("/mypage/**").authenticated()
             );
 
         http.sessionManagement(management -> management

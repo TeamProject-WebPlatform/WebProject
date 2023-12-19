@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +18,14 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtService {
     // Secret 키 env값으로 숨김 필요. 우리가 임의 설정
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437"; 
-    public String generateToken(String userName) { 
+    // public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437"; 
+    // public static final String SECRET = "32065e02097e3f6a12873e96f0b7abea952b1e706dba5f72"; 
+    @Value("${jwt.secret}")
+    String SECRET;
+    public String generateToken(String userName, String userPassword) { 
+        System.out.println( "generateToken() 호출");
         Map<String, Object> claims = new HashMap<>(); 
+        claims.put("password", userPassword);
         return createToken(claims, userName); 
     } 
   
@@ -39,6 +45,11 @@ public class JwtService {
   
     public String extractUsername(String token) { 
         return extractClaim(token, Claims::getSubject); 
+    } 
+  
+    public String extractPassword(String token) { 
+        Claims claims = extractAllClaims(token);
+        return claims.get("password", String.class);
     } 
   
     public Date extractExpiration(String token) { 
