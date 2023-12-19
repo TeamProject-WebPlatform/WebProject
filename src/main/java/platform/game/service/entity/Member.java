@@ -1,5 +1,6 @@
 package platform.game.service.entity;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -20,9 +21,6 @@ import platform.game.service.entity.idGenerator.IdGenerator;
 public class Member { 
 
     @Id
-//     @GenericGenerator(name = "custom-id-generator", strategy = "platform.game.service.entity.idGenerator", 
-//         parameters = {@Parameter(name = IdGenerator.MEM_ID_GENERATOR_PARAM_KEY, value = "MEMBER")})
-//     @GeneratedValue(generator = "custom-id-generator")
     private long memId; 
     private String memUserid; 
     private String memPw; 
@@ -31,16 +29,27 @@ public class Member {
     private String memEmail;
     private String memSteamid;
     private String memKakaoid;
+    @ColumnDefault("0")
     private int memCurPoint;
+    @ColumnDefault("0")
     private int memTotalPoint;
+    @ColumnDefault("1")
     private int memLvl;
+    @ColumnDefault("0")
     private int memAttend;
+    @ColumnDefault("0")
     private int memGameCount;
+    @ColumnDefault("0")
     private int memWinCount;
+    @ColumnDefault("0")
     private int memLoseCount;
+    @ColumnDefault("0")
     private int memPointRanking;
+    @ColumnDefault("0")
     private int memLvlRanking;
+    @ColumnDefault("0")
     private int memAttendRanking;
+    @ColumnDefault("0")
     private String loginKindCd;
     private String memCertified;
     private String memCreatedAt;
