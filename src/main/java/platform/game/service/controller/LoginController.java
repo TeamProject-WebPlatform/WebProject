@@ -10,6 +10,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,11 +36,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.service.action.KakaoAction;
 import platform.game.service.action.SignUpAction;
+import platform.game.service.entity.AuthRequest;
+import platform.game.service.entity.Member;
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.MemberTO;
 import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.OAuthTokenTO;
 import platform.game.service.service.jwt.JwtManager;
+import platform.game.service.service.jwt.JwtService;
 import platform.game.service.service.jwt.SecurityPassword;
 
 @RestController
@@ -58,6 +65,12 @@ public class LoginController {
 
     @Autowired
     private SignUpAction signUpAction;
+
+    // JWT Login
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtService jwtService; 
 
     @GetMapping("")
     public ModelAndView login() {
@@ -85,51 +98,22 @@ public class LoginController {
     }
 
     // 로그인 요청(웹사이트 - default)
-    @PostMapping("/signin_ok")
-    public int handleSigninin(@RequestBody UserSignTO userSignin, HttpServletResponse response) {
-        int flag = 2;
-        System.out.println("id : " + userSignin.getId());
-        System.out.println("password : " + userSignin.getPassword());
+    @PostMapping("/generateToken") 
+    public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw())); 
+        if (authentication.isAuthenticated()) { 
+            String password = securityPassword.encode(authRequest.getMemPw());
+            String token = jwtService.generateToken(authRequest.getMemUserid(), password); 
 
-        // jwt로 암호화
-        // db에 조회
-        // 아이디, 닉네임 중복체크
-        // 결과 flag에 int로 저장
-        // 토큰 생성 및 복호화 테스트 추후 수정 필요
-        // String token = jwtManager.createToken(userSignin.getId(),
-        // userSignin.getPassword());
-        // System.out.println(token);
-        // try{Thread.sleep(5000);}catch(Exception e){}
-        // System.out.println("5초 지남");
-        // boolean s = jwtManager.validateToken(token);
-        // System.out.println("테스트 : "+s);
-
-        flag = userDAO.getMemberTObyIDandPass(userSignin.getId(), userSignin.getPassword());
-        String s_password = userDAO.getMemberTObySecurityPassword(userSignin.getId());
-
-        if (flag == 0) {
-            System.out.println("로그인 성공");
-            String token = jwtManager.createToken(userSignin.getId(), s_password);
-            System.out.println(token);
-
-            // 쿠키 생성
             Cookie cookie = new Cookie("jwtTokenCookie", token);
-
-            // 쿠키를 안전하게 설정하기 위해 secure 및 httpOnly 설정
-            // cookie.setSecure(true); // HTTPS 프로토콜 사용 여부
-            // cookie.setHttpOnly(true); // JavaScript를 통한 접근 금지
-
-            // 쿠키의 속성 설정 (예: 유효 시간, 경로 등)
-            cookie.setMaxAge(3600); // 60 * 60 1시간 동안 유효
-            // cookie.setDomain("localhost");
-            cookie.setPath("/");    // 모든 경로에서 접근 가능
-
-            // 쿠키를 응답 헤더에 추가
+            cookie.setMaxAge(3600);
+            cookie.setPath("/");
             response.addCookie(cookie);
-        } else {
-            System.out.println("로그인 실패");
-        }
-        return flag;
+            
+            return 0;
+        } else { 
+            return 2;
+        } 
     }
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------

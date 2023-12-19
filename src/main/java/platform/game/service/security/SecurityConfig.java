@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import platform.game.service.filter.JwtAuthFilter;
-import platform.game.service.service.UserInfoService;
+import platform.game.service.service.MemberInfoService;
 
 
 @Configuration
@@ -32,7 +32,7 @@ public class SecurityConfig {
     // User Creation 
     @Bean
     public UserDetailsService userDetailsService() { 
-        return new UserInfoService(); 
+        return new MemberInfoService(); 
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
                 .requestMatchers("/auth/user/**").authenticated()
                 .requestMatchers("/auth/admin/**").authenticated()
+                .requestMatchers("/mypage/**").authenticated()
             );
 
         http.sessionManagement(management -> management
