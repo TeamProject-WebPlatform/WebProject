@@ -19,10 +19,11 @@ import platform.game.service.entity.idGenerator.IdGenerator;
 @Builder
 public class Member { 
 
-    @Id
+    
 //     @GenericGenerator(name = "custom-id-generator", strategy = "platform.game.service.entity.idGenerator", 
 //         parameters = {@Parameter(name = IdGenerator.MEM_ID_GENERATOR_PARAM_KEY, value = "MEMBER")})
 //     @GeneratedValue(generator = "custom-id-generator")
+    @Id
     private long memId; 
     private String memUserid; 
     private String memPw; 

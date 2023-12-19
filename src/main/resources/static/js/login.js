@@ -63,14 +63,15 @@ const setLoginPage = function(){
     btnLogin.addEventListener('click', async function (e) {
         e.preventDefault();
         try {
-            const response = await fetch(`/login/signin_ok`,{
+            // const response = await fetch(`/login/signin_ok`,{
+            const response = await fetch(`/login/generateToken`,{
                 method:'POST',
                 headers:{
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: inputId.value,
-                    password: inputPassword.value,
+                    memUserid: inputId.value,
+                    memPw: inputPassword.value,
                 })
             });
             if (!response.ok) {
