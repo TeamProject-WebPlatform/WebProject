@@ -20,7 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import platform.game.service.filter.JwtAuthFilter;
-import platform.game.service.service.UserInfoService;
+import platform.game.service.service.MemberInfoService;
+// import platform.game.service.service.UserInfoService;
 
 
 @Configuration
@@ -32,7 +33,8 @@ public class SecurityConfig {
     // User Creation 
     @Bean
     public UserDetailsService userDetailsService() { 
-        return new UserInfoService(); 
+        // return new UserInfoService(); 
+        return new MemberInfoService(); 
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

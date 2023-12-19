@@ -37,6 +37,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import platform.game.service.action.KakaoAction;
 import platform.game.service.action.SignUpAction;
 import platform.game.service.entity.AuthRequest;
+import platform.game.service.entity.Member;
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.MemberTO;
 import platform.game.service.model.TO.UserSignTO;
@@ -146,12 +147,13 @@ public class LoginController {
 
     @PostMapping("/generateToken") 
     // public ResponseEntity<String> authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
-    public int authenticateAndGetToken(@RequestBody UserSignTO authRequest, HttpServletResponse response) { 
+    // public int authenticateAndGetToken(@RequestBody UserSignTO authRequest, HttpServletResponse response) { 
+    public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
         System.out.println("/generateToken");
 
         // System.out.println("id : " + authRequest.getUsername());
-        System.out.println("id : " + authRequest.getId());
-        System.out.println("password : " + authRequest.getPassword());
+        System.out.println("id : " + authRequest.getMemUserid());
+        System.out.println("password : " + authRequest.getMemPw());
 
         // userinfo 테이블 업데이트
         // signUpAction.setUserInfo();
@@ -171,13 +173,14 @@ public class LoginController {
         return flag;
 */
 // /*
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getId(), authRequest.getPassword())); 
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw())); 
         if (authentication.isAuthenticated()) { 
+            System.out.println( "확인확인확인확인확인확인확인");
             // 비밀번호 암호화
             // String s_password = userDAO.getMemberTObySecurityPassword(authRequest.getId());
-            String password = securityPassword.encode(authRequest.getPassword());
+            String password = securityPassword.encode(authRequest.getMemPw());
             // String token = jwtService.generateToken(authRequest.getId(), authRequest.getPassword()); 
-            String token = jwtService.generateToken(authRequest.getId(), password); 
+            String token = jwtService.generateToken(authRequest.getMemUserid(), password); 
             // response.addHeader("Authorization", "Bearer " + token);
 
             // 쿠키 생성
