@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/login_Style.css">
     <script src="./js/login.js"></script>
+    <script src="./js/mail.js"></script>
     <title>Document</title>
     <script>
         window.onload = function () {
@@ -65,11 +66,23 @@
                         <div class="verifyContraints" name="nck-pass" style="display: none;">✔</div>
                         <input type="text" id="nickname" name="nickname" oninput="verifyNicknameContraints()" />
                     </label>
+                    <label for="email" class="signup">
+                        <div class="label">E-Mail:</div>
+                        <input type="text" id="email" name="email" />
+                        <input type="button" id="btn-email" class="btn-email" value="인증번호"></input>
+                    </label>
+                    <label for="email" class="signup">
+                        <div id="mail_number" name="mail_number" style="display: none">
+                            <input type="text" name="number" id="number" placeholder="인증번호 입력" />
+                            <input type="text" name="confirm" id="confirm" style="display: none"  value="" readonly/>
+                            <input type="button" name="confirmBtn" id="confirmBtn" style="width: 10px; height: 15px; margin-top: 1px;" >이메일 인증</input>
+                        </div>
+                    </label>
                 </div>
             </div>
             <div id="login-footer">
                 <button id="btn-login" class="login">LOG IN</button>
-                <button id="btn-signup" class="signup">SIGN UP</button>
+                <button id="btn-signup" class="signup" disabled>SIGN UP</button>
             </div>
         </form>
         <!--스팀 로그인 버튼-->

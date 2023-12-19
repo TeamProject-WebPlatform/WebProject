@@ -10,6 +10,7 @@ const setLoginPage = function(){
     const inputPassword = document.getElementById('password');
     const inputPasswordCheck = document.getElementById('passwordCheck');
     const inputNickname = document.getElementById('nickname');
+    const inputEmail = document.getElementById('email');
     const idPass = document.querySelector('.verifyContraints[name=id-pass]');
     const idFail = document.querySelector('.verifyContraints[name=id-fail]');
     const pwPass = document.querySelector('.verifyContraints[name=pw-pass]');
@@ -38,7 +39,7 @@ const setLoginPage = function(){
     navSignup.addEventListener('click', function () {
         showSignupWidget();
         frmLogin.reset();
-       
+
         inputId.setAttribute('logintype','signup');
         inputPassword.setAttribute('logintype','signup');
         
@@ -46,7 +47,7 @@ const setLoginPage = function(){
         inputPassword.placeholder="10~20 with letter + number";
         inputPasswordCheck.placeholder="";
         inputNickname.placeholder="4~10 only with letter,number";
-       
+
         navLogin.style.color = 'black';
         navSignup.style.color = 'white';
         
@@ -70,8 +71,9 @@ const setLoginPage = function(){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    memUserid: inputId.value,
-                    memPw: inputPassword.value,
+                    id: inputId.value,
+                    password: inputPassword.value,
+                    mail: inputEmail.value
                 })
             });
             if (!response.ok) {
@@ -140,13 +142,13 @@ const setLoginPage = function(){
             console.error('DB 호출 중 오류가 발생했습니다.', error);
         }
     });
+
     inputPassword.addEventListener('oninput',function(){
         //comparePassword();
     })
     inputPasswordCheck.addEventListener('oninput',function(){
         
     })
-
 }
 const showLoginWidget = function () {
     const signupContents = document.querySelectorAll('.signup');
@@ -290,4 +292,4 @@ const verifyNicknameContraints = function(){
     nckFail.style.display="none";
     nckPass.style.display="";
     return true;
-}
+};
