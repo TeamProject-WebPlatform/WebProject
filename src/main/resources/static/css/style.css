@@ -142,6 +142,7 @@ nav > ul > li{
     /* flex: 1 1 auto; */
 }
 
+/* 중앙 컨텐츠 */
 .content{
     /* width: 100%; */
     /* height: 85vh; */
@@ -153,7 +154,6 @@ nav > ul > li{
     /* height: 100vh; */
 }
 
-
 .main{
     width: 1380px;
     height: 85vh;
@@ -162,13 +162,66 @@ nav > ul > li{
     position: relative;
     background-color: rgba(43,44,47,0.5);
 }
+.user{
+    width: 100%;
+}
+
+.user_profil{
+    width: 20%;
+    margin-left: 4%;
+    margin-top: 1%;
+    display:inline-block;
+    border: 1px solid red;
+}
+
 .profil{
-    height: 40vh;
+    /* width: 19%; */
+    border: 1px solid red;
+    
+}
+
+.icon{
+    border: 1px solid red;
+
+    width: 18vh;
+    height: 18vh;
     margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.user_info{
     border: 1px solid red;
 
 }
-.battle{
-    height: 45vh;
+.level{
+    width: 80px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display:inline-block;
+    border: 1px solid red;
+}
+.nik{
+    border: 1px solid red;
+    display: inline-block;
+}
+
+.user_bagdge > .bagdge{
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
+}
+
+
+
+.user_content{
+    height: 13vh;
+    border: 1px solid red;
     background-color: #222327;
+}
+.battle{
+    height: 40vh;
+    background-image: url("../img/ezgif.com-video-to-gif.gif");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
