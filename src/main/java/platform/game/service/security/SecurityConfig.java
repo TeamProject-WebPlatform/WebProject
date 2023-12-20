@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import platform.game.service.filter.JwtAuthFilter;
 import platform.game.service.service.MemberInfoService;
@@ -40,11 +39,12 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
                 .requestMatchers("/").permitAll()
+                .requestMatchers("/error/**").permitAll()
                 .requestMatchers("/login/**").permitAll()
                 .requestMatchers("/board/**").permitAll()
-                .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
-                .requestMatchers("/auth/user/**").authenticated()
-                .requestMatchers("/auth/admin/**").authenticated()
+                .requestMatchers("/steam/**").permitAll()
+                .requestMatchers("/kakao/**").permitAll()
+                .requestMatchers("/steamapi/**").permitAll()
                 .requestMatchers("/mypage/**").authenticated()
             );
 
