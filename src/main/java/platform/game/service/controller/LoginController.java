@@ -140,7 +140,8 @@ public class LoginController {
             String token = jwtService.generateToken(authRequest.getMemUserid(), password); 
 
             Cookie cookie = new Cookie("jwtTokenCookie", token);
-            cookie.setMaxAge(3600);
+            // cookie.setMaxAge(3600);
+            cookie.setMaxAge(43200);
             cookie.setPath("/");
             response.addCookie(cookie);
             

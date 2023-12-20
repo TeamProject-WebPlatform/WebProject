@@ -38,15 +38,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/login/**").permitAll()
-                .requestMatchers("/board/**").permitAll()
-                .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
-                .requestMatchers("/auth/user/**").authenticated()
-                .requestMatchers("/auth/admin/**").authenticated()
-                .requestMatchers("/mypage/**").authenticated()
-            );
+            .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
+            .requestMatchers("/").permitAll()
+            .requestMatchers("/login/**").permitAll()
+            .requestMatchers("/board/**").permitAll()
+            .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
+            .requestMatchers("/auth/user/**").authenticated()
+            .requestMatchers("/auth/admin/**").authenticated()
+            .requestMatchers("/mypage/**").authenticated()
+        );
+        
+        http.formLogin(form -> form
+            .loginPage("/login")  // 사용자가 인증되지 않은 경우 /login 페이지로 이동
+            .permitAll()
+        );
 
         http.sessionManagement(management -> management
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
