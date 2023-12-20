@@ -22,13 +22,14 @@
                 var v = grecaptcha.getResponse();
                 if (v.length == 0) {
                     alert("Please complete the reCAPTCHA!");
-                    return false;
+                    window.location.href = "/login";
                 }
                 else{
                     alert("인증 성공");
                     return true;
                 }
             }
+
     </script>
 </head>
 
@@ -98,11 +99,12 @@
                     </div>
                 </div>
                 <div id="login-footer">
-                    <button id="btn-login" class="login">LOG IN</button>
+                    <button id="btn-login" class="login" onclick="check_recaptcha()">LOG IN</button>
                     <button id="btn-signup" class="signup" disabled>SIGN UP</button>
                 </div>
+                <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg"></div>
             </form>
-            <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg"></div>
+            
             <!--스팀 로그인 버튼-->
             <br>
             <a href="https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.return_to=http://localhost:8080/login/steam/callback&openid.realm=http://localhost:8080&openid.mode=checkid_setup">
