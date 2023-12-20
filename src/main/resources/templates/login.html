@@ -8,8 +8,11 @@
     <script src="./js/login.js"></script>
     <script src="./js/mail.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script> <!-- google recaptcha -->
+    <link id="captchaKey" th:data-contextPath="${@environment.getProperty('google.site')}"/>
     <title>Document</title>
     <script>
+        const captcha_Key = document.querySelector("#captchaKey").getAttribute("data-contextPath");
+
         window.onload = function () {
             const frmLogin = document.frmLogin;
             const navLogin = document.querySelector('#navigation li[name=login]');
@@ -102,7 +105,7 @@
                     <button id="btn-login" class="login" onclick="check_recaptcha()">LOG IN</button>
                     <button id="btn-signup" class="signup" disabled>SIGN UP</button>
                 </div>
-                <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg" id="captcha"></div>
+                <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg" name="captcha"></div>
             </form>
             
             <!--스팀 로그인 버튼-->
