@@ -221,5 +221,5 @@ nav > ul > li{
 }
 .battle{
     height: 40vh;
-    background-color: #222327;
+    background-color: rgba(43,44,47,0.5);
 }
