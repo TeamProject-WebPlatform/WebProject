@@ -87,56 +87,43 @@ public class LoginController {
     // 회원가입 요청
     @PostMapping("/signup_ok")
     public int handleSignup(@RequestBody UserSignTO userSignup) {
-        int flag = 2;
+        boolean flag = false;
+        System.out.println(userSignup.toString());
 
-        System.out.println("id : " + userSignup.getId());
-        System.out.println("password : " + userSignup.getPassword());
-        System.out.println("nickname : " + userSignup.getNickname());
-        System.out.println("email : "+userSignup.getEmail());
+        flag = signUpAction.signUp(userSignup);
 
-        //flag = signUpAction.signUp(userSignup);
-
-        if (flag == 0) {// 성공
+        if (flag) {
             System.out.println("회원가입 성공");
+            return 0;
         } else {
             System.out.println("회원가입 실패");
+            return 1;
         }
-
-        return flag;
     }
-        // 이메일 인증 요청
+    // 이메일 인증 요청
 	@PostMapping( "/mail_ok" )
 	public int mail_ok( @RequestBody UserSignTO userSignup) {
         MailAction mailAction = new MailAction(javaMailSender);
-		// int flag = 2;
-		//System.out.println("javaMailSender : " + javaMailSender);
-		userSignup.createNumber();
 
 		String toEmail = userSignup.getEmail();
 		String toName = userSignup.getNickname();
-        int number = userSignup.getNumber();
-
+        int number = mailAction.createNumber();
+        // 메일 내용 
 		String subject = toName + "님의 인증번호 입니다";
 		String content = "<h1>"+toName+"님의 인증 번호는 <br><span>"+number+"</span> 입니다.</h1>";
-		
-        System.out.println(number);
-        System.out.println(toEmail);
-        System.out.println(toName);
-        System.out.println(subject);
-        System.out.println(content);
-        // 모델에 number 값을 추가
 
 		mailAction.sendMail(toEmail, toName, subject, content);
 
 		return number;
-        // return flag;
 	}
     // 로그인 요청(웹사이트 - default)
     @PostMapping("/generateToken") 
-    public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
+    public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw())); 
         if (authentication.isAuthenticated()) { 
+            System.out.println(1);
             String password = securityPassword.encode(authRequest.getMemPw());
+            // token에 넣는 정보에서 패스워드는 빼야할듯?
             String token = jwtService.generateToken(authRequest.getMemUserid(), password); 
 
             Cookie cookie = new Cookie("jwtTokenCookie", token);
