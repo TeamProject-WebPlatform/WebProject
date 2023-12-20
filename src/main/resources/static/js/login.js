@@ -15,6 +15,7 @@ const setLoginPage = function(){
     const idFail = document.querySelector('.verifyContraints[name=id-fail]');
     const pwPass = document.querySelector('.verifyContraints[name=pw-pass]');
     const pwFail = document.querySelector('.verifyContraints[name=pw-fail]');
+    const captcha = document.getElementById('captcha');
 
     navLogin.addEventListener('click', function () {
         showLoginWidget();
@@ -35,6 +36,7 @@ const setLoginPage = function(){
         pwPass.style.display="none";
         pwcFail.style.display="none";
         pwcPass.style.display="none";
+        captcha.style.display="";
     });
     navSignup.addEventListener('click', function () {
         showSignupWidget();
@@ -59,6 +61,7 @@ const setLoginPage = function(){
         pwPass.style.display="none";
         pwcFail.style.display="";
         pwcPass.style.display="none";  
+        captcha.style.display="none";
     });
     
     btnLogin.addEventListener('click', async function (e) {
