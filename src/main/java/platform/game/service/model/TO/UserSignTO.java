@@ -8,5 +8,5 @@ public class UserSignTO {
     private String password;
     private String nickname;
     private String email;
-
+    private String steamid;
 }

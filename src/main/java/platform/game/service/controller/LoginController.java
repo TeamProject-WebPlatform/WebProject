@@ -42,7 +42,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.service.action.KakaoAction;
 import platform.game.service.action.MailAction;
-import platform.game.service.action.SignUpAction;
+import platform.game.service.action.SignAction;
 import platform.game.service.entity.AuthRequest;
 import platform.game.service.entity.Member;
 import platform.game.service.model.DAO.UserDAO;
@@ -65,17 +65,13 @@ public class LoginController {
     String domain;
     @Autowired
     private JavaMailSender javaMailSender;
-    @Autowired
-    private SecurityPassword securityPassword;
 
     @Autowired
-    private SignUpAction signUpAction;
+    private SignAction signAction;
 
     // JWT Login
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtService jwtService; 
 
     @GetMapping("")
     public ModelAndView login() {
@@ -87,7 +83,7 @@ public class LoginController {
     public int handleSignup(@RequestBody UserSignTO userSignup) {
         boolean flag = false;
 
-        flag = signUpAction.signUp(userSignup);
+        flag = signAction.signUp(userSignup,0);
 
         if (flag) {
             System.out.println("회원가입 성공");
@@ -116,18 +112,11 @@ public class LoginController {
     // 로그인 요청(웹사이트 - default)
     @PostMapping("/generateToken") 
     public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
+        //int flag = signAction.isAuth(authRequest,response);
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw())); 
-        if (authentication.isAuthenticated()) { 
-            System.out.println(1);
-            String password = securityPassword.encode(authRequest.getMemPw());
-            // token에 넣는 정보에서 패스워드는 빼야할듯?
-            String token = jwtService.generateToken(authRequest.getMemUserid(), password); 
-
-            Cookie cookie = new Cookie("jwtTokenCookie", token);
-            cookie.setMaxAge(3600);
-            cookie.setPath("/");
+        if (authentication.isAuthenticated()) {
+            Cookie cookie = signAction.generateToken(authRequest);
             response.addCookie(cookie);
-            
             return 0;
         } else { 
             return 2;
@@ -167,32 +156,22 @@ public class LoginController {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-
         boolean isTrue = Objects.requireNonNull(body).contains("true");
         if (isTrue) {
-            // 인증 성공 username : 스팀아이디
-            //ModelAndView mav = new ModelAndView("steamWebAPI");
             String[] tmp = openidIdentity.split("/");
-            String username = tmp[tmp.length - 1];
-            System.out.println(username);
-            //스팀 로그인 DB 확인
-            //스팀에서 받아온 아이디가 디비에 등록이 되어있는지 확인하는 코드
-            //MemberTO to = new MemberTO();
-            //to.setUserid(username);
-            //int flag = userDAO.setSteamMemberCheck(to);
-
-            // if(flag == 0){ // 바로 로그인
-            //     return new ModelAndView("index");
-            // }else if(flag == 1){
-            //     System.out.println("계정이 없습니다.");
-            //     //signUpAction.steamsignUp(to);
-            // }
-            //mav.addObject("steamID", username);
-            //return mav;
+            String steamid = tmp[tmp.length - 1];
+            int flag = signAction.steamSign(steamid);
+            if(flag==1){
+                System.out.println("스팀 회원가입");
+            }else{
+                System.out.println("스팀 로그인");
+            }
+            // 3. 이미 다른 로그인으로 계정을 만들고 스팀을 연동했을 때의 방법?
+            
+            response.sendRedirect("/");
         }else{
             response.sendRedirect("/error");
         }
-        response.sendRedirect("/");
     }
 
     /* 카카오톡 로그인 버튼(이메일 받아오기) */
@@ -254,7 +233,7 @@ public class LoginController {
                 System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
             }
         }else if(flag == 1){ // 계정 생성 후 이동
-            signUpAction.kakaosignUp(to);
+            //signAction.kakaosignUp(to);
             try {
                 //홈페이지로 돌아가는 구문
                 response.sendRedirect(domain);
