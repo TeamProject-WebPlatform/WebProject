@@ -111,9 +111,9 @@ public class LoginController {
         // 메일 내용 
 		String subject = toName + "님의 인증번호 입니다";
 		String content = "<h1>"+toName+"님의 인증 번호는 <br><span>"+number+"</span> 입니다.</h1>";
-
 		mailAction.sendMail(toEmail, toName, subject, content);
-
+        
+        // 리턴 number 값을 반환
 		return number;
 	}
     // 로그인 요청(웹사이트 - default)
