@@ -34,8 +34,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization"); 
         String token = null; 
-        String username = null; 
-        String password = null;
+        // MEMBER 엔티티와의 일관성을 위해 userid, pw로 변수명 변경
+        String userid = null; 
+        String pw = null;
 
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -43,8 +44,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 if ("jwtTokenCookie".equals(cookie.getName())) {
                     // String cookieValue = cookie.getValue();
                     token = cookie.getValue();
-                    username = jwtService.extractUsername(token); 
-                    password = jwtService.extractPassword(token);
+                    userid = jwtService.extractUsername(token); 
+                    pw = jwtService.extractPassword(token);
 
                     // Cookie에서 ID, PW 불러오기
                     // System.out.println("ID: " + username);
@@ -54,14 +55,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) { 
-            // System.out.println("jwt 필터 / 1 : 토큰 있음 추출");
+            //System.out.println("jwt 필터 / 1 : 토큰 있음 추출");
             token = authHeader.substring(7); 
-            username = jwtService.extractUsername(token); 
+            userid = jwtService.extractUsername(token); 
         } 
   
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) { 
-            // System.out.println("jwt 필터 / 2 : 유저 디테일 설정");
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username); 
+        if (userid != null && SecurityContextHolder.getContext().getAuthentication() == null) { 
+            //System.out.println("jwt 필터 / 2 : 유저 디테일 설정");
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userid); 
             if (jwtService.validateToken(token, userDetails)) { 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()); 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); 
