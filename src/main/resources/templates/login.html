@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./css/login_Style.css">
     <script src="./js/login.js"></script>
     <script src="./js/mail.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script> <!-- google recaptcha -->
     <title>Document</title>
     <script>
         window.onload = function () {
@@ -16,6 +17,19 @@
             frmLogin.reset();
             navLogin.click();
         }
+
+        function check_recaptcha(){
+                var v = grecaptcha.getResponse();
+                if (v.length == 0) {
+                    alert("Please complete the reCAPTCHA!");
+                    window.location.href = "/login";
+                }
+                else{
+                    alert("인증 성공");
+                    return true;
+                }
+            }
+
     </script>
 </head>
 
@@ -25,7 +39,7 @@
             <h1>logo</h1>
         </header>
         <div id="frmLogin">
-            <form method="post" name="frmLogin">
+            <form method="post" name="frmLogin" action="#" onsubmit="return check_recaptcha();">
                 <div id="login-header">
                     <div>
                         <strong class="title">User Login</strong>
@@ -85,10 +99,12 @@
                     </div>
                 </div>
                 <div id="login-footer">
-                    <button id="btn-login" class="login">LOG IN</button>
+                    <button id="btn-login" class="login" onclick="check_recaptcha()">LOG IN</button>
                     <button id="btn-signup" class="signup" disabled>SIGN UP</button>
                 </div>
+                <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg"></div>
             </form>
+            
             <!--스팀 로그인 버튼-->
             <br>
             <a href="https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.return_to=http://localhost:8080/login/steam/callback&openid.realm=http://localhost:8080&openid.mode=checkid_setup">
