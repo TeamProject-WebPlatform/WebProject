@@ -124,10 +124,10 @@ public class LoginController {
         System.out.println(toName);
         System.out.println(subject);
         System.out.println(content);
-        // 모델에 number 값을 추가
-
+        
 		mailAction.sendMail(toEmail, toName, subject, content);
-
+        
+        // 리턴 number 값을 반환
 		return number;
         // return flag;
 	}

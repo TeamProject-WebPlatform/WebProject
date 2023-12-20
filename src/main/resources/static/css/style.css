@@ -221,7 +221,5 @@ nav > ul > li{
 }
 .battle{
     height: 40vh;
-    background-image: url("../img/ezgif.com-video-to-gif.gif");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: #222327;
 }
