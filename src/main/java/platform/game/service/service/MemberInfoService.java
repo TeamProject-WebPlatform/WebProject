@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
 
 @Service
@@ -19,7 +21,7 @@ public class MemberInfoService implements UserDetailsService{
   
     @Autowired
     private PasswordEncoder encoder; 
-  
+
     @Override
     public UserDetails loadUserByUsername(String mem_userid) throws UsernameNotFoundException { 
   
@@ -30,9 +32,13 @@ public class MemberInfoService implements UserDetailsService{
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + mem_userid)); 
     } 
   
-    public String addUser(Member member) { 
-        member.setMemPw(encoder.encode(member.getMemPw())); 
-        repository.save(member); 
-        return "User Added Successfully"; 
+    public boolean addUser(Member member) { 
+        try{
+            member.setMemPw(encoder.encode(member.getMemPw())); 
+            repository.save(member); 
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 }

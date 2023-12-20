@@ -71,9 +71,8 @@ const setLoginPage = function(){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: inputId.value,
-                    password: inputPassword.value,
-                    mail: inputEmail.value
+                    memUserid: inputId.value,
+                    memPw: inputPassword.value,
                 })
             });
             if (!response.ok) {
@@ -119,6 +118,7 @@ const setLoginPage = function(){
                     id: inputId.value,
                     password: inputPassword.value,
                     nickname: inputNickname.value,
+                    email: inputEmail.value
                 })
             });
             if (!response.ok) {
