@@ -22,34 +22,35 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import platform.game.service.filter.JwtAuthFilter;
 import platform.game.service.service.MemberInfoService;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
-    private JwtAuthFilter authFilter; 
-    // User Creation 
+    private JwtAuthFilter authFilter;
+
+    // User Creation
     @Bean
-    public UserDetailsService userDetailsService() { 
-        return new MemberInfoService(); 
+    public UserDetailsService userDetailsService() {
+        return new MemberInfoService();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/login/**").permitAll()
-                .requestMatchers("/board/**").permitAll()
-                .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
-                .requestMatchers("/auth/user/**").authenticated()
-                .requestMatchers("/auth/admin/**").authenticated()
-                .requestMatchers("/mypage/**").authenticated()
-            );
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers("/board/**").permitAll()
+                        .requestMatchers("/rank/**").permitAll()
+                        .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
+                        .requestMatchers("/auth/user/**").authenticated()
+                        .requestMatchers("/auth/admin/**").authenticated()
+                        .requestMatchers("/mypage/**").authenticated());
 
         http.sessionManagement(management -> management
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authenticationProvider(authenticationProvider());
 
@@ -57,23 +58,23 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Password Encoding 
+    // Password Encoding
     @Bean
-    public PasswordEncoder passwordEncoder() { 
-        return new BCryptPasswordEncoder(); 
-    } 
-  
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
-    public AuthenticationProvider authenticationProvider() { 
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(); 
-        authenticationProvider.setUserDetailsService(userDetailsService()); 
-        authenticationProvider.setPasswordEncoder(passwordEncoder()); 
-        return authenticationProvider; 
-    } 
-  
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception { 
-        return config.getAuthenticationManager(); 
-    } 
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
 }

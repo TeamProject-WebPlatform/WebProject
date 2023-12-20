@@ -142,7 +142,7 @@ public class UserDAO {
             String id_flag = "100";
             int mem_id = i;
             String mem_userid = "test" + i;
-            String mem_pw = securityPassword.encode("test");
+            String mem_pw = "test123456789";
             String mem_nick = "tester" + i;
             String mem_role_cd = "10003";
             String mem_email = "test" + i + "@test.com";

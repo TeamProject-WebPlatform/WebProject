@@ -33,4 +33,9 @@ public class MainController {
         return new ModelAndView("shop");
     }
 
+    @GetMapping("/rank")
+    public ModelAndView rank() {
+        return new ModelAndView("rank");
+    }
+
 }

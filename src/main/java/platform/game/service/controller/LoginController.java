@@ -128,7 +128,6 @@ public class LoginController {
         // 모델에 number 값을 추가
 
         mailAction.sendMail(toEmail, toName, subject, content);
-        userDAO.setTestMember();
         return number;
         // return flag;
     }
