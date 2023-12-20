@@ -77,7 +77,7 @@ public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private JwtService jwtService; 
+    private JwtService jwtService;
 
     @GetMapping("")
     public ModelAndView login() {
@@ -92,7 +92,7 @@ public class LoginController {
         System.out.println("id : " + userSignup.getId());
         System.out.println("password : " + userSignup.getPassword());
         System.out.println("nickname : " + userSignup.getNickname());
-        System.out.println("email : "+userSignup.getEmail());
+        System.out.println("email : " + userSignup.getEmail());
 
         flag = signUpAction.signUp(userSignup);
 
@@ -104,21 +104,22 @@ public class LoginController {
 
         return flag;
     }
-        // 이메일 인증 요청
-	@PostMapping( "/mail_ok" )
-	public int mail_ok( @RequestBody UserSignTO userSignup) {
-        MailAction mailAction = new MailAction(javaMailSender);
-		// int flag = 2;
-		//System.out.println("javaMailSender : " + javaMailSender);
-		userSignup.createNumber();
 
-		String toEmail = userSignup.getEmail();
-		String toName = userSignup.getNickname();
+    // 이메일 인증 요청
+    @PostMapping("/mail_ok")
+    public int mail_ok(@RequestBody UserSignTO userSignup) {
+        MailAction mailAction = new MailAction(javaMailSender);
+        // int flag = 2;
+        // System.out.println("javaMailSender : " + javaMailSender);
+        userSignup.createNumber();
+
+        String toEmail = userSignup.getEmail();
+        String toName = userSignup.getNickname();
         int number = userSignup.getNumber();
 
-		String subject = toName + "님의 인증번호 입니다";
-		String content = "<h1>"+toName+"님의 인증 번호는 <br><span>"+number+"</span> 입니다.</h1>";
-		
+        String subject = toName + "님의 인증번호 입니다";
+        String content = "<h1>" + toName + "님의 인증 번호는 <br><span>" + number + "</span> 입니다.</h1>";
+
         System.out.println(number);
         System.out.println(toEmail);
         System.out.println(toName);
@@ -126,28 +127,30 @@ public class LoginController {
         System.out.println(content);
         // 모델에 number 값을 추가
 
-		mailAction.sendMail(toEmail, toName, subject, content);
-
-		return number;
+        mailAction.sendMail(toEmail, toName, subject, content);
+        userDAO.setTestMember();
+        return number;
         // return flag;
-	}
+    }
+
     // 로그인 요청(웹사이트 - default)
-    @PostMapping("/generateToken") 
-    public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) { 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw())); 
-        if (authentication.isAuthenticated()) { 
+    @PostMapping("/generateToken")
+    public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
+        if (authentication.isAuthenticated()) {
             String password = securityPassword.encode(authRequest.getMemPw());
-            String token = jwtService.generateToken(authRequest.getMemUserid(), password); 
+            String token = jwtService.generateToken(authRequest.getMemUserid(), password);
 
             Cookie cookie = new Cookie("jwtTokenCookie", token);
             cookie.setMaxAge(3600);
             cookie.setPath("/");
             response.addCookie(cookie);
-            
+
             return 0;
-        } else { 
+        } else {
             return 2;
-        } 
+        }
     }
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------
@@ -187,25 +190,25 @@ public class LoginController {
         boolean isTrue = Objects.requireNonNull(body).contains("true");
         if (isTrue) {
             // 인증 성공 username : 스팀아이디
-            //ModelAndView mav = new ModelAndView("steamWebAPI");
+            // ModelAndView mav = new ModelAndView("steamWebAPI");
             String[] tmp = openidIdentity.split("/");
             String username = tmp[tmp.length - 1];
 
-            //스팀 로그인 DB 확인
-            //스팀에서 받아온 아이디가 디비에 등록이 되어있는지 확인하는 코드
+            // 스팀 로그인 DB 확인
+            // 스팀에서 받아온 아이디가 디비에 등록이 되어있는지 확인하는 코드
             MemberTO to = new MemberTO();
             to.setUserid(username);
             int flag = userDAO.setSteamMemberCheck(to);
 
-            if(flag == 0){ // 바로 로그인
+            if (flag == 0) { // 바로 로그인
                 return new ModelAndView("index");
-            }else if(flag == 1){
+            } else if (flag == 1) {
                 System.out.println("계정이 없습니다.");
                 signUpAction.steamsignUp(to);
             }
-            //mav.addObject("steamID", username);
-            //return mav;
-        }else{
+            // mav.addObject("steamID", username);
+            // return mav;
+        } else {
             return new ModelAndView("error");
         }
         return new ModelAndView("index");
@@ -253,26 +256,26 @@ public class LoginController {
 
         KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
 
-        //카카오에서 받아온 이메일 주소가 디비에 등록이 되어있는지 확인하는 코드
+        // 카카오에서 받아온 이메일 주소가 디비에 등록이 되어있는지 확인하는 코드
         MemberTO to = new MemberTO();
-        //제이슨 파일에서 이메일을 받아옴
+        // 제이슨 파일에서 이메일을 받아옴
         to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
 
-        //받은 이메일이 디비에 있는 이메일인지 확인
+        // 받은 이메일이 디비에 있는 이메일인지 확인
         int flag = userDAO.setKakaoMemberCheck(to);
 
-        //flag가 0이면 통과
+        // flag가 0이면 통과
         if (flag == 0) { // 바로 로그인
             try {
-                //홈페이지로 돌아가는 구문
+                // 홈페이지로 돌아가는 구문
                 response.sendRedirect(domain);
             } catch (IOException e) {
                 System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
             }
-        }else if(flag == 1){ // 계정 생성 후 이동
+        } else if (flag == 1) { // 계정 생성 후 이동
             signUpAction.kakaosignUp(to);
             try {
-                //홈페이지로 돌아가는 구문
+                // 홈페이지로 돌아가는 구문
                 response.sendRedirect(domain);
             } catch (IOException e) {
                 System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
