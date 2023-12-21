@@ -22,6 +22,10 @@ public interface MemberInfoRepository extends JpaRepository<Member, Integer> {
 
     boolean existsByMemUserid(String mem_userid);
 
+    boolean existsByMemNick(String mem_nickname);
+
+    boolean existsByMemEmail(String mem_mail);
+
     @Query(value = "select mem_pw from member where mem_userid = :mem_userid", nativeQuery = true)
     String findByMemPw(@Param("mem_userid") String mem_userid);
 

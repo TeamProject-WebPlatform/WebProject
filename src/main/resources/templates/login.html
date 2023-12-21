@@ -51,6 +51,7 @@
                             <div class="verifyContraints" name="id-fail" style="display: none;">❗</div>
                             <div class="verifyContraints" name="id-pass" style="display: none;">✔</div>
                             <input type="text" id="id" name="id" logintype="login" oninput="verifyIdContraints()" />
+                            <input type="button" id="duplicate-id" value="중복 확인" style="display: none;" />
                         </label>
                         
                         <label for="password" class="login signup">
@@ -73,10 +74,12 @@
                             <div class="verifyContraints" name="nck-fail" style="display: none;">❗</div>
                             <div class="verifyContraints" name="nck-pass" style="display: none;">✔</div>
                             <input type="text" id="nickname" name="nickname" oninput="verifyNicknameContraints()" />
+                            <input type="button" id="duplicate-nickname" value="중복 확인" />
                         </label>
                         <label for="email" class="signup">
                             <div class="label">E-Mail:</div>
                             <input type="text" id="email" name="email" />
+                            <input type="button" id="duplicate-mail" value="중복 확인" />
                             <input type="button" id="btn-email" class="btn-email" value="인증번호"></input>
                         </label>
                         <label for="email" class="signup">

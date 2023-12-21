@@ -15,7 +15,9 @@ const setLoginPage = function(){
     const idFail = document.querySelector('.verifyContraints[name=id-fail]');
     const pwPass = document.querySelector('.verifyContraints[name=pw-pass]');
     const pwFail = document.querySelector('.verifyContraints[name=pw-fail]');
-    const captcha = document.getElementById('captcha');
+    const duplicateId = document.getElementById('duplicate-id');
+    const duplicateNickname = document.getElementById('duplicate-nickname');
+    const duplicateMail = document.getElementById('duplicate-mail');
     var count = 0;
 
     function check_recaptcha(){
@@ -78,8 +80,10 @@ const setLoginPage = function(){
         pwPass.style.display="none";
         pwcFail.style.display="";
         pwcPass.style.display="none";  
+        duplicateId.style.display="";
     });
     
+    // 로그인 시도 시 DB 내 ID, PW 체크
     btnLogin.addEventListener('click', async function (e) {
         e.preventDefault();
         try {
@@ -119,6 +123,84 @@ const setLoginPage = function(){
                     break;
                 default:
                     break;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    });
+
+    // ID 중복 체크
+    duplicateId.addEventListener('click', async function (e) {
+        e.preventDefault();
+        var checkId = false;
+        try {
+            const response = await fetch(`/login/DuplicateIdCheck`,{
+                method:'POST',
+                body: inputId.value
+                });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            if (flag){
+                alert("이미 존재하는 아이디입니다.");
+                checkId = false;
+                return;
+            } else {
+                alert("사용 가능한 아이디입니다.");
+                checkId = true;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    });
+
+    // 닉네임 중복 체크
+    duplicateNickname.addEventListener('click', async function (e) {
+        e.preventDefault();
+        var checkNick = false;
+        try {
+            const response = await fetch(`/login/DuplicateNickCheck`,{
+                method:'POST',
+                body: inputNickname.value
+                });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            if (flag){
+                alert("이미 존재하는 닉네임입니다.");
+                checkNick = false;
+                return;
+            } else {
+                alert("사용 가능한 닉네임입니다.");
+                checkNick = true;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    });
+
+    // 메일 중복 체크
+    duplicateMail.addEventListener('click', async function (e) {
+        e.preventDefault();
+        var checkMail = false;
+        try {
+            const response = await fetch(`/login/DuplicateMailCheck`,{
+                method:'POST',
+                body: inputEmail.value
+                });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            if (flag){
+                alert("이미 존재하는 아이디입니다.");
+                checkMail = false;
+                return;
+            } else {
+                alert("사용 가능한 닉네임입니다.");
+                checkMail = true;
             }
         } catch (error) {
             console.error('DB 호출 중 오류가 발생했습니다.', error);

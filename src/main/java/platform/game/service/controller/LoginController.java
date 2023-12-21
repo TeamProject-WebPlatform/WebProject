@@ -139,6 +139,24 @@ public class LoginController {
         return flag;
     }
 
+    // 가입 시 아이디 중복 체크
+    @PostMapping("/DuplicateIdCheck")
+    public boolean DuplicateIdCheck(@RequestBody String mem_userid, HttpServletResponse response) {
+        return MemberRepository.existsByMemUserid(mem_userid);
+    }
+
+    // 가입 시 닉네임 중복 체크
+    @PostMapping("/DuplicateNickCheck")
+    public boolean DuplicateNickCheck(@RequestBody String mem_nickname, HttpServletResponse response) {
+        return MemberRepository.existsByMemNick(mem_nickname);
+    }
+
+    // 가입 시 이메일 중복 체크
+    @PostMapping("/DuplicateMailCheck")
+    public boolean DuplicateMailCheck(@RequestBody String mem_mail, HttpServletResponse response) {
+        return MemberRepository.existsByMemEmail(mem_mail);
+    }
+
     // 로그인 요청(웹사이트 - default)
     @PostMapping("/generateToken")
     public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
