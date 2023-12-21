@@ -16,6 +16,24 @@ const setLoginPage = function(){
     const pwPass = document.querySelector('.verifyContraints[name=pw-pass]');
     const pwFail = document.querySelector('.verifyContraints[name=pw-fail]');
     const captcha = document.getElementById('captcha');
+    var count = 0;
+
+    function check_recaptcha(){
+        count+=1;
+        var Captcha_Check = grecaptcha.getResponse();
+        if (Captcha_Check.length == 0) {
+            if (count ==3){
+                document.getElementById("captcha").style.display="";
+            } else if (count > 3){
+                alert("Please complete the reCAPTCHA!");
+                return;
+            }
+        }
+        else{
+            alert("인증 성공");
+            window.location.href = "./";
+        }
+    }
 
     navLogin.addEventListener('click', function () {
         showLoginWidget();
@@ -36,7 +54,6 @@ const setLoginPage = function(){
         pwPass.style.display="none";
         pwcFail.style.display="none";
         pwcPass.style.display="none";
-        captcha.style.display="";
     });
     navSignup.addEventListener('click', function () {
         showSignupWidget();
@@ -61,14 +78,13 @@ const setLoginPage = function(){
         pwPass.style.display="none";
         pwcFail.style.display="";
         pwcPass.style.display="none";  
-        captcha.style.display="none";
     });
     
     btnLogin.addEventListener('click', async function (e) {
         e.preventDefault();
         try {
             // const response = await fetch(`/login/signin_ok`,{
-            const response = await fetch(`/login/generateToken`,{
+            const response = await fetch(`/login/memberCheck`,{
                 method:'POST',
                 headers:{
                     'Content-Type': 'application/json',
@@ -83,14 +99,23 @@ const setLoginPage = function(){
             }
             const flag = await response.json();
             switch (flag){
-                case 1:
-                    console.log("아이디 없음");
-                    break;
-                case 2:
-                    console.log("비번 오류");
+                case 1: 
+                    alert('아이디 또는 비번 오류');
+                    check_recaptcha();
                     break;
                 case 0:
-                    window.location.href = "/";
+                    // DB 체크 성공 시 토큰 생성
+                    await fetch(`/login/generateToken`,{
+                        method:'POST',
+                        headers:{
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            memUserid: inputId.value,
+                            memPw: inputPassword.value,
+                        })
+                    });
+                    check_recaptcha();
                     break;
                 default:
                     break;

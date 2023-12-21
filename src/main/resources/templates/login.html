@@ -12,7 +12,6 @@
     <title>Document</title>
     <script>
         const captcha_Key = document.querySelector("#captchaKey").getAttribute("data-contextPath");
-
         window.onload = function () {
             const frmLogin = document.frmLogin;
             const navLogin = document.querySelector('#navigation li[name=login]');
@@ -20,18 +19,6 @@
             frmLogin.reset();
             navLogin.click();
         }
-
-        function check_recaptcha(){
-                var v = grecaptcha.getResponse();
-                if (v.length == 0) {
-                    alert("Please complete the reCAPTCHA!");
-                    window.location.href = "/login";
-                }
-                else{
-                    alert("인증 성공");
-                    return true;
-                }
-            }
 
     </script>
 </head>
@@ -102,10 +89,10 @@
                     </div>
                 </div>
                 <div id="login-footer">
-                    <button id="btn-login" class="login" onclick="check_recaptcha()">LOG IN</button>
+                    <button id="btn-login" class="login">LOG IN</button>
                     <button id="btn-signup" class="signup" disabled>SIGN UP</button>
                 </div>
-                <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg" name="captcha"></div>
+                <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg" id="captcha" style="display:none"></div>
             </form>
             
             <!--스팀 로그인 버튼-->

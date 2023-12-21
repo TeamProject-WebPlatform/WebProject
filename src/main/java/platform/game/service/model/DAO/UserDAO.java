@@ -138,11 +138,11 @@ public class UserDAO {
     public int setTestMember() {
         int flag = 1;
         SecurityPassword securityPassword = new SecurityPassword();
-        for (int i = 5; i <= 105; i++) {
+        for (int i = 100; i <= 200; i++) {
             String id_flag = "100";
             int mem_id = i;
             String mem_userid = "test" + i;
-            String mem_pw = "test123456789";
+            String mem_pw = securityPassword.encode("test123456");
             String mem_nick = "tester" + i;
             String mem_role_cd = "10003";
             String mem_email = "test" + i + "@test.com";
@@ -160,5 +160,4 @@ public class UserDAO {
 
         return flag;
     }
-
 }
