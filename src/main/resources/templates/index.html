@@ -9,7 +9,7 @@
         <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
         <!-- 메인 자바스크립트 -->
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <script src="./js/JavaScript.js"></script>
+        <script src="./js/main_style.js"></script>
         <script src="./js/swiperjs.js"></script>
         <!-- 메인 스타이 css -->
         <link rel="stylesheet" href="./css/style.css" />
@@ -22,10 +22,15 @@
             <header>
                 <h1><a href="/home"><img src="http://placehold.it/300x70?text=logo" alt="logo"></a></h1>
                 <div id="login">
-                    <p><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p>
-                    <p><a href="#"><i class="fa-solid fa-user" alt="마이페이지" title="마이페이지"></i></a></p>
-                    <p><a href="servicecenter/main"><i class="fa-solid fa-headphones" alt="고객센터"title="고객센터"></i></a></p>
-                    <p><a href="#"><i class="fa-solid fa-magnifying-glass" alt="검색"title="검색"></i></a><input type="text" size="12px"></p>
+                    <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p>
+                    <div class="logto">
+                        <p class="login_info">Tokarev &nbsp;&nbsp;<i class="fa-solid fa-caret-down"></i></p>
+                        <ul class="login_info_list">
+                            <li><a href="#">회원 정보 수정</a></li>
+                            <li><a href="#">마이 페이지</a></li>
+                            <li class="logout"><a href="">로그 아웃</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <nav>
                     <ul class="row">
