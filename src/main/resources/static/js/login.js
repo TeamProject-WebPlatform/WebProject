@@ -130,7 +130,32 @@ const setLoginPage = function(){
     });
 
     // ID 중복 체크
+    // async function duplicateIdCheck(){
+    //     var checkId = false;
+    //     try {
+    //         const response = await fetch(`/login/DuplicateIdCheck`,{
+    //             method:'POST',
+    //             body: inputId.value
+    //             });
+    //         if (!response.ok) {
+    //             throw new Error('서버 응답이 실패했습니다.');
+    //         }
+    //         const flag = await response.json();
+    //         if (flag){
+    //             alert("이미 존재하는 아이디입니다.");
+    //             checkId = false;
+    //             return checkId;
+    //         } else {
+    //             alert("사용 가능한 아이디입니다.");
+    //             checkId = true;
+    //             return checkId;
+    //         }
+    //     } catch (error) {
+    //         console.error('DB 호출 중 오류가 발생했습니다.', error);
+    //     }
+    // }
     duplicateId.addEventListener('click', async function (e) {
+        //duplicateIdCheck();
         e.preventDefault();
         var checkId = false;
         try {
