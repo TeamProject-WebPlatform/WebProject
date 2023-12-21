@@ -6,47 +6,24 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import org.springframework.ui.Model;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import platform.game.service.action.KakaoAction;
 import platform.game.service.action.MailAction;
 import platform.game.service.action.SignAction;
 import platform.game.service.entity.AuthRequest;
 import platform.game.service.model.DAO.UserDAO;
-import platform.game.service.model.TO.MemberTO;
 import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
 
@@ -118,7 +95,7 @@ public class LoginController {
         }
     }
 
-    // 아래 부터는 스팀 로그인 관련--------------------------------------------
+    // 아래 부터는 스팀, 카카오 로그인 관련--------------------------------------------
     @GetMapping("/steam/callback")
     public void steamLogin(
             @RequestParam(value = "openid.ns") String openidNs,
@@ -168,74 +145,6 @@ public class LoginController {
             response.sendRedirect("/error");
         }
     }
-
-    /* 카카오톡 로그인 버튼(이메일 받아오기) */
-    // 카카오톡 콜백 컨트롤러(코드 받아오기)
-    // @GetMapping("/kakao/callback")
-    // public void kakaoCallback(String code, HttpServletResponse response) {// 데이터
-    // 리턴해주는 컨트롤러 함수
-    // RestTemplate restTemplate = new RestTemplate();
-    // // 헤더 오브젝트 생성
-    // HttpHeaders headers = new HttpHeaders();
-    // headers.add("Content-Type",
-    // "application/x-www-form-urlencoded;charset=utf-8");
-    // // 바디 오브젝트 생성
-    // MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    // params.add("grant_type", "authorization_code");
-    // params.add("client_id", kakaoClientId);
-    // params.add("redirect_uri", domain + "/login/kakao/callback");
-    // params.add("code", code);
-
-    // // 헤더와 바디를 하나로 합침
-    // HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new
-    // HttpEntity<>(params, headers);
-
-    // // http 요청 - post방식
-    // ResponseEntity<String> res = restTemplate.exchange(
-    // "https://kauth.kakao.com/oauth/token",
-    // HttpMethod.POST,
-    // kakaoTokenRequest,
-    // String.class);
-
-    // ObjectMapper objectMapper = new ObjectMapper();
-    // KakakoOAuthTokenTO oAuthToken = null;
-
-    // try {
-    // oAuthToken = objectMapper.readValue(res.getBody(), KakakoOAuthTokenTO.class);
-    // } catch (JsonMappingException e) {
-    // System.out.println("카카오톡 로그인 에러1 : " + e.getMessage());
-    // } catch (JsonProcessingException e) {
-    // System.out.println("카카오톡 로그인 에러2 : " + e.getMessage());
-    // }
-
-    // KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
-
-    // //카카오에서 받아온 이메일 주소가 디비에 등록이 되어있는지 확인하는 코드
-    // MemberTO to = new MemberTO();
-    // //제이슨 파일에서 이메일을 받아옴
-    // to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
-
-    // //받은 이메일이 디비에 있는 이메일인지 확인
-    // int flag = userDAO.setKakaoMemberCheck(to);
-
-    // //flag가 0이면 통과
-    // if (flag == 0) { // 바로 로그인
-    // try {
-    // //홈페이지로 돌아가는 구문
-    // response.sendRedirect(domain);
-    // } catch (IOException e) {
-    // System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-    // }
-    // }else if(flag == 1){ // 계정 생성 후 이동
-    // //signAction.kakaosignUp(to);
-    // try {
-    // //홈페이지로 돌아가는 구문
-    // response.sendRedirect(domain);
-    // } catch (IOException e) {
-    // System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-    // }
-    // }
-    // }
     @GetMapping("/kakao/callback")
     public void kakaoCallback(String code, HttpServletResponse response) {// 데이터 리턴해주는 컨트롤러 함수
         // 1차 json 토큰 요청
