@@ -5,7 +5,8 @@
     --bg-black-100:#353535;
     /* --bg-black-50:#2b2c2f; */
     /* --bg-black-50:rgb(53, 70, 90); */
-    --bg-black-gradient: linear-gradient(rgb(9, 12, 21)10%,rgb(26, 35, 52)30%, rgb(71, 92, 123)60%,rgb(143,167,191)90%,rgb(185, 208, 226)100%);
+    /* --bg-black-gradient: linear-gradient(rgb(9, 12, 21)10%,rgb(26, 35, 52)30%, rgb(71, 92, 123)60%,rgb(143,167,191)90%,rgb(185, 208, 226)100%); */
+    
     --bg-opacity: rgba(43,44,47,0.5);
     --text-black-white:#ffffff;
     --text-black-black:#000000;
@@ -58,21 +59,27 @@ body{
     font: '돋음', dotum, sans-serif;
     font-size: 14px;
     background-color: #fff;
-    color:#333;
+    color:#fff;
+    overflow-x: hidden;
 }
+
 #web{
     width: 100%;
     height: 100vh;
-    background-image: url('../img/mainBG.jpg');
-    background-size : cover;
-    border: 1px solid red;
+    background: #403a3e; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #403a3e, #be5869); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #403a3e, #be5869); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-repeat: round;
+    
 }
+
 header{
     width: 100%;
     margin: 0 auto;
-    border: 1px solid red;
+    /* outline: 1px solid red; */
     position: relative;
-    /* margin-bottom: 3%; */
+    top: 0;
+    margin-bottom: 1%;
 }
 header::after{
     content:"";
@@ -83,10 +90,8 @@ header::after{
 header > h1{
     width: 300px;
     height: 70px;
-    /* margin: 0 auto; */
     margin-top: 1%;
     margin-left: 1%;
-    /* outline: 1px dotted red; */
     float: left;
 }
 #login{
@@ -102,7 +107,7 @@ header > h1{
     display : flex;
     justify-content : center;
     align-items : center;
-    color: yellow;
+    color: rgb(0, 73, 140);
     float: left;
     font-size: 30px;
     margin-right: 15px;
@@ -128,10 +133,10 @@ header > h1{
     align-items : center;
     font-size: 20px;
     cursor: pointer;
-    color: var(--text-black-white);
+    /* color: var(--text-black-white); */
     /* outline:1px solid red; */
     background-color: rgb(0, 73, 140);
-    transition: all 0.5s;
+    transition: all 0.2s;
 }
 .login_info_list{
     position: absolute;
@@ -143,15 +148,18 @@ header > h1{
     overflow: hidden;
     transition: all 1s;
     z-index: 9999;
+    opacity: 0;
 }
 
 .logto:hover > .login_info{
     color: var(--text-black-black);
+    font-size: 25px;
     border-bottom: 5px solid white;
 }
 .logto:hover > .login_info_list{
     visibility: visible;
     height: 12vh;
+    opacity: 1;
 }
 
 .login_info_list > li{
@@ -166,6 +174,8 @@ header > h1{
     transition: all .5s;
 }
 .login_info_list > li:hover{
+    font-size: 25px;
+    overflow: visible;
     color: var(--text-black-black);
     border-bottom: 2px solid white;
 }
@@ -175,12 +185,9 @@ header > h1{
 nav{
     /* position: absolute; */
     width: 1280px;
-    /* top: 100%;
-    left: 16.5%; */
-
+    /* outline: 1px solid red; */
     margin: 0 auto;
-    margin-top: 4%;
-    /* border: 1px dotted red; */
+    margin-bottom: 1%;
 }
 /* nav::after{
     content:"";
@@ -193,23 +200,30 @@ nav > ul{
     /* margin: 0 auto; */
     
     /* float: left; */
-    outline: 1px dotted red;
+    /* outline: 1px dotted red; */
     justify-content: center;
 }
 nav > ul > li{
     width: 200px;
     height: 50px;
-    background-color: #fff;
-    opacity: 0.3;
+    /* background-color: #fff; */
     text-align: center;
     line-height: 50px;
     box-sizing: border-box;
     margin-left: 45px;
-    outline:1px solid black;
+    /* outline:1px solid black; */
+    font-size: 20px;
     position: relative;
     border-bottom: 1px solid white ;
     /* float: left; */
     /* flex: 1 1 auto; */
+    transition: all 1s;
+}
+nav > ul > li:hover{
+    font-size: 35px;
+    color: rgb(0, 73, 140);;
+    border-bottom: 1px solid rgb(0, 73, 140); ;
+
 }
 
 /* 중앙 컨텐츠 */
@@ -217,8 +231,8 @@ nav > ul > li{
     /* width: 100%; */
     /* height: 85vh; */
     /* margin: 0 auto; */
-    border: 1px solid red;
-    background-color: rgba(255, 255, 255, .5);
+    /* outline: 1px solid red; */
+    /* background-color: rgba(255, 255, 255, .5); */
     /* opacity: .5; */
     flex: 1 0 0;
     /* height: 100vh; */
@@ -226,11 +240,11 @@ nav > ul > li{
 
 .main{
     width: 1380px;
-    height: 85vh;
+    /* height: 85vh; */
     margin: 0 auto;
-    border: 1px solid red;
+    /* outline: 1px solid red; */
     position: relative;
-    background-color: rgba(43,44,47,0.5);
+    /* background-color: rgba(43,44,47,0.5); */
 }
 .user{
     width: 100%;
@@ -241,17 +255,17 @@ nav > ul > li{
     margin-left: 4%;
     margin-top: 1%;
     display:inline-block;
-    border: 1px solid red;
+    outline: 1px solid black;
 }
 
 .profile{
     /* width: 19%; */
-    border: 1px solid red;
+    /* border: 1px solid red; */
     
 }
 
 .icon{
-    border: 1px solid red;
+    /* border: 1px solid red; */
 
     width: 18vh;
     height: 18vh;
@@ -261,7 +275,7 @@ nav > ul > li{
 }
 
 .user_info{
-    border: 1px solid red;
+    /* border: 1px solid red; */
 
 }
 .level{
@@ -269,10 +283,10 @@ nav > ul > li{
     margin-top: 2%;
     margin-bottom: 2%;
     display:inline-block;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 .nik{
-    border: 1px solid red;
+    /* border: 1px solid red; */
     display: inline-block;
 }
 
@@ -282,14 +296,13 @@ nav > ul > li{
     height: 50px;
 }
 
-
-
 .user_content{
     height: 13vh;
-    border: 1px solid red;
+    /* border: 1px solid red; */
     background-color: #222327;
 }
 .battle{
-    height: 40vh;
+    height: 35vh;
+    border: 1px solid black;
     background-color: rgba(43,44,47,0.5);
 }
