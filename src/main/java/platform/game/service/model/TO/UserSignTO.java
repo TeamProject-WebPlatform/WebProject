@@ -4,9 +4,10 @@ import lombok.Data;
 
 @Data
 public class UserSignTO {
-    private String id;
-    private String password;
-    private String nickname;
-    private String email;
-    private String steamid;
+    private String memUserid;
+    private String memPw;
+    private String memNick;
+    private String memEmail;
+    private String memSteamid;
+    private String memKakaoid;
 }

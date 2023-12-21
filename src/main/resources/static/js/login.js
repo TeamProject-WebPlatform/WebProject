@@ -115,10 +115,10 @@ const setLoginPage = function(){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: inputId.value,
-                    password: inputPassword.value,
-                    nickname: inputNickname.value,
-                    email: inputEmail.value
+                    memUserid: inputId.value,
+                    memPw: inputPassword.value,
+                    memNick: inputNickname.value,
+                    memEmail: inputEmail.value
                 })
             });
             if (!response.ok) {
@@ -126,16 +126,11 @@ const setLoginPage = function(){
             }
             const flag = await response.json();
             switch (flag){
-                case 1:
-                    console.log("아이디 중복");
-                    break;
-                case 2:
-                    console.log("닉네임 중복");
-                    break;
                 case 0:
                     window.location.href = "/";
                     break;
                 default:
+                    window.location.href = "/";
                     break;
             }
         } catch (error) {

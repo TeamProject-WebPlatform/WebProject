@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,13 +45,10 @@ import platform.game.service.action.KakaoAction;
 import platform.game.service.action.MailAction;
 import platform.game.service.action.SignAction;
 import platform.game.service.entity.AuthRequest;
-import platform.game.service.entity.Member;
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.MemberTO;
 import platform.game.service.model.TO.UserSignTO;
-import platform.game.service.model.TO.KakaoTO.OAuthTokenTO;
-import platform.game.service.service.jwt.JwtService;
-import platform.game.service.service.jwt.SecurityPassword;
+import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
 
 @RestController
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model",
@@ -61,17 +59,15 @@ public class LoginController {
 
     @Autowired
     UserDAO userDAO;
+
     @Value("${domain}")
     String domain;
+
     @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
     private SignAction signAction;
-
-    // JWT Login
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @GetMapping("")
     public ModelAndView login() {
@@ -80,47 +76,46 @@ public class LoginController {
 
     // 회원가입 요청
     @PostMapping("/signup_ok")
-    public int handleSignup(@RequestBody UserSignTO userSignup) {
-        boolean flag = false;
+    public int handleSignup(@RequestBody UserSignTO userSignup, HttpServletResponse response) {
+        Cookie cookie = signAction.signUp(userSignup, 0);
 
-        flag = signAction.signUp(userSignup,0);
-
-        if (flag) {
-            System.out.println("회원가입 성공");
+        if (cookie != null) {
+            // 성공
+            response.addCookie(cookie);
             return 0;
         } else {
-            System.out.println("회원가입 실패");
             return 1;
         }
     }
+
     // 이메일 인증 요청
-	@PostMapping( "/mail_ok" )
-	public int mail_ok( @RequestBody UserSignTO userSignup) {
+    @PostMapping("/mail_ok")
+    public int mail_ok(@RequestBody UserSignTO userSignup) {
         MailAction mailAction = new MailAction(javaMailSender);
 
-		String toEmail = userSignup.getEmail();
-		String toName = userSignup.getNickname();
+        String toEmail = userSignup.getMemEmail();
+        String toName = userSignup.getMemNick();
         int number = mailAction.createNumber();
-        // 메일 내용 
-		String subject = toName + "님의 인증번호 입니다";
-		String content = "<h1>"+toName+"님의 인증 번호는 <br><span>"+number+"</span> 입니다.</h1>";
-		mailAction.sendMail(toEmail, toName, subject, content);
-        
+        // 메일 내용
+        String subject = toName + "님의 인증번호 입니다";
+        String content = "<h1>" + toName + "님의 인증 번호는 <br><span>" + number + "</span> 입니다.</h1>";
+        mailAction.sendMail(toEmail, toName, subject, content);
+
         // 리턴 number 값을 반환
-		return number;
-	}
+        return number;
+    }
+
     // 로그인 요청(웹사이트 - default)
-    @PostMapping("/generateToken") 
+    @PostMapping("/generateToken")
     public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
-        //int flag = signAction.isAuth(authRequest,response);
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw())); 
-        if (authentication.isAuthenticated()) {
-            Cookie cookie = signAction.generateToken(authRequest);
+        Cookie cookie = signAction.generateToken(authRequest);
+        if (cookie != null) {
+            // 성공
             response.addCookie(cookie);
             return 0;
-        } else { 
-            return 2;
-        } 
+        } else {
+            return 1;
+        }
     }
 
     // 아래 부터는 스팀 로그인 관련--------------------------------------------
@@ -137,7 +132,7 @@ public class LoginController {
             @RequestParam(value = "openid.signed") String openidSigned,
             @RequestParam(value = "openid.sig") String openidSig,
             HttpServletRequest request,
-            HttpServletResponse response) throws IOException{
+            HttpServletResponse response) throws IOException {
         String body = WebClient.create("https://steamcommunity.com")
                 .get()
                 .uri(uriBuilder -> uriBuilder
@@ -160,86 +155,104 @@ public class LoginController {
         if (isTrue) {
             String[] tmp = openidIdentity.split("/");
             String steamid = tmp[tmp.length - 1];
-            int flag = signAction.steamSign(steamid);
-            if(flag==1){
-                System.out.println("스팀 회원가입");
-            }else{
-                System.out.println("스팀 로그인");
+            Cookie cookie = signAction.steamSign(steamid);
+
+            if (cookie != null) {
+                // 성공
+                response.addCookie(cookie);
             }
             // 3. 이미 다른 로그인으로 계정을 만들고 스팀을 연동했을 때의 방법?
-            
+
             response.sendRedirect("/");
-        }else{
+        } else {
             response.sendRedirect("/error");
         }
     }
 
     /* 카카오톡 로그인 버튼(이메일 받아오기) */
     // 카카오톡 콜백 컨트롤러(코드 받아오기)
+    // @GetMapping("/kakao/callback")
+    // public void kakaoCallback(String code, HttpServletResponse response) {// 데이터
+    // 리턴해주는 컨트롤러 함수
+    // RestTemplate restTemplate = new RestTemplate();
+    // // 헤더 오브젝트 생성
+    // HttpHeaders headers = new HttpHeaders();
+    // headers.add("Content-Type",
+    // "application/x-www-form-urlencoded;charset=utf-8");
+    // // 바디 오브젝트 생성
+    // MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    // params.add("grant_type", "authorization_code");
+    // params.add("client_id", kakaoClientId);
+    // params.add("redirect_uri", domain + "/login/kakao/callback");
+    // params.add("code", code);
+
+    // // 헤더와 바디를 하나로 합침
+    // HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new
+    // HttpEntity<>(params, headers);
+
+    // // http 요청 - post방식
+    // ResponseEntity<String> res = restTemplate.exchange(
+    // "https://kauth.kakao.com/oauth/token",
+    // HttpMethod.POST,
+    // kakaoTokenRequest,
+    // String.class);
+
+    // ObjectMapper objectMapper = new ObjectMapper();
+    // KakakoOAuthTokenTO oAuthToken = null;
+
+    // try {
+    // oAuthToken = objectMapper.readValue(res.getBody(), KakakoOAuthTokenTO.class);
+    // } catch (JsonMappingException e) {
+    // System.out.println("카카오톡 로그인 에러1 : " + e.getMessage());
+    // } catch (JsonProcessingException e) {
+    // System.out.println("카카오톡 로그인 에러2 : " + e.getMessage());
+    // }
+
+    // KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
+
+    // //카카오에서 받아온 이메일 주소가 디비에 등록이 되어있는지 확인하는 코드
+    // MemberTO to = new MemberTO();
+    // //제이슨 파일에서 이메일을 받아옴
+    // to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
+
+    // //받은 이메일이 디비에 있는 이메일인지 확인
+    // int flag = userDAO.setKakaoMemberCheck(to);
+
+    // //flag가 0이면 통과
+    // if (flag == 0) { // 바로 로그인
+    // try {
+    // //홈페이지로 돌아가는 구문
+    // response.sendRedirect(domain);
+    // } catch (IOException e) {
+    // System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+    // }
+    // }else if(flag == 1){ // 계정 생성 후 이동
+    // //signAction.kakaosignUp(to);
+    // try {
+    // //홈페이지로 돌아가는 구문
+    // response.sendRedirect(domain);
+    // } catch (IOException e) {
+    // System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
+    // }
+    // }
+    // }
     @GetMapping("/kakao/callback")
     public void kakaoCallback(String code, HttpServletResponse response) {// 데이터 리턴해주는 컨트롤러 함수
-        String client_id = "6c633b1da1bdc67e6071145ed5723fec";
+        // 1차 json 토큰 요청
+        KakaoOAuthTokenTO oAuthToken = signAction.getKakaoOAuthToken(code);
+        // 2차 데이터 요청
+        String email = signAction.getKakaoEmail(oAuthToken.getAccess_token());
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        // 헤더 오브젝트 생성
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        // 바디 오브젝트 생성
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", client_id);
-        params.add("redirect_uri", domain + "/login/kakao/callback");
-        params.add("code", code);
-
-        // 헤더와 바디를 하나로 합침
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
-
-        // http 요청 - post방식
-        ResponseEntity<String> res = restTemplate.exchange(
-                "https://kauth.kakao.com/oauth/token",
-                HttpMethod.POST,
-                kakaoTokenRequest,
-                String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        OAuthTokenTO oAuthToken = null;
-
+        Cookie cookie = signAction.kakaoSign(email);
         try {
-            oAuthToken = objectMapper.readValue(res.getBody(), OAuthTokenTO.class);
-        } catch (JsonMappingException e) {
-            System.out.println("카카오톡 로그인 에러1 : " + e.getMessage());
-        } catch (JsonProcessingException e) {
-            System.out.println("카카오톡 로그인 에러2 : " + e.getMessage());
+            if (cookie != null) {
+                response.addCookie(cookie);
+                response.sendRedirect("/");
+            } else {
+                response.sendRedirect("/login");
+            }
+        } catch (Exception e) {
         }
 
-        KakaoAction.getKakaoToken(oAuthToken.getAccess_token());
-
-        //카카오에서 받아온 이메일 주소가 디비에 등록이 되어있는지 확인하는 코드
-        MemberTO to = new MemberTO();
-        //제이슨 파일에서 이메일을 받아옴
-        to.setEmail(KakaoAction.getKakaoToken(oAuthToken.getAccess_token()));
-
-        //받은 이메일이 디비에 있는 이메일인지 확인
-        int flag = userDAO.setKakaoMemberCheck(to);
-
-        //flag가 0이면 통과
-        if (flag == 0) { // 바로 로그인
-            try {
-                //홈페이지로 돌아가는 구문
-                response.sendRedirect(domain);
-            } catch (IOException e) {
-                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-            }
-        }else if(flag == 1){ // 계정 생성 후 이동
-            //signAction.kakaosignUp(to);
-            try {
-                //홈페이지로 돌아가는 구문
-                response.sendRedirect(domain);
-            } catch (IOException e) {
-                System.out.println("LoginController.kakaoLogin : 리다이렉션 실패");
-            }
-        }
     }
 }
