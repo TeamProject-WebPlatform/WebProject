@@ -1,11 +1,21 @@
 package platform.game.service.action;
 
+import java.util.Date;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import jakarta.transaction.Transactional;
+import platform.game.service.entity.CommonCode;
+import platform.game.service.entity.Member;
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.MemberTO;
 import platform.game.service.model.TO.UserSignTO;
+import platform.game.service.repository.CommonCodeRepository;
+import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.service.MemberInfoService;
 import platform.game.service.service.jwt.SecurityPassword;
 
 @Component
@@ -13,28 +23,39 @@ public class SignUpAction {
 
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private CommonCodeRepository comCdRepo; 
+    @Autowired
+    private MemberInfoService service; 
+    //트랜잭션 템플릿. update 하려면 필요함.
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
-    public int signUp(UserSignTO userSignup) {
-        //회원번호 불러오기
-        String signin_type = "default";
-        int lastMemberId = userDAO.getLastMemberId(signin_type);
-        int member_id = lastMemberId + 1;
-
-        MemberTO to = new MemberTO();
-        to.setMember_id(member_id);
-        to.setUserid(userSignup.getId());
-
-        // 비밀번호 암호화
-        SecurityPassword securityPassword = new SecurityPassword();
-        String password = securityPassword.encode(userSignup.getPassword());
-
-        to.setPassword(password);
-        to.setNickname(userSignup.getNickname());
-        to.setEmail(userSignup.getEmail());
-
-        System.out.println("MemberTO 확인 : " + to);
-
-        int flag = userDAO.setMember(to);
+    public boolean signUp(UserSignTO userSignup) {
+        // 회원번호 불러오기;
+        Optional<CommonCode> idInfo = comCdRepo.findBycomCd("19001");
+        Long lastid = Long.parseLong(idInfo.get().getComCdParam1())+1;
+        Long id = Long.parseLong("100"+lastid);
+        Member member = Member.builder()
+                                .memId(id)
+                                .memUserid(userSignup.getId())
+                                .memPw(userSignup.getPassword())
+                                .memNick(userSignup.getNickname())
+                                .memRoleCd("10003")
+                                .memEmail(userSignup.getEmail())
+                                .loginKindCd("19101")
+                                .memCertified("Y")
+                                .memCreatedAt(new Date().toString())
+                                .build();
+        boolean flag = service.addUser(member);
+        if(flag){
+            // 공통 코드에서 마지막 회원 번호 update
+            transactionTemplate.execute(status -> {
+                // 트랜잭션 내에서 업데이트 쿼리 실행
+                comCdRepo.updateParam1ByCode("19001",String.valueOf(lastid));
+                return null;
+            });
+        }
 
         return flag;
     }

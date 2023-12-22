@@ -19,7 +19,7 @@ public class MailAction {
     }
 
     public void sendMail(String toEmail, String toName, String subject, String content) {
-        System.out.println("호출됨");
+        //System.out.println("호출됨");
 
 		try {
 			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -33,17 +33,16 @@ public class MailAction {
 			
 			javaMailSender.send(mimeMessage);
 			
-			System.out.println("전송완료");
-
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+    public int createNumber(){
+        int number = (int)(Math.random() * (90000)) + 100000;// (int) Math.random() * (최댓값-최소값+1) + 최소값
+		return number;
+    }
 }

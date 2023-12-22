@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import platform.game.service.filter.JwtAuthFilter;
 import platform.game.service.service.MemberInfoService;
@@ -38,20 +37,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorize) -> authorize
-            .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
-            .requestMatchers("/").permitAll()
-            .requestMatchers("/login/**").permitAll()
-            .requestMatchers("/board/**").permitAll()
-            .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
-            .requestMatchers("/auth/user/**").authenticated()
-            .requestMatchers("/auth/admin/**").authenticated()
-            .requestMatchers("/mypage/**").authenticated()
-        );
-        
-        http.formLogin(form -> form
-            .loginPage("/login")  // 사용자가 인증되지 않은 경우 /login 페이지로 이동
-            .permitAll()
-        );
+                .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/error/**").permitAll()
+                .requestMatchers("/login/**").permitAll()
+                .requestMatchers("/board/**").permitAll()
+                .requestMatchers("/steam/**").permitAll()
+                .requestMatchers("/kakao/**").permitAll()
+                .requestMatchers("/steamapi/**").permitAll()
+                .requestMatchers("/mypage/**").authenticated()
+            );
 
         http.sessionManagement(management -> management
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
