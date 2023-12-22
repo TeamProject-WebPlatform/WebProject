@@ -27,6 +27,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private MemberInfoService userDetailsService; 
 
+    private String userid = null; 
+    private String pw = null;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -34,8 +37,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization"); 
         String token = null; 
         // MEMBER 엔티티와의 일관성을 위해 userid, pw로 변수명 변경
-        String userid = null; 
-        String pw = null;
+        // String userid = null; 
+        // String pw = null;
 
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -43,8 +46,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 if ("jwtTokenCookie".equals(cookie.getName())) {
                     // String cookieValue = cookie.getValue();
                     token = cookie.getValue();
-                    userid = jwtService.extractUsername(token); 
-                    pw = jwtService.extractPassword(token);
+                    this.userid = jwtService.extractUsername(token); 
+                    this.pw = jwtService.extractPassword(token);
 
                     // Cookie에서 ID, PW 불러오기
                     // System.out.println("ID: " + username);
@@ -70,6 +73,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } 
 
         filterChain.doFilter(request, response);   
+    }
+
+    public String getUserID() {
+        return this.userid;
+    }
+
+    public String getPW() {
+        return this.pw;
     }
     
 }

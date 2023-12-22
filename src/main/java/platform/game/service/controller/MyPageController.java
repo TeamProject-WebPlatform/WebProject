@@ -34,6 +34,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
 import platform.game.service.action.MypageAction;
+import platform.game.service.filter.JwtAuthFilter;
 import platform.game.service.service.jwt.JwtManager;
 
 @RestController
@@ -49,11 +50,15 @@ public class MyPageController {
 
     @Autowired
     JwtManager jwtManager;
+    @Autowired
+    private JwtAuthFilter authFilter;
 
     @GetMapping("/{userid}")
     @PreAuthorize("hasAuthority('ROLE_USER')") 
     public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
         String markdownValueFormLocal = null;
+
+        System.out.println( "UserID : " + authFilter.getUserID() );
 
         try {
             markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( userid );
