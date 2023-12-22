@@ -58,7 +58,7 @@ public class MyPageController {
     public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
         String markdownValueFormLocal = null;
 
-        System.out.println( "UserID : " + authFilter.getUserID() );
+        // System.out.println( "UserID : " + authFilter.getUserID() );
 
         try {
             markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( userid );
@@ -71,6 +71,8 @@ public class MyPageController {
         HtmlRenderer renderer = HtmlRenderer.builder().build();
 
         model.addAttribute("contents", renderer.render(document));
+
+        System.out.println( "renderer : " + renderer.render(document) );
 
         return new ModelAndView("mypage");
     }

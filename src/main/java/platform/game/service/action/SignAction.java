@@ -82,8 +82,8 @@ public class SignAction {
             try {
                 System.out.println("체크 : "+userSignup.toString());
                 // 멤버 id 할당 하기 위해 common code에서 값 select
-                Optional<CommonCode> idInfo = comCdRepo.findBycomCd(idCode);
-                Long lastid = Long.parseLong(idInfo.get().getComCdParam1()) + 1;
+                Optional<CommonCode> idInfo = comCdRepo.findByCd(idCode);
+                Long lastid = Long.parseLong(idInfo.get().getRemark1()) + 1;
                 Long id = Long.parseLong(idPrefix + lastid);
                 System.out.println("signupAction > id : "+id);
                 // member 객체 생성
@@ -106,7 +106,7 @@ public class SignAction {
                 System.out.println("signupAction > 멤버 객체 추가 성공");
                 // 성공하면 common code의 값 update
                 if (flag) {
-                    comCdRepo.updateParam1ByCode(idCode, String.valueOf(lastid));
+                    comCdRepo.updateRemark1ByCd(idCode, String.valueOf(lastid));
                 } else {
                     System.out.println("롤백 1");
                     successFlag.set(false);

@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import jakarta.servlet.http.Cookie;
 import platform.game.service.filter.JwtAuthFilter;
 import platform.game.service.service.MemberInfoService;
 
@@ -52,6 +53,20 @@ public class SecurityConfig {
         http.formLogin(form -> form
             .loginPage("/login")
             .permitAll()
+        );
+
+        http
+            .logout(logout -> logout
+            .logoutUrl("/logout")
+            .addLogoutHandler((request, response, auth) -> {
+                for (Cookie cookie : request.getCookies()) {
+                    String cookieName = cookie.getName();
+                    Cookie cookieToDelete = new Cookie(cookieName, null);
+                    cookieToDelete.setMaxAge(0);
+                    response.addCookie(cookieToDelete);
+                }
+            })
+            .logoutSuccessUrl("/")
         );
 
         http.sessionManagement(management -> management
