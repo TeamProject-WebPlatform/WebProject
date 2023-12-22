@@ -20,7 +20,9 @@ public class MainController {
     public ModelAndView main() {
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-            //System.out.println(member.toString());
+            System.out.println("멤버 있음 " +member.toString());
+        }else{
+            System.out.println("멤버 없음");
         }
         return new ModelAndView("index");
         
