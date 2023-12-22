@@ -12,7 +12,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import platform.game.service.service.MemberInfoService;
 import platform.game.service.service.jwt.JwtService;
-// import platform.game.service.service.UserInfoService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

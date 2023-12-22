@@ -38,6 +38,7 @@ public class MemberInfoService implements UserDetailsService{
             repository.save(member); 
             return true;
         }catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
