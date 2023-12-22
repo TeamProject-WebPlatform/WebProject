@@ -49,6 +49,11 @@ public class SecurityConfig {
                         .requestMatchers("/steamapi/**").permitAll()
                         .requestMatchers("/mypage/**").authenticated());
 
+        http.formLogin(form -> form
+            .loginPage("/login")
+            .permitAll()
+        );
+
         http.sessionManagement(management -> management
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
