@@ -54,6 +54,7 @@ const setLoginPage = function(){
         pwPass.style.display="none";
         pwcFail.style.display="none";
         pwcPass.style.display="none";
+        duplicateId.style.display="none";
     });
     navSignup.addEventListener('click', function () {
         showSignupWidget();
@@ -117,6 +118,7 @@ const setLoginPage = function(){
                             memPw: inputPassword.value,
                         })
                     });
+                    window.location.href = "./";
                     check_recaptcha();
                     break;
                 default:
