@@ -15,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -34,7 +35,9 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
 import platform.game.service.action.MypageAction;
+import platform.game.service.entity.Member;
 import platform.game.service.filter.JwtAuthFilter;
+import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.service.jwt.JwtManager;
 
 @RestController
@@ -57,8 +60,14 @@ public class MyPageController {
     @PreAuthorize("hasAuthority('ROLE_USER')") 
     public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
         String markdownValueFormLocal = null;
+        
+        // if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+        //     Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+        //     //System.out.println(member.toString());
+        // }
 
-        // System.out.println( "UserID : " + authFilter.getUserID() );
+        // System.out.println( "UserID : " + authFilter.getUserID() ); 
+        // 위에 방법으로
 
         try {
             markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( userid );
