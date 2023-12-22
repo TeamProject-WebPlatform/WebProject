@@ -18,10 +18,9 @@ import platform.game.service.service.MemberInfoDetails;
 public class MainController {
     @RequestMapping("/")
     public ModelAndView main() {
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication()
-                        .getPrincipal()).getMember();
-            System.out.println(member.toString());
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+            //System.out.println(member.toString());
         }
         return new ModelAndView("index");
         
