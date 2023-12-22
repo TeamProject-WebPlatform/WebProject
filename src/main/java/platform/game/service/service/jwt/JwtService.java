@@ -26,7 +26,7 @@ public class JwtService {
         claims.put("password", userPassword);
         return createToken(claims, userName); 
     } 
-  
+
     private String createToken(Map<String, Object> claims, String userName) { 
         return Jwts.builder() 
                 .setClaims(claims) 
@@ -35,25 +35,23 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) 
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact(); 
     } 
-  
     private Key getSignKey() { 
         byte[] keyBytes= Decoders.BASE64.decode(SECRET); 
         return Keys.hmacShaKeyFor(keyBytes); 
     } 
-  
+
     public String extractUsername(String token) { 
         return extractClaim(token, Claims::getSubject); 
     } 
-  
     public String extractPassword(String token) { 
         Claims claims = extractAllClaims(token);
         return claims.get("password", String.class);
     } 
-  
+
     public Date extractExpiration(String token) { 
         return extractClaim(token, Claims::getExpiration); 
     } 
-  
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) { 
         final Claims claims = extractAllClaims(token); 
         return claimsResolver.apply(claims); 
