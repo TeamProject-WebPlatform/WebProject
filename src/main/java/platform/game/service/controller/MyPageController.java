@@ -81,6 +81,8 @@ public class MyPageController {
 
         model.addAttribute("contents", renderer.render(document));
 
+        System.out.println( "renderer : " + renderer.render(document) );
+
         return new ModelAndView("mypage");
     }
 
