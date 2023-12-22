@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="author" content="우리팀">
@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="../css/list_style.css">
+        <link rel="stylesheet" type="text/css" href="../css/list_style.css">
         <title>게시판</title>
     </head>
     <body>
@@ -60,39 +60,35 @@
                         <div class="con_txt">
                             <div class="contents_sub">
                                 <div class="board_top">
-                                    <div class="bold">총 <span class="txt_orange">1</span>건</div>
+                                    <div class="bold">총 <span class="txt_orange" th:text="${#lists.size(lists)}"></span>건</div>
                                 </div>
                         
                                 <!--게시판-->
                                 <div class="board">
                                     <table>
-                                    <tr>
-                                        <th width="3%">&nbsp;</th>
-                                        <th width="5%">번호</th>
-                                        <th>제목</th>
-                                        <th width="10%">글쓴이</th>
-                                        <th width="17%">등록일</th>
-                                        <th width="5%">조회</th>
-                                        <th width="3%">&nbsp;</th>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td>1</td>
-                                        <td class="left"><a href="board_view1.jsp">adfas</a>&nbsp;<img src="../../images/icon_new.gif" alt="NEW"></td>
-                                        <td>asdfa</td>
-                                        <td>2017-01-31</td>
-                                        <td>6</td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td>2</td>
-                                        <td class="left"><img src="../../images/icon_re1.gif">&nbsp;&nbsp;<a href="board_view1.jsp">adfas</a>&nbsp;<img src="../../images/icon_new.gif" alt="NEW"></td>
-                                        <td>asdfa</td>
-                                        <td>2017-01-31</td>
-                                        <td>6</td>
-                                        <td>&nbsp;</td>
-                                    </tr>
+                                        <tr>
+                                            <th width="3%">&nbsp;</th>
+                                            <th width="5%">번호</th>
+                                            <th>제목</th>
+                                            <th width="10%">글쓴이</th>
+                                            <th width="17%">등록일</th>
+                                            <th width="5%">조회</th>
+                                            <th width="3%">&nbsp;</th>
+                                        </tr>
+                                        <tr th:each="post, rowStat : ${lists}">
+                                            <td>&nbsp;</td>
+                                            <td th:text="${#lists.size(lists) - rowStat.index}"></td>
+                                            <td class="left">
+                                                <a th:href="@{'view(post_id=' + ${post.postId} + ')}" th:text="${post.postTitle}"></a>
+                                                <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
+                                                    <img src="./images/icon_new.gif" alt="NEW">
+                                                </span>
+                                            </td>
+                                            <td th:text="${post.member.memNick}"></td>
+                                            <td th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                                            <td th:text="${post.postHit}"></td>
+                                            <td>&nbsp;</td>
+                                        </tr>
                                     </table>
                                 </div>
                                 
@@ -109,8 +105,8 @@
                                             <span>&lt;</span>
                                             &nbsp;&nbsp;
                                             <span>[ 1 ]</span>
-                                            <span><a href="board_list1.jsp">2</a></span>
-                                            <span><a href="board_list1.jsp">3</a></span>
+                                            <span><a href="list">2</a></span>
+                                            <span><a href="list">3</a></span>
                                             &nbsp;&nbsp;
                                             <span>&gt;</span>
                                             &nbsp;
