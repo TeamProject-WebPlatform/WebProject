@@ -10,49 +10,94 @@
         <!-- 메인 자바스크립트 -->
         <script src="js/JavaScript.js"></script>
         <!-- 메인 스타이 css -->
-        <!-- <link rel="stylesheet" href="./css/style.css"> -->
+        <link rel="stylesheet" href="../css/md_style.css">
         <!-- TUI 에디터 CSS CDN -->
         <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
         <title>마이페이지</title>
     </head>
     <body>
-
-        <!-- QRcode -->
-        <form action="/mypage/qrcode/create", method="get">
-            <input type="text" name="url" />
-            <button type="submit">create</button>
-        </form>
-
-        <div class="web" style="display: flex;">
-            <div class="profile">
-                <div class="img">
-                    <img src="../img/doyun.png" alt="profile">
+        <div id="web">
+            <header>
+                <h1><a href="/home"><img src="http://placehold.it/300x70?text=logo" alt="logo"></a></h1>
+                <div id="login">
+                    <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p>
+                    <div class="logto">
+                        <p class="login_info">Tokarev &nbsp;&nbsp;<i class="fa-solid fa-caret-down"></i></p>
+                        <ul class="login_info_list">
+                            <li><a href="#">회원 정보</a></li>
+                            <li><a href="#">마이 페이지</a></li>
+                            <li class="logout"><a href="">로그 아웃</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="name">
+            </header>
+            <nav>
+                <ul class="row">
+                    <li><a href="board/notice">공지사항</a>
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </li>
+                    <li><a href="board/fight">대전 / 협동</a>
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </li>
+                    <li><a href="board/list">게시판</a>
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </li>
+                    <li class="action"><a href="mypage/doyun">마이 페이지</a>
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </li>
+                    <li><a href="board/shop">아이템샾</a>
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <section>
 
+                <!-- QRcode -->
+                <form action="/mypage/qrcode/create", method="get">
+                    <input type="text" name="url" />
+                    <button type="submit">create</button>
+                </form>
+                
+                <div class="web" style="display: flex;">
+                <div class="profile">
+                    <div class="img">
+                        <img src="../img/doyun.png" alt="profile">
+                    </div>
+                    <div class="name">
+                        
+                    </div>
+                    <div class="link">
+                        
+                    </div>
+                    <hr>
                 </div>
-                <div class="link">
-
+                
+                <div class="starter-template">
+                    <div th:utext="${contents}"></div>
                 </div>
-                <hr>
             </div>
             
-            <div class="starter-template">
-                <div th:utext="${contents}"></div>
-            </div>
-        </div>
-
-        <!-- 에디터를 적용할 요소 (컨테이너) -->
+            <!-- 에디터를 적용할 요소 (컨테이너) -->
         <div id="content"></div>
-
+        
         <!-- TUI 에디터 JS CDN -->
         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
         <script>
-                const editor = new toastui.Editor({
-                    el: document.querySelector('#content'),      // 에디터를 적용할 요소 (컨테이너)
-                    height: '500px',                             // 에디터 영역의 높이 값 (OOOpx || auto)
-                    initialEditType: 'markdown',                 // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
-                    initialValue: '',                            // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+            const editor = new toastui.Editor({
+                el: document.querySelector('#content'),      // 에디터를 적용할 요소 (컨테이너)
+                height: '500px',                             // 에디터 영역의 높이 값 (OOOpx || auto)
+                initialEditType: 'markdown',                 // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+                initialValue: '',                            // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
                     previewStyle: 'vertical',                    // 마크다운 프리뷰 스타일 (tab || vertical)
                     placeholder: '내용을 입력해 주세요.',
                     /* start of hooks */
@@ -65,7 +110,7 @@
                                 */
                                 const formData = new FormData();
                                 formData.append('image', blob);
-
+                                
                                 // 2. FileApiController - uploadEditorImage 메서드 호출
                                 const response = await fetch('/mypage/tui-editor/image-upload', {
                                     method : 'POST',
@@ -75,11 +120,11 @@
                                 // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
                                 const filename = await response.text();
                                 console.log('서버에 저장된 파일명 : ', filename);
-
+                                
                                 // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
                                 const imageUrl = `/mypage/tui-editor/image-print?filename=${filename}`;
                                 callback(imageUrl, 'image alt attribute');
-
+                                
                             } catch (error) {
                                 console.error('업로드 실패 : ', error);
                             }
@@ -87,7 +132,9 @@
                     }
                     /* end of hooks */
                 });
-        </script>
+                </script>
+            </section>
 
+        </div>
     </body>
 </html>
