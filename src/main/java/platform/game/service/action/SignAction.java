@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.LinkedMultiValueMap;
@@ -32,6 +33,7 @@ import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.service.MemberInfoService;
 import platform.game.service.service.jwt.JwtService;
 import platform.game.service.service.jwt.SecurityPassword;
@@ -62,7 +64,7 @@ public class SignAction {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private final int JWT_EXPIRY_TIME = 3600; // JWT 토큰 만료 시간
+    private final int JWT_EXPIRY_TIME = JwtService.JWT_EXPIRY_TIME; // JWT 토큰 만료 시간
 
     public Cookie signUp(UserSignTO userSignup, int login) {
         // jwt 토큰 저장할 Cookie
@@ -82,8 +84,8 @@ public class SignAction {
             try {
                 System.out.println("체크 : "+userSignup.toString());
                 // 멤버 id 할당 하기 위해 common code에서 값 select
-                Optional<CommonCode> idInfo = comCdRepo.findBycomCd(idCode);
-                Long lastid = Long.parseLong(idInfo.get().getComCdParam1()) + 1;
+                Optional<CommonCode> idInfo = comCdRepo.findByCd(idCode);
+                Long lastid = Long.parseLong(idInfo.get().getRemark1()) + 1;
                 Long id = Long.parseLong(idPrefix + lastid);
                 System.out.println("signupAction > id : "+id);
                 // member 객체 생성
@@ -106,7 +108,7 @@ public class SignAction {
                 System.out.println("signupAction > 멤버 객체 추가 성공");
                 // 성공하면 common code의 값 update
                 if (flag) {
-                    comCdRepo.updateParam1ByCode(idCode, String.valueOf(lastid));
+                    comCdRepo.updateRemark1ByCd(idCode, String.valueOf(lastid));
                 } else {
                     System.out.println("롤백 1");
                     successFlag.set(false);
