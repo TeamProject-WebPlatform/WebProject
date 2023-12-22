@@ -8,8 +8,10 @@
     <script src="./js/login.js"></script>
     <script src="./js/mail.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script> <!-- google recaptcha -->
+    <link id="captchaKey" th:data-contextPath="${@environment.getProperty('google.site')}"/>
     <title>Document</title>
     <script>
+        const captcha_Key = document.querySelector("#captchaKey").getAttribute("data-contextPath");
         window.onload = function () {
             const frmLogin = document.frmLogin;
             const navLogin = document.querySelector('#navigation li[name=login]');
@@ -18,25 +20,13 @@
             navLogin.click();
         }
 
-        function check_recaptcha(){
-                var v = grecaptcha.getResponse();
-                if (v.length == 0) {
-                    alert("Please complete the reCAPTCHA!");
-                    window.location.href = "/login";
-                }
-                else{
-                    alert("인증 성공");
-                    return true;
-                }
-            }
-
     </script>
 </head>
 
 <body>
     <div id="wrap_full">
         <header>
-            <h1>logo</h1>
+            <h1><a href="/"><img src="http://placehold.it/300x70?text=logo" alt="logo"></a></h1>
         </header>
         <div id="frmLogin">
             <form method="post" name="frmLogin" action="#" onsubmit="return check_recaptcha();">
@@ -61,6 +51,7 @@
                             <div class="verifyContraints" name="id-fail" style="display: none;">❗</div>
                             <div class="verifyContraints" name="id-pass" style="display: none;">✔</div>
                             <input type="text" id="id" name="id" logintype="login" oninput="verifyIdContraints()" />
+                            <input type="button" id="duplicate-id" value="중복 확인" style="display: none;" />
                         </label>
                         
                         <label for="password" class="login signup">
@@ -83,11 +74,13 @@
                             <div class="verifyContraints" name="nck-fail" style="display: none;">❗</div>
                             <div class="verifyContraints" name="nck-pass" style="display: none;">✔</div>
                             <input type="text" id="nickname" name="nickname" oninput="verifyNicknameContraints()" />
+                            <input type="button" id="duplicate-nickname" value="중복 확인" />
                         </label>
                         <label for="email" class="signup">
                             <div class="label">E-Mail:</div>
                             <input type="text" id="email" name="email" />
-                            <input type="button" id="btn-email" class="btn-email" value="인증번호"></input>
+                            <input type="button" id="duplicate-mail" value="중복 확인" />
+                            <input type="button" id="btn-email" class="btn-email" value="인증번호" disabled></input>
                         </label>
                         <label for="email" class="signup">
                             <div id="mail_number" name="mail_number" style="display: none">
@@ -99,10 +92,10 @@
                     </div>
                 </div>
                 <div id="login-footer">
-                    <button id="btn-login" class="login" onclick="check_recaptcha()">LOG IN</button>
+                    <button id="btn-login" class="login">LOG IN</button>
                     <button id="btn-signup" class="signup" disabled>SIGN UP</button>
                 </div>
-                <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg" id="captcha"></div>
+                <div class="g-recaptcha" data-sitekey="6LfJJDIpAAAAAPY_wY2MHDLseQvR8Wpnl8rtftKg" id="captcha" style="display:none"></div>
             </form>
             
             <!--스팀 로그인 버튼-->

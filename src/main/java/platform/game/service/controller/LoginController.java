@@ -3,6 +3,7 @@ package platform.game.service.controller;
 import java.io.IOException;
 import java.util.Objects;
 
+import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,6 +27,9 @@ import platform.game.service.entity.AuthRequest;
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
+import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.service.jwt.JwtService;
+import platform.game.service.service.jwt.SecurityPassword;
 
 @RestController
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model",
@@ -44,7 +48,13 @@ public class LoginController {
     private JavaMailSender javaMailSender;
 
     @Autowired
+    private SecurityPassword securityPassword;
+
+    @Autowired
     private SignAction signAction;
+
+    @Autowired
+    private MemberInfoRepository MemberRepository;
 
     @GetMapping("")
     public ModelAndView login() {
@@ -77,9 +87,46 @@ public class LoginController {
         String subject = toName + "님의 인증번호 입니다";
         String content = "<h1>" + toName + "님의 인증 번호는 <br><span>" + number + "</span> 입니다.</h1>";
         mailAction.sendMail(toEmail, toName, subject, content);
-
         // 리턴 number 값을 반환
         return number;
+    }
+
+    // 로그인 요청 시 DB 내 ID, PW 유무 검사
+    @PostMapping("/memberCheck")
+    public int memberCheck(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
+        int flag = 2;
+        boolean member_Check = MemberRepository.existsByMemUserid(authRequest.getMemUserid());
+
+        if (member_Check) {
+            String mem_pw = MemberRepository.findByMemPw(authRequest.getMemUserid());
+            if (securityPassword.matches(authRequest.getMemPw(), mem_pw)) {
+                flag = 0;
+            } else {
+                flag = 1;
+            }
+        } else {
+            flag = 1;
+        }
+
+        return flag;
+    }
+
+    // 가입 시 아이디 중복 체크
+    @PostMapping("/DuplicateIdCheck")
+    public boolean DuplicateIdCheck(@RequestBody String mem_userid, HttpServletResponse response) {
+        return MemberRepository.existsByMemUserid(mem_userid);
+    }
+
+    // 가입 시 닉네임 중복 체크
+    @PostMapping("/DuplicateNickCheck")
+    public boolean DuplicateNickCheck(@RequestBody String mem_nickname, HttpServletResponse response) {
+        return MemberRepository.existsByMemNick(mem_nickname);
+    }
+
+    // 가입 시 이메일 중복 체크
+    @PostMapping("/DuplicateMailCheck")
+    public boolean DuplicateMailCheck(@RequestBody String mem_mail, HttpServletResponse response) {
+        return MemberRepository.existsByMemEmail(mem_mail);
     }
 
     // 로그인 요청(웹사이트 - default)
@@ -145,6 +192,7 @@ public class LoginController {
             response.sendRedirect("/error");
         }
     }
+
     @GetMapping("/kakao/callback")
     public void kakaoCallback(String code, HttpServletResponse response) {// 데이터 리턴해주는 컨트롤러 함수
         // 1차 json 토큰 요청
