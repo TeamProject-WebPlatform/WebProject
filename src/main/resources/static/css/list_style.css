@@ -160,32 +160,6 @@ nav > ul > li{
     border: 1px solid red;
     position: relative;
 }
-.list::before{
-    position: absolute;
-    top:0;
-    left: -300px;
-    text-align: center;
-    color: black;
-    width: 300px;
-    height: 100vh;
-    content:"광고";
-    display: block;
-    clear: both;
-    background-color: rgba(0, 0, 0, .5);
-}
-.list::after{
-    position: absolute;
-    top:0;
-    right: -300px;
-    text-align: center;
-    color: black;
-    width: 300px;
-    height: 100vh;
-    content:"광고";
-    /* display: block; */
-    clear: both;
-    background-color: rgba(0, 0, 0, .5);
-}
 
 /* 게시판 스타일 */
 .contents_sub { width:100%; margin:0; }

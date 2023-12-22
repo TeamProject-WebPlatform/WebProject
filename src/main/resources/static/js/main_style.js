@@ -1,12 +1,18 @@
 document.addEventListener('DOMContentLoaded', function(){
     // 쿠키에서 토큰 값을 가져오는 함수
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        
-        if (parts.length === 2) {
-            return parts.pop().split(';').shift();
-        }
+    function getCookie(cookieName) {
+        const name = cookieName + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookieArray = decodedCookie.split(';');
+    
+        for (let i = 0; i < cookieArray.length; i++) {
+            let cookie = cookieArray[i].trim();
+    
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }   
+        return null;
     }
 
     // 토큰 값을 가져와서 사용하는 예제
@@ -27,9 +33,7 @@ document.addEventListener('DOMContentLoaded', function(){
         console.log('Deleting cookie...');
         document.cookie = 'jwtTokenCookie=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly';
         console.log('Cookie deleted.');
-        if(token == null){
-            document.getElementsByClassName("log")[0].style.display = "block";
-            document.getElementsByClassName("logto")[0].style.display = "none";
-        }
+        document.getElementsByClassName("log")[0].style.display = "block";
+        document.getElementsByClassName("logto")[0].style.display = "none";
     });
 });
