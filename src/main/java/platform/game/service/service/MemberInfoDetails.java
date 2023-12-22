@@ -18,13 +18,15 @@ import platform.game.service.repository.CommonCodeRepository;
 
 public class MemberInfoDetails implements UserDetails { 
 
-
+    private Member member;
     private String mem_userid; 
     private String mem_pw; 
     private String mem_role_cd;
     private List<GrantedAuthority> authorities; 
   
     public MemberInfoDetails(Member member) { 
+        this.member = member;
+        
         mem_userid = member.getMemUserid(); 
         mem_pw = member.getMemPw(); 
         mem_role_cd = member.getMemRoleCd();
@@ -43,7 +45,7 @@ public class MemberInfoDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() { 
         return authorities; 
     } 
-  
+
     @Override
     public String getPassword() { 
         return mem_pw; 
@@ -73,4 +75,7 @@ public class MemberInfoDetails implements UserDetails {
     public boolean isEnabled() { 
         return true; 
     } 
+    public Member getMember() {
+        return member;
+    }
 }

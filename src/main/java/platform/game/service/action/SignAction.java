@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.LinkedMultiValueMap;
@@ -32,6 +33,7 @@ import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.service.MemberInfoService;
 import platform.game.service.service.jwt.JwtService;
 import platform.game.service.service.jwt.SecurityPassword;
@@ -62,7 +64,7 @@ public class SignAction {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private final int JWT_EXPIRY_TIME = 3600; // JWT 토큰 만료 시간
+    private final int JWT_EXPIRY_TIME = JwtService.JWT_EXPIRY_TIME; // JWT 토큰 만료 시간
 
     public Cookie signUp(UserSignTO userSignup, int login) {
         // jwt 토큰 저장할 Cookie
