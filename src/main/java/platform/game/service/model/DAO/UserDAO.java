@@ -22,11 +22,11 @@ public class UserDAO {
         String s_password = mapper.searchMember(userid);
 
         SecurityPassword securityPassword = new SecurityPassword();
-        boolean pwcheck = securityPassword.matches(password, s_password);
+        //boolean pwcheck = securityPassword.matches(password, s_password);
 
-        if (pwcheck) {
-            flag = 0; // 성공
-        }
+        // if (pwcheck) {
+        //     flag = 0; // 성공
+        // }
         return flag;
     }
 
