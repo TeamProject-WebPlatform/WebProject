@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function(){
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        nickname: inputNickname.value,
-                        email: inputEmail.value,
+                        memNick: inputNickname.value,
+                        memEmail: inputEmail.value,
                     })
                 });
                 if (!response.ok) {

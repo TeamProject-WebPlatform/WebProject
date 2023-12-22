@@ -22,7 +22,6 @@ public class JwtService {
     String SECRET;
     
     public String generateToken(String userName, String userPassword) { 
-        System.out.println( "generateToken() 호출");
         Map<String, Object> claims = new HashMap<>(); 
         claims.put("password", userPassword);
         return createToken(claims, userName); 
