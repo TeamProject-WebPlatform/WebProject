@@ -1,11 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 보기</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="우리팀">
+        <meta name="description" content="게시판">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="../css/list_style.css">
+        <!-- 댓글 로그인 확인 스크립트 -->
+        <script th:inline="javascript">
+            var isLoggedIn = [[${loginCheck}]]; // Thymeleaf로부터 loginCheck 값을 받아옴
+        </script>
+        <script>
+            function checkLogin() {
+                console.log(isLoggedIn);
+                if (isLoggedIn) {
+                    // 로그인 상태일 때 댓글 등록 처리
+                    submitComment();
+                } else {
+                    // 로그인 상태가 아닐 때 로그인 여부 확인 창 표시
+                    var userResponse = confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?");
+                    
+                    if (userResponse) {
+                        window.location.href = "/login";
+                    } else {
+                        // 아니요를 선택한 경우 아무 동작 없음
+                    }
+                }
+            }
+        
+            function submitComment() {
+                console.log("호출");
+                // 여기에 실제 댓글 등록 처리 코드 작성
+                alert("댓글이 등록되었습니다.");
+                window.location.reload();
+            }
+        </script>
+        <script>
+            function modifyPost(postId) {
+                if (postId) {
+                    console.log(postId);
+                    location.href = 'modify?post_id=' + postId;
+                } else {
+                    alert('유효한 post_id가 없습니다.');
+                }
+            }
+        </script>
+        
+        <script>
+            function checkLoginAndNavigate() {
+                if (isLoggedIn === "true") {
+                    // 로그인이 되어 있으면 글쓰기 페이지로 이동
+                    location.href = 'write';
+                } else {
+                    // 로그인이 안되어 있으면 로그인 페이지로 이동
+                    alert('로그인이 필요합니다.');
+                    location.href = '/login';
+                }
+            }
+        </script>
+    </head>
+
 <body>
-    view html
+    <header>
+        <h1><a href="/"><img src="http://placehold.it/300x70?text=logo" alt="logo"></a></h1>
+        <div id="login">
+            <p><a href="../login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p>
+            <p><a href="#"><i class="fa-solid fa-user" alt="마이페이지" title="마이페이지"></i></a></p>
+            <p><a href="../servicecenter/main"><i class="fa-solid fa-headphones" alt="고객센터"title="고객센터"></i></a></p>
+            <p><a href="#"><i class="fa-solid fa-magnifying-glass" alt="검색"title="검색"></i></a><input type="text" size="12px"></p>
+        </div>
+        <nav>
+            <ul class="row">
+                <li><a href="notice">공지사항</a>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </li>
+                <li><a href="fight">대전 / 협동</a>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </li>
+                <li><a href="list">게시판</a>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </li>
+                <li><a href="mypage/doyun">마이 페이지</a>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </li>
+                <li><a href="shop">아이템샾</a>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <!-- 상단 디자인 -->
+    <div class="con_title">
+        <h3>게시판</h3>
+        <p>HOME &gt; 게시판 &gt; <strong>게시판</strong></p>
+    </div>
+    <div class="con_txt">
+        <div class="contents_sub">
+            <div class="board_view">
+                <table>
+                    <tr>
+                        <th width="10%">제목</th>
+                        <td width="60" th:text="${post.postTitle}"></td>
+                        <th width="10%">등록일</th>
+                        <td width="20%" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                    </tr>
+                    <tr>
+                        <th>글쓴이</th>
+                        <td th:text="${post.member.memNick}"></td>
+                        <th>조회</th>
+                        <td th:text="${post.postHit}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" height="200" valign="top" style="padding: 20px; line-height: 160%" th:text="${post.postContent}"></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <table>
+                <tr th:each="comment  : ${comment}">
+                    <td class="coment_re" width="20%">
+                        <!-- <strong th:text="${comment.member.memId}"></strong> (<span th:text="${comment.updatedAt}"></span>) -->
+                        <strong>글쓴이 : <span th:text="${comment.member.memId}"></span></strong> (<span th:text="${comment.updatedAt}"></span>)
+                        <br /><br /><strong>내용</strong><br />
+                        <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
+                    </td>
+                </tr>
+            </table>
+
+            <form action="comment_write_ok" method="post" name="cfrm">
+                <!-- <input type="hidden" name="cpage" th:value="${cpage}" />
+                <input type="hidden" name="seq" th:value="${post.postId}" /> -->
+                <table>
+                    <tr>
+                        <td width="6%" class="bg01"></td>
+                    </tr>
+                    <tr>
+                        <td class="bg01">
+                            내용 입력<br/>
+                            <textarea name="ccontent" cols="" rows="" class="coment_input_text"></textarea>
+                        </td>
+                        <td align="right" class="bg01">
+                            <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01" onclick="checkLogin()"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            
+            <div class="btn_area">
+                <div class="align_left">
+                    <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'"/>
+                </div>
+                <div class="align_right">
+                    <!-- <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='modify?post_id=' + /*[[${post.postId}]]*/ ''"/> -->
+                    <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='modify?post_id=${post.postId}'" />
+                    <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='delete?post_id=${post.postId}'"/>
+                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"/>
+                </div>
+            </div>	
+            <!--//게시판-->
+        </div>
+    </div>
+<!-- 하단 디자인 -->
+</div>
+
 </body>
 </html>
