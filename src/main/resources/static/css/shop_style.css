@@ -226,7 +226,7 @@ nav > ul > li:hover{
     width: 100%;
     /* flex: 1 0 0; */
     /* outline: 1px solid red; */
-    background-color: rgba(0, 0, 0, .5);
+    /* background-color: rgba(0, 0, 0, .5); */
 
 }
 .shop{
@@ -245,34 +245,40 @@ nav > ul > li:hover{
 .main_item{
     width: 250px;
     margin: 0 auto;
-    outline: 1px solid red;
+    outline: 1px solid yellow;
 }
 .main_item > li{
-    height: 80px; /* 높이 설정, 원하는 값으로 조절하세요 */
-    line-height: 80px; /* 내용의 중앙 정렬을 위해 높이와 동일한 값으로 설정 */
     text-align: center;
-    /* margin-top: 3vh; /* 또는 필요에 따라 원하는 여백 값으로 조절 */
-    outline: 1px solid red;
-
-    /* margin: 0 auto; */
+    margin: 0 auto;
+    /* outline: 1px solid red; */
+}
+.main_item > li > a{
     font-size: 30px;
-    outline: 1px solid red;
+    width: 250px;
+    height: 60px;
+    line-height: 60px;
+    display: block;
+    /* background-color: skyblue; */
+    outline: 1px solid black;
 }
 .main_item > li:first-child{
     margin-top: 3vh;
 }
 .main_item > li > ul{
-    /* margin-top: 3vh; */
+
     text-align: right;
     outline: 1px solid red;
 }
-.main_item > li > ul > li{
-    /* margin-top: 3vh; */
-    font-size: 20px;
-    /* display: block; */
 
+.main_item > li > ul > li > a{
     outline: 1px solid red;
+    font-size: 20px;
+    width: 250px;
+    height: 60px;
+    line-height: 60px;
+    display: block;
 }
+
 /* 아이템 샵 메인 */
 .shopmain{
     width: 1380px;
@@ -313,5 +319,8 @@ nav > ul > li:hover{
 .user_content{
     height: 13vh;
     /* border: 1px solid red; */
-    background-color: #222327;
+    /* background-color: #222327; */
+}
+.paginate_regular{
+    
 }
