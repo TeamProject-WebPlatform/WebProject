@@ -1,6 +1,6 @@
 package platform.game.service.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int CommentId;
+    private int commentId;
 
     @ManyToOne
     @JoinColumn(name = "postId", referencedColumnName = "postId")
@@ -33,21 +33,22 @@ public class Comment {
     private Member member;
 
     @Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
-    private String CommentContent;
+    private String commentContent;
 
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int CommentLikeCnt;
+    private int commentLikeCnt;
 
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int CommentDislikeCnt;
-    private Date CreatedAt;
+    private int commentDislikeCnt;
+    
+    private Date createdAt;
 
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int CommentGrp;
+    private int commentGrp;
 
-    private Date UpdatedAt;
-    private Date DeletedAt;
+    private Date updatedAt;
+    private Date deletedAt;
 
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
-    private int CommentRepotCnt;
+    private int commentRepotCnt;
 }

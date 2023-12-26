@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
-import platform.game.service.model.DAO.CommentDAO;
 import platform.game.service.model.DAO.PostDAO;
 import platform.game.service.repository.PostInfoRepository;
+import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -34,10 +36,10 @@ public class BoardController {
     private PostDAO dao;
 
     @Autowired
-    private CommentDAO cDao;
+    private PostInfoRepository postInfoRepository;
 
     @Autowired
-    private PostInfoRepository postInfoRepository;
+    private CommentInfoRepository commentInfoRepository;
 
 
     @GetMapping("/list")
@@ -70,21 +72,17 @@ public class BoardController {
 
         String loginCheck = "true";
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            System.out.println("멤버 있음 ");
             loginCheck = "true";
         }else{
-            System.out.println("멤버 없음");
             loginCheck = "false";
         }
 
         Post post = new Post();
         
         post = postInfoRepository.findByPostId(postId);
-        
-        System.out.println(postId);
-        //댓글 기능
-        ArrayList<Comment> comment = cDao.commentList(postId);
-        
+
+        //댓글 불러오기
+        ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
 
         ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName( "list_view" );
@@ -93,6 +91,33 @@ public class BoardController {
         modelAndView.addObject( "loginCheck", loginCheck );
 	
 		return modelAndView;
+    }
+
+    @RequestMapping("/comment_write_ok")
+    public String writeComment(@RequestParam("postId") int postId, @RequestParam("ccontent") String content) {
+        System.out.println("comment_write_ok 호출");
+        Member member = null;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+        }else{
+            System.out.println("로그인을 하세요");
+        }
+        Date date = new Date();
+
+        Comment comment = new Comment();
+        comment.setPost(postInfoRepository.findByPostId(postId));
+        comment.setCommentContent(content);
+        comment.setCreatedAt(date);
+        comment.setUpdatedAt(date);
+        comment.setMember(member);
+        System.out.println("comment 확인 : " + comment);
+
+        commentInfoRepository.save(comment);
+
+
+        // 댓글이 등록된 후에 어디로 이동할지를 결정
+        // 예시: 댓글 등록 후 해당 게시물로 이동
+        return "redirect:/board/view?post_id=" + postId;
     }
 
     @RequestMapping( "/write" )

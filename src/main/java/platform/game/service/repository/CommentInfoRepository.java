@@ -10,4 +10,5 @@ public interface CommentInfoRepository extends JpaRepository<Comment, Integer>{
     // Optional<Comment> findByPost(int postId);
 
     ArrayList<Comment> findByPost_PostId(int postId);
+    Comment save(Comment comment);
 }

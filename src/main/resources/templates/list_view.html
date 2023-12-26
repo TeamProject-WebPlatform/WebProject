@@ -12,12 +12,23 @@
         <script th:inline="javascript">
             var isLoggedIn = [[${loginCheck}]]; // Thymeleaf로부터 loginCheck 값을 받아옴
         </script>
+        <!--댓글 로직-->
+        <script type="text/javascript">
+            window.onload = function() {
+                document.getElementById('cbtn').onclick = function() {
+                    checkLogin();
+                    document.cfrm.submit();
+                };
+	        };
+        </script>
         <script>
             function checkLogin() {
                 console.log(isLoggedIn);
                 if (isLoggedIn) {
                     // 로그인 상태일 때 댓글 등록 처리
-                    submitComment();
+                    // submitComment();
+                    document.getElementsByName("ccontent").value;
+                    document.getElementsByName("postId").value;
                 } else {
                     // 로그인 상태가 아닐 때 로그인 여부 확인 창 표시
                     var userResponse = confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?");
@@ -28,13 +39,6 @@
                         // 아니요를 선택한 경우 아무 동작 없음
                     }
                 }
-            }
-        
-            function submitComment() {
-                console.log("호출");
-                // 여기에 실제 댓글 등록 처리 코드 작성
-                alert("댓글이 등록되었습니다.");
-                window.location.reload();
             }
         </script>
         <script>
@@ -140,8 +144,8 @@
             </table>
 
             <form action="comment_write_ok" method="post" name="cfrm">
-                <!-- <input type="hidden" name="cpage" th:value="${cpage}" />
-                <input type="hidden" name="seq" th:value="${post.postId}" /> -->
+                <!-- <input type="hidden" name="cpage" th:value="${cpage}" /> -->
+                <input type="hidden" name="postId" th:value="${post.postId}" />
                 <table>
                     <tr>
                         <td width="6%" class="bg01"></td>
@@ -152,7 +156,8 @@
                             <textarea name="ccontent" cols="" rows="" class="coment_input_text"></textarea>
                         </td>
                         <td align="right" class="bg01">
-                            <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01" onclick="checkLogin()"/>
+                            <!-- <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01" onclick="checkLogin()"/> -->
+                            <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01"/>
                         </td>
                     </tr>
                 </table>
@@ -163,9 +168,8 @@
                     <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'"/>
                 </div>
                 <div class="align_right">
-                    <!-- <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='modify?post_id=' + /*[[${post.postId}]]*/ ''"/> -->
-                    <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='modify?post_id=${post.postId}'" />
-                    <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='delete?post_id=${post.postId}'"/>
+                    <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='modify?post_id=${post.postId}'|" />
+                    <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='delete?post_id=${post.postId}'|"/>
                     <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"/>
                 </div>
             </div>	
