@@ -1,4 +1,15 @@
 @charset "utf-8";
+
+:root{
+    --bg-opacity: rgba(43,44,47,0.5);
+    --text-black-white:#ffffff;
+    --text-black-black:#000000;
+    --outer-shadow: 3px 3px 3px #222327, -3px -3px  3px #363636;
+    --outer-shadow-0: 0 0 0 #222327, 0 0 0 #363636;
+    --inner-shadow: inset 3px 3px 3px #222327, inset -3px -3px 3px #363636;
+    --inner-shadow-0: inset 0 0 0 #222327, inset 0 0 0 #363636;
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -32,7 +43,6 @@ a{
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    /* justify-content: space-around; */
     /* align-content: space-around; */
 }
 
@@ -228,9 +238,8 @@ nav > ul > li:hover{
 
 /* 프로필 부분 */
 .qrcode{
-    
     width: 1380px;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     margin: 0 auto;
 }
 /* .sec{
@@ -243,7 +252,7 @@ nav > ul > li:hover{
 
 .profile{
     width: 300px;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     text-align: center;
     margin-left: 10vh;
     margin-top: 1%;
@@ -251,10 +260,26 @@ nav > ul > li:hover{
 }
 
 .starter-template{
-    outline: 1px solid red;
-    display: flex;
+    width: 640px;
+    /* outline: 1px solid red; */
+    /* display: flex; */
     margin-left: 10vh;
     font-size: 20px;
+}
+#data{
+    width: 50px;
+    height: 50px;
+    /* outline: 1px solid red; */
+    margin-top: 0;
+    border: 0;
+    background-color: transparent;
+}
+
+#data > i{
+    font-size: 50px;
+}
+#data > i:active{
+    color: var(--text-black-white);
 }
 
 .profile_size{
@@ -275,6 +300,29 @@ nav > ul > li:hover{
 }
 
 #content{
+    width: 100%;
     display: none;
     margin: 0 auto;
+    text-align: center;
+}
+#context{
+    width: 1380px;
+    margin: 0 auto;
+}
+
+#data_check, #data_check2{
+    width: 50px;
+    height: 50px;
+    margin-top: 0;
+    border: 0;
+    font-size: 50px;
+    background-color: transparent;
+}
+
+#data_check > i:active{
+    color: var(--text-black-white);
+}
+
+#data_check2 > i:active{
+    color: var(--text-black-white);
 }

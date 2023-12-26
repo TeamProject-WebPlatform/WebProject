@@ -5,10 +5,11 @@
     --bg-black-100:#353535;
     /* --bg-black-50:#2b2c2f; */
     /* --bg-black-50:rgb(53, 70, 90); */
+    /* --bg-black-gradient: linear-gradient(rgb(9, 12, 21)10%,rgb(26, 35, 52)30%, rgb(71, 92, 123)60%,rgb(143,167,191)90%,rgb(185, 208, 226)100%); */
+    
     --bg-opacity: rgba(43,44,47,0.5);
-    --text-black-900:#ffffff;
-    --text-black-700:#ffffff;
-    --text-black-600:#ffffff;
+    --text-black-white:#ffffff;
+    --text-black-black:#000000;
     --outer-shadow: 3px 3px 3px #222327, -3px -3px  3px #363636;
     --outer-shadow-0: 0 0 0 #222327, 0 0 0 #363636;
     --inner-shadow: inset 3px 3px 3px #222327, inset -3px -3px 3px #363636;
@@ -57,21 +58,23 @@ a{
 body{
     font: '돋음', dotum, sans-serif;
     font-size: 14px;
-    background-color: var(--bg-black-900);
-    color:#333;
+    background-color: #fff;
+    /* color:#fff; */
+    overflow-x: hidden;
 }
+
 #web{
     width: 100%;
-    min-height: 100vh;
-    background-size : cover;
-    border: 1px solid red;
+    height: 100vh;
 }
+
 header{
     width: 100%;
     margin: 0 auto;
-    border: 1px solid red;
+    /* outline: 1px solid red; */
     position: relative;
-    /* margin-bottom: 3%; */
+    top: 0;
+    margin-bottom: 1%;
 }
 header::after{
     content:"";
@@ -82,33 +85,104 @@ header::after{
 header > h1{
     width: 300px;
     height: 70px;
-    /* margin: 0 auto; */
     margin-top: 1%;
     margin-left: 1%;
-    /* outline: 1px dotted red; */
     float: left;
 }
 #login{
     /* background-color: #dadada; */
     float: right;
+    margin-top: 1%;
+    margin-right: 1%;
     opacity: 1;
 }
 #login > p{
-    color: yellow;
+    width: 15vh;
+    height: 5vh;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    color: rgb(0, 73, 140);
     float: left;
     font-size: 30px;
     margin-right: 15px;
 }
+/* .log{
+    display: none;
+} */
+
+.logto{
+    /* width: 10vh; */
+    /* outline:1px solid red; */
+    display: none;
+
+    position: relative;
+    /* outline: 1px solid black; */
+
+}
+.login_info{
+    width: 15vh;
+    height: 5vh;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    font-size: 20px;
+    cursor: pointer;
+    /* color: var(--text-black-white); */
+    /* outline:1px solid red; */
+    background-color: rgb(0, 73, 140);
+    transition: all 0.2s;
+}
+.login_info_list{
+    position: absolute;
+    height: 0;
+    left: 0;
+    /* outline:1px solid red; */
+    background-color: rgb(0, 73, 140);
+    visibility: hidden;
+    overflow: hidden;
+    transition: all 1s;
+    z-index: 9999;
+    opacity: 0;
+}
+
+.logto:hover > .login_info{
+    color: var(--text-black-black);
+    font-size: 25px;
+    border-bottom: 5px solid white;
+}
+.logto:hover > .login_info_list{
+    visibility: visible;
+    height: 12vh;
+    opacity: 1;
+}
+
+.login_info_list > li{
+    width: 15vh;
+    height: 4vh;
+    color: var(--text-black-black);
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    transition: all .5s;
+}
+.login_info_list > li:hover{
+    font-size: 25px;
+    overflow: visible;
+    color: var(--text-black-white);
+    border-bottom: 2px solid white;
+}
+
+
 /* 네비게이션 메뉴 */
 nav{
     /* position: absolute; */
     width: 1280px;
-    /* top: 100%;
-    left: 16.5%; */
-
+    /* outline: 1px solid red; */
     margin: 0 auto;
-    margin-top: 4%;
-    /* border: 1px dotted red; */
+    margin-bottom: 1%;
 }
 /* nav::after{
     content:"";
@@ -121,100 +195,123 @@ nav > ul{
     /* margin: 0 auto; */
     
     /* float: left; */
-    outline: 1px dotted red;
+    /* outline: 1px dotted red; */
     justify-content: center;
 }
 nav > ul > li{
     width: 200px;
     height: 50px;
-    background-color: var(--bg-black-900);
-    opacity: 0.3;
+    /* background-color: #fff; */
     text-align: center;
     line-height: 50px;
     box-sizing: border-box;
     margin-left: 45px;
-    outline:1px solid black;
+    /* outline:1px solid black; */
+    font-size: 20px;
     position: relative;
-    border-bottom: 1px solid white ;
+    border-bottom: 1px solid black ;
     /* float: left; */
     /* flex: 1 1 auto; */
+    transition: all 1s;
+}
+nav > ul > li:hover{
+    font-size: 35px;
+    color: var(--text-black-white);
+    background-color: rgb(0, 73, 140);
+    border-bottom: 1px solid var(--text-black-black);
+
 }
 
 .content{
     width: 100%;
-    /* border: 1px solid red; */
-    background-color: rgba(255, 255, 255, .5);
-    /* opacity: .5; */
-    /* height: 100vh; */
+    /* flex: 1 0 0; */
+    /* outline: 1px solid red; */
+    background-color: rgba(0, 0, 0, .5);
+
 }
 .shop{
     width: 1980px;
     margin: 0 auto;
-    flex: 1 0 0;
+    flex: 0 0 1;
+    outline: 1px solid olivedrab;
+
 }
 
 .shoplist{ 
-    min-width: 250px;
-    border: 1px solid red;
+    width: 300px;
+    outline: 1px solid blue;
 }
 
 .main_item{
-    max-width: 150px;
-    height: 40vh;
+    width: 250px;
     margin: 0 auto;
-    border: 1px solid red;
-    font-size: 20px;
-    text-align: center;
+    outline: 1px solid red;
 }
 .main_item > li{
+    height: 80px; /* 높이 설정, 원하는 값으로 조절하세요 */
+    line-height: 80px; /* 내용의 중앙 정렬을 위해 높이와 동일한 값으로 설정 */
+    text-align: center;
+    /* margin-top: 3vh; /* 또는 필요에 따라 원하는 여백 값으로 조절 */
+    outline: 1px solid red;
+
+    /* margin: 0 auto; */
+    font-size: 30px;
+    outline: 1px solid red;
+}
+.main_item > li:first-child{
     margin-top: 3vh;
-    border: 1px solid red;
+}
+.main_item > li > ul{
+    /* margin-top: 3vh; */
+    text-align: right;
+    outline: 1px solid red;
+}
+.main_item > li > ul > li{
+    /* margin-top: 3vh; */
+    font-size: 20px;
+    /* display: block; */
+
+    outline: 1px solid red;
 }
 /* 아이템 샵 메인 */
 .shopmain{
-    min-width: 1380px;
-    max-width: 1380px;
-    /* max-width: 1360px; */
-    position: relative;
-    border: 1px solid red;
-}
-
-/* 광고 */
-.shopmain::after{
-    position: absolute;
-    top:0;
-    right: -300px;
-    text-align: center;
-    color: black;
-    width: 300px;
-    height: 100vh;
-    content:"광고";
-    /* display: block; */
-    clear: both;
-    background-color: rgba(0, 0, 0, .5);
-}
-
-.shop-aside{
-    min-width: 200px;
-    border: 1px solid red;
-
-}
-
-.item{
-    border-radius: 50%;
-    overflow: hidden;
-    background-color: #000000;
-}
-.item > img{
-    width: 200px;
+    width: 1380px;
+    outline: 1px solid red;
 }
 
 .itemlist{
     /* max-width: 1370px; */
     margin: 0 auto;
-    flex-flow: row nowrap;
-    justify-content: space-around;
-    align-items: stretch;
-
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
+.sub_item {
+    /* width: 20%; */
+    height: 32vh;
+    margin-top: 1%;
+    outline: 1px solid red;
+    /* margin-bottom: 20px; 필요에 따라 여백 조절 */
+    flex: 0 0 calc(20% - 20px); /* 20%의 너비, 여백을 포함하여 필요에 따라 조절 */
+}
+
+.item{
+    width: 15vh;
+    height: 15vh;
+    margin: 0 auto;
+    margin-top: 5%;
+    border-radius: 50%;
+    outline: 1px solid red;
+    overflow: hidden;
+}
+
+.item > img {
+    width: 100%;
+}
+
+.user_content{
+    height: 13vh;
+    /* border: 1px solid red; */
+    background-color: #222327;
+}

@@ -9,7 +9,7 @@
         <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
         <!-- 메인 자바스크립트 -->
-        <script src="../js/main_style.js"></script>
+        <script src="../js/login_style.js"></script>
         <script src="../js/md_page.js"></script>
         <!-- 메인 스타이 css -->
         <link rel="stylesheet" href="../css/md_style.css">
@@ -64,7 +64,7 @@
             </nav>
             <section>
                 <!-- QRcode -->
-                <div class="row qrcode">
+                <div id="qrcode" class="row qrcode">
                     <div class="profile">
                         <!-- <form class="sec" action="/mypage/qrcode/create", method="get">
                             <input type="text" name="url" />
@@ -82,14 +82,24 @@
                         <div class="link profile_size">
                             <input type="text" name="text" id="text" style="width: 200px;height: 300px;">
                         </div>
-                        <input type="button" value="프로필 수정">
                     </div>
                     
                     <div class="starter-template">
                         <div th:utext="${contents}"></div>
                     </div>
-                    <div id="content">
+                    <button type="button" name="data" id="data">
+                        <i class="far fa-pen-to-square" alt="회원정보 수정"title="회원정보 수정"></i>
+                    </button>
+                </div>
+                <div id="content">
+                    <div id="context">
                     </div>
+                    <button type="button" name="data_check" id="data_check" >
+                        <i class="fa-solid fa-check" alt="수정 확인"title="수정 확인"></i>
+                    </button>
+                    <button type="button" name="data_check2" id="data_check2">
+                        <i class="fa-solid fa-minus" alt="수정 취소"title="수정 취소"></i>
+                    </button>
                 </div>
                 <!-- 에디터를 적용할 요소 (컨테이너) -->
                 
