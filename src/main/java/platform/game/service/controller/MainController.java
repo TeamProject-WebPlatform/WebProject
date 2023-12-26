@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.nimbusds.jose.shaded.gson.JsonArray;
+
 import platform.game.service.entity.Member;
 import platform.game.service.entity.RankList;
 import platform.game.service.mapper.SqlMapperInter;
@@ -61,8 +63,11 @@ public class MainController {
     @GetMapping("/rank")
     public ModelAndView rank(ModelAndView modelAndView) {
         List<LevelRankTO> lists = sqlMapperInter.getLevelrank();
+        ArrayList<Integer> ranks = rankDAO.getLevelList();
         modelAndView.setViewName("rank");
         modelAndView.addObject("lists", lists);
+        modelAndView.addObject("ranks", ranks);
+
         return modelAndView;
     }
 
