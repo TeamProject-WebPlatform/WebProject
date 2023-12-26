@@ -66,13 +66,13 @@ public class MyPageController {
         //     //System.out.println(member.toString());
         // }
 
-        // System.out.println( "UserID : " + authFilter.getUserID() ); 
-        // 위에 방법으로
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+        System.out.println();
 
         try {
             markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( userid );
         } catch (Exception e) {
-            System.out.println( "[에러] MainController : " + e.getMessage() );
+            System.out.println( "[에러] MyPageController : " + e.getMessage() );
         }
 
         Parser parser = Parser.builder().build();
@@ -81,7 +81,7 @@ public class MyPageController {
 
         model.addAttribute("contents", renderer.render(document));
 
-        System.out.println( "renderer : " + renderer.render(document) );
+        // System.out.println( "renderer : " + renderer.render(document) );
 
         return new ModelAndView("mypage");
     }
