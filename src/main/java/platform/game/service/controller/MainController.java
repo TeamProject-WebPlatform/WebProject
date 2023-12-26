@@ -1,5 +1,8 @@
 package platform.game.service.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.RankList;
 import platform.game.service.mapper.SqlMapperInter;
+import platform.game.service.model.DAO.RankDAO;
+import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.service.MemberInfoDetails;
 
 // Spring Security의 /login 페이지 안되게
@@ -21,6 +26,9 @@ import platform.game.service.service.MemberInfoDetails;
 public class MainController {
     @Autowired
     SqlMapperInter sqlMapperInter;
+
+    @Autowired
+    RankDAO rankDAO;
 
     @RequestMapping("/")
     public ModelAndView main() {
@@ -51,12 +59,11 @@ public class MainController {
     }
 
     @GetMapping("/rank")
-    public ModelAndView rank() {
-        int rank = 1;
-        int i = 1;
-        int e = i - 1;
-        sqlMapperInter.setLevelRank(rank, i, e);
-        return new ModelAndView("rank");
+    public ModelAndView rank(ModelAndView modelAndView) {
+        List<LevelRankTO> lists = sqlMapperInter.getLevelrank();
+        modelAndView.setViewName("rank");
+        modelAndView.addObject("lists", lists);
+        return modelAndView;
     }
 
 }

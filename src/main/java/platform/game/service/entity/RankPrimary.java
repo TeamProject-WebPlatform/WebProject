@@ -9,5 +9,5 @@ import lombok.Data;
 public class RankPrimary implements Serializable {
 
     private int rank;
-    private char rank_code;
+    private int rankCode;
 }

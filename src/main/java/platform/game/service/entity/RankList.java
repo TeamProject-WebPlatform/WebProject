@@ -1,8 +1,11 @@
 package platform.game.service.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +24,10 @@ public class RankList {
     @Id
     private int rank;
     @Id
-    private char rank_code;
-    private int mem_id;
-    private String rank_update;
+    @Column(name = "rank_code")
+    private int rankCode;
+    @Column(name = "mem_id")
+    private int memId;
+    @Column(name = "rank_update")
+    private String rankUpdate;
 }
