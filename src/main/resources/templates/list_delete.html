@@ -1,11 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 삭제</title>
-</head>
-<body>
-    delete html
-</body>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="우리팀">
+        <meta name="description" content="게시판">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="../css/list_style.css">
+        <script type="text/javascript">
+            function deletePost() {
+                // 삭제 버튼 클릭 시 확인 및 폼 제출
+                var confirmation = confirm('게시물을 삭제하시겠습니까?');
+                if (confirmation) {
+                    document.dfrm.submit();
+                }
+            }
+        </script>
+        <title>게시판</title>
+    </head>
+    <body>
+        <div id="web">
+            <header>
+                <h1><a href="/home"><img src="http://placehold.it/300x70?text=logo" alt="logo"></a></h1>
+                <div id="login">
+                    <p><a href="../login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p>
+                    <p><a href="#"><i class="fa-solid fa-user" alt="마이페이지" title="마이페이지"></i></a></p>
+                    <p><a href="../servicecenter/main"><i class="fa-solid fa-headphones" alt="고객센터"title="고객센터"></i></a></p>
+                    <p><a href="#"><i class="fa-solid fa-magnifying-glass" alt="검색"title="검색"></i></a><input type="text" size="12px"></p>
+                </div>
+                <nav>
+                    <ul class="row">
+                        <li><a href="notice">공지사항</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="fight">대전 / 협동</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="list">게시판</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="mypage/doyun">마이 페이지</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="shop">아이템샾</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <section>
+                <div class="row content">
+                    <div class="list">
+                        <div class="con_title">
+                            <h3>게시판</h3>
+                            <p>HOME &gt; 게시판 &gt; <strong>게시판</strong></p>
+                        </div>
+                        <div class="con_txt">
+                            <form action="delete_ok" method="post" name="dfrm">
+                                <input type="hidden" name="post_id" th:value="${post.postId}">
+                                <div class="contents_sub">	
+                                    <!--게시판-->
+                                    <div class="board_write">
+                                        <table>
+                                        <tr>
+                                            <th>제목</th>
+                                            <td><input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input" readonly/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>내용</th>
+                                            <td><textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea></td>
+                                        </tr>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="btn_area">
+                                        <div class="align_left">
+                                            <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list?cpage=<%=cpage %>'" /> -->
+                                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'" />
+                                            <input type="button" value="보기" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='view?post_id=${post.postId}'|" />
+                                        </div>
+                                        <div class="align_right">
+                                            <input type="button" id="dbtn" value="삭제" class="btn_write btn_txt01" style="cursor: pointer;" onclick="deletePost()"/>
+                                        </div>
+                                    </div>
+                                    <!--//게시판-->
+                                </div>
+                            </form>
+                        </div>
+                        <!-- 하단 디자인 -->
+                
+                    </div>
+                </div>
+            </section>
+            <footer>
+                
+            </footer>
+        </div>
+    </body>
 </html>
