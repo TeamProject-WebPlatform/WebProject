@@ -9,7 +9,7 @@
         <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
         <!-- 메인 자바스크립트 -->
-        <script src="../js/main_style.js"></script>
+        <script src="../js/login_style.js"></script>
         <script src="../js/md_page.js"></script>
         <!-- 메인 스타이 css -->
         <link rel="stylesheet" href="../css/md_style.css">
@@ -20,15 +20,17 @@
     <body>
         <div id="web">
             <header>
-                <h1><a href="/"><img src="http://placehold.it/300x70?text=logo" alt="logo"></a></h1>
+                <h1 class="logo"><a href="/"><img src="../img/logo.png" alt="logo"></a></h1>
                 <div id="login">
-                    <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p>
+                    <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
+                    <p class="log"><a href="login">로그인</a></p>
                     <div class="logto">
                         <p class="login_info">Tokarev &nbsp;&nbsp;<i class="fa-solid fa-caret-down"></i></p>
                         <ul class="login_info_list">
-                            <li><a href="#">회원 정보</a></li>
-                            <li><a href="#">마이 페이지</a></li>
-                            <li class="logout"><a href="">로그 아웃</a></li>
+                            <li><a href="#">회원정보관리</a></li>
+                            <li><a href="mypage/doyun">프로필</a></li>
+                            <li><a href="board/shop">아이템 샵</a></li>
+                            <li class="logout"><a href="/logout">로그아웃</a></li>
                         </ul>
                     </div>
                 </div>
@@ -40,7 +42,12 @@
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="board/fight">대전 / 협동</a>
+                    <li><a href="board/fight">대전</a>
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </li>
+                    <li><a href="board/team">협동</a>
                         <ul>
                             <li></li>
                         </ul>
@@ -50,12 +57,7 @@
                             <li></li>
                         </ul>
                     </li>
-                    <li class="action"><a href="mypage/doyun">마이 페이지</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="board/shop">아이템샾</a>
+                    <li><a href="board/rank">랭킹</a>
                         <ul>
                             <li></li>
                         </ul>
@@ -64,7 +66,7 @@
             </nav>
             <section>
                 <!-- QRcode -->
-                <div class="row qrcode">
+                <div id="qrcode" class="row qrcode">
                     <div class="profile">
                         <!-- <form class="sec" action="/mypage/qrcode/create", method="get">
                             <input type="text" name="url" />
@@ -82,14 +84,24 @@
                         <div class="link profile_size">
                             <input type="text" name="text" id="text" style="width: 200px;height: 300px;">
                         </div>
-                        <input type="button" value="프로필 수정">
                     </div>
                     
                     <div class="starter-template">
                         <div th:utext="${contents}"></div>
                     </div>
-                    <div id="content">
+                    <button type="button" name="data" id="data">
+                        <i class="far fa-pen-to-square" alt="회원정보 수정"title="회원정보 수정"></i>
+                    </button>
+                </div>
+                <div id="content">
+                    <div id="context">
                     </div>
+                    <button type="button" name="data_check" id="data_check" >
+                        <i class="fa-solid fa-check" alt="수정 확인"title="수정 확인"></i>
+                    </button>
+                    <button type="button" name="data_check2" id="data_check2">
+                        <i class="fa-solid fa-minus" alt="수정 취소"title="수정 취소"></i>
+                    </button>
                 </div>
                 <!-- 에디터를 적용할 요소 (컨테이너) -->
                 
