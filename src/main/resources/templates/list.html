@@ -35,7 +35,7 @@
                 <h1 class="logo"><a href="/"><img src="../img/logo.png" alt="logo"></a></h1>
                 <div id="login">
                     <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
-                    <p class="log"><a href="login">로그인</a></p>
+                    <p class="log"><a href="/login">로그인</a></p>
                     <div class="logto">
                         <p class="login_info">Tokarev &nbsp;&nbsp;<i class="fa-solid fa-caret-down"></i></p>
                         <ul class="login_info_list">
@@ -49,27 +49,27 @@
             </header>
             <nav>
                 <ul class="row">
-                    <li><a href="board/notice">공지사항</a>
+                    <li><a href="../board/notice">공지사항</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="board/fight">대전</a>
+                    <li><a href="../board/fight">대전</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="board/team">협동</a>
+                    <li><a href="../board/team">협동</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li class="action"><a href="board/list">게시판</a>
+                    <li class="action"><a href="../board/list">게시판</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="board/rank">랭킹</a>
+                    <li><a href="../board/rank">랭킹</a>
                         <ul>
                             <li></li>
                         </ul>
@@ -108,7 +108,7 @@
                                                 <!-- <a th:href="@{'view(post_id=' + ${post.postId} + ')}" th:text="${post.postTitle}"></a> -->
                                                 <a th:href="@{view(post_id=${post.postId})}" th:text="${post.postTitle}"></a>
                                                 <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
-                                                    <img src="./images/icon_new.gif" alt="NEW">
+                                                    <img src="../img/icon_new.gif" alt="NEW">
                                                 </span>
                                             </td>
                                             <td th:text="${post.member.memNick}"></td>
