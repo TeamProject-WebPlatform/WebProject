@@ -147,7 +147,7 @@ public class BoardController {
         post.setUpdatedAt(date);
 
         // 게시판 코드가 들어가는 장소
-        post.setBoardCd("TestBoard1"); // 임시로 데이터를 넣어둠
+        post.setBoardCd("board_list"); // 임시로 데이터를 넣어둠
         post.setMember(member);
 
         int flag = dao.WriteOk(post);

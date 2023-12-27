@@ -32,14 +32,17 @@ public class MainController {
 
     @RequestMapping("/")
     public ModelAndView main() {
+        ModelAndView mav = new ModelAndView("index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
-            System.out.println("멤버 있음 " + member.toString());
+            if(member!=null){
+                mav.addObject("nickname", member.getMemNick());
+            }
         } else {
             System.out.println("멤버 없음");
         }
-        return new ModelAndView("index");
+        return mav;
 
     }
 
