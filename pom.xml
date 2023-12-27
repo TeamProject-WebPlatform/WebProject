@@ -147,7 +147,7 @@
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>9.31</version>
 		</dependency>
-<<<<<<< HEAD
+
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
@@ -170,8 +170,6 @@
 			<version>2.16.0</version>
 		</dependency>
 
-=======
->>>>>>> e141496b4a9be4b672b51896759abd016a60e326
 	</dependencies>
 
 	<build>
