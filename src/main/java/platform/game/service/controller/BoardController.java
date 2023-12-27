@@ -26,7 +26,8 @@ import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
-@ComponentScan(basePackages = { "platform.game.action", "platform.game.service.repository", "platform.game.service.model"})
+@ComponentScan(basePackages = { "platform.game.action", "platform.game.service.repository",
+        "platform.game.service.model" })
 @RequestMapping("/board")
 public class BoardController {
 
@@ -39,29 +40,28 @@ public class BoardController {
     @Autowired
     private CommentInfoRepository commentInfoRepository;
 
-
     @GetMapping("/list")
     public ModelAndView list() {
         ArrayList<Post> lists = dao.List();
-        //가장 최근에 만들어진 게시글이 맨위에 나오도록 하도록 설정
+        // 가장 최근에 만들어진 게시글이 맨위에 나오도록 하도록 설정
         Collections.reverse(lists);
-		
+
         String loginCheck = "true";
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             System.out.println("멤버 있음 ");
             loginCheck = "true";
-        }else{
+        } else {
             System.out.println("멤버 없음");
             loginCheck = "false";
         }
 
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName( "list" );
-		modelAndView.addObject( "lists", lists );
-        modelAndView.addObject( "loginCheck", loginCheck );
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("list");
+        modelAndView.addObject("lists", lists);
+        modelAndView.addObject("loginCheck", loginCheck);
 
-		return modelAndView;
+        return modelAndView;
     }
 
     @GetMapping("/view")
@@ -71,24 +71,24 @@ public class BoardController {
         String loginCheck = "true";
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             loginCheck = "true";
-        }else{
+        } else {
             loginCheck = "false";
         }
 
         Post post = new Post();
-        
+
         post = postInfoRepository.findByPostId(postId);
 
-        //댓글 불러오기
+        // 댓글 불러오기
         ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
 
         ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName( "list_view" );
-		modelAndView.addObject( "post", post );
-        modelAndView.addObject( "comment", comment );
-        modelAndView.addObject( "loginCheck", loginCheck );
-	
-		return modelAndView;
+        modelAndView.setViewName("list_view");
+        modelAndView.addObject("post", post);
+        modelAndView.addObject("comment", comment);
+        modelAndView.addObject("loginCheck", loginCheck);
+
+        return modelAndView;
     }
 
     @RequestMapping("/comment_write_ok")
@@ -96,13 +96,14 @@ public class BoardController {
         System.out.println("comment_write_ok 호출");
         Member member = null;
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-        }else{
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+        } else {
             System.out.println("로그인을 하세요");
         }
         Date date = new Date();
 
-        Comment comment = new Comment(); 
+        Comment comment = new Comment();
         comment.setPost(postInfoRepository.findByPostId(postId));
         comment.setCommentContent(content);
         comment.setCreatedAt(date);
@@ -112,20 +113,19 @@ public class BoardController {
 
         commentInfoRepository.save(comment);
 
-
         // 댓글이 등록된 후에 어디로 이동할지를 결정
         // 예시: 댓글 등록 후 해당 게시물로 이동
         return "redirect:/board/view?post_id=" + postId;
     }
 
-    @RequestMapping( "/write" )
+    @RequestMapping("/write")
     public ModelAndView listWrite() {
         System.out.println("Controller_listWrite 호출");
 
         ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName( "list_write" );
+        modelAndView.setViewName("list_write");
 
-		return modelAndView;
+        return modelAndView;
     }
 
     @RequestMapping("/write_ok")
@@ -135,54 +135,55 @@ public class BoardController {
         Date date = new Date();
         Member member = null;
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-        }else{
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+        } else {
             System.out.println("로그인을 하세요");
         }
-        post.setPostTitle(request.getParameter( "subject" ));
-        post.setPostTags(request.getParameter( "tags" ));
-        post.setPostContent(request.getParameter( "content" ));
+        post.setPostTitle(request.getParameter("subject"));
+        post.setPostTags(request.getParameter("tags"));
+        post.setPostContent(request.getParameter("content"));
         post.setCreatedAt(date);
         post.setUpdatedAt(date);
 
-        //게시판 코드가 들어가는 장소
-        post.setBoardCd("TestBoard1");  //임시로 데이터를 넣어둠
+        // 게시판 코드가 들어가는 장소
+        post.setBoardCd("TestBoard1"); // 임시로 데이터를 넣어둠
         post.setMember(member);
-        
-		int flag = dao.WriteOk( post );
+
+        int flag = dao.WriteOk(post);
 
         ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName( "list_write_ok" );
-		modelAndView.addObject( "flag", flag );
-	
-		return modelAndView;
+        modelAndView.setViewName("list_write_ok");
+        modelAndView.addObject("flag", flag);
+
+        return modelAndView;
     }
 
     @GetMapping("/modify")
     public ModelAndView listModify(@RequestParam(name = "post_id") int postId) {
         System.out.println("Controller_listModift 호출");
         Post post = new Post();
-        
+
         post = postInfoRepository.findByPostId(postId);
 
         ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName( "list_modify" );
-		modelAndView.addObject( "post", post );
+        modelAndView.setViewName("list_modify");
+        modelAndView.addObject("post", post);
 
         return modelAndView;
     }
 
     @PostMapping("/modify_ok")
-    public ModelAndView listModifyOk(@RequestParam(name = "post_id") int postId, 
-                                  @RequestParam(name = "subject") String title, 
-                                  @RequestParam(name = "tags") String tags, 
-                                  @RequestParam(name = "content") String content) {
+    public ModelAndView listModifyOk(@RequestParam(name = "post_id") int postId,
+            @RequestParam(name = "subject") String title,
+            @RequestParam(name = "tags") String tags,
+            @RequestParam(name = "content") String content) {
         System.out.println("Controller_listModify_ok 호출");
         Date date = new Date();
 
         // Find the existing post by ID
         Optional<Post> optionalPost = postInfoRepository.findById(postId);
-        
+
         Post post = optionalPost.get();
         // Update the post with the new values
         post.setPostTitle(title);
@@ -192,29 +193,28 @@ public class BoardController {
 
         System.out.println("modify_ok post : " + post);
 
-            // Save the updated post
+        // Save the updated post
         int flag = dao.ModifyOk(post);
         System.out.println("flag : " + flag);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("list_modify_ok");
-        modelAndView.addObject( "flag", flag );
+        modelAndView.addObject("flag", flag);
 
         return modelAndView;
     }
-
 
     @GetMapping("/delete")
     public ModelAndView listDelete(@RequestParam(name = "post_id") int postId) {
 
         System.out.println("Controller_listdelete 호출");
         Post post = new Post();
-        
+
         post = postInfoRepository.findByPostId(postId);
 
         ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName( "list_delete" );
-		modelAndView.addObject( "post", post );
+        modelAndView.setViewName("list_delete");
+        modelAndView.addObject("post", post);
 
         return modelAndView;
     }
