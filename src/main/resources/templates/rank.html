@@ -54,12 +54,12 @@
                 });
     </script>
     <body>
-        랭킹 페이지
         <table width="800px">
-            <tr th:each="levelRankTO : ${lists}">
-                <td th:text="${levelRankTO.rank}"></td>
-                <td th:text="${levelRankTO.mem_lvl}"></td>
-                <td th:text="${levelRankTO.mem_userid}"></td>
+            <caption>랭킹 순위표</caption>
+            <tr th:each="winRankTO : ${lists}">
+                <td th:text="${winRankTO.rank}"></td>
+                <td th:text="${winRankTO.mem_userid}"></td>
+                <td th:text="${winRankTO.winrate}"></td>
             </tr>
         </table>
     </body>

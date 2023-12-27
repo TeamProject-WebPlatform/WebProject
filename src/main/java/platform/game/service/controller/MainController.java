@@ -19,7 +19,9 @@ import platform.game.service.entity.Member;
 import platform.game.service.entity.RankList;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
+import platform.game.service.model.TO.AttendRankTO;
 import platform.game.service.model.TO.LevelRankTO;
+import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.service.MemberInfoDetails;
 
 // Spring Security의 /login 페이지 안되게
@@ -62,8 +64,8 @@ public class MainController {
 
     @GetMapping("/rank")
     public ModelAndView rank(ModelAndView modelAndView) {
-        List<LevelRankTO> lists = sqlMapperInter.getLevelrank();
-        ArrayList<Integer> ranks = rankDAO.getLevelList();
+        List<WinRankTO> lists = sqlMapperInter.getWinrank();
+        ArrayList<Integer> ranks = rankDAO.getWinList();
         modelAndView.setViewName("rank");
         modelAndView.addObject("lists", lists);
         modelAndView.addObject("ranks", ranks);
