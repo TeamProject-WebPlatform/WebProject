@@ -148,7 +148,7 @@
                         <tr th:each="comment  : ${comment}">
                             <td class="coment_re" width="20%">
                                 <!-- <strong th:text="${comment.member.memId}"></strong> (<span th:text="${comment.updatedAt}"></span>) -->
-                                <strong>글쓴이 : <span th:text="${comment.member.memId}"></span></strong> (<span th:text="${comment.updatedAt}"></span>)
+                                <strong>글쓴이 : <span th:text="${comment.member.memNick}"></span></strong> (<span th:text="${comment.updatedAt}"></span>)
                                 <br /><br /><strong>내용</strong><br />
                                 <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
                             </td>
