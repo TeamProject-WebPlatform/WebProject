@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,8 +37,10 @@ import com.google.zxing.common.BitMatrix;
 
 import platform.game.service.action.MypageAction;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.RiotInfo;
 import platform.game.service.filter.JwtAuthFilter;
 import platform.game.service.service.MemberInfoDetails;
+import platform.game.service.service.RiotService;
 import platform.game.service.service.jwt.JwtManager;
 
 @RestController
@@ -55,16 +58,13 @@ public class MyPageController {
     JwtManager jwtManager;
     @Autowired
     private JwtAuthFilter authFilter;
+    @Autowired
+    private RiotService riotService;
 
     @GetMapping("/{userid}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
         String markdownValueFormLocal = null;
-        
-        // if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-        //     Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-        //     //System.out.println(member.toString());
-        // }
 
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
         model.addAttribute("member", member);
@@ -82,6 +82,17 @@ public class MyPageController {
         model.addAttribute("contents", renderer.render(document));
 
         return new ModelAndView("mypage");
+    }
+ 
+    @GetMapping("/summonerByName")
+    public RiotInfo callSummonerByName(String summonerName){
+        // String summonerName = "Java를자바";
+    
+        summonerName = summonerName.replaceAll(" ","%20");
+ 
+        RiotInfo apiResult = riotService.callRiotAPISummonerByName(summonerName);
+ 
+        return apiResult;
     }
 
     @PostMapping("/tui-editor/image-upload")

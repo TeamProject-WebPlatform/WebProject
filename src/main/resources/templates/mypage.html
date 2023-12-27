@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <!-- 메인 자바스크립트 -->
         <script src="../js/main_style.js"></script>
         <script src="../js/md_page.js"></script>
@@ -35,27 +36,27 @@
             </header>
             <nav>
                 <ul class="row">
-                    <li><a href="board/notice">공지사항</a>
+                    <li><a href="../board/notice">공지사항</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="board/fight">대전 / 협동</a>
+                    <li><a href="../board/fight">대전 / 협동</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="board/list">게시판</a>
+                    <li><a href="../board/list">게시판</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li class="action"><a href="mypage/doyun">마이 페이지</a>
+                    <li class="action"><a href="../mypage/doyun">마이 페이지</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="board/shop">아이템샾</a>
+                    <li><a href="../board/shop">아이템샾</a>
                         <ul>
                             <li></li>
                         </ul>
@@ -83,6 +84,10 @@
                         </div>
                         <div class="link profile_size">
                             <!-- <input type="text" name="text" id="text" style="width: 200px;height: 300px;"> -->
+                        </div>
+                        <div>
+                            <input id="riotID" type="text">
+                            <button id="btn_searchRiotID">검색</button>
                         </div>
                         <input type="button" value="프로필 수정">
                     </div>
