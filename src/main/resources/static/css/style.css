@@ -255,8 +255,7 @@ nav > ul > li:hover{
 }
 
 .icon{
-    /* border: 1px solid red; */
-
+    border: 1px solid black;
     width: 18vh;
     height: 18vh;
     margin: 0 auto;
