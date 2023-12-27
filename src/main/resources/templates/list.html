@@ -8,6 +8,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="../css/list_style.css">
+        <!--로그인 체크하는 구문-->
+        <script th:inline="javascript">
+            var isLoggedIn = [[${loginCheck}]]; // Thymeleaf로부터 loginCheck 값을 받아옴
+        </script>
+        <script>
+            function checkLoginAndNavigate() {
+                if (isLoggedIn === "true") {
+                    // 로그인이 되어 있으면 글쓰기 페이지로 이동
+                    location.href = 'write';
+                } else {
+                    // 로그인이 안되어 있으면 로그인 페이지로 이동
+                    alert('로그인이 필요합니다.');
+                    location.href = '/login';
+                }
+            }
+        </script>
+
         <title>게시판</title>
     </head>
     <body>
@@ -86,7 +103,8 @@
                                             <td>&nbsp;</td>
                                             <td th:text="${#lists.size(lists) - rowStat.index}"></td>
                                             <td class="left">
-                                                <a th:href="@{'view(post_id=' + ${post.postId} + ')}" th:text="${post.postTitle}"></a>
+                                                <!-- <a th:href="@{'view(post_id=' + ${post.postId} + ')}" th:text="${post.postTitle}"></a> -->
+                                                <a th:href="@{view(post_id=${post.postId})}" th:text="${post.postTitle}"></a>
                                                 <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
                                                     <img src="./images/icon_new.gif" alt="NEW">
                                                 </span>
@@ -101,9 +119,8 @@
                                 
                                 <div class="btn_area">
                                     <div class="align_right">
-                                        <input type="button" value="새글쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="location.href='list/write'" />
+                                        <input type="button" value="새글쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" />
                                     </div>
-                        
                                     <!--페이지넘버-->
                                     <div class="paginate_regular">
                                         <div align="absmiddle">
