@@ -28,7 +28,9 @@ public class SteamWebApiController {
     String steamWebApiKey;
     @Autowired
     SteamAction steamAction;
-    
+    /*
+     * playerSummary 와 myGameList 사용하면됨
+     */
     // http://localhost:8080/steamapi/playerSummary?steamID=76561198272883644
     @GetMapping("/playerSummary")
     public Mono<String> steamPlayerSummary(String steamID) {

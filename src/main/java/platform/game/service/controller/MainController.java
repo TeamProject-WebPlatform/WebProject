@@ -13,11 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import platform.game.service.entity.Member;
-import platform.game.service.entity.RankList;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
-import platform.game.service.model.TO.AttendRankTO;
-import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.service.MemberInfoDetails;
 
