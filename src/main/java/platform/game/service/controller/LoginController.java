@@ -3,7 +3,6 @@ package platform.game.service.controller;
 import java.io.IOException;
 import java.util.Objects;
 
-import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,7 +27,6 @@ import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
 import platform.game.service.repository.MemberInfoRepository;
-import platform.game.service.service.jwt.JwtService;
 import platform.game.service.service.jwt.SecurityPassword;
 
 @RestController
