@@ -1,11 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 보기</title>
-</head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="우리팀">
+        <meta name="description" content="게시판">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="../css/list_style.css">
+        <script src="./js/login_style.js"></script>
+
+        <!-- <link rel="stylesheet" type="text/css" href="../css/board_view.css"> -->
+        <!-- 댓글 로그인 확인 스크립트 -->
+        <script th:inline="javascript">
+            var isLoggedIn = [[${loginCheck}]]; // Thymeleaf로부터 loginCheck 값을 받아옴
+        </script>
+        <!--댓글 로직-->
+        <script type="text/javascript">
+            window.onload = function() {
+                document.getElementById('cbtn').onclick = function() {
+                    checkLogin();
+                    document.cfrm.submit();
+                };
+	        };
+        </script>
+        <script>
+            function checkLogin() {
+                console.log(isLoggedIn);
+                if (isLoggedIn) {
+                    // 로그인 상태일 때 댓글 등록 처리
+                    // submitComment();
+                    document.getElementsByName("ccontent").value;
+                    document.getElementsByName("postId").value;
+                } else {
+                    // 로그인 상태가 아닐 때 로그인 여부 확인 창 표시
+                    var userResponse = confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?");
+                    
+                    if (userResponse) {
+                        window.location.href = "/login";
+                    } else {
+                        // 아니요를 선택한 경우 아무 동작 없음
+                    }
+                }
+            }
+        </script>
+        <script>
+            function modifyPost(postId) {
+                if (postId) {
+                    console.log(postId);
+                    location.href = 'modify?post_id=' + postId;
+                } else {
+                    alert('유효한 post_id가 없습니다.');
+                }
+            }
+        </script>
+        
+        <script>
+            function checkLoginAndNavigate() {
+                if (isLoggedIn === "true") {
+                    // 로그인이 되어 있으면 글쓰기 페이지로 이동
+                    location.href = 'write';
+                } else {
+                    // 로그인이 안되어 있으면 로그인 페이지로 이동
+                    alert('로그인이 필요합니다.');
+                    location.href = '/login';
+                }
+            }
+        </script>
+    </head>
+
 <body>
-    view html
+    <header>
+        <h1 class="logo"><a href="/"><img src="../img/logo.png" alt="logo"></a></h1>
+        <div id="login">
+            <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
+            <p class="log"><a href="login">로그인</a></p>
+            <div class="logto">
+                <p class="login_info">Tokarev &nbsp;&nbsp;<i class="fa-solid fa-caret-down"></i></p>
+                <ul class="login_info_list">
+                    <li><a href="#">회원정보관리</a></li>
+                    <li><a href="mypage/doyun">프로필</a></li>
+                    <li><a href="board/shop">아이템 샵</a></li>
+                    <li class="logout"><a href="/logout">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <nav>
+        <ul class="row">
+            <li><a href="board/notice">공지사항</a>
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li><a href="board/fight">대전</a>
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li><a href="board/team">협동</a>
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li class="action"><a href="board/list">게시판</a>
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li><a href="board/rank">랭킹</a>
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <!-- 상단 디자인 -->
+    <section>
+        <div class="content">
+            <div class="con_title">
+                <h3>게시판</h3>
+                <p>HOME &gt; 게시판 &gt; <strong>게시판</strong></p>
+            </div>
+            <div class="con_txt">
+                <div class="contents_sub">
+                    <div class="board_view">
+                        <table>
+                            <tr>
+                                <th width="10%">제목</th>
+                                <td width="60" th:text="${post.postTitle}"></td>
+                                <th width="10%">등록일</th>
+                                <td width="20%" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                            </tr>
+                            <tr>
+                                <th>글쓴이</th>
+                                <td th:text="${post.member.memNick}"></td>
+                                <th>조회</th>
+                                <td th:text="${post.postHit}"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" height="200" valign="top" style="padding: 20px; line-height: 160%" th:text="${post.postContent}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <table>
+                        <tr th:each="comment  : ${comment}">
+                            <td class="coment_re" width="20%">
+                                <!-- <strong th:text="${comment.member.memId}"></strong> (<span th:text="${comment.updatedAt}"></span>) -->
+                                <strong>글쓴이 : <span th:text="${comment.member.memId}"></span></strong> (<span th:text="${comment.updatedAt}"></span>)
+                                <br /><br /><strong>내용</strong><br />
+                                <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <form action="comment_write_ok" method="post" name="cfrm">
+                        <!-- <input type="hidden" name="cpage" th:value="${cpage}" /> -->
+                        <input type="hidden" name="postId" th:value="${post.postId}" />
+                        <table>
+                            <tr>
+                                <td class="bg01">
+                                    <!-- 내용 입력<br/> -->
+                                    <textarea name="ccontent" cols="" rows="" class="coment_input_text" alt="내용 입력"title="내용 입력"></textarea>
+                                </td>
+                                <td align="right" class="bg01 bg02">
+                                    <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    
+                    <div class="btn_area">
+                        <div class="align_left">
+                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'"/>
+                        </div>
+                        <div class="align_right">
+                            <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='modify?post_id=${post.postId}'|" />
+                            <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='delete?post_id=${post.postId}'|"/>
+                            <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"/>
+                        </div>
+                    </div>	
+                    <!--//게시판-->
+                </div>
+            </div>
+        </div>
+    </section>
+
 </body>
 </html>
