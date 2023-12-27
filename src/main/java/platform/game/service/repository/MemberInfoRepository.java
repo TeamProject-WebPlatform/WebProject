@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import platform.game.service.entity.Member;
-import java.util.List;
 
 @Repository
 public interface MemberInfoRepository extends JpaRepository<Member, Integer> {

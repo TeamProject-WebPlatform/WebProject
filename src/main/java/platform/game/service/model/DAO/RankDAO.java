@@ -2,15 +2,12 @@ package platform.game.service.model.DAO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.nimbusds.jose.shaded.gson.JsonObject;
 
 import platform.game.service.entity.RankList;
-import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.repository.RankListRepository;
 
 @Repository
