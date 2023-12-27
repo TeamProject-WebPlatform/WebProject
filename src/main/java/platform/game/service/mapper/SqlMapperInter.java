@@ -72,10 +72,6 @@ public interface SqlMapperInter {
                         String mem_email, int mem_total_point, int mem_lvl, int mem_attend, int mem_game_count,
                         int mem_win_count, int mem_lose_count);
 
-        // 랭킹 테스트용 정렬
-        @Select("select mem_userid, mem_total_point, mem_lvl from member order by mem_total_point desc limit 50")
-        public int getPointRank();
-
         @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
                         "SELECT #{rank}, 0, mem_id, NOW() " +
                         "FROM member " +
