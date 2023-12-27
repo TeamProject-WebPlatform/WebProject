@@ -64,11 +64,21 @@ public class MainController {
 
     @GetMapping("/rank")
     public ModelAndView rank(ModelAndView modelAndView) {
-        List<WinRankTO> lists = sqlMapperInter.getWinrank();
-        ArrayList<Integer> ranks = rankDAO.getWinList();
+        List<WinRankTO> WinRanklists = sqlMapperInter.getWinrank();
+        List<AttendRankTO> AttendRanklists = sqlMapperInter.getAttendrank();
+        List<LevelRankTO> LevelRanklists = sqlMapperInter.getLevelrank();
+
+        ArrayList<Integer> WinRanks = rankDAO.getWinList();
+        ArrayList<Integer> AttendRanks = rankDAO.getAttendList();
+        ArrayList<Integer> LevelRanks = rankDAO.getLevelList();
+
         modelAndView.setViewName("rank");
-        modelAndView.addObject("lists", lists);
-        modelAndView.addObject("ranks", ranks);
+        modelAndView.addObject("winlist", WinRanklists);
+        modelAndView.addObject("attendlist", AttendRanklists);
+        modelAndView.addObject("levellist", LevelRanklists);
+        modelAndView.addObject("attendrank", AttendRanks);
+        modelAndView.addObject("levelrank", LevelRanks);
+        modelAndView.addObject("winrank", WinRanks);
 
         return modelAndView;
     }

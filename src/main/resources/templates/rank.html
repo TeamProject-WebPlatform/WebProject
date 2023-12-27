@@ -6,14 +6,30 @@
     </head>
     <title>랭킹</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <canvas id="myChart"></canvas>
+    <canvas id="myChart" style='width:30vw; height:30vh; display: inline-block;'></canvas>
+    <canvas id="myChart2" style='width:30vw; height:30vh; display: inline-block;'></canvas>
+    <canvas id="myChart3" style='width:30vw; height:30vh; display: inline-block;'></canvas>
     <script type="text/javascript">
-        var rankings = "[[${ranks}]]";
-        let ranks = rankings.split(",");
-        ranks[0] = ranks[0].substring(1);
-        ranks[ranks.length - 1] = ranks[ranks.length - 1].split("]")[0];
+        var WinRankings = "[[${winrank}]]";
+        var LevelRankings = "[[${levelrank}]]";
+        var AttendRankings = "[[${attendrank}]]";
 
-        var myChart = new Chart(
+        let WinRanks = WinRankings.split(",");
+        let LevelRanks = LevelRankings.split(",");
+        let AttendRanks = AttendRankings.split(",");
+
+        WinRanks[0] = WinRanks[0].substring(1);
+        WinRanks[WinRanks.length - 1] = WinRanks[WinRanks.length - 1].split("]")[0];
+
+        LevelRanks[0] = LevelRanks[0].substring(1);
+        LevelRanks[LevelRanks.length - 1] = LevelRanks[LevelRanks.length - 1].split("]")[0];
+
+        AttendRanks[0] = AttendRanks[0].substring(1);
+        AttendRanks[AttendRanks.length - 1] = AttendRanks[AttendRanks.length - 1].split("]")[0];
+
+        console.log(WinRankings);
+
+        var WinChart = new Chart(
             document.getElementById('myChart'),
             {
                 type: 'line',
@@ -21,15 +37,15 @@
                     labels: [],
                     datasets: [
                         {
-                        label: 'Dataset1',
-                        data: ({0:ranks[0], 10:ranks[1], 20:ranks[2], 30:ranks[3], 40:ranks[4], 50:ranks[5], 60:ranks[6], 70:ranks[7], 80:ranks[8], 90:ranks[9]}),
+                        label: '승률 별 인구수',
+                        data: ({0:WinRanks[0], 10:WinRanks[1], 20:WinRanks[2], 30:WinRanks[3], 40:WinRanks[4], 50:WinRanks[5], 60:WinRanks[6], 70:WinRanks[7], 80:WinRanks[8], 90:WinRanks[9]}),
                         borderColor: 'rgb(75, 0, 192)',
                         fill: false,
                         stepped: false,
                         },
                         {
-                        label: 'Dataset2',
-                        data: ({0:ranks[0], 10:ranks[1], 20:ranks[2], 30:ranks[3], 40:ranks[4], 50:ranks[5], 60:ranks[6], 70:ranks[7], 80:ranks[8], 90:ranks[9]}),
+                        label: '승률 별 인구수',
+                        data: ({0:WinRanks[0], 10:WinRanks[1], 20:WinRanks[2], 30:WinRanks[3], 40:WinRanks[4], 50:WinRanks[5], 60:WinRanks[6], 70:WinRanks[7], 80:WinRanks[8], 90:WinRanks[9]}),
                         borderColor: 'rgb(75, 0, 192)',
                         fill: false,
                         stepped: false,
@@ -39,7 +55,7 @@
                     ]
                     },
                 options: {
-                    responsive: true,
+                    responsive: false,
                     interaction: {
                     intersect: false,
                     axis: 'x'
@@ -47,20 +63,109 @@
                     plugins: {
                     title: {
                         display: true,
-                        text: (ctx) => 'Step ' + ctx.chart.data.datasets[0].stepped + ' Interpolation',
+                        text: (ctx) => '승률 별 유저 분포도',
+                    },
+                    legend:{
+                        display : false
+                    }
+                    }
+                }
+                });
+
+        var AttendChart = new Chart(
+            document.getElementById('myChart2'),
+            {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                        label: '출석 일수',
+                        data: ({0:AttendRanks[0], 50:AttendRanks[1], 100:AttendRanks[2], 150:AttendRanks[3], 200:AttendRanks[4], 250:AttendRanks[5], 300:AttendRanks[6]}),
+                        borderColor: 'rgb(75, 0, 192)',
+                        fill: false,
+                        stepped: false,
+                        },
+                        {
+                        label: '출석 일수',
+                        data: ({0:AttendRanks[0], 50:AttendRanks[1], 100:AttendRanks[2], 150:AttendRanks[3], 200:AttendRanks[4], 250:AttendRanks[5], 300:AttendRanks[6]}),
+                        borderColor: 'rgb(75, 0, 192)',
+                        fill: false,
+                        stepped: false,
+                        backgroundColor: '#000000',
+                        type:'bar'
+                        }
+                    ]
+                    },
+                options: {
+                    responsive: false,
+                    interaction: {
+                    intersect: false,
+                    axis: 'x'
+                    },
+                    plugins: {
+                    title: {
+                        display: true,
+                        text: (ctx) => '출석일 수 유저 분포도',
+                    },
+                    legend:{
+                        display : false
+                    }
+                    }
+                }
+                });
+
+        var LevelChart = new Chart(
+            document.getElementById('myChart3'),
+            {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                        label: '레벨 구간 별 인구수',
+                        data: ({0:LevelRanks[0], 10:LevelRanks[1], 20:LevelRanks[2], 30:LevelRanks[3], 40:LevelRanks[4], 50:LevelRanks[5], 60:LevelRanks[6], 70:LevelRanks[7], 80:LevelRanks[8], 90:LevelRanks[9]}),
+                        borderColor: 'rgb(75, 0, 192)',
+                        fill: false,
+                        stepped: false,
+                        },
+                        {
+                        label: '레벨 구간 별 인구수',
+                        data: ({0:LevelRanks[0], 10:LevelRanks[1], 20:LevelRanks[2], 30:LevelRanks[3], 40:LevelRanks[4], 50:LevelRanks[5], 60:LevelRanks[6], 70:LevelRanks[7], 80:LevelRanks[8], 90:LevelRanks[9]}),
+                        borderColor: 'rgb(75, 0, 192)',
+                        fill: false,
+                        stepped: false,
+                        backgroundColor: '#000000',
+                        type:'bar'
+                        }
+                    ]
+                    },
+                options: {
+                    responsive: false,
+                    interaction: {
+                    intersect: false,
+                    axis: 'x'
+                    },
+                    plugins: {
+                    title: {
+                        display: true,
+                        text: (ctx) => '레벨 구간 별 유저 분포도',
+                    },
+                    legend:{
+                        display : false
                     }
                     }
                 }
                 });
     </script>
     <body>
-        <table width="800px">
+        <!-- <table width="800px">
             <caption>랭킹 순위표</caption>
-            <tr th:each="winRankTO : ${lists}">
+            <tr th:each="winRankTO : ${winlist}">
                 <td th:text="${winRankTO.rank}"></td>
                 <td th:text="${winRankTO.mem_userid}"></td>
                 <td th:text="${winRankTO.winrate}"></td>
             </tr>
-        </table>
+        </table> -->
     </body>
 </html>

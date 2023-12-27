@@ -86,16 +86,16 @@ public class RankDAO {
         int over0 = rankListRepository.WinRank0over();
 
         ArrayList<Integer> rankList = new ArrayList<Integer>();
-        rankList.add(over90);
-        rankList.add(over80);
-        rankList.add(over70);
-        rankList.add(over60);
-        rankList.add(over50);
-        rankList.add(over40);
-        rankList.add(over30);
-        rankList.add(over20);
-        rankList.add(over10);
         rankList.add(over0);
+        rankList.add(over10);
+        rankList.add(over20);
+        rankList.add(over30);
+        rankList.add(over40);
+        rankList.add(over50);
+        rankList.add(over60);
+        rankList.add(over70);
+        rankList.add(over80);
+        rankList.add(over90);
         return rankList;
     }
 }
