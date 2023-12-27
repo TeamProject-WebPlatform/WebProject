@@ -3,18 +3,13 @@ package platform.game.service.service;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
-import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
-import platform.game.service.repository.CommonCodeRepository;
 
 public class MemberInfoDetails implements UserDetails { 
 

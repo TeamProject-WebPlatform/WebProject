@@ -7,15 +7,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.LinkedMultiValueMap;
@@ -33,7 +28,6 @@ import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
-import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.service.MemberInfoService;
 import platform.game.service.service.jwt.JwtService;
 import platform.game.service.service.jwt.SecurityPassword;
@@ -82,12 +76,12 @@ public class SignAction {
         // 트랜잭션 내에서 쿼리 실행
         transactionTemplate.execute(status -> {
             try {
-                System.out.println("체크 : "+userSignup.toString());
+                System.out.println("체크 : " + userSignup.toString());
                 // 멤버 id 할당 하기 위해 common code에서 값 select
                 Optional<CommonCode> idInfo = comCdRepo.findByCd(idCode);
                 Long lastid = Long.parseLong(idInfo.get().getRemark1()) + 1;
                 Long id = Long.parseLong(idPrefix + lastid);
-                System.out.println("signupAction > id : "+id);
+                System.out.println("signupAction > id : " + id);
                 // member 객체 생성
                 Member member = Member.builder()
                         .memId(id)
@@ -102,7 +96,7 @@ public class SignAction {
                         .memCertified(memCertified)
                         .memCreatedAt(new Date().toString())
                         .build();
-                System.out.println("signupAction > 멤버 객체 생성 성공 "+member.toString());
+                System.out.println("signupAction > 멤버 객체 생성 성공 " + member.toString());
                 // memService bean에서 addUser로 만든 member를 DB에 추가(service 내에서 비번 암호화)
                 boolean flag = memService.addUser(member);
                 System.out.println("signupAction > 멤버 객체 추가 성공");
@@ -136,7 +130,7 @@ public class SignAction {
     }
 
     // 카카오 로그인
-    public KakaoOAuthTokenTO getKakaoOAuthToken(String code){
+    public KakaoOAuthTokenTO getKakaoOAuthToken(String code) {
         KakaoOAuthTokenTO oAuthToken = null;
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -145,42 +139,45 @@ public class SignAction {
         params.add("client_id", kakaoClientId);
         params.add("redirect_uri", domain + "/login/kakao/callback");
         params.add("code", code);
-        try{
+        try {
             String body = WebClient.create("https://kauth.kakao.com")
-                .post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/oauth/token")
-                        .build())
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue(params)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-            oAuthToken = objectMapper.readValue(body, KakaoOAuthTokenTO.class); 
-        }catch(Exception e){}
+                    .post()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/oauth/token")
+                            .build())
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .bodyValue(params)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            oAuthToken = objectMapper.readValue(body, KakaoOAuthTokenTO.class);
+        } catch (Exception e) {
+        }
         return oAuthToken;
     }
-    
-    public String getKakaoEmail(String access_token){
+
+    public String getKakaoEmail(String access_token) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> responseMap = null;
 
         try {
             String body = WebClient.create("https://kapi.kakao.com")
-                .post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/v2/user/me")
-                        .build())
-                .headers(httpHeaders -> {
-                    httpHeaders.add("Authorization", "Bearer " + access_token);
-                    httpHeaders.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-                })
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-            responseMap = objectMapper.readValue(body, new TypeReference<Map<String, Object>>() {});
-        } catch (Exception e){}
+                    .post()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/v2/user/me")
+                            .build())
+                    .headers(httpHeaders -> {
+                        httpHeaders.add("Authorization", "Bearer " + access_token);
+                        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                    })
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            responseMap = objectMapper.readValue(body, new TypeReference<Map<String, Object>>() {
+            });
+        } catch (Exception e) {
+        }
 
         String email = "";
         if (responseMap != null) {
@@ -192,7 +189,7 @@ public class SignAction {
         return email;
     }
 
-    public Cookie kakaoSign(String email){
+    public Cookie kakaoSign(String email) {
         Cookie cookie = null;
         Optional<Member> mem = memRepo.findByMemKakaoid(email);
         if (mem.isPresent()) {
@@ -200,7 +197,7 @@ public class SignAction {
             AuthRequest authRequest = new AuthRequest();
             authRequest.setMemUserid("kakao_" + email);
             authRequest.setMemPw("kakao_" + email);
-            
+
             cookie = generateToken(authRequest);
         } else {
             // 회원가입
@@ -215,9 +212,6 @@ public class SignAction {
         return cookie;
     }
 
-
-
-
     // 스팀 로그인시 자동 회원가입 jwt 토큰을 리턴
     public Cookie steamSign(String steamid) {
         // steamid 검색해서 이미 있으면 로그인
@@ -229,7 +223,7 @@ public class SignAction {
             AuthRequest authRequest = new AuthRequest();
             authRequest.setMemUserid("steam_" + steamid);
             authRequest.setMemPw("steam_" + steamid);
-            
+
             cookie = generateToken(authRequest);
         } else {
             // 회원가입
@@ -247,7 +241,8 @@ public class SignAction {
 
     // JWT 토큰 만들기
     public Cookie generateToken(AuthRequest authRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw())); 
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
         Cookie cookie = null;
         if (authentication.isAuthenticated()) {
             String password = securityPassword.encode(authRequest.getMemPw());
@@ -256,7 +251,7 @@ public class SignAction {
             cookie = new Cookie("jwtTokenCookie", token);
             cookie.setMaxAge(JWT_EXPIRY_TIME);
             cookie.setPath("/");
-        }else{
+        } else {
             return null;
         }
         return cookie;

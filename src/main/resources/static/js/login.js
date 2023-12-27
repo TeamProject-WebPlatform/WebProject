@@ -17,7 +17,6 @@ const setLoginPage = function(){
     const pwFail = document.querySelector('.verifyContraints[name=pw-fail]');
     const duplicateId = document.getElementById('duplicate-id');
     var count = 0;
-
     function check_recaptcha(){
         count+=1;
         var Captcha_Check = grecaptcha.getResponse();
