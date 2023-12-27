@@ -225,15 +225,15 @@ nav > ul > li{
     transition: all 1s;
 }
 nav > ul > li:hover{
-    font-size: 35px;
-    color: rgb(0, 73, 140);
+    font-size: 30px;
+    /* color: rgb(0, 73, 140); */
     border-bottom: 1px solid rgb(0, 73, 140);
 }
 
 .action{
-    font-size: 35px;
-    color: rgb(0, 73, 140);
-    border-bottom: 1px solid rgb(0, 73, 140);
+    font-size: 30px;
+    /* color: rgb(0, 73, 140); */
+    border-bottom: 1px solid var(--text-black-blackrgb);
 }
 
 /* 프로필 부분 */
