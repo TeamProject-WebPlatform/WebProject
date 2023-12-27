@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function(){
             return false;
         }
     });
-    
+
     document.getElementById("btn_searchRiotID").addEventListener("click", function() {
         var summonerName = document.getElementById("riotID").value;
 
@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function(){
             success: function (result) {
                 // 성공 시 처리
                 console.log(result);
-                // 여기에서 결과(result)를 사용하여 원하는 동작 수행
             },
             error: function (error) {
                 // 실패 시 처리

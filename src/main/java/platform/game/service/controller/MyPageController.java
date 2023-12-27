@@ -51,8 +51,8 @@ public class MyPageController {
     private MypageAction mypageAction = new MypageAction();
     // 파일을 업로드할 디렉터리 경로
     String currentPath = Paths.get("").toAbsolutePath().toString();
-    private final String uploadDir = Paths.get(currentPath, "src/main/resources/static/tempImg", "img").toString();
-    // private final String uploadDir = Paths.get("C:", "tempImg", "img").toString();
+    private final String mdDir = Paths.get(currentPath, "src/main/resources/static/", "md").toString();
+    private final String mdImgDir = Paths.get(currentPath, "src/main/resources/static/", "md_img").toString();
 
     @Autowired
     JwtManager jwtManager;
@@ -107,10 +107,10 @@ public class MyPageController {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");           // 32자리 랜덤 문자열
         String extension = orgFilename.substring(orgFilename.lastIndexOf(".") + 1);             // 확장자
         String saveFilename = uuid + "." + extension;                                             // 저장할 파일명
-        String fileFullPath = Paths.get(uploadDir, saveFilename).toString();                      // 전체 경로
+        String fileFullPath = Paths.get(mdImgDir, saveFilename).toString();                      // 전체 경로
 
         // 디렉터리 생성
-        File dir = new File(uploadDir);
+        File dir = new File(mdImgDir);
         if (dir.exists() == false) {
             dir.mkdirs();
         }
@@ -132,7 +132,7 @@ public class MyPageController {
 
     @GetMapping(value = "/tui-editor/image-print", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
     public byte[] printEditorImage(@RequestParam final String filename) {
-        String fileFullPath = Paths.get(uploadDir, filename).toString();
+        String fileFullPath = Paths.get(mdImgDir, filename).toString();
 
         File uploadedFile = new File(fileFullPath);
         if (uploadedFile.exists() == false) {
