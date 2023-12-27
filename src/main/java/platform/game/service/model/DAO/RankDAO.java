@@ -83,16 +83,33 @@ public class RankDAO {
         int over0 = rankListRepository.WinRank0over();
 
         ArrayList<Integer> rankList = new ArrayList<Integer>();
-        rankList.add(over90);
-        rankList.add(over80);
-        rankList.add(over70);
-        rankList.add(over60);
-        rankList.add(over50);
-        rankList.add(over40);
-        rankList.add(over30);
-        rankList.add(over20);
-        rankList.add(over10);
         rankList.add(over0);
+        rankList.add(over10);
+        rankList.add(over20);
+        rankList.add(over30);
+        rankList.add(over40);
+        rankList.add(over50);
+        rankList.add(over60);
+        rankList.add(over70);
+        rankList.add(over80);
+        rankList.add(over90);
+        return rankList;
+    }
+
+    public ArrayList<Integer> getPointList(){
+        int over1600 = rankListRepository.PointRank1600over();
+        int over1200 = rankListRepository.PointRank1200over();
+        int over800 = rankListRepository.PointRank800over();
+        int over400 = rankListRepository.PointRank400over();
+        int over0 = rankListRepository.PointRank0over();
+
+        ArrayList<Integer> rankList = new ArrayList<Integer>();
+        rankList.add(over0);
+        rankList.add(over400);
+        rankList.add(over800);
+        rankList.add(over1200);
+        rankList.add(over1600);
+
         return rankList;
     }
 }
