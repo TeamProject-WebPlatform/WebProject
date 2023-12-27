@@ -14,6 +14,8 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer>{
     ArrayList<Post> findAll();
     //게시물 찾기
     Post findByPostId(int postId);
+    //공지사항 찾기
+    ArrayList<Post> findByBoardCd(String boardCd);
     //게시물 삭제하기
     Post deleteByPostId(int postId);
 }

@@ -42,8 +42,8 @@ public class BoardController {
 
     @GetMapping("/list")
     public ModelAndView list() {
-        ArrayList<Post> lists = dao.List();
-        // 가장 최근에 만들어진 게시글이 맨위에 나오도록 하도록 설정
+        String boardCd = "board_list";
+        ArrayList<Post> lists = postInfoRepository.findByBoardCd(boardCd);
         Collections.reverse(lists);
 
         String loginCheck = "true";
@@ -239,8 +239,28 @@ public class BoardController {
     }
 
     @GetMapping("/notice")
-    public ModelAndView notice() {
-        return new ModelAndView("notice_list");
+    public ModelAndView noticelist() {
+        String boardCd = "notice";
+        ArrayList<Post> lists = postInfoRepository.findByBoardCd(boardCd);
+        //가장 최근에 만들어진 게시글이 맨위에 나오도록 하도록 설정
+        Collections.reverse(lists);
+		
+        String loginCheck = "true";
+
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            System.out.println("멤버 있음 ");
+            loginCheck = "true";
+        }else{
+            System.out.println("멤버 없음");
+            loginCheck = "false";
+        }
+
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName( "list" );
+		modelAndView.addObject( "lists", lists );
+        modelAndView.addObject( "loginCheck", loginCheck );
+
+		return modelAndView;
     }
 
     @GetMapping("/notice/view")
