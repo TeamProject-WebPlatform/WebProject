@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
     const editor = new toastui.Editor({
-        el: document.querySelector('#content'),      // 에디터를 적용할 요소 (컨테이너)
+        el: document.querySelector('#context'),      // 에디터를 적용할 요소 (컨테이너)
         height: '500px',                             // 에디터 영역의 높이 값 (OOOpx || auto)
         initialEditType: 'markdown',                 // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
         initialValue: '',                            // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
@@ -23,22 +23,40 @@ document.addEventListener('DOMContentLoaded', function(){
                         body : formData,
                     });
 
-                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
-                    const filename = await response.text();
-                    console.log('서버에 저장된 파일명 : ', filename);
-                    
-                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
-                    const imageUrl = `/mypage/tui-editor/image-print?filename=${filename}`;
-                    callback(imageUrl, 'image alt attribute');
-                    
-                } catch (error) {
-                    console.error('업로드 실패 : ', error);
+                        // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+                        const filename = await response.text();
+                        console.log('서버에 저장된 파일명 : ', filename);
+                        
+                        // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+                        const imageUrl = `/mypage/tui-editor/image-print?filename=${filename}`;
+                        callback(imageUrl, 'image alt attribute');
+                        
+                    } catch (error) {
+                        console.error('업로드 실패 : ', error);
+                    }
                 }
             }
-        }
-        /* end of hooks */
-    });
+            /* end of hooks */
+        });
 
+    document.getElementById('data').addEventListener('click', function () {
+        if (confirm("정보를 수정하시겠습니까?") == true){    //확인
+            document.getElementById("qrcode").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        }else{   //취소
+            return false;
+        }
+    });
+    document.getElementById('data_check').addEventListener('click', function () {
+        if (confirm("정보를 수정하시겠습니까?") == true){    //확인
+            document.getElementById("qrcode").style.display = "block";
+            document.getElementById("content").style.display = "none";
+            location.reload();
+        }else{   //취소
+            return false;
+        }
+    });
+    
     document.getElementById("btn_searchRiotID").addEventListener("click", function() {
         var summonerName = document.getElementById("riotID").value;
 

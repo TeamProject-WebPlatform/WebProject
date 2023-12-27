@@ -1,15 +1,28 @@
 # Hi I'm Doyun 👋
 
+<br>
+
 ### Contact   
 Email : User@gmail.com   
 
-### LOL   
-![](https://i.namu.wiki/i/SpOFjtiQxoqG-rztLeB8A0DgSnuEUdKsXplqmPsgzCzjASfJyOc6NmS2juY0PrqSHGjd6JGKZ76vEidJqOOmmESTHT-4mmQB4EiULu2pI8fBOShcc9vrEqMcds1R2wQahrscO-3oiNFZos6U8aC-HA.webp)
+<br>
 
-### Working on
-<img src="https://github-readme-stats.vercel.app/api?username=Doyun9710&show_icons=true&theme=github_dark"/>
+### Steam   
 
-### My Stacks
+
+<br>
+
+### LOL - Diamond   
+<img src="https://i.namu.wiki/i/SpOFjtiQxoqG-rztLeB8A0DgSnuEUdKsXplqmPsgzCzjASfJyOc6NmS2juY0PrqSHGjd6JGKZ76vEidJqOOmmESTHT-4mmQB4EiULu2pI8fBOShcc9vrEqMcds1R2wQahrscO-3oiNFZos6U8aC-HA.webp" alt="다이아몬드" width="200" height="200">  
+
+<br>
+
+
+
+
+<br>
+
+### My Stacks   
 <div id="frontend">
   <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
   <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
@@ -22,36 +35,7 @@ Email : User@gmail.com
 <div id="backend">
   <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
   <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
-  <!-- WebSocket -->
-  <!-- Docker -->
   <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-  <!-- AWS EC2 -->
   <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
-  <!-- Tomcat -->
   <img src="https://img.shields.io/badge/apachetomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=black">
-  <!-- Logback -->
-</div>
-
-<div id="db">
-  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
-  <img src="https://img.shields.io/badge/mariaDB-003545?style=for-the-badge&logo=mariaDB&logoColor=white"> 
-  <!-- Redis -->
-  <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"> 
-  <!-- Kafka
-  <img src="https://img.shields.io/badge/apachekafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white"> -->
-  <!-- Github -->
-  <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-  <!-- Git Action -->
-  <img src="https://img.shields.io/badge/githubactions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
-</div>
-
-<div id="lib">
-  <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=TensorFlow&logoColor=white"/> 
-  <img src="https://img.shields.io/badge/WebRTC-333333?style=for-the-badge&logo=WebRTC&logoColor=white"/> 
-  <img src="https://img.shields.io/badge/GameEngine-Phaser-blueviolet?style=for-the-badge"/>
-</div>
-
-<div id="community">
-  <img src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=Jira&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white"/>
 </div>
