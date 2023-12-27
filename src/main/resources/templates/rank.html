@@ -1,66 +1,199 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="UTF-8">
+        <meta name="author" content="우리팀">
+        <meta name="description" content="게시판">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/list_style.css">
+        <title>랭킹</title>
     </head>
-    <title>랭킹</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <canvas id="myChart"></canvas>
-    <script type="text/javascript">
-        var rankings = "[[${ranks}]]";
-        let ranks = rankings.split(",");
-        ranks[0] = ranks[0].substring(1);
-        ranks[ranks.length - 1] = ranks[ranks.length - 1].split("]")[0];
-
-        var myChart = new Chart(
-            document.getElementById('myChart'),
-            {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [
-                        {
-                        label: 'Dataset1',
-                        data: ({0:ranks[0], 10:ranks[1], 20:ranks[2], 30:ranks[3], 40:ranks[4], 50:ranks[5], 60:ranks[6], 70:ranks[7], 80:ranks[8], 90:ranks[9]}),
-                        borderColor: 'rgb(75, 0, 192)',
-                        fill: false,
-                        stepped: false,
-                        },
-                        {
-                        label: 'Dataset2',
-                        data: ({0:ranks[0], 10:ranks[1], 20:ranks[2], 30:ranks[3], 40:ranks[4], 50:ranks[5], 60:ranks[6], 70:ranks[7], 80:ranks[8], 90:ranks[9]}),
-                        borderColor: 'rgb(75, 0, 192)',
-                        fill: false,
-                        stepped: false,
-                        backgroundColor: '#000000',
-                        type:'bar'
-                        }
-                    ]
-                    },
-                options: {
-                    responsive: true,
-                    interaction: {
-                    intersect: false,
-                    axis: 'x'
-                    },
-                    plugins: {
-                    title: {
-                        display: true,
-                        text: (ctx) => 'Step ' + ctx.chart.data.datasets[0].stepped + ' Interpolation',
-                    }
-                    }
-                }
-                });
-    </script>
     <body>
-        <table width="800px">
-            <caption>랭킹 순위표</caption>
-            <tr th:each="winRankTO : ${lists}">
-                <td th:text="${winRankTO.rank}"></td>
-                <td th:text="${winRankTO.mem_userid}"></td>
-                <td th:text="${winRankTO.winrate}"></td>
-            </tr>
-        </table>
+        <div id="web">
+            <header>
+                <h1><a href="/"><img src="http://placehold.it/300x70?text=logo" alt="logo"></a></h1>
+                <div id="login">
+                    <p><a href="../login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p>
+                    <p><a href="#"><i class="fa-solid fa-user" alt="마이페이지" title="마이페이지"></i></a></p>
+                    <p><a href="../servicecenter/main"><i class="fa-solid fa-headphones" alt="고객센터"title="고객센터"></i></a></p>
+                    <p><a href="#"><i class="fa-solid fa-magnifying-glass" alt="검색"title="검색"></i></a><input type="text" size="12px"></p>
+                </div>
+                <nav>
+                    <ul class="row">
+                        <li><a href="notice">공지사항</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="fight">대전 / 협동</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="list">게시판</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="mypage/doyun">마이 페이지</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="shop">아이템샾</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <section>
+                <div class="row content">
+                    <div class="list">
+                        <div class="con_title">
+                            <h3>랭킹</h3>
+                            <p>HOME &gt; <strong>랭킹</strong></p>
+                        </div>
+                        <!-- 랭킹 별 차트 구문 -->
+                        <canvas id="win" style='width:450px; height:30vh; display: inline-block;'></canvas>
+                        <canvas id="point" style='width:450px; height:30vh; display: inline-block;'></canvas>
+                        <canvas id="level" style='width:450px; height:30vh; display: inline-block;'></canvas>
+                        <script type="text/javascript">
+                            var WinRankings = "[[${winrank}]]";
+                            var LevelRankings = "[[${levelrank}]]";
+                            var PointRankings = "[[${pointrank}]]";
+
+                            let WinRanks = WinRankings.split(",");
+                            let LevelRanks = LevelRankings.split(",");
+                            let PointRanks = PointRankings.split(",");
+
+                            WinRanks[0] = WinRanks[0].substring(1);
+                            WinRanks[WinRanks.length - 1] = WinRanks[WinRanks.length - 1].split("]")[0];
+
+                            LevelRanks[0] = LevelRanks[0].substring(1);
+                            LevelRanks[LevelRanks.length - 1] = LevelRanks[LevelRanks.length - 1].split("]")[0];
+
+                            PointRanks[0] = PointRanks[0].substring(1);
+                            PointRanks[PointRanks.length - 1] = PointRanks[PointRanks.length - 1].split("]")[0];
+
+                            var WinChart = new Chart(
+                                document.getElementById('win'),
+                                {
+                                    type: 'line',
+                                    data: {
+                                        labels: [],
+                                        datasets: [
+                                            {
+                                            label: '승률 별 유저수',
+                                            data: ({0:WinRanks[0], 10:WinRanks[1], 20:WinRanks[2], 30:WinRanks[3], 40:WinRanks[4], 50:WinRanks[5], 60:WinRanks[6], 70:WinRanks[7], 80:WinRanks[8], 90:WinRanks[9]}),
+                                            borderColor: 'rgb(75, 0, 192)',
+                                            fill: false,
+                                            stepped: false,
+                                            backgroundColor: 'skyblue',
+                                            type:'bar'
+                                            }
+                                        ]
+                                        },
+                                    options: {
+                                        responsive: false,
+                                        interaction: {
+                                        intersect: false,
+                                        axis: 'x'
+                                        },
+                                        plugins: {
+                                        title: {
+                                            display: true,
+                                            text: (ctx) => '승률 별 유저 분포도',
+                                        },
+                                        legend:{
+                                            display : false
+                                        }
+                                        }
+                                    }
+                                    });
+
+                            var LevelChart = new Chart(
+                                document.getElementById('level'),
+                                {
+                                    type: 'line',
+                                    data: {
+                                        labels: ['0~9','10~19','20~29','30~39','40~49','50~59','60~69','70~79','80~89','90~'],
+                                        datasets: [
+                                            {
+                                            label: '레벨 구간 별 인구수',
+                                            data: ({'0~9':LevelRanks[0], '10~19':LevelRanks[1], '20~29':LevelRanks[2], '30~39':LevelRanks[3],'40~49':LevelRanks[4], '50~59':LevelRanks[5], '60~69':LevelRanks[6], '70~79':LevelRanks[7], '80~89':LevelRanks[8], '90~':LevelRanks[9]}),
+                                            borderColor: 'rgb(75, 0, 192)',
+                                            fill: false,
+                                            stepped: false,
+                                            backgroundColor: 'skyblue',
+                                            type:'bar'
+                                            }
+                                        ]
+                                        },
+                                    options: {
+                                        responsive: false,
+                                        interaction: {
+                                        intersect: false,
+                                        axis: 'x'
+                                        },
+                                        plugins: {
+                                        title: {
+                                            display: true,
+                                            text: (ctx) => '레벨 구간 별 유저 분포도',
+                                        },
+                                        legend:{
+                                            display : false
+                                        }
+                                        }
+                                    }
+                                    });
+
+                            var PointChart = new Chart(
+                                document.getElementById('point'),
+                                {
+                                    type: 'line',
+                                    data: {
+                                        labels: [],
+                                        datasets: [
+                                            {
+                                            label: '포인트 보유 별 유저수',
+                                            data: ({0:PointRanks[0], 50:PointRanks[1], 100:PointRanks[2], 150:PointRanks[3], 200:PointRanks[4]}),
+                                            borderColor: 'rgb(75, 0, 192)',
+                                            fill: false,
+                                            stepped: false,
+                                            backgroundColor: 'skyblue',
+                                            type:'bar'
+                                            }
+                                        ]
+                                        },
+                                    options: {
+                                        responsive: false,
+                                        interaction: {
+                                        intersect: false,
+                                        axis: 'x'
+                                        },
+                                        plugins: {
+                                        title: {
+                                            display: true,
+                                            text: (ctx) => '포인트 보유량 유저 분포도',
+                                        },
+                                        legend:{
+                                            display : false
+                                        }
+                                        }
+                                    }
+                                    });
+                        </script>
+                    </div>
+                </div>
+            </section>
+            <footer>
+                
+            </footer>
+        </div>
     </body>
 </html>
