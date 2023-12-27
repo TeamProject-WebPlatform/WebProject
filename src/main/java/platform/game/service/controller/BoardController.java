@@ -104,7 +104,7 @@ public class BoardController {
         }
         Date date = new Date();
 
-        Comment comment = new Comment();
+        Comment comment = new Comment(); 
         comment.setPost(postInfoRepository.findByPostId(postId));
         comment.setCommentContent(content);
         comment.setCreatedAt(date);
