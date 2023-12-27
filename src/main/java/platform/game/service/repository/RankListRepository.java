@@ -96,4 +96,19 @@ public interface RankListRepository extends JpaRepository<RankList, Integer> {
 
     @Query(value = "select count(*) from member where mem_attend >=0 and mem_attend <50", nativeQuery = true)
     int AttendRank0over();
+
+    @Query(value = "select count(*) from member where mem_total_point >= 1600", nativeQuery = true)
+    int PointRank1600over();
+
+    @Query(value = "select count(*) from member where mem_total_point >= 1200 and mem_total_point < 1600", nativeQuery = true)
+    int PointRank1200over();
+
+    @Query(value = "select count(*) from member where mem_total_point >= 800 and mem_total_point < 1200", nativeQuery = true)
+    int PointRank800over();
+
+    @Query(value = "select count(*) from member where mem_total_point >= 400 and mem_total_point < 800", nativeQuery = true)
+    int PointRank400over();
+
+    @Query(value = "select count(*) from member where mem_total_point >= 0 and mem_total_point < 400", nativeQuery = true)
+    int PointRank0over();
 }
