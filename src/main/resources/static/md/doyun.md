@@ -1,14 +1,10 @@
 # Hi I'm Doyun 👋
 
-### Java Back-End Developer   
-
 ### Contact   
 Email : User@gmail.com   
-Notion : Loading...   
-Velog : https://velog.io/@doyun1010
 
-### Top Languages
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Doyun9710&layout=compact&theme=dark"/>
+### LOL   
+![](https://i.namu.wiki/i/SpOFjtiQxoqG-rztLeB8A0DgSnuEUdKsXplqmPsgzCzjASfJyOc6NmS2juY0PrqSHGjd6JGKZ76vEidJqOOmmESTHT-4mmQB4EiULu2pI8fBOShcc9vrEqMcds1R2wQahrscO-3oiNFZos6U8aC-HA.webp)
 
 ### Working on
 <img src="https://github-readme-stats.vercel.app/api?username=Doyun9710&show_icons=true&theme=github_dark"/>

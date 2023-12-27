@@ -67,7 +67,7 @@ public class MyPageController {
         // }
 
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-        System.out.println();
+        model.addAttribute("member", member);
 
         try {
             markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( userid );
@@ -80,8 +80,6 @@ public class MyPageController {
         HtmlRenderer renderer = HtmlRenderer.builder().build();
 
         model.addAttribute("contents", renderer.render(document));
-
-        // System.out.println( "renderer : " + renderer.render(document) );
 
         return new ModelAndView("mypage");
     }

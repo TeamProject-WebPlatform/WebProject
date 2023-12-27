@@ -76,12 +76,13 @@
                             </div>
                         </div>
                         <div class="name profile_size">
-                            <p><samp>닉네임</samp></p>
-                            <p>Lv :<samp> 100</samp></p>
+                            <p th:text="${member.memNick}"></p>
+                            <p th:text="'Lv. ' + ${member.memLvl}"></p>
+                            <p th:text="${member.memEmail}"></p>
+                            <p th:text="'Point. ' + ${member.memCurPoint}"></p>
                         </div>
                         <div class="link profile_size">
-                            <input type="text" name="text" id="text" style="width: 200px;height: 300px;">
-                            <!-- <td th:text="${member.memNick}"></td> -->
+                            <!-- <input type="text" name="text" id="text" style="width: 200px;height: 300px;"> -->
                         </div>
                         <input type="button" value="프로필 수정">
                     </div>
