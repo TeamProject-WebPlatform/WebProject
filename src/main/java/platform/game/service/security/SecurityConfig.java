@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/board/**").permitAll()
+                        // .requestMatchers("/board/**").authenticated()
                         .requestMatchers("/rank/**").permitAll()
                         .requestMatchers("/steam/**").permitAll()
                         .requestMatchers("/kakao/**").permitAll()
