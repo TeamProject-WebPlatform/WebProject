@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import platform.game.service.model.TO.AttendRankTO;
 import platform.game.service.model.TO.LevelRankTO;
+import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.WinRankTO;
 
 @Mapper
@@ -102,6 +103,13 @@ public interface SqlMapperInter {
                         "LIMIT #{i}, 1")
         int setWinrateRank(int rank, int i);
 
+        @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
+                        "SELECT #{rank}, 3, mem_id, NOW() " +
+                        "FROM member " +
+                        "ORDER BY mem_total_point DESC " +
+                        "LIMIT #{i}, 1")
+        int setTotalPointRank(int rank, int i);
+
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranklist r join member m on r.rank_code=0 and m.mem_id=r.mem_id")
         public List<LevelRankTO> getLevelrank();
 
@@ -110,4 +118,7 @@ public interface SqlMapperInter {
 
         @Select("select r.rank, m.mem_userid, (m.mem_win_count/m.mem_game_count)*100 as winrate from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
         public List<WinRankTO> getWinrank();
+
+        @Select("select r.rank, m.mem_userid, (m.mem_win_count/m.mem_game_count)*100 as winrate from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
+        public List<PointRankTO> getPointrank();
 }

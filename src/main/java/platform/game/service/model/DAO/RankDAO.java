@@ -98,4 +98,21 @@ public class RankDAO {
         rankList.add(over90);
         return rankList;
     }
+
+    public ArrayList<Integer> getPointList(){
+        int over1600 = rankListRepository.PointRank1600over();
+        int over1200 = rankListRepository.PointRank1200over();
+        int over800 = rankListRepository.PointRank800over();
+        int over400 = rankListRepository.PointRank400over();
+        int over0 = rankListRepository.PointRank0over();
+
+        ArrayList<Integer> rankList = new ArrayList<Integer>();
+        rankList.add(over0);
+        rankList.add(over400);
+        rankList.add(over800);
+        rankList.add(over1200);
+        rankList.add(over1600);
+
+        return rankList;
+    }
 }
