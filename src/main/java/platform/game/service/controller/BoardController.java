@@ -183,7 +183,9 @@ public class BoardController {
 
         // Find the existing post by ID
         Optional<Post> optionalPost = postInfoRepository.findById(postId);
-
+        if(optionalPost.isPresent()){
+            
+        }
         Post post = optionalPost.get();
         // Update the post with the new values
         post.setPostTitle(title);
