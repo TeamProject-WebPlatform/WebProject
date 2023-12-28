@@ -7,8 +7,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
-        <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <!-- Chart -->
+        <script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+        <!-- Editor -->
+        <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+        <!-- Editor's Plugin -->
+        <script src="https://uicdn.toast.com/editor-plugin-chart/latest/toastui-editor-plugin-chart.min.js"></script>
         <!-- 메인 자바스크립트 -->
         <script src="../js/login_style.js"></script>
         <script src="../js/md_page.js"></script>
@@ -16,6 +21,7 @@
         <link rel="stylesheet" href="../css/md_style.css">
         <!-- TUI 에디터 CSS CDN -->
         <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+        <link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
         <title>마이페이지</title>
     </head>
     <body>
@@ -78,14 +84,32 @@
                             </div>
                         </div>
                         <div class="name profile_size">
+                            <!-- <p th:text="'Lv.' + ${member.memLvl} + '   ' + ${member.memNick}"></p> -->
                             <p th:text="${member.memNick}"></p>
                             <p th:text="'Lv. ' + ${member.memLvl}"></p>
                             <p th:text="${member.memEmail}"></p>
-                            <p th:text="'Point. ' + ${member.memCurPoint}"></p>
+                            <!-- <p th:text="${member.승률}"></p> -->
+                            <p th:text="'Point ' + ${member.memCurPoint} + 'p'"></p>
+
+                            <br>
+
+                            <p th:text="'연동 계정'"></p>
+                            <p th:text="'Kakao'"></p>
+                            <p th:text="'Riot'"></p>
+                            <p th:text="'Steam'"></p>
+
+                            <br>
+
+                            <p th:text="'뱃지'"></p>
+                            <img src="https://url.kr/4fkgmh" width="30" height="30"> <img src="https://url.kr/tr76jl" width="30" height="30"> <img src="" width="30" height="30"> 
+
+                            <br>
+
                         </div>
                         <div class="link profile_size">
                             <!-- <input type="text" name="text" id="text" style="width: 200px;height: 300px;"> -->
                         </div>
+                        <br>
                         <div>
                             <input id="riotID" type="text">
                             <button id="btn_searchRiotID">검색</button>

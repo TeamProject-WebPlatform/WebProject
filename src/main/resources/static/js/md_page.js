@@ -23,21 +23,21 @@ document.addEventListener('DOMContentLoaded', function(){
                         body : formData,
                     });
 
-                        // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
-                        const filename = await response.text();
-                        console.log('서버에 저장된 파일명 : ', filename);
-                        
-                        // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
-                        const imageUrl = `/mypage/tui-editor/image-print?filename=${filename}`;
-                        callback(imageUrl, 'image alt attribute');
-                        
-                    } catch (error) {
-                        console.error('업로드 실패 : ', error);
-                    }
+                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+                    const filename = await response.text();
+                    console.log('서버에 저장된 파일명 : ', filename);
+                    
+                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+                    const imageUrl = `/mypage/tui-editor/image-print?filename=${filename}`;
+                    callback(imageUrl, 'image alt attribute');
+                    
+                } catch (error) {
+                    console.error('업로드 실패 : ', error);
                 }
             }
-            /* end of hooks */
-        });
+        }
+        /* end of hooks */
+    });
 
     document.getElementById('data').addEventListener('click', function () {
         if (confirm("정보를 수정하시겠습니까?") == true){    //확인

@@ -55,6 +55,7 @@ public class MypageAction implements BoardAction {
     public String getMarkdownValueFormLocal(String PATH, String userid) throws Exception {
         checkUserMarkdownFile(PATH, userid);
 
+        // AWS 환경
         // StringBuilder stringBuilder = new StringBuilder();
         // ClassPathResource classPathResource = new ClassPathResource(PATH + "\\" + userid + ".md" );
         // BufferedReader br = Files.newBufferedReader(Paths.get(classPathResource.getURI()));

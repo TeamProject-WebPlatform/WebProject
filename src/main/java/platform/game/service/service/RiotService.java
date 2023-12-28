@@ -64,9 +64,9 @@ public class RiotService {
                 System.out.println("Tier: " + tier);
                 System.out.println("Rank: " + rank);
                 System.out.println("League Points: " + leaguePoints);
-                System.out.println();
             }
         } catch (IOException e){
+            System.out.println( "[에러] RiotService" );
             e.printStackTrace();
             return null;
         }
