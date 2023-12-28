@@ -26,9 +26,13 @@
                 <h1 class="logo"><a href="/"><img src="../img/logo.png" alt="logo"></a></h1>
                 <div id="login">
                     <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
-                    <p class="log"><a href="/login">로그인</a></p>
+                    <p class="log"><a href="login">로그인</a></p>
                     <div class="logto">
-                        <p class="login_info">Tokarev &nbsp;&nbsp;<i class="fa-solid fa-caret-down"></i></p>
+                        <p class="login_info">
+                            <div th:if="${nickname}">
+                                <p th:text="${nickname}"></p>
+                            </div> &nbsp;&nbsp;
+                            <i class="fa-solid fa-caret-down"></i></p>
                         <ul class="login_info_list">
                             <li><a href="#">회원정보관리</a></li>
                             <li><a href="mypage/doyun">프로필</a></li>
@@ -37,36 +41,36 @@
                         </ul>
                     </div>
                 </div>
+                <nav>
+                    <ul class="row">
+                        <li><a href="../board/notice">공지사항</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/fight">대전</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="board/team">협동</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/list">게시판</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../rank">랭킹</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
             </header>
-            <nav>
-                <ul class="row">
-                    <li><a href="../board/notice">공지사항</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../board/fight">대전</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../board/team">협동</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li class="action"><a href="../board/list">게시판</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../rank">랭킹</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
             <section>
                 <div class="row content">
                     <div class="list">
