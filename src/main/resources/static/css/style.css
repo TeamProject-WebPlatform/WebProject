@@ -19,7 +19,9 @@ a{
 .row{
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    /* justify-content: center; */
+    align-items: stretch;
+    justify-content:space-around
 }
 
 body{
@@ -27,7 +29,7 @@ body{
     font-size: 14px;
     background-color: #fff;
     /* color:#fff; */
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
 }
 
 #web{
@@ -162,14 +164,14 @@ nav{
     clear: both;
 } */
 nav > ul{
-    width: 1380px;
+    /* width: 1380px; */
     /* height: 10vh; */
     /* margin: 0 auto; */
     background-color: #f0f0f0;
-
+    /* justify-content:space-around; */
     /* float: left; */
     /* outline: 1px dotted red; */
-    justify-content: center;
+    
 }
 nav > ul > li{
     width: 200px;
@@ -178,10 +180,9 @@ nav > ul > li{
     text-align: center;
     line-height: 50px;
     box-sizing: border-box;
-    margin-left: 45px;
+    /* margin-left: 45px; */
     /* outline:1px solid black; */
     font-size: 20px;
-    position: relative;
     /* border-bottom: 1px solid black ; */
     /* float: left; */
     /* flex: 1 1 auto; */
@@ -199,35 +200,54 @@ nav > ul > li:hover{
     width: 100%;
     /* height: 85vh; */
     /* margin: 0 auto; */
-    /* outline: 1px solid red; */
+    outline: 1px solid red;
     /* background-color: rgba(255, 255, 255, .5); */
     /* opacity: .5; */
-    /* flex: 1 0 0; */
     /* height: 100vh; */
 }
-
-.sub_main{
-    width: 22px;
+.main{
+    max-width: 1920px;
+    /* flex: 0 0 1; */
+    flex: 0 0 100%;
+    margin: 0 auto;
+}
+.left_main{
+    width: 300px;
+    /* flex: 0 0 1; */
+    /* height: 100vh; */
+    /* outline: 1px solid red; */
+}
+.main_list{
+    width: 250px;
+    margin: 0 auto;
+    height: calc(100% - 50%);
     outline: 1px solid red;
 }
 
-.main{
-    width: 1380px;
+.center_main{
+    width: 1320px;
     /* height: 85vh; */
-    margin: 0 auto;
+    /* margin: 0 auto; */
     outline: 1px solid red;
-    position: relative;
+    /* position: relative; */
     /* background-color: rgba(43,44,47,0.5); */
 }
+
+.right_main{
+    width: 300px;
+    /* height: 100vh; */
+    outline: 1px solid red;
+}
+
 .user{
     width: 100%;
 }
 
 .user_profile{
     width: 20%;
-    margin-left: 4%;
+    /* margin-left: 4%; */
     margin-top: 1%;
-    display:inline-block;
+    /* display:inline-block; */
     outline: 1px solid black;
 }
 
@@ -293,7 +313,7 @@ nav > ul > li:hover{
 .nik {
     /* border: 1px solid red; */
     /* display: inline-block; */
-    margin-left: 10px; /* Adjust the margin as needed */
+    margin-left: 10px; /*Adjust the margin as needed*/
 }
 
 .user_info > .bagdge {
@@ -311,7 +331,15 @@ nav > ul > li:hover{
     /* background-color: #222327; */
 }
 .battle{
-    height: 35vh;
+    height: 30vh;
     border: 1px solid black;
     /* background-color: rgba(43,44,47,0.5); */
+}
+
+.battle_user{
+    width: 640px;
+    height: 25vh;
+    margin-top: 2.5vh;
+    /* height: calc(100% - 50px); */
+    outline: 1px solid red;
 }
