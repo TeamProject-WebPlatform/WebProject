@@ -1,22 +1,5 @@
 @charset "utf-8";
 
-:root{
-    --bg-black-900:#ffffff;
-    --bg-black-100:#353535;
-    /* --bg-black-50:#2b2c2f; */
-    /* --bg-black-50:rgb(53, 70, 90); */
-    /* --bg-black-gradient: linear-gradient(rgb(9, 12, 21)10%,rgb(26, 35, 52)30%, rgb(71, 92, 123)60%,rgb(143,167,191)90%,rgb(185, 208, 226)100%); */
-    
-    --bg-opacity: rgba(43,44,47,0.5);
-    --text-black-white:#ffffff;
-    --text-black-black:#000000;
-    --outer-shadow: 3px 3px 3px #222327, -3px -3px  3px #363636;
-    --outer-shadow-0: 0 0 0 #222327, 0 0 0 #363636;
-    --inner-shadow: inset 3px 3px 3px #222327, inset -3px -3px 3px #363636;
-    --inner-shadow-0: inset 0 0 0 #222327, inset 0 0 0 #363636;
-}
-
-
 *{
     margin: 0;
     padding: 0;

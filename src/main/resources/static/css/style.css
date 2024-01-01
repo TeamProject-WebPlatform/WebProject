@@ -1,16 +1,5 @@
 @charset "utf-8";
 
-:root{
-    --bg-opacity: rgba(43,44,47,0.5);
-    --text-black-white:#ffffff;
-    --text-black-black:#000000;
-    --outer-shadow: 3px 3px 3px #222327, -3px -3px  3px #363636;
-    --outer-shadow-0: 0 0 0 #222327, 0 0 0 #363636;
-    --inner-shadow: inset 3px 3px 3px #222327, inset -3px -3px 3px #363636;
-    --inner-shadow-0: inset 0 0 0 #222327, inset 0 0 0 #363636;
-}
-
-
 *{
     margin: 0;
     padding: 0;
@@ -31,22 +20,6 @@ a{
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-}
-
-.outer-shadow{
-    box-shadow: var(--outer-shadow);
-}
-
-.inner-shadow{
-    box-shadow: var(--inner-shadow);
-}
-
-.hover-in-shadow{
-    position: relative;
-    z-index: 1;
-}
-.hover-in-shadow:hover{
-    box-shadow: var(--outer-shadow-0);
 }
 
 body{
@@ -128,7 +101,6 @@ header > h1{
     cursor: pointer;
     /* color: var(--text-black-white); */
     /* outline:1px solid red; */
-    background-color: #363636(--text-black-white);
     transition: all 0.2s;
 }
 .login_info_list{
@@ -158,7 +130,7 @@ header > h1{
 .login_info_list > li{
     width: 15vh;
     height: 4vh;
-    color: var(--text-black-black);
+    color: black;
     display : flex;
     justify-content : center;
     align-items : center;
@@ -169,7 +141,7 @@ header > h1{
 .login_info_list > li:hover{
     /* font-size: 25px; */
     overflow: visible;
-    color: var(--text-black-black);
+    color: black;
     /* border-bottom: 2px solid white; */
 }
 
@@ -177,8 +149,7 @@ header > h1{
 /* 네비게이션 메뉴 */
 nav{
     /* position: absolute; */
-    width: 1380px;
-    margin: 0 auto;
+    width: 100%;
     /* margin-top: 10%; */
     /* outline: 1px solid red; */
     /* background-color: #f0f0f0; */
@@ -191,6 +162,7 @@ nav{
 } */
 nav > ul{
     width: 1380px;
+    margin: 0 auto;
     /* height: 10vh; */
     /* margin: 0 auto; */
     background-color: #f0f0f0;
@@ -224,7 +196,7 @@ nav > ul > li:hover{
 
 /* 중앙 컨텐츠 */
 .content{
-    /* width: 100%; */
+    width: 100%;
     /* height: 85vh; */
     /* margin: 0 auto; */
     /* outline: 1px solid red; */
@@ -329,7 +301,7 @@ nav > ul > li:hover{
 
 .user_content{
     font-size: 30px;
-    height: 18vh;
+    /* height: 18vh; */
     border: 1px solid black;
     /* background-color: #222327; */
 }
