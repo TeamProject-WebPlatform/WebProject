@@ -149,7 +149,8 @@ header > h1{
 /* 네비게이션 메뉴 */
 nav{
     /* position: absolute; */
-    width: 100%;
+    width: 1380px;
+    margin: 0 auto;
     /* margin-top: 10%; */
     /* outline: 1px solid red; */
     /* background-color: #f0f0f0; */
@@ -162,7 +163,6 @@ nav{
 } */
 nav > ul{
     width: 1380px;
-    margin: 0 auto;
     /* height: 10vh; */
     /* margin: 0 auto; */
     background-color: #f0f0f0;
@@ -191,7 +191,7 @@ nav > ul > li:hover{
     font-size: 35px;
     /* color: var(--text-black-white); */
     /* background-color: rgb(0, 73, 140); */
-    border-bottom: 1px solid var(--text-black-black);
+    border-bottom: 1px solid black;
 }
 
 /* 중앙 컨텐츠 */
@@ -202,15 +202,20 @@ nav > ul > li:hover{
     /* outline: 1px solid red; */
     /* background-color: rgba(255, 255, 255, .5); */
     /* opacity: .5; */
-    flex: 1 0 0;
+    /* flex: 1 0 0; */
     /* height: 100vh; */
+}
+
+.sub_main{
+    width: 22px;
+    outline: 1px solid red;
 }
 
 .main{
     width: 1380px;
     /* height: 85vh; */
     margin: 0 auto;
-    /* outline: 1px solid red; */
+    outline: 1px solid red;
     position: relative;
     /* background-color: rgba(43,44,47,0.5); */
 }
