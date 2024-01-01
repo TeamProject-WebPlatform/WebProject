@@ -229,7 +229,7 @@ nav > ul > li:hover{
 }
 
 .center_main{
-    width: 1320px;
+    max-width: 1320px;
     /* height: 85vh; */
     /* margin: 0 auto; */
     outline: 1px solid darkgreen;
