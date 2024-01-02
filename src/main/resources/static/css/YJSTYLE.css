@@ -210,17 +210,13 @@ nav > ul > li:hover{
     position: relative;
     /* background-color: rgba(43,44,47,0.5); */
 }
-.lnb {
+#lnb {
     outline: 1px solid red;
-    width: calc(100vh - 1380px)/2;
-    height: 100%;
 }
-.rnb {
+#rnb {
     outline: 1px solid red;
-    width: calc(100vh - 1380px)/2;
-    height: 100%;
 }
-.footer{
+#footer{
     outline: 1px solid red;
     height: 150px;
 }

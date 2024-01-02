@@ -1,10 +1,9 @@
 const setPage = async function (page) {
     switch (page) {
-        case 0:
+        case "main":
             // 메인 페이지
             setSwiperWrapper();
             setSwiper();
-            
             break;
         case 1:
             // 공지사항 게시판
