@@ -57,6 +57,10 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
+    document.getElementById("btn_loginRiot").addEventListener("click", function() {
+        window.location.href = "/loginRiot";
+    });
+
     document.getElementById("btn_searchRiotID").addEventListener("click", function() {
         var summonerName = document.getElementById("riotID").value;
 

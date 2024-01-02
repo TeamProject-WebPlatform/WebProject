@@ -161,18 +161,10 @@ public class MyPageController {
         }
     }
 
-    @RequestMapping("/check-cookie")
+    @RequestMapping("/click_btn_loginRiot")
     public String checkCookie(@CookieValue(name = "jwtTokenCookie", defaultValue = "defaultValue") String myCookieValue) {
-        System.out.println( "checkCookie()");
-
-        String valueID = jwtManager.extractToken("id", myCookieValue);
-        String valuePW = jwtManager.extractToken("password", myCookieValue);
-        String valueRo = jwtManager.extractToken("role", myCookieValue);
-
-        System.out.println( "토큰에서 받아온 ID" + valueID );
-        System.out.println( "토큰에서 받아온 PW" + valuePW );
-        System.out.println( "토큰에서 받아온 Ro" + valueRo );
-
-        return "Value of myCookie: " + myCookieValue;
+        // 버튼이 클릭되면 다른 사이트의 로그인 페이지로 리다이렉션
+        String otherSiteLoginUrl = "https://authenticate.riotgames.com/?client_id=prod-xsso-leagueoflegends&code_challenge=aoQCOQA8tWSFLkt9bgoqQroU0a8YwNr1gBwrvHS90mw&method=riot_identity&platform=web&redirect_uri=https%3A%2F%2Fauth.riotgames.com%2Fauthorize%3Fclient_id%3Dprod-xsso-leagueoflegends%26code_challenge%3DaoQCOQA8tWSFLkt9bgoqQroU0a8YwNr1gBwrvHS90mw%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fxsso.leagueoflegends.com%252Fredirect%26response_type%3Dcode%26scope%3Dopenid%2520account%2520email%26state%3Df136ad1e5210381586c7816d37&security_profile=low";
+        return "redirect:" + otherSiteLoginUrl;
     }
 }
