@@ -42,7 +42,6 @@ public class MainController {
     @Autowired
     private CommentInfoRepository commentInfoRepository;
 
-
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
@@ -117,7 +116,6 @@ public class MainController {
     @GetMapping("/getBoardViewFragment")
     public String getBoardViewFragment(@RequestParam(name = "post_id") int postId, Model model) {
         // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
-        
 
         return "fragments/content/board/view";
     }
