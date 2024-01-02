@@ -11,27 +11,25 @@
         <script src="./js/login_style.js"></script>
 
         <!-- <link rel="stylesheet" type="text/css" href="../css/board_view.css"> -->
-        <!-- 댓글 로그인 확인 스크립트 -->
+        <!-- 로그인 확인 스크립트 -->
         <script th:inline="javascript">
             var isLoggedIn = [[${loginCheck}]]; // Thymeleaf로부터 loginCheck 값을 받아옴
         </script>
-        <!--댓글 로직-->
+        <!-- 댓글 작성 확인 함수 부분-->
         <script type="text/javascript">
             window.onload = function() {
                 document.getElementById('cbtn').onclick = function() {
                     checkLogin();
-                    document.cfrm.submit();
                 };
 	        };
         </script>
         <script>
             function checkLogin() {
                 console.log(isLoggedIn);
-                if (isLoggedIn) {
-                    // 로그인 상태일 때 댓글 등록 처리
-                    // submitComment();
+                if (isLoggedIn == "true") {
                     document.getElementsByName("ccontent").value;
                     document.getElementsByName("postId").value;
+                    document.cfrm.submit();
                 } else {
                     // 로그인 상태가 아닐 때 로그인 여부 확인 창 표시
                     var userResponse = confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?");
@@ -44,22 +42,12 @@
                 }
             }
         </script>
-        <script>
-            function modifyPost(postId) {
-                if (postId) {
-                    console.log(postId);
-                    location.href = 'modify?post_id=' + postId;
-                } else {
-                    alert('유효한 post_id가 없습니다.');
-                }
-            }
-        </script>
-        
+        <!--쓰기버튼 함수-->
         <script>
             function checkLoginAndNavigate() {
                 if (isLoggedIn === "true") {
                     // 로그인이 되어 있으면 글쓰기 페이지로 이동
-                    location.href = 'write';
+                    location.href = '../board/write';
                 } else {
                     // 로그인이 안되어 있으면 로그인 페이지로 이동
                     alert('로그인이 필요합니다.');
@@ -88,7 +76,7 @@
     </header>
     <nav>
         <ul class="row">
-            <li><a href="../board/notice">공지사항</a>
+            <li><a href="../board/list?board_cd=notice">공지사항</a>
                 <ul>
                     <li></li>
                 </ul>
@@ -103,7 +91,7 @@
                     <li></li>
                 </ul>
             </li>
-            <li class="action"><a href="../board/list">게시판</a>
+            <li class="action"><a href="../board/list?board_cd=free">게시판</a>
                 <ul>
                     <li></li>
                 </ul>
@@ -173,10 +161,12 @@
                     
                     <div class="btn_area">
                         <div class="align_left">
-                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'"/>
+                            <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='list?board_cd=${post.boardCd}'|"/> -->
+                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list?board_cd=free'"/>
+                            <h2 th:text="|window.location.href='list?board_cd=${post.boardCd}'|"></h2>
                         </div>
                         <div class="align_right">
-                            <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='modify?post_id=${post.postId}'|" />
+                            <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='modify?post_id=${post.postId}'|"/>
                             <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='delete?post_id=${post.postId}'|"/>
                             <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"/>
                         </div>

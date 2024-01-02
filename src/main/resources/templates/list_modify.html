@@ -10,16 +10,12 @@
         <link rel="stylesheet" type="text/css" href="../css/list_style.css">
         <script src="./js/login_style.js"></script>
         <script type="text/javascript">
-            window.onload = function() {
-                document.getElementById('mbtn').onclick = function() {
-                    //alert('click');
-                    if( document.mfrm.subject.value.trim() == '' ) {
-                        alert('제목을 입력하세요.');
-                        return;
-                    }
+            function modifyPost(){
+                var confirmation = confirm('게시물을 수정하시겠습니까?');
+                if (confirmation) {
                     document.mfrm.submit();
-                };
-            };
+                }
+            }
         </script>
         <title>게시판</title>
     </head>
@@ -43,22 +39,22 @@
             </header>
             <nav>
                 <ul class="row">
-                    <li><a href="../board/notice">공지사항</a>
+                    <li><a href="../board/list?board_cd=notice">공지사항</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="../board/fight">대전</a>
+                    <li><a href="../board/list?board_cd=fight">대전</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li><a href="../board/team">협동</a>
+                    <li><a href="../board/list?board_cd=team">협동</a>
                         <ul>
                             <li></li>
                         </ul>
                     </li>
-                    <li class="action"><a href="../board/list">게시판</a>
+                    <li><a href="../board/list?board_cd=free">게시판</a>
                         <ul>
                             <li></li>
                         </ul>
@@ -79,8 +75,9 @@
                         </div>
                         <div class="con_menu"></div>
                         <div class="con_txt">
-                            <form action="modify_ok?post_id=${post.postId}" method="post" name="mfrm">
-                                <input type="hidden" name="seq" value="${post.postId}" />
+                            <!-- <form action="modify_ok?post_id=${post.postId}" method="post" name="mfrm"> -->
+                            <form action="modify_ok" method="post" name="mfrm">
+                                <input type="hidden" name="post_id" th:value="${post.postId}" />
                                 <!-- <input type="hidden" name="cpage" value="<%= cpage %>" /> -->
                                 <div class="contents_sub">	
                                     <!--게시판-->
@@ -103,11 +100,12 @@
                                     
                                     <div class="btn_area">
                                         <div class="align_left">
-                                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'" />
+                                            <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'" /> -->
+                                            <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='list?board_cd=${post.boardCd}'|" /> -->
                                             <input type="button" value="보기" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='view?post_id=${post.postId}'|" />
                                         </div>
                                         <div class="align_right">
-                                            <input type="button" id="mbtn" value="수정" class="btn_write btn_txt01" style="cursor: pointer;" />
+                                            <input type="button" id="mbtn" value="수정" class="btn_write btn_txt01" style="cursor: pointer;" onclick="modifyPost()"/>
                                         </div>
                                     </div>
                                     <!--//게시판-->
