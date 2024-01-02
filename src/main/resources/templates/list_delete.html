@@ -11,7 +11,6 @@
         <script src="./js/login_style.js"></script>
         <script type="text/javascript">
             function deletePost() {
-                // 삭제 버튼 클릭 시 확인 및 폼 제출
                 var confirmation = confirm('게시물을 삭제하시겠습니까?');
                 if (confirmation) {
                     document.dfrm.submit();
@@ -94,9 +93,7 @@
                                     
                                     <div class="btn_area">
                                         <div class="align_left">
-                                            <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list?cpage=<%=cpage %>'" /> -->
-                                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'" />
-                                            <input type="button" value="보기" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='view?post_id=${post.postId}'|" />
+                                            <a th:href="@{list(board_cd=${post.boardCd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
                                         </div>
                                         <div class="align_right">
                                             <input type="button" id="dbtn" value="삭제" class="btn_write btn_txt01" style="cursor: pointer;" onclick="deletePost()"/>
