@@ -230,6 +230,7 @@ nav > ul > li:hover{
 
 .center_main{
     max-width: 1320px;
+    width: 1320px;
     /* height: 85vh; */
     /* margin: 0 auto; */
     outline: 1px solid darkgreen;
@@ -248,7 +249,7 @@ nav > ul > li:hover{
     justify-content:space-around;
 }
 
-.user_profile{
+.profile{
     width: 20%;
     /* margin-left: 4%; */
     margin-top: 1%;
@@ -256,13 +257,13 @@ nav > ul > li:hover{
     outline: 1px solid black;
 }
 
-.profile{
+.profile-header{
     /* width: 19%; */
     /* border: 1px solid red; */
     
 }
 
-.user_icon{
+.profile-image{
     border: 1px solid black;
     width: 18vh;
     height: 18vh;
@@ -289,14 +290,14 @@ nav > ul > li:hover{
     border: 1px solid red; 
     display: inline-block;
 }
-.user_info > .bagdge{
+.user_info > .badge{
     width: 50px;
     height: 50px;
     display: inline-block;
     object-fit: cover;
 }*/
 
-.user_info {
+.profile-user_info {
     /* width: 200px; */
     margin: 0 auto;
     font-size: 20px;
@@ -307,7 +308,7 @@ nav > ul > li:hover{
     justify-content: center;
 }
 
-.user_level {
+.profile-user_level {
     /* width: 80px; */
     /* margin-top: 2%; */
     /* margin-bottom: 2%; */
@@ -315,13 +316,13 @@ nav > ul > li:hover{
     /* outline: 1px solid red; */
 }
 
-.user_nick {
+.profile-user_nick {
     /* border: 1px solid red; */
     /* display: inline-block; */
     margin-left: 10px; /*Adjust the margin as needed*/
 }
 
-.user_info > .bagdge {
+.profile-user_info > .badge {
     width: 50px;
     height: 50px;
     /* display: inline-block; */
@@ -329,13 +330,13 @@ nav > ul > li:hover{
     margin-left: 10px; /* Adjust the margin as needed */
 }
 
-.user_content{
+.profile-main{
     font-size: 30px;
     /* height: 18vh; */
     border: 1px solid black;
     /* background-color: #222327; */
 }
-.battle{
+.board{
     /* height: 30vh; */
     border: 1px solid black;
     /* background-color: rgba(43,44,47,0.5); */
@@ -345,4 +346,9 @@ nav > ul > li:hover{
     outline: 1px solid red;
     height:250px;
     width:50%;
+}
+
+#footer{
+    outline: 1px solid red;
+    height: 150px;
 }

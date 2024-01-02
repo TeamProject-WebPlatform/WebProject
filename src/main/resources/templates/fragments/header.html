@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <body>
 
     <header th:fragment="headerFragment" id="header">
         <script src="./js/login_style.js"></script>
-        <h1 class="logo"><a href="/"><img src="../img/logo.png" alt="logo"></a></h1>
+        <h1 class="logo"><a href="/"><img src="./img/logo.png" alt="logo"></a></h1>
         <div id="login">
             <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
             <p class="log"><a href="login">로그인</a></p>
             <div class="logto">
                 <p class="login_info">
-                    <div th:if="${nickname}">
-                        <p th:text="${nickname}"></p>
-                    </div> &nbsp;&nbsp;
-                    <i class="fa-solid fa-caret-down"></i></p>
+                <div th:if="${nickname}">
+                    <p th:text="${nickname}"></p>
+                </div> &nbsp;&nbsp;
+                <i class="fa-solid fa-caret-down"></i></p>
                 <ul class="login_info_list">
-                    <li><a href="javascript:;">회원정보관리</a></li>
+                    <li><a href="#">회원정보관리</a></li>
                     <li><a href="mypage/doyun">프로필</a></li>
                     <li><a href="board/shop">아이템 샵</a></li>
                     <li class="logout"><a href="/logout">로그아웃</a></li>
@@ -25,4 +26,5 @@
     </header>
 
 </body>
+
 </html>

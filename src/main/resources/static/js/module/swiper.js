@@ -7,7 +7,7 @@ const setSwiper = function () {
         spaceBetween: 30,
         centeredSlides: true,
         autoplay: {
-            delay: 5000,
+            delay: 3000,
             disableOnInteraction: false
         },
         pagination: {
@@ -20,8 +20,8 @@ const setSwiper = function () {
         },
         on: {
             autoplayTimeLeft(s, time, progress) {
-                progressCircle.style.setProperty("--progress", 1 - progress);
-                progressContent.textContent = `${Math.ceil(time / 1000)}s`;
+                // progressCircle.style.setProperty("--progress", 1 - progress);
+                // progressContent.textContent = `${Math.ceil(time / 1000)}s`;
             }
         }
     });
@@ -64,9 +64,9 @@ const createSwiperProfile = function (nickname) {
             <a href="/mypage/${memNickname}">
                 <div class="profile-header">
                     <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
-                    <div class="profile-info">
-                        <p class="profile-level">Lv : ${memLevel}</p>
-                        <p class="profile-nick">${memNickname}</p>
+                    <div class="profile-user_info">
+                        <p class="profile-user_level">Lv : ${memLevel}</p>
+                        <p class="profile-user_nick">${memNickname}</p>
                         <img class="badge" src="../img/${memSymbolImageName}" alt="NO-SYMBOL">
                     </div>
                 </div>
