@@ -33,7 +33,7 @@ public class MainController {
 
     @RequestMapping({"/","/home"})
     public ModelAndView main() {
-        ModelAndView mav = new ModelAndView("yj-index");
+        ModelAndView mav = new ModelAndView("index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();

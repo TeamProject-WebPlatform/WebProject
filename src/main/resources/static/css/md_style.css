@@ -196,8 +196,9 @@ nav{
     /* position: absolute; */
     width: 1380px;
     margin: 0 auto;
+    /* margin-top: 10%; */
     /* outline: 1px solid red; */
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
     margin-bottom: 1%;
 }
 /* nav::after{
@@ -209,7 +210,8 @@ nav > ul{
     width: 1380px;
     /* height: 10vh; */
     /* margin: 0 auto; */
-    
+    background-color: #f0f0f0;
+
     /* float: left; */
     /* outline: 1px dotted red; */
     justify-content: center;
@@ -240,7 +242,7 @@ nav > ul > li:hover{
 .action{
     font-size: 30px;
     /* color: rgb(0, 73, 140); */
-    border-bottom: 1px solid var(--text-black-blackrgb);
+    border-bottom: 1px solid var(--text-black-black);
 }
 
 /* 프로필 부분 */

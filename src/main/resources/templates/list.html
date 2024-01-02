@@ -34,7 +34,12 @@
             <header>
                 <h1 class="logo"><a href="/"><img src="../img/logo.png" alt="logo"></a></h1>
                 <div id="login">
+<<<<<<< HEAD
                     <p class="log"><a href="/login">로그인</a></p>
+=======
+                    <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
+                    <p class="log"><a href="login">로그인</a></p>
+>>>>>>> 9e684c039fe011e18184dc1373cb7c3e6f07f874
                     <div class="logto">
                         <p class="login_info">
                             <div th:if="${nickname}">
@@ -49,36 +54,36 @@
                         </ul>
                     </div>
                 </div>
+                <nav>
+                    <ul class="row">
+                        <li><a href="../board/notice">공지사항</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/fight">대전</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="board/team">협동</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/list">게시판</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../rank">랭킹</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
             </header>
-            <nav>
-                <ul class="row">
-                    <li><a href="../board/list?board_cd=notice">공지사항</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../board/list?board_cd=fight">대전</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../board/list?board_cd=team">협동</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../board/list?board_cd=free">게시판</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../rank">랭킹</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
             <section>
                 <div class="row content">
                     <div class="list">
@@ -90,6 +95,8 @@
                             <div class="contents_sub">
                                 <div class="board_top">
                                     <div class="bold">총 <span class="txt_orange" th:text="${#lists.size(lists)}"></span>건</div>
+                                    <input type="text" name="board_search" id="board_search">
+                                    <input type="button" value="검색">
                                 </div>
                         
                                 <!--게시판-->
