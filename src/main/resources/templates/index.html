@@ -16,6 +16,10 @@
         <link rel="stylesheet" href="./css/swiper.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
         <title>메인페이지</title>
+        <script>
+            var rol = "[[${rol}]]";
+            console.log(rol);
+        </script>
     </head>
     <body>
         <div id="web">
@@ -68,16 +72,16 @@
                 <div class="row content">
                     <div class="main">
                         <div class="swiper mySwiper">
-                            <div class="swiper-wrapper">
+                            <div th:each="to, i : ${rol}" th:if="${i.index<4}" class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                    <div class="row user">
-                                        <div class="user_profile">
-                                            <a href="/mypage/doyun">
+                                    <div  class="row user">
+                                        <div th:each="to, i : ${rol}" th:if="${i.index<4}" class="user_profile">
+                                            <a th:href="@{/mypage/{nickname}(nickname=${to.mem_nick})}">
                                                 <div class="profile">
                                                     <p class="icon"><img src="../img/doyun_icon.png" alt="#"></p>
                                                     <div class="user_info">
-                                                        <p class="level">Lv : 100</p>
-                                                        <p class="nik">doyun</p>
+                                                        <p th:text="'LV' + ${to.mem_lvl}"class="level"></p>
+                                                        <p th:text="${to.mem_nick}" class="nik"></p>
                                                         <img class="bagdge" src="../img/starbucks.png" alt="스벅">
                                                     </div>
                                                     <!-- <div class="user_bagdge">
@@ -89,59 +93,18 @@
                                                     </p>
                                                 </div>
                                             </a>
-                                        </div>
-                                        <div class="user_profile">
-                                            <a href="#">
-                                                <div class="profile">
-                                                    <p class="icon"><img src="" alt="#"></p>
-                                                    <div class="user_info">
-                                                        <p class="level">Lv : 70</p>
-                                                        <p class="nik">때릴거야?</p>
-                                                        <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                    </div>
-                                                </div>
-                                                <div class="user_content">
-                                                    <p></p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="user_profile">
-                                            <div class="profile">
-                                                <p class="icon"><img src="" alt="#"></p>
-                                                <div class="user_info">
-                                                    <p class="level">Lv : 20</p>
-                                                    <p class="nik">이론마스터</p>
-                                                    <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                </div>
-                                            </div>
-                                            <div class="user_content">
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="user_profile">
-                                            <div class="profile">
-                                                <p class="icon"><img src="" alt="#"></p>
-                                                <div class="user_info">
-                                                    <p class="level">Lv : 49</p>
-                                                    <p class="nik">전투는실전</p>
-                                                    <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                </div>
-                                            </div>
-                                            <div class="user_content">
-                                                
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="row user">
-                                        <div class="user_profile">
-                                            <a href="/mypage/doyun">
+                                        <div th:each="to, i : ${rol}" th:if="${i.index>=4 && i.index<8}" class="user_profile">
+                                            <a th:href="@{/mypage/{nickname}(nickname=${to.mem_nick})}">
                                                 <div class="profile">
                                                     <p class="icon"><img src="../img/doyun_icon.png" alt="#"></p>
                                                     <div class="user_info">
-                                                        <p class="level">Lv : 100</p>
-                                                        <p class="nik">doyun</p>
+                                                        <p th:text="'LV' + ${to.mem_lvl}"class="level"></p>
+                                                        <p th:text="${to.mem_nick}" class="nik"></p>
                                                         <img class="bagdge" src="../img/starbucks.png" alt="스벅">
                                                     </div>
                                                     <!-- <div class="user_bagdge">
@@ -153,59 +116,18 @@
                                                     </p>
                                                 </div>
                                             </a>
-                                        </div>
-                                        <div class="user_profile">
-                                            <a href="#">
-                                                <div class="profile">
-                                                    <p class="icon"><img src="" alt="#"></p>
-                                                    <div class="user_info">
-                                                        <p class="level">Lv : 70</p>
-                                                        <p class="nik">철권고수</p>
-                                                        <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                    </div>
-                                                </div>
-                                                <div class="user_content">
-                                                    <p></p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="user_profile">
-                                            <div class="profile">
-                                                <p class="icon"><img src="" alt="#"></p>
-                                                <div class="user_info">
-                                                    <p class="level">Lv : 100</p>
-                                                    <p class="nik">이론첼린저</p>
-                                                    <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                </div>
-                                            </div>
-                                            <div class="user_content">
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="user_profile">
-                                            <div class="profile">
-                                                <p class="icon"><img src="" alt="#"></p>
-                                                <div class="user_info">
-                                                    <p class="level">Lv : 60</p>
-                                                    <p class="nik">스나이퍼</p>
-                                                    <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                </div>
-                                            </div>
-                                            <div class="user_content">
-                                                
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="row user">
-                                        <div class="user_profile">
-                                            <a href="/mypage/doyun">
+                                        <div th:each="to, i : ${rol}" th:if="${i.index>=8 && i.index<12}" class="user_profile">
+                                            <a th:href="@{/mypage/{nickname}(nickname=${to.mem_nick})}">
                                                 <div class="profile">
                                                     <p class="icon"><img src="../img/doyun_icon.png" alt="#"></p>
                                                     <div class="user_info">
-                                                        <p class="level">Lv : 100</p>
-                                                        <p class="nik">doyun</p>
+                                                        <p th:text="'LV' + ${to.mem_lvl}"class="level"></p>
+                                                        <p th:text="${to.mem_nick}" class="nik"></p>
                                                         <img class="bagdge" src="../img/starbucks.png" alt="스벅">
                                                     </div>
                                                     <!-- <div class="user_bagdge">
@@ -217,59 +139,18 @@
                                                     </p>
                                                 </div>
                                             </a>
-                                        </div>
-                                        <div class="user_profile">
-                                            <a href="#">
-                                                <div class="profile">
-                                                    <p class="icon"><img src="" alt="#"></p>
-                                                    <div class="user_info">
-                                                        <p class="level">Lv : 70</p>
-                                                        <p class="nik">배린이</p>
-                                                        <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                    </div>
-                                                </div>
-                                                <div class="user_content">
-                                                    <p></p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="user_profile">
-                                            <div class="profile">
-                                                <p class="icon"><img src="" alt="#"></p>
-                                                <div class="user_info">
-                                                    <p class="level">Lv : 120</p>
-                                                    <p class="nik">헤드헌터</p>
-                                                    <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                </div>
-                                            </div>
-                                            <div class="user_content">
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="user_profile">
-                                            <div class="profile">
-                                                <p class="icon"><img src="" alt="#"></p>
-                                                <div class="user_info">
-                                                    <p class="level">Lv : 49</p>
-                                                    <p class="nik">데바데석유</p>
-                                                    <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                </div>
-                                            </div>
-                                            <div class="user_content">
-                                                
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
                                     <div class="row user">
-                                        <div class="user_profile">
-                                            <a href="/mypage/doyun">
+                                        <div th:each="to, i : ${rol}" th:if="${i.index>=12}" class="user_profile">
+                                            <a th:href="@{/mypage/{nickname}(nickname=${to.mem_nick})}">
                                                 <div class="profile">
                                                     <p class="icon"><img src="../img/doyun_icon.png" alt="#"></p>
                                                     <div class="user_info">
-                                                        <p class="level">Lv : 100</p>
-                                                        <p class="nik">doyun</p>
+                                                        <p th:text="'LV' + ${to.mem_lvl}"class="level"></p>
+                                                        <p th:text="${to.mem_nick}" class="nik"></p>
                                                         <img class="bagdge" src="../img/starbucks.png" alt="스벅">
                                                     </div>
                                                     <!-- <div class="user_bagdge">
@@ -281,47 +162,6 @@
                                                     </p>
                                                 </div>
                                             </a>
-                                        </div>
-                                        <div class="user_profile">
-                                            <a href="#">
-                                                <div class="profile">
-                                                    <p class="icon"><img src="" alt="#"></p>
-                                                    <div class="user_info">
-                                                        <p class="level">Lv : 70</p>
-                                                        <p class="nik">홀리</p>
-                                                        <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                    </div>
-                                                </div>
-                                                <div class="user_content">
-                                                    <p></p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="user_profile">
-                                            <div class="profile">
-                                                <p class="icon"><img src="" alt="#"></p>
-                                                <div class="user_info">
-                                                    <p class="level">Lv : 100</p>
-                                                    <p class="nik">바론강타</p>
-                                                    <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                </div>
-                                            </div>
-                                            <div class="user_content">
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="user_profile">
-                                            <div class="profile">
-                                                <p class="icon"><img src="" alt="#"></p>
-                                                <div class="user_info">
-                                                    <p class="level">Lv : 49</p>
-                                                    <p class="nik">용스틸장인</p>
-                                                    <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                </div>
-                                            </div>
-                                            <div class="user_content">
-                                                
-                                            </div>
                                         </div>
                                     </div>  
                                 </div>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
+import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
 
 @Mapper
@@ -106,4 +107,7 @@ public interface SqlMapperInter {
 
         @Select("select r.rank, m.mem_userid, (m.mem_win_count/m.mem_game_count)*100 as winrate from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
         public List<PointRankTO> getPointrank();
+
+        @Select("select distinct m.mem_nick, m.mem_lvl from ranklist r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
+        public List<RollingRankTO> getRol();
 }

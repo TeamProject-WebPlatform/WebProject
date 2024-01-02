@@ -1,6 +1,7 @@
 package platform.game.service.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
+import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -30,7 +32,7 @@ public class MainController {
     RankDAO rankDAO;
 
     @RequestMapping("/")
-    public ModelAndView main() {
+    public ModelAndView main(ModelAndView modelAndView) {
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
@@ -38,7 +40,12 @@ public class MainController {
         } else {
             System.out.println("멤버 없음");
         }
-        return new ModelAndView("index");
+
+        List<RollingRankTO> rol = sqlMapperInter.getRol();
+        modelAndView.setViewName("index");
+        modelAndView.addObject("rol", rol);
+
+        return modelAndView;
 
     }
 
