@@ -68,24 +68,26 @@
                         <!-- 랭킹 별 차트 구문 -->
                         <canvas id="win" style='width:450px; height:30vh; display: inline-block;'></canvas>
                         <canvas id="point" style='width:450px; height:30vh; display: inline-block;'></canvas>
-                        <canvas id="level" style='width:450px; height:30vh; display: inline-block;'></canvas>
+                        <canvas id="levels" style='width:450px; height:30vh; display: inline-block;'></canvas>
                         <script type="text/javascript">
+                            var LevelRankings = "[[${levels}]]";
                             var WinRankings = "[[${winrank}]]";
-                            var LevelRankings = "[[${levelrank}]]";
                             var PointRankings = "[[${pointrank}]]";
 
                             let WinRanks = WinRankings.split(",");
-                            let LevelRanks = LevelRankings.split(",");
                             let PointRanks = PointRankings.split(",");
+                            let LevelRanks = LevelRankings.split(",");
 
+                            console.log(levels);
                             WinRanks[0] = WinRanks[0].substring(1);
                             WinRanks[WinRanks.length - 1] = WinRanks[WinRanks.length - 1].split("]")[0];
+
+                            PointRanks[0] = PointRanks[0].substring(1);
+                            PointRanks[PointRanks.length - 1] = PointRanks[PointRanks.length - 1].split("]")[0];
 
                             LevelRanks[0] = LevelRanks[0].substring(1);
                             LevelRanks[LevelRanks.length - 1] = LevelRanks[LevelRanks.length - 1].split("]")[0];
 
-                            PointRanks[0] = PointRanks[0].substring(1);
-                            PointRanks[PointRanks.length - 1] = PointRanks[PointRanks.length - 1].split("]")[0];
 
                             var WinChart = new Chart(
                                 document.getElementById('win'),
@@ -123,41 +125,7 @@
                                     }
                                     });
 
-                            var LevelChart = new Chart(
-                                document.getElementById('level'),
-                                {
-                                    type: 'line',
-                                    data: {
-                                        labels: ['0~9','10~19','20~29','30~39','40~49','50~59','60~69','70~79','80~89','90~'],
-                                        datasets: [
-                                            {
-                                            label: '레벨 구간 별 인구수',
-                                            data: ({'0~9':LevelRanks[0], '10~19':LevelRanks[1], '20~29':LevelRanks[2], '30~39':LevelRanks[3],'40~49':LevelRanks[4], '50~59':LevelRanks[5], '60~69':LevelRanks[6], '70~79':LevelRanks[7], '80~89':LevelRanks[8], '90~':LevelRanks[9]}),
-                                            borderColor: 'rgb(75, 0, 192)',
-                                            fill: false,
-                                            stepped: false,
-                                            backgroundColor: 'skyblue',
-                                            type:'bar'
-                                            }
-                                        ]
-                                        },
-                                    options: {
-                                        responsive: false,
-                                        interaction: {
-                                        intersect: false,
-                                        axis: 'x'
-                                        },
-                                        plugins: {
-                                        title: {
-                                            display: true,
-                                            text: (ctx) => '레벨 구간 별 유저 분포도',
-                                        },
-                                        legend:{
-                                            display : false
-                                        }
-                                        }
-                                    }
-                                    });
+                            
 
                             var PointChart = new Chart(
                                 document.getElementById('point'),
@@ -187,6 +155,42 @@
                                         title: {
                                             display: true,
                                             text: (ctx) => '포인트 보유량 유저 분포도',
+                                        },
+                                        legend:{
+                                            display : false
+                                        }
+                                        }
+                                    }
+                                    });
+
+                            var WinChart = new Chart(
+                                document.getElementById('levels'),
+                                {
+                                    type: 'line',
+                                    data: {
+                                        labels: [],
+                                        datasets: [
+                                            {
+                                            label: '레벨 구간 별 유저 수',
+                                            data: ({0:LevelRanks[0], 10:LevelRanks[1], 20:LevelRanks[2], 30:LevelRanks[3], 40:LevelRanks[4], 50:LevelRanks[5], 60:LevelRanks[6], 70:LevelRanks[7], 80:LevelRanks[8], 90:LevelRanks[9]}),
+                                            borderColor: 'rgb(75, 0, 192)',
+                                            fill: false,
+                                            stepped: false,
+                                            backgroundColor: 'skyblue',
+                                            type:'bar'
+                                            }
+                                        ]
+                                        },
+                                    options: {
+                                        responsive: false,
+                                        interaction: {
+                                        intersect: false,
+                                        axis: 'x'
+                                        },
+                                        plugins: {
+                                        title: {
+                                            display: true,
+                                            text: (ctx) => '레벨 구간 별 유저 분포도',
                                         },
                                         legend:{
                                             display : false

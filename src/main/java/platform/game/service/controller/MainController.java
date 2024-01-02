@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import platform.game.service.entity.Member;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
-import platform.game.service.model.TO.AttendRankTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.WinRankTO;
@@ -61,23 +60,19 @@ public class MainController {
     @GetMapping("/rank")
     public ModelAndView rank(ModelAndView modelAndView) {
         List<WinRankTO> WinRanklists = sqlMapperInter.getWinrank();
-        List<AttendRankTO> AttendRanklists = sqlMapperInter.getAttendrank();
         List<LevelRankTO> LevelRanklists = sqlMapperInter.getLevelrank();
         List<PointRankTO> PointRanklists = sqlMapperInter.getPointrank();
 
-        ArrayList<Integer> WinRanks = rankDAO.getWinList();
-        ArrayList<Integer> AttendRanks = rankDAO.getAttendList();
-        ArrayList<Integer> LevelRanks = rankDAO.getLevelList();
-        ArrayList<Integer> PointRanks = rankDAO.getPointList();
+        List<Integer> WinRanks = rankDAO.getWinList();
+        List<Integer> LevelLists = rankDAO.getLevelList();
+        List<Integer> PointRanks = rankDAO.getPointList();
 
         modelAndView.setViewName("rank");
         modelAndView.addObject("winlist", WinRanklists);
-        modelAndView.addObject("attendlist", AttendRanklists);
         modelAndView.addObject("levellist", LevelRanklists);
         modelAndView.addObject("pointlist", PointRanklists);
 
-        modelAndView.addObject("attendrank", AttendRanks);
-        modelAndView.addObject("levelrank", LevelRanks);
+        modelAndView.addObject("levels", LevelLists);
         modelAndView.addObject("winrank", WinRanks);
         modelAndView.addObject("pointrank", PointRanks);
 
