@@ -98,7 +98,6 @@ public class MainController {
     @GetMapping("/getMainFragment")
     public String getMainFragment(Model model) {
         // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
-        // model.addAttribute("test","굿");
 
         return "fragments/content/main";
     }
