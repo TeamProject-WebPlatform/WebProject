@@ -1,11 +1,13 @@
 package platform.game.service.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +33,18 @@ public class MainController {
     @Autowired
     RankDAO rankDAO;
 
+    private List<RollingRankTO> rollingRankList;
+
+    public MainController(SqlMapperInter sqlMapperInter) {
+        this.sqlMapperInter = sqlMapperInter;
+        this.rollingRankList = sqlMapperInter.getRol(); // 초기화
+    }
+
+    @Scheduled(cron = "0 0/5 * * * *")
+    public void RollingTimer() {
+        rollingRankList = sqlMapperInter.getRol();
+    }
+
     @RequestMapping("/")
     public ModelAndView main(ModelAndView modelAndView) {
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -41,9 +55,8 @@ public class MainController {
             System.out.println("멤버 없음");
         }
 
-        List<RollingRankTO> rol = sqlMapperInter.getRol();
         modelAndView.setViewName("index");
-        modelAndView.addObject("rol", rol);
+        modelAndView.addObject("rol", rollingRankList);
 
         return modelAndView;
 

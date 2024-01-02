@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Post {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int postId;
@@ -35,10 +35,10 @@ public class Post {
     private Date createdAt;
     private Date updatedAt;
     private Date deletedAt;
-    private int postLikeCount;
-    private int postDislikeCount;
-    private int postCmtCount;
-    private int postReportCount;
+    private int postLikeCnt;
+    private int postDislikeCnt;
+    private int postCommentCnt;
+    private int postReportCnt;
     private String postTags;
     private String boardCd;
 
