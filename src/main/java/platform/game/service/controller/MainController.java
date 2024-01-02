@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +31,7 @@ public class MainController {
     @Autowired
     RankDAO rankDAO;
 
-    @RequestMapping("/")
+    @RequestMapping({"/","/home"})
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("yj-index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -45,12 +46,6 @@ public class MainController {
         return mav;
 
     }
-
-    @GetMapping("/home")
-    public ModelAndView home() {
-        return new ModelAndView("index");
-    }
-
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("list");
@@ -87,4 +82,10 @@ public class MainController {
         return modelAndView;
     }
 
+    @GetMapping("/getMainFragment")
+    public String getBoardFragment(Model model) {
+        // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
+        model.addAttribute("test","굿");
+        return "fragments/content/main";
+    }
 }

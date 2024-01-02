@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="author" content="우리팀">
@@ -158,12 +158,19 @@
                             </tr>
                         </table>
                     </form>
+                    <script>
+                        window.onload = function(){
+                            var test = "free";
+                            console.log(test);
+                        }
+                    </script>
                     
                     <div class="btn_area">
                         <div class="align_left">
-                            <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='list?board_cd=${post.boardCd}'|"/> -->
-                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list?board_cd=free'"/>
-                            <h2 th:text="|window.location.href='list?board_cd=${post.boardCd}'|"></h2>
+                            <a th:href="@{list(board_cd=${post.boardCd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
+                            <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" th:href="board/list?board_cd='${post.boardCd}'"/> -->
+                            <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list?board_cd=free'"/> -->
+                            <h2 th:text="${post.boardCd}"></h2>
                         </div>
                         <div class="align_right">
                             <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='modify?post_id=${post.postId}'|"/>

@@ -2,8 +2,15 @@ const setPage = async function (page) {
     switch (page) {
         case "main":
             // 메인 페이지
+            await fetch('/getMainFragment')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('content').innerHTML = html;
+                    })       
+                    .catch(error => console.error('컨트롤러 main 에러:', error));
             setSwiperWrapper();
             setSwiper();
+            
             break;
         case 1:
             // 공지사항 게시판

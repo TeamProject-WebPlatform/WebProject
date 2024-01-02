@@ -11,13 +11,13 @@
     <!-- 메인 자바스크립트 -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
-    <script src="./js/controller.js"></script>
     <script src="./js/module/swiper.js"></script>
+    <script src="./js/controller.js"></script>
     <script>
-        var content="mainFragment";
         window.onload = function () {
-            setPage(content);
+            setPage("main");
         }
+        
     </script>
     <!-- 메인 스타일 css -->
     <link rel="stylesheet" href="./css/swiper.css" />
@@ -38,7 +38,7 @@
             <div th:replace="~{fragments/lnb :: lnbFragment}">
                 LNB
             </div>      
-            <div th:replace="~{fragments/content :: mainFragment}">
+            <div id="content">
                 메인 컨텐츠
             </div>
             <div th:replace="~{fragments/rnb :: rnbFragment}">
