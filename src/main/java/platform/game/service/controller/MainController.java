@@ -115,24 +115,11 @@ public class MainController {
     }
 
     @GetMapping("/getBoardViewFragment")
-    public String getBoardViewFragment(@RequestParam(name = "post_id") int postId,
-            @RequestParam("board_cd") String boardCd, 
-            Model model) {
+    public String getBoardViewFragment(@RequestParam(name = "post_id") int postId, Model model) {
         // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
-        Post post = new Post();
+        
 
-        post = postInfoRepository.findByPostId(postId);
-
-        // 댓글 불러오기
-        ArrayList<Comment> commentList = commentInfoRepository.findByPost_PostId(postId);
-
-        model.addAttribute("post", post);
-        model.addAttribute("commentList", commentList);
-
-        return "fragments/content/board/list";
+        return "fragments/content/board/view";
     }
-    /*
-     * Board는 컨트롤러 html 수정된거 오면 복붙해서 넣기로
-     * 
-     */
+
 }

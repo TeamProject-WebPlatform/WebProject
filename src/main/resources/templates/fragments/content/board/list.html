@@ -6,13 +6,14 @@
         <p>HOME &gt; <strong>게시판</strong></p>
     </div>
     <div class="con_txt">
+        <input type="hidden" name="board_cd" th:value="${boardCd}" />
+        <!-- <input type="hidden" name="cpage" value="<%= cpage %>" /> -->
         <div class="contents_sub">
             <div class="board_top">
                 <div class="bold">총 <span class="txt_orange" th:text="${#lists.size(lists)}"></span>건</div>
                 <input type="text" name="board_search" id="board_search">
                 <input type="button" value="검색">
             </div>
-
             <!--게시판-->
             <div class="board">
                 <table>
@@ -30,11 +31,11 @@
                         <td th:text="${#lists.size(lists) - rowStat.index}"></td>
                         <td class="left">
                             <!--게시물 클릭시 이동하도록 하는 구문-->
-                            <a th:href="@{view(board_cd=${post.boardCd}, post_id=${post.postId})}"
-                                th:text="${post.postTitle}"></a>
+                            <a th:href="@{view(board_cd=${post.boardCd}, post_id=${post.postId})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
+                            <!--게시물 댓글 갯수-->
+                            <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                             <!--새로운 글 작성시 보여지는 new 표시-->
-                            <span
-                                th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
+                            <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
                                 <img src="../img/icon_new.gif" alt="NEW">
                             </span>
                         </td>
@@ -48,11 +49,19 @@
                     </tr>
                 </table>
             </div>
-
+            
             <div class="btn_area">
                 <div class="align_right">
-                    <input type="button" value="새글쓰기" class="btn_write btn_txt01" style="cursor: pointer;"
-                        onclick="checkLoginAndNavigate()" />
+                    <!-- <a th:href="@{write(board_cd=${boardCd})}"><input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"></a> -->
+                    <!-- <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" /> -->
+                    <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
+                        <!-- 로그인 상태인 경우의 링크 -->
+                        <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                    </a>
+                    <a th:unless="${loginCheck}" href="/login">
+                        <!-- 로그인 상태가 아닌 경우의 링크 -->
+                        <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()">
+                    </a>
                 </div>
                 <!--페이지넘버-->
                 <div class="paginate_regular">
