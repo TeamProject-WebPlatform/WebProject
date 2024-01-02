@@ -1,196 +1,59 @@
 <!DOCTYPE html>
-<html lang="ko">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="author" content="우리팀">
-        <meta name="description" content="팀포트폴리오">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
-        <!-- 메인 자바스크립트 -->
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <script src="./js/login_style.js"></script>
-        <script src="./js/swiperjs.js"></script>
-        <!-- 메인 스타이 css -->
-        <link rel="stylesheet" href="./css/style.css" />
-        <link rel="stylesheet" href="./css/swiper.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-        <title>메인페이지</title>
-        <script>
-            var rol = "[[${rol}]]";
-            console.log(rol);
-        </script>
-    </head>
-    <body>
-        <div id="web">
-            <header>
-                <h1 class="logo"><a href="/"><img src="../img/logo.png" alt="logo"></a></h1>
-                <div id="login">
-                    <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
-                    <p class="log"><a href="login">로그인</a></p>
-                    <div class="logto">
-                        <p class="login_info">Tokarev &nbsp;&nbsp;<i class="fa-solid fa-caret-down"></i></p>
-                        <ul class="login_info_list">
-                            <li><a href="#">회원정보관리</a></li>
-                            <li><a href="mypage/doyun">프로필</a></li>
-                            <li><a href="board/shop">아이템 샵</a></li>
-                            <li class="logout"><a href="/logout">로그아웃</a></li>
-                        </ul>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="우리팀">
+    <meta name="description" content="팀포트폴리오">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
+    <!-- 메인 자바스크립트 -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script src="./js/module/swiper.js"></script>
+    <script src="./js/controller.js"></script>
+    <script src="./js/login_style.js"></script>
+    <script>
+        window.onload = function () {
+            setPage("main");
+        }
+
+    </script>
+    <!-- 메인 스타일 css -->
+    <link rel="stylesheet" href="./css/swiper.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <title>메인페이지</title>
+</head>
+
+<body>
+    <div id="web">
+        <header th:replace="~{fragments/header :: headerFragment}">
+            헤더
+        </header>
+        <nav th:replace="~{fragments/navigation :: navFragment}">
+            네비게이션
+        </nav>
+        <section class="home_content">
+            <div class="content">
+                <div class="row main">
+                    <div th:replace="~{fragments/lnb :: lnbFragment}">
+                        LNB
+                    </div>
+                    <div class="center_main" id="center_main">
+                        메인 컨텐츠
+                    </div>
+                    <div th:replace="~{fragments/rnb :: rnbFragment}">
+                        RNB
                     </div>
                 </div>
-            </header>
-            <nav>
-                <ul class="row">
-                    <li><a href="board/notice">공지사항</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="board/fight">대전</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="board/team">협동</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="board/list">게시판</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="rank">랭킹</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-            <section>
-                <div class="row content">
-                    <div class="main">
-                        <div class="swiper mySwiper">
-                            <div th:each="to, i : ${rol}" th:if="${i.index<4}" class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div  class="row user">
-                                        <div th:each="to, i : ${rol}" th:if="${i.index<4}" class="user_profile">
-                                            <a th:href="@{/mypage/{nickname}(nickname=${to.mem_nick})}">
-                                                <div class="profile">
-                                                    <p class="icon"><img src="../img/doyun_icon.png" alt="#"></p>
-                                                    <div class="user_info">
-                                                        <p th:text="'LV' + ${to.mem_lvl}"class="level"></p>
-                                                        <p th:text="${to.mem_nick}" class="nik"></p>
-                                                        <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                    </div>
-                                                    <!-- <div class="user_bagdge">
-                                                    </div> -->
-                                                </div>
-                                                <div class="user_content">
-                                                    <p>
-                                                        안녕하세요.
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="row user">
-                                        <div th:each="to, i : ${rol}" th:if="${i.index>=4 && i.index<8}" class="user_profile">
-                                            <a th:href="@{/mypage/{nickname}(nickname=${to.mem_nick})}">
-                                                <div class="profile">
-                                                    <p class="icon"><img src="../img/doyun_icon.png" alt="#"></p>
-                                                    <div class="user_info">
-                                                        <p th:text="'LV' + ${to.mem_lvl}"class="level"></p>
-                                                        <p th:text="${to.mem_nick}" class="nik"></p>
-                                                        <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                    </div>
-                                                    <!-- <div class="user_bagdge">
-                                                    </div> -->
-                                                </div>
-                                                <div class="user_content">
-                                                    <p>
-                                                        안녕하세요.
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="row user">
-                                        <div th:each="to, i : ${rol}" th:if="${i.index>=8 && i.index<12}" class="user_profile">
-                                            <a th:href="@{/mypage/{nickname}(nickname=${to.mem_nick})}">
-                                                <div class="profile">
-                                                    <p class="icon"><img src="../img/doyun_icon.png" alt="#"></p>
-                                                    <div class="user_info">
-                                                        <p th:text="'LV' + ${to.mem_lvl}"class="level"></p>
-                                                        <p th:text="${to.mem_nick}" class="nik"></p>
-                                                        <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                    </div>
-                                                    <!-- <div class="user_bagdge">
-                                                    </div> -->
-                                                </div>
-                                                <div class="user_content">
-                                                    <p>
-                                                        안녕하세요.
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="row user">
-                                        <div th:each="to, i : ${rol}" th:if="${i.index>=12}" class="user_profile">
-                                            <a th:href="@{/mypage/{nickname}(nickname=${to.mem_nick})}">
-                                                <div class="profile">
-                                                    <p class="icon"><img src="../img/doyun_icon.png" alt="#"></p>
-                                                    <div class="user_info">
-                                                        <p th:text="'LV' + ${to.mem_lvl}"class="level"></p>
-                                                        <p th:text="${to.mem_nick}" class="nik"></p>
-                                                        <img class="bagdge" src="../img/starbucks.png" alt="스벅">
-                                                    </div>
-                                                    <!-- <div class="user_bagdge">
-                                                    </div> -->
-                                                </div>
-                                                <div class="user_content">
-                                                    <p>
-                                                        안녕하세요.
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>  
-                                </div>
-                            </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-pagination"></div>
-                            <div class="autoplay-progress">
-                                <svg viewBox="0 0 48 48">
-                                    <circle cx="24" cy="24" r="20"></circle>
-                                </svg>
-                                <span></span>
-                            </div>
-                        </div>
-                        <div class="battle">
-                            <div class="Proceeding">
-                                <div class="user1">
-                                    
-                                </div>
-                                <div class="user1">
-                                </div>
-                            </div>  
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <footer>
-                
-            </footer>
-        </div>
-    </body>
+            </div>
+        </section>
+        <footer th:replace="~{fragments/footer :: footerFragment}">
+            푸터
+        </footer>
+    </div>
+</body>
+
 </html>

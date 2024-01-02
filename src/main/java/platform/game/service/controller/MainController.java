@@ -1,8 +1,6 @@
 package platform.game.service.controller;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +8,23 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.Post;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
+import platform.game.service.repository.CommentInfoRepository;
+import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 // Spring Security의 /login 페이지 안되게
@@ -45,12 +49,21 @@ public class MainController {
         rollingRankList = sqlMapperInter.getRol();
     }
 
-    @RequestMapping("/")
+    @Autowired
+    private PostInfoRepository postInfoRepository;
+
+    @Autowired
+    private CommentInfoRepository commentInfoRepository;
+
+    @RequestMapping({ "/", "/home" })
     public ModelAndView main(ModelAndView modelAndView) {
+        ModelAndView mav = new ModelAndView("index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
-            System.out.println("멤버 있음 " + member.toString());
+            if (member != null) {
+                mav.addObject("nickname", member.getMemNick());
+            }
         } else {
             System.out.println("멤버 없음");
         }
@@ -60,11 +73,6 @@ public class MainController {
 
         return modelAndView;
 
-    }
-
-    @GetMapping("/home")
-    public ModelAndView home() {
-        return new ModelAndView("index");
     }
 
     @GetMapping("/list")
@@ -99,4 +107,44 @@ public class MainController {
         return modelAndView;
     }
 
+    @GetMapping("/getMainFragment")
+    public String getMainFragment(Model model) {
+        // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
+        // model.addAttribute("test","굿");
+
+        return "fragments/content/main";
+    }
+
+    @GetMapping("/getBoardListFragment")
+    public String getBoardListFragment(@RequestParam("board_cd") String boardCd, Model model) {
+        // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
+        ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
+
+        model.addAttribute("lists", lists);
+        model.addAttribute("boardCd", boardCd);
+
+        return "fragments/content/board/list";
+    }
+
+    @GetMapping("/getBoardViewFragment")
+    public String getBoardViewFragment(@RequestParam(name = "post_id") int postId,
+            @RequestParam("board_cd") String boardCd,
+            Model model) {
+        // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
+        Post post = new Post();
+
+        post = postInfoRepository.findByPostId(postId);
+
+        // 댓글 불러오기
+        ArrayList<Comment> commentList = commentInfoRepository.findByPost_PostId(postId);
+
+        model.addAttribute("post", post);
+        model.addAttribute("commentList", commentList);
+
+        return "fragments/content/board/list";
+    }
+    /*
+     * Board는 컨트롤러 html 수정된거 오면 복붙해서 넣기로
+     * 
+     */
 }

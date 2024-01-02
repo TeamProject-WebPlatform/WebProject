@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function(){
     const inputNickname = document.getElementById('nickname');
     const inputEmail = document.getElementById('email');

@@ -15,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,7 +35,11 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
 import platform.game.service.action.MypageAction;
+import platform.game.service.entity.Member;
+import platform.game.service.entity.RiotInfo;
 import platform.game.service.filter.JwtAuthFilter;
+import platform.game.service.service.MemberInfoDetails;
+import platform.game.service.service.RiotService;
 import platform.game.service.service.jwt.JwtManager;
 
 @RestController
@@ -44,31 +50,28 @@ public class MyPageController {
     private MypageAction mypageAction = new MypageAction();
     // 파일을 업로드할 디렉터리 경로
     String currentPath = Paths.get("").toAbsolutePath().toString();
-    private final String uploadDir = Paths.get(currentPath, "src/main/resources/static/tempImg", "img").toString();
-    // private final String uploadDir = Paths.get("C:", "tempImg", "img").toString();
+    private final String mdDir = Paths.get(currentPath, "src/main/resources/static/", "md").toString();
+    private final String mdImgDir = Paths.get(currentPath, "src/main/resources/static/", "md_img").toString();
 
     @Autowired
     JwtManager jwtManager;
     @Autowired
     private JwtAuthFilter authFilter;
+    @Autowired
+    private RiotService riotService;
 
     @GetMapping("/{userid}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView mypage(@PathVariable("userid") String userid, Model model){
         String markdownValueFormLocal = null;
-        
-        // if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-        //     Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-        //     //System.out.println(member.toString());
-        // }
 
-        // System.out.println( "UserID : " + authFilter.getUserID() ); 
-        // 위에 방법으로
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+        model.addAttribute("member", member);
 
         try {
-            markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( userid );
+            markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( mdDir, userid );
         } catch (Exception e) {
-            System.out.println( "[에러] MainController : " + e.getMessage() );
+            System.out.println( "[에러] MyPageController : " + e.getMessage() );
         }
 
         Parser parser = Parser.builder().build();
@@ -77,9 +80,18 @@ public class MyPageController {
 
         model.addAttribute("contents", renderer.render(document));
 
-        System.out.println( "renderer : " + renderer.render(document) );
-
         return new ModelAndView("mypage");
+    }
+ 
+    @GetMapping("/summonerByName")
+    public RiotInfo callSummonerByName(String summonerName){
+        // String summonerName = "Java를자바";
+    
+        summonerName = summonerName.replaceAll(" ","%20");
+ 
+        RiotInfo apiResult = riotService.callRiotAPISummonerByName(summonerName);
+ 
+        return apiResult;
     }
 
     @PostMapping("/tui-editor/image-upload")
@@ -94,10 +106,10 @@ public class MyPageController {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");           // 32자리 랜덤 문자열
         String extension = orgFilename.substring(orgFilename.lastIndexOf(".") + 1);             // 확장자
         String saveFilename = uuid + "." + extension;                                             // 저장할 파일명
-        String fileFullPath = Paths.get(uploadDir, saveFilename).toString();                      // 전체 경로
+        String fileFullPath = Paths.get(mdImgDir, saveFilename).toString();                      // 전체 경로
 
         // 디렉터리 생성
-        File dir = new File(uploadDir);
+        File dir = new File(mdImgDir);
         if (dir.exists() == false) {
             dir.mkdirs();
         }
@@ -119,7 +131,7 @@ public class MyPageController {
 
     @GetMapping(value = "/tui-editor/image-print", produces = { MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
     public byte[] printEditorImage(@RequestParam final String filename) {
-        String fileFullPath = Paths.get(uploadDir, filename).toString();
+        String fileFullPath = Paths.get(mdImgDir, filename).toString();
 
         File uploadedFile = new File(fileFullPath);
         if (uploadedFile.exists() == false) {
