@@ -41,4 +41,5 @@ public class Post {
     private int postReportCnt;
     private String postTags;
     private String boardCd;
+
 }
