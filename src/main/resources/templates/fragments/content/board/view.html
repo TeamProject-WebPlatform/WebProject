@@ -31,7 +31,12 @@
                 <tr th:each="comment  : ${comment}">
                     <td class="coment_re" width="20%">
                         <strong>글쓴이 : <span th:text="${comment.member.memNick}"></span></strong> (<span th:text="${comment.updatedAt}"></span>)
-                        <br /><br /><strong>내용</strong><br />
+                        <!--댓글 삭제 버튼-->
+                        <a th:if="${writePost}" th:onclick="setBoardCommentDeleteOkPage('board_comment_delete_ok', '[[${post.postId}]]', '[[${comment.commentId}]]')">
+                            <span class="delete-comment" style="cursor: pointer; color: red;"> x </span>
+                        </a>
+                        <br /><br />
+                        <strong>내용</strong><br />
                         <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
                     </td>
                 </tr>

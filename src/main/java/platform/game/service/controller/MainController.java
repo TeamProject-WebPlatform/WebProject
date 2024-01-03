@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.transaction.Transactional;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
@@ -121,6 +122,11 @@ public class MainController {
 
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
 
+        for (Post postComment : lists) {
+            System.out.println("PostId: " + postComment.getPostId());
+            System.out.println("post_comment : " + commentInfoRepository.countByPost_PostId(postComment.getPostId()));
+        }
+
         // 쌍따옴표로 넘어와서 쌍따옴표 없에는 문구(원인 찾으면 없에도 됨)
         System.out.println("list : " + boardCd);
         int RboardCd = Integer.parseInt(boardCd.replaceAll("\"", ""));
@@ -185,9 +191,6 @@ public class MainController {
         model.addAttribute("comment", comment);
         model.addAttribute("loginCheck", loginCheck);
         model.addAttribute("writePost", writePost);
-
-        System.out.println(writePost);
-        System.out.println(post.getPostId());
 
         return "fragments/content/board/view";
     }
@@ -314,8 +317,6 @@ public class MainController {
             flag = 1;
         }
 
-        System.out.println("flag : " + flag);
-
         if (flag == 0) {
             // 성공하면 뷰로 이동
             // 쌍따옴표로 넘어와서 쌍따옴표 없에는 문구(원인 찾으면 없에도 됨)
@@ -420,10 +421,28 @@ public class MainController {
         comment.setUpdatedAt(date);
         comment.setMember(member);
 
+        // 멤버 비교 변수들
+        long id = 1; // 멤버 비교를 위한 변수
+        long pid = post.getMember().getMemId(); // 멤버 비교를 위한 게시물 변수
+        String writePost = "false"; // 결과 보내주는 변수
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            id = member.getMemId();
+        }
+        if (id == pid) {
+            // 게시물 작성자가 맞을 경우
+            System.out.println("맞음");
+            writePost = "true";
+        } else {
+            // 게시물 작성자가 아닐경우
+            System.out.println("틀림");
+        }
+
         int flag = 1;
         try {
             commentInfoRepository.save(comment);
-            // 댓글 카운트 추가
+            // 댓글 카운트 저장
             post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
             postInfoRepository.save(post);
 
@@ -437,6 +456,8 @@ public class MainController {
             // 성공하면 뷰로 이동
             post = postInfoRepository.findByPostId(post.getPostId());
 
+            ArrayList<Comment> comments = commentInfoRepository.findByPost_PostId(postId);
+
             // 쌍따옴표로 넘어와서 쌍따옴표 없에는 문구(원인 찾으면 없에도 됨)
             System.out.println("comment_ok : " + post.getBoardCd());
             int RboardCd = Integer.parseInt(post.getBoardCd().replaceAll("\"", ""));
@@ -444,6 +465,78 @@ public class MainController {
             model.addAttribute("boardCd", RboardCd);
 
             model.addAttribute("post", post);
+            model.addAttribute("comment", comments);
+            model.addAttribute("writePost", writePost);
+
+            return "fragments/content/board/view";
+        } else {
+            // 글쓰기 실패 시 처리
+            return "redirect:/error";
+        }
+
+    }
+
+    @GetMapping("/getBoardCommentDelete_okFragment")
+    @Transactional
+    public String getBoardCommentDelete_okFragment(@RequestParam("post_id") int postId,
+            @RequestParam("comment_id") int commentId, Model model) {
+        // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
+        System.out.println("getBoardCommentDelete_okFragment 호출");
+
+        System.out.println("commentId : " + commentId);
+
+        Post post = new Post();
+
+        int flag = 1;
+        try {
+            commentInfoRepository.deleteByCommentId(commentId);
+
+            // 댓글 카운트 저장
+            post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
+            postInfoRepository.save(post);
+
+            System.out.println("CommentCnt : " + post.getPostCommentCnt());
+
+            flag = 0;
+        } catch (Exception e) {
+            System.out.println("수정 오류 : " + e.getMessage());
+            flag = 1;
+        }
+
+        if (flag == 0) {
+            // 성공하면 뷰로 이동
+            post = postInfoRepository.findByPostId(postId);
+
+            ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
+            // 멤버 비교 변수들
+            long id = 1; // 멤버 비교를 위한 변수
+            long pid = post.getMember().getMemId(); // 멤버 비교를 위한 게시물 변수
+            String writePost = "false"; // 결과 보내주는 변수
+            Member member = null;
+
+            if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+                member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+                id = member.getMemId();
+            }
+            if (id == pid) {
+                // 게시물 작성자가 맞을 경우
+                System.out.println("맞음");
+                writePost = "true";
+            } else {
+                // 게시물 작성자가 아닐경우
+                System.out.println("틀림");
+            }
+
+            // 쌍따옴표로 넘어와서 쌍따옴표 없에는 문구(원인 찾으면 없에도 됨)
+            System.out.println("comment_delete_ok : " + post.getBoardCd());
+            int RboardCd = Integer.parseInt(post.getBoardCd().replaceAll("\"", ""));
+            System.out.println("comment_delete_ok1 : " + RboardCd);
+            model.addAttribute("boardCd", RboardCd);
+
+            model.addAttribute("post", post);
+            model.addAttribute("comment", comment);
+            model.addAttribute("writePost", writePost);
 
             return "fragments/content/board/view";
         } else {

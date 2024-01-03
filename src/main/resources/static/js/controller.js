@@ -168,3 +168,16 @@ const setBoardCommentOkPage = async function (page, postId, content){
             break;
     }
 }
+
+const setBoardCommentDeleteOkPage = async function (page, postId, commentId){
+    switch (page) {
+        case "board_comment_delete_ok":
+            await fetch('/getBoardCommentDelete_okFragment?post_id='+ postId + '&comment_id=' + commentId)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('center_main').innerHTML = html;
+                })       
+                .catch(error => console.error('컨트롤러 공지사항 에러:', error));
+            break;
+    }
+}
