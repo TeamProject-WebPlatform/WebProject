@@ -18,7 +18,7 @@ public class MailAction {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendMail(String toEmail, String toName, String subject, String content) {
+    public Boolean sendMail(String toEmail, String toName, String subject, String content) {
         //System.out.println("호출됨");
 
 		try {
@@ -32,13 +32,11 @@ public class MailAction {
 			mimeMessage.setSentDate(new Date());
 			
 			javaMailSender.send(mimeMessage);
-			
-		} catch (MailException e) {
+			System.out.println("메일 전송 완료");
+			return true;
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
+			return false;
 		}
 	}
     public int createNumber(){

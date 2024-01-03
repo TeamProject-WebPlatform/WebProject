@@ -82,10 +82,8 @@ header > h1{
     font-size: 20px;
     margin-right: 15px;
 }
-#login_info{
+#login-info{
     width: 15vh;
-    height: 5vh;
-    display : flex;
     position: relative;
     justify-content : center;
     align-items : center;
@@ -95,14 +93,19 @@ header > h1{
     /* outline:1px solid red; */
     transition: all 0.2s;
 }
+#login-info > div{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-left : 5px;
+    margin-right : 5px;
+}
 #login-info:hover #login-info-section{
     display: block;
-    height: 16.5vh;
-    opacity: 1;
 }
 #login-info-section{
+    height: 16.5vh;
     position: absolute;
-    height: 0;
     left: 0;
     /* outline:1px solid red; */
     background-color: #c0c0c0;
@@ -110,7 +113,6 @@ header > h1{
     overflow: hidden;
     transition: all 1s;
     z-index: 9999;
-    opacity: 0;
 }
 
 #login-info:hover{

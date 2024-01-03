@@ -169,12 +169,7 @@ const setLoginPage = function(){
         }
     });
 
-    inputPassword.addEventListener('oninput',function(){
-        //comparePassword();
-    })
-    inputPasswordCheck.addEventListener('oninput',function(){
-        
-    })
+
 }
 const showLoginWidget = function () {
     const signupContents = document.querySelectorAll('.signup');
