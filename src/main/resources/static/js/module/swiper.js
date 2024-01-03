@@ -1,6 +1,5 @@
 
 const setSwiper = function () {
-    console.log("스와이퍼 set");
     const progressCircle = document.querySelector(".autoplay-progress svg");
     const progressContent = document.querySelector(".autoplay-progress span");
     var swiper = new Swiper(".memberSwiper", {
@@ -27,7 +26,6 @@ const setSwiper = function () {
     });
 }
 const setSwiperWrapper = function(){
-    console.log("스와이퍼래퍼 set");
     const wrapper = document.querySelector('.swiper-wrapper');
     let slideNum = 4;
     let profilePerSlide = 4;
