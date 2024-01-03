@@ -10,8 +10,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import platform.game.service.entity.Comment;
@@ -73,6 +75,13 @@ public class MainController {
 
         return modelAndView;
 
+    }
+
+    @PostMapping("/roll") // 메인화면 Rolling RandomList
+    @ResponseBody
+    public List<RollingRankTO> roll() {
+        List<RollingRankTO> list = rollingRankList;
+        return list;
     }
 
     @GetMapping("/list")

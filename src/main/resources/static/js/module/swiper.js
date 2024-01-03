@@ -1,4 +1,19 @@
-
+const SwiperData = async function() {
+    let datalist = [];
+    try {
+        const response = await fetch("/roll", {
+            method: "POST"
+        });
+        const data = await response.json();
+        for (let i = 0; i < data.length; i++) {
+            datalist.push(data[i]);
+        }
+    } catch (error) {
+        console.log("에러", error);
+        throw error;  // 에러를 다시 던져서 호출하는 쪽에서 처리할 수 있도록 함
+    }
+    return datalist;
+}
 const setSwiper = function () {
     console.log("스와이퍼 set");
     const progressCircle = document.querySelector(".autoplay-progress svg");
@@ -26,37 +41,29 @@ const setSwiper = function () {
         }
     });
 }
-const setSwiperWrapper = function(){
-    console.log("스와이퍼래퍼 set");
-    const wrapper = document.querySelector('.swiper-wrapper');
+const setSwiperWrapper = async function(){
+    let datalist = await SwiperData();
     let slideNum = 4;
     let profilePerSlide = 4;
-    let totalProfilNum = slideNum * profilePerSlide;
-    let members = []; // 메인페이지 프로필 전광판에 표시될 사람들의 닉네임 배열
-
-    for (var i = 0; i < totalProfilNum; i++) {
-        members[i] = "doyun"+i;
-    }
-
-    // 슬라이더 세팅
     let html = "";
     for(let i = 0;i<slideNum;i++){
         html += `
             <div class="swiper-slide">
                 <div class="row user">`;
         for(let j = 0;j<profilePerSlide;j++){
-            html += createSwiperProfile(members[4*i+j+1]);
+            html += createSwiperProfile(datalist[4*i+j].mem_nick, datalist[4*i+j].mem_lvl);
         }            
         html +=`
                 </div>
             </div>`;
     }
+    const wrapper = document.querySelector('.swiper-wrapper');
     wrapper.innerHTML = html;
 }
-const createSwiperProfile = function (nickname) {
+const createSwiperProfile = function (nickname, level) {
     let memNickname = nickname;
     let memImageName = "doyun_icon.png";
-    let memLevel = 100;
+    let memLevel = level;
     let memSymbolImageName = "starbucks.png";
     let memIntroduction = "안녕하세요";
     let membProfileHTML = `
@@ -83,3 +90,5 @@ const createSwiperProfile = function (nickname) {
     `
     return membProfileHTML;
 }
+
+document.addEventListener("DOMContentLoaded", SwiperData());

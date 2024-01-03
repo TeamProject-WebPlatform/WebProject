@@ -12,9 +12,8 @@ const setPage = async function (page) {
                     })       
                     .catch(error => console.error('컨트롤러 메인 에러:', error));
             // DOM에 받은 변수로 세팅
-            setSwiperWrapper();
+            await setSwiperWrapper();
             setSwiper();
-            
             break;
         case "notice": boardCd = "20001";
         case "board": if(!boardCd) boardCd = "20004";
