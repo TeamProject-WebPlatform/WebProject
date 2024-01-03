@@ -121,6 +121,7 @@ header > h1{
 
 .logto:hover > .login_info{
     color: black;
+    background-color: #c0c0c0;
     /* font-size: 20px; */
     /* border-bottom: 5px solid white; */
 }
@@ -224,6 +225,7 @@ nav > ul > li:hover{
 .main_list{
     width: 250px;
     margin: 0 auto;
+    /* margin-top: 3%; */
     height: calc(100% - 50%);
     outline: 1px solid red;
 }

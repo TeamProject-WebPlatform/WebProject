@@ -25,11 +25,9 @@
                     <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
                     <p class="log"><a href="login">로그인</a></p>
                     <div class="logto">
-                        <p class="login_info">
-                            <div th:if="${nickname}">
-                                <p th:text="${nickname}"></p>
-                            </div> &nbsp;&nbsp;
-                            <i class="fa-solid fa-caret-down"></i></p>
+                        <div class="login_info" th:if="${nickname}">
+                            <p th:text="${nickname}"></p>&nbsp;&nbsp;<i class="fa-solid fa-caret-down"></i>
+                        </div> 
                         <ul class="login_info_list">
                             <li><a href="#">회원정보관리</a></li>
                             <li><a href="mypage/doyun">프로필</a></li>
@@ -85,11 +83,11 @@
                                             <div class="user_profile">
                                                 <a href="/mypage/doyun">
                                                     <div class="profile">
-                                                        <p class="user_icon"><img src="../static/img/doyun_icon.png" alt="#"></p>
+                                                        <p class="user_icon"><img src="./img/doyun_icon.png" alt="#"></p>
                                                         <div class="user_info">
                                                             <p class="user_level">Lv : 100</p>
                                                             <p class="user_nick">doyun</p>
-                                                            <img class="bagdge" src="../img/starbucks.png" alt="스벅">
+                                                            <img class="bagdge" src="./img/starbucks.png" alt="스벅">
                                                         </div>
                                                         <!-- <div class="user_bagdge">
                                                         </div> -->
