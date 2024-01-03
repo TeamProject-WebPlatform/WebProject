@@ -6,8 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import platform.game.service.entity.Comment;
 
-public interface CommentInfoRepository extends JpaRepository<Comment, Integer>{
+public interface CommentInfoRepository extends JpaRepository<Comment, Integer> {
     ArrayList<Comment> findByPost_PostId(int postId);
-    
+
     void deleteByPost_PostId(int postId);
+
+    int countByPost_PostId(int postId);
+
+    void deleteByCommentId(int commentId);
 }

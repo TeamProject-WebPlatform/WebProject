@@ -241,10 +241,12 @@ public class SignAction {
 
     // JWT 토큰 만들기
     public Cookie generateToken(AuthRequest authRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
         Cookie cookie = null;
-        if (authentication.isAuthenticated()) {
+        Authentication authentication = null;
+        try{
+            authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
+            if (authentication.isAuthenticated()) {
             String password = securityPassword.encode(authRequest.getMemPw());
             String token = jwtService.generateToken(authRequest.getMemUserid(), password);
 
@@ -254,6 +256,10 @@ public class SignAction {
         } else {
             return null;
         }
+        }catch(Exception e){System.out.println(e.getMessage());}
+        
+        
+        
         return cookie;
     }
 

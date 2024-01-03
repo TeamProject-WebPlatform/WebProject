@@ -38,7 +38,6 @@ public class BoardController {
 
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd) {
-        System.out.println("boardCd : " + boardCd);
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
 
         String loginCheck = "true";
@@ -64,16 +63,36 @@ public class BoardController {
     public ModelAndView listView(@RequestParam(name = "post_id") int postId) {
         System.out.println("Controller_listView 호출");
 
+        Post post = new Post();
+        post = postInfoRepository.findByPostId(postId);
+
+        Member member = null;
         String loginCheck = "true";
+        long id = 1; // 멤버 비교를 위한 변수
+        long pid = post.getMember().getMemId(); // 멤버 비교를 위한 게시물 변수
+        String writePost = "false"; // 결과 보내주는 변수
+
+        // hit 증가시키기
+        post.setPostHit(post.getPostHit() + 1);
+        postInfoRepository.save(post);
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
             loginCheck = "true";
+            id = member.getMemId();
         } else {
             loginCheck = "false";
         }
 
-        Post post = new Post();
-
-        post = postInfoRepository.findByPostId(postId);
+        if (id == pid) {
+            // 게시물 작성자가 맞을 경우
+            System.out.println("맞음");
+            writePost = "true";
+        } else {
+            // 게시물 작성자가 아닐경우
+            System.out.println("틀림");
+        }
 
         // 댓글 불러오기
         ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
@@ -83,7 +102,7 @@ public class BoardController {
         modelAndView.addObject("post", post);
         modelAndView.addObject("comment", comment);
         modelAndView.addObject("loginCheck", loginCheck);
-        System.out.println("controller 확인 : " + post.getBoardCd());
+        modelAndView.addObject("writePost", writePost);
         return modelAndView;
     }
 
@@ -99,8 +118,11 @@ public class BoardController {
         }
         Date date = new Date();
 
+        Post post = new Post();
+        post = postInfoRepository.findByPostId(postId);
+
         Comment comment = new Comment();
-        comment.setPost(postInfoRepository.findByPostId(postId));
+        comment.setPost(post);
         comment.setCommentContent(content);
         comment.setCreatedAt(date);
         comment.setUpdatedAt(date);
@@ -108,17 +130,21 @@ public class BoardController {
         System.out.println("comment 확인 : " + comment);
 
         commentInfoRepository.save(comment);
+        // 댓글 카운트 추가
+        post.setPostCommentCnt(post.getPostCommentCnt() + 1);
+        postInfoRepository.save(post);
 
         // 댓글이 등록된 후에 해당 게시물로 이동
         return "redirect:/board/view?post_id=" + postId;
     }
 
     @RequestMapping("/write")
-    public ModelAndView listWrite() {
+    public ModelAndView listWrite(@RequestParam(name = "board_cd") String boardCd) {
         System.out.println("Controller_listWrite 호출");
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("list_write");
+        modelAndView.addObject("board_cd", boardCd);
 
         return modelAndView;
     }
@@ -140,6 +166,7 @@ public class BoardController {
         post.setUpdatedAt(date);
         post.setBoardCd(request.getParameter("board_cd"));
         post.setMember(member);
+        post.setPostCommentCnt(0);
 
         int flag = 1;
         try {
@@ -170,8 +197,6 @@ public class BoardController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("list_modify");
         modelAndView.addObject("post", post);
-
-        System.out.println("post ID " + post.getBoardCd());
 
         return modelAndView;
     }
