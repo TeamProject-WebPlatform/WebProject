@@ -355,10 +355,12 @@ public class MainController {
     }
 
     @GetMapping("/getBoardDelete_okFragment")
+    @Transactional
     public String getBoardLDelete_okFragment(@RequestParam("board_cd") String boardCd,
             @RequestParam("post_id") int postId, Model model) {
         // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
         System.out.println("getBoardDelete_okFragment 호출");
+        System.out.println("delete postId : " + postId);
 
         int flag = 1;
         try {
@@ -367,7 +369,7 @@ public class MainController {
             postInfoRepository.deleteById(postId);
             flag = 0;
         } catch (Exception e) {
-            System.out.println("수정 오류 : " + e.getMessage());
+            System.out.println("수정 오류1 : " + e.getMessage());
             flag = 1;
         }
 
