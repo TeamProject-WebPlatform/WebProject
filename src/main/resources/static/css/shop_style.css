@@ -207,20 +207,22 @@ nav > ul > li:hover{
 .shop{
     max-width: 1920px;
     margin: 0 auto;
+    justify-content: flex-start;
     /* flex: 0 0 1; */
-    outline: 1px solid olivedrab;
+    /* outline: 1px solid olivedrab; */
 
 }
 
 .left_shop{ 
     width: 300px;
-    outline: 1px solid blue;
+    /* outline: 1px solid blue; */
 }
 
 .left_shop_list{
     width: 250px;
     margin: 0 auto;
-    outline: 1px solid yellow;
+    border: 1px solid blak;
+    /* outline: 1px solid yellow; */
 }
 .left_shop_list > li{
     text-align: center;
@@ -240,16 +242,15 @@ nav > ul > li:hover{
     margin-top: 3vh;
 }
 .left_shop_list > li > ul{
-
     text-align: right;
-    /* visibility: hidden; */
-    /* height: 0; */
+    visibility: hidden;
+    height: 0;
     overflow: hidden;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
 }
 
 .left_shop_list > li > ul > li > a{
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     font-size: 20px;
     width: 250px;
     height: 60px;
@@ -264,10 +265,47 @@ nav > ul > li:hover{
 }
 
 /* 아이템 샵 메인 */
-#center_shop{
+#center_all_shop{
     max-width: 1320px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     outline: 1px solid red;
+}
+#center_icon_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_profile_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_badge_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_time_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_winning_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+
+.category_name{
+    margin-top: 1%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+    font-size: 20px;
 }
 
 .itemlist{  
@@ -275,14 +313,16 @@ nav > ul > li:hover{
     /* margin-left: 5%; */
     /* width: 100%; */
     justify-content:space-around;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     /* margin: 0 auto; */
 }
 
 .sub_item {
     width: 230px;
     /* height: 32vh; */
-    outline: 1px solid red;
+    border: 1px solid black;
+    border-radius: 10%;
+    /* outline: 1px solid red; */
     /* flex: 0 0 calc(20% - 20px); */
 }
 
@@ -290,11 +330,13 @@ nav > ul > li:hover{
     /* width: 178px; */
     height: 17vh;
     margin: 0 auto;
-    margin-top: 5%;
+    /* margin-top: 5%; */
     margin-bottom: 5%;
+    border-bottom: 1px solid black;
     position: relative;
+    /* border: 1px solid black; */
     /* border-radius: 50%; */
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
 }
 .item > a{
     /* border-radius: 50%; */
@@ -312,7 +354,8 @@ nav > ul > li:hover{
     /* margin-top: 5%; */
     border-radius: 50%;
     overflow: hidden;
-    outline: 1px solid red;
+    border: 1px solid black;
+    /* outline: 1px solid red; */
 
 }
 
@@ -325,13 +368,13 @@ nav > ul > li:hover{
     /* height: 13vh; */
     /* line-height: 13vh; */    
     text-align: center;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
 }
 
 .name_item{
     margin-left: 4%;
     /* margin-top: 5%; */
-    /* margin-bottom: 2%; */
+    margin-bottom: 4%;
     font-size: 20px;
     text-align: left;
 }
@@ -342,17 +385,20 @@ nav > ul > li:hover{
 
 .button_item{
     max-width: 100%;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     text-align: center;
 }
 
 #explanation{
-    /* border: none; */
+    width: 100%;
+    border: none;
     resize: none;
 }
 .select{
     width: 100px;
-    outline: 1px solid red;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    /* outline: 1px solid red; */
 }
 .paginate_regular{
     /* max-width: calc(100% - 600px); */
@@ -362,5 +408,5 @@ nav > ul > li:hover{
     margin-top: 2%;
     margin-bottom: 2%;
     font-size: 25px;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
 }
