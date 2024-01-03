@@ -1,0 +1,96 @@
+<link rel="stylesheet" type="text/css" href="../css/list_style.css">
+
+<div class="content">
+    <div class="con_title">
+        <h3>게시판</h3>
+        <p>HOME &gt; <strong>게시판</strong></p>
+    </div>
+    <div class="con_txt">
+        <div class="contents_sub">
+            <div class="board_view">
+                <table>
+                    <tr>
+                        <th width="10%">제목</th>
+                        <td width="60" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></td>
+                        <th width="10%">등록일</th>
+                        <td width="20%" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                    </tr>
+                    <tr>
+                        <th>글쓴이</th>
+                        <td th:text="${post.member.memNick}"></td>
+                        <th>조회</th>
+                        <td th:text="${post.postHit}"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" height="200" valign="top" style="padding: 20px; line-height: 160%" th:text="${post.postContent}"></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <table>
+                <tr th:each="comment  : ${comment}">
+                    <td class="coment_re" width="20%">
+                        <strong>글쓴이 : <span th:text="${comment.member.memNick}"></span></strong> (<span th:text="${comment.updatedAt}"></span>)
+                        <br /><br /><strong>내용</strong><br />
+                        <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
+                    </td>
+                </tr>
+            </table>
+            
+            <form action="comment_write_ok" method="post" name="cfrm">
+                <!-- <input type="hidden" name="cpage" th:value="${cpage}" /> -->
+                <input type="hidden" name="postId" th:value="${post.postId}" />
+                <table>
+                    <tr>
+                        <td class="bg01">
+                            <!-- 내용 입력<br/> -->
+                            <textarea name="ccontent" id="ccontent" cols="" rows="" class="coment_input_text" alt="내용 입력" title="내용 입력"></textarea>
+                        </td>
+                        <td align="right" class="bg01 bg02">
+                            <!-- 로그인 상태인 경우의 댓글 작성 -->
+                            <a th:if="${loginCheck}" th:onclick="setBoardCommentOkPage('board_comment_ok', '[[${post.postId}]]', document.getElementById('ccontent').value)">
+                                <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01" style="cursor: pointer;">
+                            </a> 
+                            <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
+                            <a th:unless="${loginCheck}" href="/login">
+                                <input type="button" value="댓글등록" class="btn_re btn_txt01" onclick="checkLoginAndNavigate()"/>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <script>
+                window.onload = function(){
+                    var test = "free";
+                    console.log(test);
+                }
+            </script>
+            
+            <div class="btn_area">
+                <div class="align_left">
+                    <a th:onclick="setBoardListPage('board_list','[[${boardCd}]]')">
+                        <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;">
+                    </a>
+                </div>
+                <div class="align_right">
+                    <!-- 본인이 작성한 글이면 보임 -->
+                    <a th:if="${writePost}" th:onclick="setBoardModifyPage('board_modify', '[[${post.postId}]]')">
+                        <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;">
+                    </a> 
+                    <!--본인이 작성한 글이면 보임 -->
+                    <a th:if="${writePost}" th:onclick="setBoardDeletePage('board_delete', '[[${post.postId}]]')">
+                        <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;">
+                    </a>
+                    <!-- 로그인 상태인 경우의 링크 -->
+                    <a th:if="${loginCheck}" th:onclick="setBoardWritePage('board_write', '[[${boardCd}]]')">
+                        <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                    </a>
+                    <!-- 로그인 상태가 아닌 경우의 링크 -->
+                    <a th:unless="${loginCheck}" href="/login">
+                        <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                    </a>
+            </div>	
+            <!--//게시판-->
+        </div>
+    </div>
+</div>
