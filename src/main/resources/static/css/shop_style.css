@@ -197,13 +197,13 @@ nav > ul > li:hover{
     border-bottom: 1px solid black;
 }
 
-.content{
+#content{
     width: 100%;
     /* flex: 1 0 0; */
     /* outline: 1px solid red; */
     /* background-color: rgba(0, 0, 0, .5); */
-
 }
+
 .shop{
     max-width: 1920px;
     margin: 0 auto;
@@ -213,11 +213,12 @@ nav > ul > li:hover{
 
 }
 
+/* 컨텐츠 왼쪽 */
 .left_shop{ 
     width: 300px;
     /* outline: 1px solid blue; */
 }
-
+/* 리스트 */
 .left_shop_list{
     width: 250px;
     margin: 0 auto;
@@ -241,32 +242,59 @@ nav > ul > li:hover{
 .left_shop_list > li:first-child{
     margin-top: 3vh;
 }
-.left_shop_list > li > ul{
-    text-align: right;
+.left_shop_list > li > .sub_border_list{
     visibility: hidden;
-    height: 0;
     overflow: hidden;
-    /* outline: 1px solid red; */
+    width: 250px;
+    height: 0;
+    /* height: 120px; */
+    display: flex;
+    flex-direction: column; /* 자식 요소들을 수직으로 정렬 */
+    transition: all 0.2s;
 }
 
+.left_shop_list > li > ul > li{
+    margin-left: auto;
+    /* outline: 1px solid red; */
+    /* font-size: 15px; */
+    width: 150px;
+
+    /* line-height: 60px; */
+    /* display: block; */
+}
 .left_shop_list > li > ul > li > a{
     /* outline: 1px solid red; */
     font-size: 20px;
-    width: 250px;
+    width: 150px;
     height: 60px;
     line-height: 60px;
     display: block;
 }
 
+/* 액션 */
+.list_action{
+    background-color: #f0f0f0;
+    font-size: 35px;
+}
+.sub_list_action{
+    visibility: visible;
+    height: 120px;
+}
+.hide{
+    visibility: hidden;
+    height: 0;
+}
+
+/* 컨텐츠 오른쪽 여백 */
 .right_shop{
     width: 300px;
-    outline: 1px solid red;
-
+    /* outline: 1px solid red; */
 }
 
 /* 아이템 샵 메인 */
 #center_all_shop{
     max-width: 1320px;
+    display: none;
     /* margin: 0 auto; */
     outline: 1px solid red;
 }
@@ -299,6 +327,13 @@ nav > ul > li:hover{
     display: none;
     /* margin: 0 auto; */
     outline: 1px solid red;
+}
+
+#center_action{
+    display: block;
+}
+#center_hide{
+    display: none;
 }
 
 .category_name{
