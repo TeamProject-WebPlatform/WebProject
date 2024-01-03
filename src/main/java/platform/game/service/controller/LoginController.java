@@ -56,7 +56,7 @@ public class LoginController {
 
     @GetMapping("")
     public ModelAndView login() {
-        return new ModelAndView("login");
+        return new ModelAndView("login2");
     }
 
     // 회원가입 요청
@@ -79,12 +79,13 @@ public class LoginController {
         MailAction mailAction = new MailAction(javaMailSender);
 
         String toEmail = userSignup.getMemEmail();
-        String toName = userSignup.getMemNick();
+
         int number = mailAction.createNumber();
         // 메일 내용
-        String subject = toName + "님의 인증번호 입니다";
-        String content = "<h1>" + toName + "님의 인증 번호는 <br><span>" + number + "</span> 입니다.</h1>";
-        mailAction.sendMail(toEmail, toName, subject, content);
+        String subject = "GAMMOA 회원가입의 인증번호 입니다";
+        String content = "<h1>인증 번호는 <br><span>" + number + "</span> 입니다.</h1>";
+        Boolean success = mailAction.sendMail(toEmail, "new User", subject, content);
+        if(!success) number = -1;
         // 리턴 number 값을 반환
         return number;
     }
@@ -134,8 +135,10 @@ public class LoginController {
         if (cookie != null) {
             // 성공
             response.addCookie(cookie);
+            System.out.println("로그인 성공");
             return 0;
         } else {
+            System.out.println("로그인 실패");
             return 1;
         }
     }
