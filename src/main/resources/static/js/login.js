@@ -1,316 +1,446 @@
-// const setLoginPage = function(){
-//     const navLogin = document.querySelector('#navigation li[name=login]');
-//     const navSignup = document.querySelector('#navigation li[name=signup]');
-//     const btnLogin = document.getElementById('btn-login');
-//     const btnSingup = document.getElementById('btn-signup');
-//     const frmLogin = document.frmLogin;
-//     const pwcFail = document.querySelector('.verifyContraints[name=pwc-fail]');
-//     const pwcPass = document.querySelector('.verifyContraints[name=pwc-pass]');
-//     const inputId = document.getElementById('id');
-//     const inputPassword = document.getElementById('password');
-//     const inputPasswordCheck = document.getElementById('passwordCheck');
-//     const inputNickname = document.getElementById('nickname');
-//     const inputEmail = document.getElementById('email');
-//     const idPass = document.querySelector('.verifyContraints[name=id-pass]');
-//     const idFail = document.querySelector('.verifyContraints[name=id-fail]');
-//     const pwPass = document.querySelector('.verifyContraints[name=pw-pass]');
-//     const pwFail = document.querySelector('.verifyContraints[name=pw-fail]');
-//     const duplicateId = document.getElementById('duplicate-id');
-//     var count = 0;
-//     function check_recaptcha(){
-//         count+=1;
-//         var Captcha_Check = grecaptcha.getResponse();
-//         if (Captcha_Check.length == 0) {
-//             if (count ==3){
-//                 document.getElementById("captcha").style.display="";
-//             } else if (count > 3){
-//                 alert("Please complete the reCAPTCHA!");
-//                 return;
-//             }
-//         }
-//         else{
-//             alert("인증 성공");
-//             window.location.href = "./";
-//         }
-//     }
+const checkDuplication = async function () {
+    // 중복체크
+    let timeoutUsername;
+    let timeoutNickname;
+    let timeoutEmail;
 
-//     navLogin.addEventListener('click', function () {
-//         showLoginWidget();
-//         frmLogin.reset();
-        
-//         inputId.setAttribute('logintype','login');
-//         inputPassword.setAttribute('logintype','login');
-        
-//         inputId.placeholder="";
-//         inputPassword.placeholder="";
-        
-//         navSignup.style.color = 'black';
-//         navLogin.style.color = 'white';
-        
-//         idFail.style.display="none";
-//         idPass.style.display="none";
-//         pwFail.style.display="none";
-//         pwPass.style.display="none";
-//         pwcFail.style.display="none";
-//         pwcPass.style.display="none";
-//         duplicateId.style.display="none";
-//     });
-//     navSignup.addEventListener('click', function () {
-//         showSignupWidget();
-//         frmLogin.reset();
+    const usernameInput = document.getElementById('username');
+    const nicknameInput = document.getElementById('nickname');
+    const emailInput = document.getElementById('email');
 
-//         inputId.setAttribute('logintype','signup');
-//         inputPassword.setAttribute('logintype','signup');
-        
-//         inputId.placeholder="8~15 only with letter,number";
-//         inputPassword.placeholder="10~20 with letter + number";
-//         inputPasswordCheck.placeholder="";
-//         inputNickname.placeholder="4~10 only with letter,number";
+    const usernameAlert = document.getElementById('usernameAlert');
+    const nicknameAlert = document.getElementById('nicknameAlert');
+    const emailAlert = document.getElementById('emailAlert');
 
-//         navLogin.style.color = 'black';
-//         navSignup.style.color = 'white';
-        
-//         idFail.style.display="none";
-//         idFail.title = "";
-//         idPass.style.display="none";  
-//         pwFail.style.display="none";
-//         pwFail.title = "";
-//         pwPass.style.display="none";
-//         pwcFail.style.display="";
-//         pwcPass.style.display="none";  
-//         duplicateId.style.display="";
-//     });
-    
-//     // 로그인 시도 시 DB 내 ID, PW 체크
-//     btnLogin.addEventListener('click', async function (e) {
-//         e.preventDefault();
-//         try {
-//             // const response = await fetch(`/login/signin_ok`,{
-//             const response = await fetch(`/login/memberCheck`,{
-//                 method:'POST',
-//                 headers:{
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     memUserid: inputId.value,
-//                     memPw: inputPassword.value,
-//                 })
-//             });
-//             if (!response.ok) {
-//                 throw new Error('서버 응답이 실패했습니다.');
-//             }
-//             const flag = await response.json();
-//             switch (flag){
-//                 case 1: 
-//                     alert('아이디 또는 비번 오류');
-//                     check_recaptcha();
-//                     break;
-//                 case 0:
-//                     // DB 체크 성공 시 토큰 생성
-//                     await fetch(`/login/generateToken`,{
-//                         method:'POST',
-//                         headers:{
-//                             'Content-Type': 'application/json',
-//                         },
-//                         body: JSON.stringify({
-//                             memUserid: inputId.value,
-//                             memPw: inputPassword.value,
-//                         })
-//                     });
-//                     window.location.href = "./";
-//                     check_recaptcha();
-//                     break;
-//                 default:
-//                     break;
-//             }
-//         } catch (error) {
-//             console.error('DB 호출 중 오류가 발생했습니다.', error);
-//         }
-//     });
-    
-//     btnSingup.addEventListener('click', async function (e) {
-//         e.preventDefault();
-//         if(!verifyIdContraints()) return;
-//         if(!verifyPasswordContraints()) return;
-//         if(!verifyNicknameContraints()) return;
-        
-//         if(!comparePassword()){
-//             return;
-//         }
-        
-//         try {
-//             console.log(inputId.value);
-//             const response = await fetch(`/login/signup_ok`,{
-//                 method:'POST',
-//                 headers:{
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     memUserid: inputId.value,
-//                     memPw: inputPassword.value,
-//                     memNick: inputNickname.value,
-//                     memEmail: inputEmail.value
-//                 })
-//             });
-//             if (!response.ok) {
-//                 throw new Error('서버 응답이 실패했습니다.');
-//             }
-//             const flag = await response.json();
-//             switch (flag){
-//                 case 0:
-//                     window.location.href = "/";
-//                     break;
-//                 default:
-//                     window.location.href = "/";
-//                     break;
-//             }
-//         } catch (error) {
-//             console.error('DB 호출 중 오류가 발생했습니다.', error);
-//         }
-//     });
+    // 입력 이벤트를 감지하여 1초 후에 중복 체크를 실행
+    usernameInput.addEventListener('input', function () {
+        clearTimeout(timeoutUsername);
+
+        timeoutUsername = setTimeout(async function () {
+            if(verifyIdContraints()) await checkUsernameDuplication(usernameInput.value);
+        }, 1000);
+    });
+    nicknameInput.addEventListener('input', function () {
+        clearTimeout(timeoutNickname);
+
+        timeoutNickname = setTimeout(async function () {
+            if(verifyNicknameContraints()) await checkNicknameDuplication(nicknameInput.value);
+        }, 1000);
+    });
+    emailInput.addEventListener('input', function () {
+        clearTimeout(timeoutEmail);
+
+        timeoutEmail = setTimeout(async function () {
+            if(verifyEmailContraints()) await checkEmailDuplication(emailInput.value);
+        }, 1000);
+    });
+    async function checkUsernameDuplication(username) {
+        try {
+            const response = await fetch(`/login/DuplicateIdCheck`,{
+                method:'POST',
+                body: usernameInput.value
+                });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            if (flag){
+                usernameAlert.innerHTML = "USERNAME 중복"
+            } else {
+                usernameAlert.innerHTML = ""
+                document.getElementById('username').setAttribute("pass","true");
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+    async function checkNicknameDuplication(nickname){
+        try {
+            const response = await fetch(`/login/DuplicateNickCheck`,{
+                method:'POST',
+                body: nicknameInput.value
+                });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            if (flag){
+                nicknameAlert.innerHTML = "NICKNAME 중복"
+            } else {
+                nicknameAlert.innerHTML = ""
+                document.getElementById('nickname').setAttribute("pass","true");
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+    async function checkEmailDuplication(nickname){
+        try {
+            const response = await fetch(`/login/DuplicateMailCheck`,{
+                method:'POST',
+                body: emailInput.value
+                });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            if (flag){
+                emailAlert.innerHTML = "EMAIL 중복"
+            } else {
+                emailAlert.innerHTML = ""
+                document.getElementById('email').setAttribute("pass","true");
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+}
 
 
-// }
-// const showLoginWidget = function () {
-//     const signupContents = document.querySelectorAll('.signup');
-//     const loginContents = document.querySelectorAll('.login');
-//     signupContents.forEach(function (i) {
-//         i.style.display = "none";
-//     })
-//     loginContents.forEach(function (i) {
-//         i.style.display = "";
-        
-//     })
-// }
-// const showSignupWidget = function () {
-//     const signupContents = document.querySelectorAll('.signup');
-//     const loginContents = document.querySelectorAll('.login');
-//     loginContents.forEach(function (i) {
-//         i.style.display = "none";
-//     })
-//     signupContents.forEach(function (i) {
-//         i.style.display = "";
-//     })
-// }
+const openSignupForm = async function () {
+    const signin = document.querySelectorAll(".sign")[0];
+    const signup = document.querySelectorAll(".sign")[1];
+    const i_transition = document.querySelectorAll("section .sign .content .form .inputBox i");
 
-// const comparePassword = function(){
-//     const password1 = document.getElementById('password').value;
-//     const password2 = document.getElementById('passwordCheck').value;
-//     const passwordCheckPass = document.querySelector('.verifyContraints[name=pwc-pass]');
-//     const passwordCheckFail = document.querySelector('.verifyContraints[name=pwc-fail]');
-//     if(password1==='' || password2===''){   
-//         passwordCheckFail.style.display = "";
-//         passwordCheckPass.style.display = "none";
-//         return false;
-//     }
-//     let check = (password1 === password2);
+    i_transition.forEach(function (x) {
+        x.style.transition = "0s";
+    })
 
-//     if(!check){
-//         passwordCheckFail.style.display = "";
-//         passwordCheckPass.style.display = "none";
-//     }else{
-//         passwordCheckFail.style.display = "none";
-//         passwordCheckPass.style.display = "";
-//     }
-//     return check;
-// }
+    signin.style.visibility = "hidden";
+    signup.style.visibility = "visible";
+    await sleep(0); // 비동기 처리
+    i_transition.forEach(function (x) {
+        x.style.transition = "0.5s";
+    });
+    clearInput();
+}
+const openSigninForm = async function () {
+    const signin = document.querySelectorAll(".sign")[0];
+    const signup = document.querySelectorAll(".sign")[1];
+    const i_transition = document.querySelectorAll("section .sign .content .form .inputBox i");
 
-// const verifyIdContraints = function(){
-//     // 회원가입 시 아이디 조건체크
-//     const idPass = document.querySelector('.verifyContraints[name=id-pass]');
-//     const idFail = document.querySelector('.verifyContraints[name=id-fail]');
-//     const inputId = document.getElementById('id');      
-//     if(inputId.getAttribute('logintype')=='login'){
-//         return;
-//     }
-//     const val = inputId.value;
-//     if(val=='') return false;
-//     if(val.search(/\W|\s/g) > -1){
-//         idFail.style.display="";
-//         idFail.title = "특수문자 입력";
-//         idPass.style.display="none";
-//         return false;
-//     }
-//     if(val.length<8 || val.length>15){
-//         idFail.style.display="";
-//         idFail.title = "아이디 길이 오류";
-//         idPass.style.display="none";
-//         return false;
-//     }
-//     idFail.style.display="none";
-//     idPass.style.display="";
-//     return true;
-// }
-// const verifyPasswordContraints = function(){
-//     // 회원가입 시 비밀번호 조건 체크
-//     const pwPass = document.querySelector('.verifyContraints[name=pw-pass]');
-//     const pwFail = document.querySelector('.verifyContraints[name=pw-fail]');
-//     const inputPassword = document.getElementById('password');
+    i_transition.forEach(function (x) {
+        x.style.transition = "0s";
+    })
 
-//     if(inputPassword.getAttribute('logintype')=='login'){
-//         return;
-//     }
-//     let chk = false; // 숫자 + 문자의 조합인지
-//     let haveNum = false;
-//     let haveChar= false;
-//     const val = inputPassword.value;
-//     if(val.search(/\W|\s/g) > -1){
-//         pwFail.style.display="";
-//         pwFail.title = "특수문자 입력";
-//         pwPass.style.display="none";
-//         return false;
-//     }
-//     if(val.length<10 || val.length>20){
-//         pwFail.style.display="";
-//         pwFail.title = "비밀번호 길이 오류";
-//         pwPass.style.display="none";
-//         return false;
-//     }
-//     for(let i = 0;i<val.length;i++){
-//         if(haveNum && haveChar){
-//             chk = true;
-//             break;
-//         }
-//         if(!isNaN(val[i])){
-//             haveNum = true;
-//         }else{
-//             haveChar = true;
-//         }
-//     }
-//     if(haveNum && haveChar){
-//         chk = true;
-//     }
-//     if(!chk){
-//         pwFail.style.display="";
-//         pwFail.title = "비밀번호 조합 오류, 문자와숫자를 함께";
-//         pwPass.style.display="none";
-//         return false;
-//     }
-//     pwFail.style.display="none";
-//     pwPass.style.display="";
-//     return true
-// }
-// const verifyNicknameContraints = function(){
-//     // 회원가입 시 닉네임 조건 체크
-//     const inputNickname = document.getElementById('nickname');
-//     const nckPass = document.querySelector('.verifyContraints[name=nck-pass]');
-//     const nckFail = document.querySelector('.verifyContraints[name=nck-fail]');
-    
-//     const val = inputNickname.value;
-//     if(val=='') return false;
-//     if(val.search(/\W|\s/g) > -1){
-//         nckFail.style.display="";
-//         nckFail.title = "특수문자 입력";
-//         nckPass.style.display="none";
-//         return false;
-//     }
-//     if(val.length<4 || val.length>10){
-//         nckFail.style.display="";
-//         nckFail.title = "아이디 길이 오류";
-//         nckPass.style.display="none";
-//         return false;
-//     }
-//     nckFail.style.display="none";
-//     nckPass.style.display="";
-//     return true;
-// };
+    signup.style.visibility = "hidden";
+    signin.style.visibility = "visible";
+    await sleep(0); // 비동기 처리
+    i_transition.forEach(function (x) {
+        x.style.transition = "0.5s";
+    });
+    clearInput();
+}
+const clearInput = function () {
+    const input = document.querySelectorAll("input[clear='true']");
+    input.forEach(function (x) {
+        x.value = "";
+    })
+}
+const comparePassword = function () {
+    const password = document.getElementById('password').value;
+    const passwordCheck = document.getElementById('passwordCheck').value;
+    const passwordCheckLabel = document.getElementById('passwordCheckLabel');
+
+    if (passwordCheck === '') {
+        passwordCheckLabel.style.color = "#aaa";
+        return false;
+    }
+
+    let check = (password === passwordCheck);
+    if (!check) {
+        passwordCheckLabel.style.color = "red";
+    } else {
+        passwordCheckLabel.style.color = "green";
+    }
+    return check;
+}
+const verifyIdContraints = function () {
+    // 회원가입 시 아이디 조건체크
+    const username = document.getElementById('username').value;
+    const usernameLabel = document.getElementById('usernameLabel');
+    const usernameAlert = document.getElementById('usernameAlert');
+    usernameAlert.innerHTML = "";
+    if (username === '') {
+        usernameLabel.style.color = "#aaa";
+        return false;
+    }
+
+    if (username.search(/\W|\s/g) > -1) {
+        usernameLabel.style.color = "red";
+        return false;
+    }
+
+    if (username.length < 8 || username.length > 15) {
+        usernameLabel.style.color = "red";
+        return false;
+    }
+
+    usernameLabel.style.color = "green";
+
+    return true;
+}
+const verifyPasswordContraints = function () {
+    // 회원가입 시 비밀번호 조건 체크
+    const password = document.getElementById('password').value;
+    const passwordLabel = document.getElementById('passwordLabel');
+
+    let chk = false; // 숫자 + 문자의 조합인지
+    let haveNum = false;
+    let haveChar = false;
+
+    if (password === '') {
+        passwordLabel.style.color = "#aaa";
+        return false;
+    }
+
+    if (password.search(/\W|\s/g) > -1) {
+        passwordLabel.style.color = "red";
+        return false;
+    }
+
+    if (password.length < 10 || password.length > 20) {
+        passwordLabel.style.color = "red";
+        return false;
+    }
+
+    for (let i = 0; i < password.length; i++) {
+        if (haveNum && haveChar) {
+            chk = true;
+            break;
+        }
+        if (!isNaN(password[i])) {
+            haveNum = true;
+        } else {
+            haveChar = true;
+        }
+    }
+    if (haveNum && haveChar) {
+        chk = true;
+    }
+    if (!chk) {
+        passwordLabel.style.color = "red";
+        return false;
+    }
+    passwordLabel.style.color = "green";
+    return true
+};
+const verifyNicknameContraints = function () {
+    // 회원가입 시 닉네임 조건 체크
+    const nickname = document.getElementById('nickname').value;
+    const nicknameLabel = document.getElementById('nicknameLabel');
+    const nicknameAlert = document.getElementById('nicknameAlert');
+    nicknameAlert.innerHTML = "";
+
+    if (nickname == '') {
+        nicknameLabel.style.color = "#aaa";
+        return false;
+    }
+    if (nickname.search(/\W|\s/g) > -1) {
+        nicknameLabel.style.color = "red";
+        return false;
+    }
+    if (nickname.length < 4 || nickname.length > 10) {
+        nicknameLabel.style.color = "red";
+        return false;
+    }
+    nicknameLabel.style.color = "green";
+    return true;
+};
+const verifyEmailContraints = function () {
+    // 회원가입 시 이메일 조건 체크
+    const email = document.getElementById('email').value;
+    const emailLabel = document.getElementById('emailLabel');
+    const emailAlert = document.getElementById('emailAlert');
+    emailAlert.innerHTML = "";
+    if (email == '') {
+        emailLabel.style.color = "#aaa";
+        return false;
+    }
+    var emailArr = email.split('@');
+    if (!emailArr[1] || !emailArr[1].split('.')[1]) {
+        emailLabel.style.color = "red";
+        return false;
+    }
+    emailLabel.style.color = "green";
+    return true;
+};
+const verifyEmailCode = function () {
+    const emailCode = document.getElementById('emailCode').value;
+    const emailLabel = document.getElementById('emailCodeLabel');
+    if (emailCheckNumber !== 0 && emailCheckNumber !== -1) {
+        if (Number(emailCode) === emailCheckNumber) {
+            emailLabel.style.color = "green";
+            return true;
+        }
+    }
+
+    emailLabel.style.color = "red";
+    return false;
+};
+const flash = async function (object) {
+    object.classList.add('flashing');
+    await sleep(500);
+    object.classList.remove('flashing');
+}
+const signup = async function () {
+    const btn = document.getElementById('signupBtn');
+    btn.addEventListener('click', async function (e) {
+        e.preventDefault();
+    })
+
+    if (btn.getAttribute("state") === '0') {
+        // 인증 번호 보내기
+        const email = document.getElementById('email');
+        const emailLabel = document.getElementById('emailLabel');
+        if (email.getAttribute('pass')==='false') return;
+        if (!verifyEmailContraints()) {
+            flash(emailLabel);
+        } else {
+            // 이메일에 코드 보내기
+            btn.value = "⚫ ⚫ ⚫";
+            try {
+                const response = await fetch(`/login/mail_ok`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        memEmail: email.value,
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error('서버 응답이 실패했습니다.');
+                }
+                const number = await response.json();
+                if (number === -1) {
+                    // 에러뜬거
+                }
+                emailCheckNumber = number;
+                console.log(number);
+                btn.setAttribute("state", '1');
+                btn.value = "회원가입";
+            } catch (error) {
+                console.error('DB 호출 중 오류가 발생했습니다.', error);
+            };
+        }
+    } else if (btn.getAttribute("state") === '1') {
+        let success = true;
+        if (!verifyIdContraints()) {
+            success = false;
+            flash(document.getElementById('usernameLabel'));
+        }
+
+        if (!verifyPasswordContraints()) {
+            success = false;
+            flash(document.getElementById('passwordLabel'));
+        }
+
+        if (!comparePassword()) {
+            success = false;
+            flash(document.getElementById('passwordCheckLabel'));
+        }
+
+        if (!verifyNicknameContraints()) {
+            success = false;
+            flash(document.getElementById('nicknameLabel'));
+        }
+
+        if (!verifyEmailCode()) {
+            success = false;
+            flash(document.getElementById('emailLabel'));
+        }
+
+        if (!success) return;
+        if(document.getElementById('username').getAttribute('pass')==='false') return;
+        if(document.getElementById('nickname').getAttribute('pass')==='false') return;
+        if(document.getElementById('email').getAttribute('pass')==='false') return;
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const nickname = document.getElementById('nickname').value;
+        const email = document.getElementById('email').value;
+
+        try {
+            const response = await fetch(`/login/signup_ok`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    memUserid: username,
+                    memPw: password,
+                    memNick: nickname,
+                    memEmail: email
+                })
+            });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            switch (flag) {
+                case 0:
+                    window.location.href = "/";
+                    break;
+                default:
+                    window.location.href = "/";
+                    break;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+
+}
+const signin = async function(){
+    let username = document.getElementById('usernameLogin').value;
+    let password = document.getElementById('passwordLogin').value;
+    console.log(username);
+    console.log(password);
+    try {
+        const response = await fetch(`/login/generateToken`,{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                memUserid: username,
+                memPw: password,
+            })
+        });
+        if (!response.ok) {
+            throw new Error('서버 응답이 실패했습니다.');
+        }
+        const flag = await response.json();
+        switch (flag){
+            case 1: 
+                alert('아이디 또는 비번 오류');
+                // check_recaptcha();
+                break;
+            case 0:
+                window.location.href = "./";
+                break;
+            default:
+                break;
+        }
+    } catch (error) {
+        console.error('DB 호출 중 오류가 발생했습니다.', error);
+    }
+}    
+function check_recaptcha(){
+    loginCnt+=1;
+    var Captcha_Check = grecaptcha.getResponse();
+    if (Captcha_Check.length == 0) {
+        if (loginCnt ==3){
+            document.getElementById("captcha").style.display="";
+        } else if (loginCnt > 3){
+            alert("Please complete the reCAPTCHA!");
+            return;
+        }
+    }
+    else{
+        alert("인증 성공");
+        window.location.href = "./";
+    }
+}
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));

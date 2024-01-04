@@ -56,7 +56,7 @@ public class LoginController {
 
     @GetMapping("")
     public ModelAndView login() {
-        return new ModelAndView("login2");
+        return new ModelAndView("login");
     }
 
     // 회원가입 요청
