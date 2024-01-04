@@ -1,21 +1,27 @@
 package platform.game.service.repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import platform.game.service.entity.Post;
 
 @Repository
-public interface PostInfoRepository extends JpaRepository<Post, Integer>{
-    //게시물 전체 가져오기
-    //게시판 별 게시물 가져오기 추가하기
+public interface PostInfoRepository extends JpaRepository<Post, Integer> {
+    // 게시물 전체 가져오기
+    // 게시판 별 게시물 가져오기 추가하기
     ArrayList<Post> findAll();
-    //게시물 찾기
+
+    // 게시물 찾기
     Post findByPostId(int postId);
-    //게시판에 맞는 리스트 찾기 찾기
+
+    // 게시판에 맞는 리스트 찾기 찾기
     ArrayList<Post> findByBoardCdOrderByPostIdDesc(String boardCd);
-    //게시물 삭제하기
+
+    // 게시물 삭제하기
     Post deleteByPostId(int postId);
 }

@@ -27,11 +27,14 @@
                         <th width="3%">&nbsp;</th>
                     </tr>
                     <tr th:each="post, rowStat : ${lists}">
+                        <script th:inline="javascript">
+                            var pid = 3; // Thymeleaf로부터 loginCheck 값을 받아옴
+                        </script>
                         <td>&nbsp;</td>
                         <td th:text="${#lists.size(lists) - rowStat.index}"></td>
                         <td class="left">
                             <!--게시물 클릭시 이동하도록 하는 구문-->
-                            <a th:href="@{view(board_cd=${post.boardCd}, post_id=${post.postId})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
+                            <span th:onclick="setBoardViewPage('board_view', '[[${post.postId}]]')" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
                             <!--게시물 댓글 갯수-->
                             <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                             <!--새로운 글 작성시 보여지는 new 표시-->
@@ -52,14 +55,12 @@
             
             <div class="btn_area">
                 <div class="align_right">
-                    <!-- <a th:href="@{write(board_cd=${boardCd})}"><input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"></a> -->
-                    <!-- <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" /> -->
-                    <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
-                        <!-- 로그인 상태인 경우의 링크 -->
+                    <!-- 로그인 상태인 경우의 링크 -->
+                    <a th:if="${loginCheck}" th:onclick="setBoardWritePage('board_write', '[[${boardCd}]]')">
                         <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
                     </a>
+                    <!-- 로그인 상태가 아닌 경우의 링크 -->
                     <a th:unless="${loginCheck}" href="/login">
-                        <!-- 로그인 상태가 아닌 경우의 링크 -->
                         <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()">
                     </a>
                 </div>
