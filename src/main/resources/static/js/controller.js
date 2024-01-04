@@ -3,7 +3,6 @@ const setPage = async function (page) {
     switch (page) {
         case "main":
             // 메인 페이지
-
             //DOM + 백엔드에서 변수받음 
             await fetch('/getMainFragment')
                     .then(response => response.text())
