@@ -36,23 +36,6 @@ import platform.game.service.service.MemberInfoDetails;
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.security" })
 public class MainController {
-    @Autowired
-    SqlMapperInter sqlMapperInter;
-
-    @Autowired
-    RankDAO rankDAO;
-
-    private List<RollingRankTO> rollingRankList;
-
-    public MainController(SqlMapperInter sqlMapperInter) {
-        this.sqlMapperInter = sqlMapperInter;
-        this.rollingRankList = sqlMapperInter.getRol(); // 초기화
-    }
-
-    @Scheduled(cron = "0 0/5 * * * *")
-    public void RollingTimer() {
-        rollingRankList = sqlMapperInter.getRol();
-    }
 
     @Autowired
     private PostInfoRepository postInfoRepository;
@@ -76,13 +59,6 @@ public class MainController {
 
     }
 
-    @PostMapping("/roll") // 메인화면 Rolling RandomList
-    @ResponseBody
-    public List<RollingRankTO> roll() {
-        List<RollingRankTO> list = rollingRankList;
-        return list;
-    }
-
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("list");
@@ -93,27 +69,27 @@ public class MainController {
         return new ModelAndView("shop");
     }
 
-    @GetMapping("/rank")
-    public ModelAndView rank(ModelAndView modelAndView) {
-        List<WinRankTO> WinRanklists = sqlMapperInter.getWinrank();
-        List<LevelRankTO> LevelRanklists = sqlMapperInter.getLevelrank();
-        List<PointRankTO> PointRanklists = sqlMapperInter.getPointrank();
+    // @GetMapping("/rank")
+    // public ModelAndView rank(ModelAndView modelAndView) {
+    // List<WinRankTO> WinRanklists = sqlMapperInter.getWinrank();
+    // List<LevelRankTO> LevelRanklists = sqlMapperInter.getLevelrank();
+    // List<PointRankTO> PointRanklists = sqlMapperInter.getPointrank();
 
-        List<Integer> WinRanks = rankDAO.getWinList();
-        List<Integer> LevelLists = rankDAO.getLevelList();
-        List<Integer> PointRanks = rankDAO.getPointList();
+    // List<Integer> WinRanks = rankDAO.getWinList();
+    // List<Integer> LevelLists = rankDAO.getLevelList();
+    // List<Integer> PointRanks = rankDAO.getPointList();
 
-        modelAndView.setViewName("rank");
-        modelAndView.addObject("winlist", WinRanklists);
-        modelAndView.addObject("levellist", LevelRanklists);
-        modelAndView.addObject("pointlist", PointRanklists);
+    // modelAndView.setViewName("rank");
+    // modelAndView.addObject("winlist", WinRanklists);
+    // modelAndView.addObject("levellist", LevelRanklists);
+    // modelAndView.addObject("pointlist", PointRanklists);
 
-        modelAndView.addObject("levels", LevelLists);
-        modelAndView.addObject("winrank", WinRanks);
-        modelAndView.addObject("pointrank", PointRanks);
+    // modelAndView.addObject("levels", LevelLists);
+    // modelAndView.addObject("winrank", WinRanks);
+    // modelAndView.addObject("pointrank", PointRanks);
 
-        return modelAndView;
-    }
+    // return modelAndView;
+    // }
 
     @GetMapping("/getMainFragment")
     public String getMainFragment(Model model) {

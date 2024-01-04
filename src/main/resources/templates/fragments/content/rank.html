@@ -1,5 +1,6 @@
 
 <link rel="stylesheet" type="text/css" href="../css/list_style.css">
+
         <div id="web">
                 <div class="row content">
                     <div class="list">
@@ -11,16 +12,14 @@
                         <canvas id="win" style='width:450px; height:30vh; display: inline-block;'></canvas>
                         <canvas id="point" style='width:450px; height:30vh; display: inline-block;'></canvas>
                         <canvas id="levels" style='width:450px; height:30vh; display: inline-block;'></canvas>
-                        <script type="text/javascript">
+                        <!-- <script>
                             var LevelRankings = "[[${levels}]]";
                             var WinRankings = "[[${winrank}]]";
                             var PointRankings = "[[${pointrank}]]";
-
                             let WinRanks = WinRankings.split(",");
                             let PointRanks = PointRankings.split(",");
                             let LevelRanks = LevelRankings.split(",");
 
-                            console.log(levels);
                             WinRanks[0] = WinRanks[0].substring(1);
                             WinRanks[WinRanks.length - 1] = WinRanks[WinRanks.length - 1].split("]")[0];
 
@@ -29,7 +28,6 @@
 
                             LevelRanks[0] = LevelRanks[0].substring(1);
                             LevelRanks[LevelRanks.length - 1] = LevelRanks[LevelRanks.length - 1].split("]")[0];
-
 
                             var WinChart = new Chart(
                                 document.getElementById('win'),
@@ -140,7 +138,7 @@
                                         }
                                     }
                                     });
-                        </script>
+                        </script> -->
                     </div>
                 </div>
         </div>
