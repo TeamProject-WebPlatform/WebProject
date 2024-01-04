@@ -36,6 +36,10 @@ public class BoardController {
     @Autowired
     private CommentInfoRepository commentInfoRepository;
 
+    @RequestMapping("/shop")
+    public String shop(){
+        return "shop";
+    }
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd) {
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
@@ -211,7 +215,6 @@ public class BoardController {
 
         // Find the existing post by ID
         Optional<Post> optionalPost = postInfoRepository.findById(postId);
-
         Post post = optionalPost.get();
         // Update the post with the new values
         post.setPostTitle(title);

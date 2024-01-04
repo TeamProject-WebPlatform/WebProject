@@ -3,7 +3,6 @@ const setPage = async function (page) {
     switch (page) {
         case "main":
             // 메인 페이지
-
             //DOM + 백엔드에서 변수받음 
             await fetch('/getMainFragment')
                     .then(response => response.text())
@@ -12,9 +11,8 @@ const setPage = async function (page) {
                     })       
                     .catch(error => console.error('컨트롤러 메인 에러:', error));
             // DOM에 받은 변수로 세팅
-            setSwiperWrapper();
+            await setSwiperWrapper();
             setSwiper();
-            
             break;
         case "notice": boardCd = "20001";
         case "board": if(!boardCd) boardCd = "20004";
@@ -28,16 +26,17 @@ const setPage = async function (page) {
                     .catch(error => console.error('컨트롤러 공지사항 에러:', error));
             break;
 
-        case 2:
+        case 'fight':
             // 대전 게시판
+            
             break;
-        case 3:
+        case 'team':
             // 협동 게시판
             break;
         case 4:
             // 게시판
             break;
-        case 5:
+        case "rank": boardCd="20005";
             // 랭킹
             break;
         case 6:
@@ -46,7 +45,7 @@ const setPage = async function (page) {
         case 7:
             // 프로필
             break;
-        case 8:
+        case 'shop':
             // 아이템 샵
             break;
     }

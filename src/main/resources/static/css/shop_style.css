@@ -19,7 +19,9 @@ a{
 .row{
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    /* align-items: flex-start; */
+    /* justify-content: center; */
+    align-items: stretch;
 }
 
 body{
@@ -101,7 +103,6 @@ header > h1{
     cursor: pointer;
     /* color: var(--text-black-white); */
     /* outline:1px solid red; */
-    background-color: #363636;
     transition: all 0.2s;
 }
 .login_info_list{
@@ -152,6 +153,8 @@ nav{
     /* position: absolute; */
     width: 1380px;
     margin: 0 auto;
+    justify-content:space-around;
+
     /* margin-top: 10%; */
     /* outline: 1px solid red; */
     /* background-color: #f0f0f0; */
@@ -163,27 +166,24 @@ nav{
     clear: both;
 } */
 nav > ul{
-    width: 1380px;
+    /* width: 1380px; */
     /* height: 10vh; */
-    /* margin: 0 auto; */
+    justify-content:space-around;
     background-color: #f0f0f0;
-
     /* float: left; */
     /* outline: 1px dotted red; */
-    justify-content: center;
-}
-nav > ul > li{
-    width: 200px;
+    
+    width: 1380px;
+    /* height: 10vh; */
     height: 50px;
     /* background-color: #fff; */
     text-align: center;
     line-height: 50px;
     box-sizing: border-box;
-    margin-left: 45px;
+    /* margin-left: 45px; */
     /* outline:1px solid black; */
     font-size: 20px;
-    position: relative;
-    border-bottom: 1px solid black ;
+    /* border-bottom: 1px solid black ; */
     /* float: left; */
     /* flex: 1 1 auto; */
     transition: all 1s;
@@ -193,40 +193,42 @@ nav > ul > li:hover{
     /* color: var(--text-black-white); */
     /* background-color: rgb(0, 73, 140); */
     border-bottom: 1px solid black;
-
 }
 
-.content{
+#content{
     width: 100%;
     /* flex: 1 0 0; */
     /* outline: 1px solid red; */
     /* background-color: rgba(0, 0, 0, .5); */
-
 }
+
 .shop{
-    width: 1980px;
+    max-width: 1920px;
     margin: 0 auto;
-    flex: 0 0 1;
-    outline: 1px solid olivedrab;
+    justify-content: flex-start;
+    /* flex: 0 0 1; */
+    /* outline: 1px solid olivedrab; */
 
 }
 
-.shoplist{ 
+/* 컨텐츠 왼쪽 */
+.left_shop{ 
     width: 300px;
-    outline: 1px solid blue;
+    /* outline: 1px solid blue; */
 }
-
-.main_item{
+/* 리스트 */
+.left_shop_list{
     width: 250px;
     margin: 0 auto;
-    outline: 1px solid yellow;
+    border: 1px solid blak;
+    /* outline: 1px solid yellow; */
 }
-.main_item > li{
+.left_shop_list > li{
     text-align: center;
     margin: 0 auto;
     /* outline: 1px solid red; */
 }
-.main_item > li > a{
+.left_shop_list > li > a{
     font-size: 30px;
     width: 250px;
     height: 60px;
@@ -235,66 +237,209 @@ nav > ul > li:hover{
     /* background-color: skyblue; */
     outline: 1px solid black;
 }
-.main_item > li:first-child{
+.left_shop_list > li:first-child{
     margin-top: 3vh;
 }
-.main_item > li > ul{
-
-    text-align: right;
-    outline: 1px solid red;
+.left_shop_list > li > .sub_border_list{
+    visibility: hidden;
+    overflow: hidden;
+    width: 250px;
+    height: 0;
+    /* height: 120px; */
+    display: flex;
+    flex-direction: column; /* 자식 요소들을 수직으로 정렬 */
+    transition: all 0.2s;
 }
 
-.main_item > li > ul > li > a{
-    outline: 1px solid red;
+.left_shop_list > li > ul > li{
+    margin-left: auto;
+    /* outline: 1px solid red; */
+    /* font-size: 15px; */
+    width: 150px;
+
+    /* line-height: 60px; */
+    /* display: block; */
+}
+.left_shop_list > li > ul > li > a{
+    /* outline: 1px solid red; */
     font-size: 20px;
-    width: 250px;
+    width: 150px;
     height: 60px;
     line-height: 60px;
     display: block;
 }
 
+/* 액션 */
+.list_action{
+    background-color: #f0f0f0;
+    font-size: 35px;
+}
+.sub_list_action{
+    visibility: visible;
+    height: 120px;
+}
+.hide{
+    visibility: hidden;
+    height: 0;
+}
+
+/* 컨텐츠 오른쪽 여백 */
+.right_shop{
+    width: 300px;
+    /* outline: 1px solid red; */
+}
+
 /* 아이템 샵 메인 */
-.shopmain{
-    width: 1380px;
+#center_all_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_icon_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_profile_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_badge_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_time_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
+    outline: 1px solid red;
+}
+#center_winning_shop{
+    max-width: 1320px;
+    display: none;
+    /* margin: 0 auto; */
     outline: 1px solid red;
 }
 
-.itemlist{
-    /* max-width: 1370px; */
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+#center_action{
+    display: block;
+}
+#center_hide{
+    display: none;
+}
+
+.category_name{
+    margin-top: 1%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+    font-size: 20px;
+}
+
+.itemlist{  
+    width: 1320px;
+    /* margin-left: 5%; */
+    /* width: 100%; */
+    justify-content:space-around;
+    /* outline: 1px solid red; */
+    /* margin: 0 auto; */
 }
 
 .sub_item {
-    /* width: 20%; */
-    height: 32vh;
-    margin-top: 1%;
-    outline: 1px solid red;
-    /* margin-bottom: 20px; 필요에 따라 여백 조절 */
-    flex: 0 0 calc(20% - 20px); /* 20%의 너비, 여백을 포함하여 필요에 따라 조절 */
+    width: 230px;
+    /* height: 32vh; */
+    border: 1px solid black;
+    border-radius: 10%;
+    /* outline: 1px solid red; */
+    /* flex: 0 0 calc(20% - 20px); */
 }
 
 .item{
+    /* width: 178px; */
+    height: 17vh;
+    margin: 0 auto;
+    /* margin-top: 5%; */
+    margin-bottom: 5%;
+    border-bottom: 1px solid black;
+    position: relative;
+    /* border: 1px solid black; */
+    /* border-radius: 50%; */
+    /* outline: 1px solid red; */
+}
+.item > a{
+    /* border-radius: 50%; */
+    /* margin-top: 5%; */
+    outline: 1px solid red;
+}
+.icon_item{
+    position: absolute;
     width: 15vh;
     height: 15vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     margin: 0 auto;
-    margin-top: 5%;
+    /* margin-top: 5%; */
     border-radius: 50%;
-    outline: 1px solid red;
     overflow: hidden;
+    border: 1px solid black;
+    /* outline: 1px solid red; */
+
 }
 
-.item > img {
+.item > .icon_item > a > img {
     width: 100%;
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+.explanation_item{
+    width: 100%;
+    /* height: 13vh; */
+    /* line-height: 13vh; */    
+    text-align: center;
+    /* outline: 1px solid red; */
 }
 
-.user_content{
-    height: 13vh;
-    /* border: 1px solid red; */
-    /* background-color: #222327; */
+.name_item{
+    margin-left: 4%;
+    /* margin-top: 5%; */
+    margin-bottom: 4%;
+    font-size: 20px;
+    text-align: left;
+}
+.price_item{
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.button_item{
+    max-width: 100%;
+    /* outline: 1px solid red; */
+    text-align: center;
+}
+
+#explanation{
+    width: 100%;
+    border: none;
+    resize: none;
+}
+.select{
+    width: 100px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    /* outline: 1px solid red; */
 }
 .paginate_regular{
-    
+    /* max-width: calc(100% - 600px); */
+    min-width: calc(100% - 600px);
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    font-size: 25px;
+    /* outline: 1px solid red; */
 }

@@ -6,10 +6,11 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import platform.game.service.model.TO.AttendRankTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
+import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
 
 @Mapper
@@ -75,18 +76,11 @@ public interface SqlMapperInter {
                         "SELECT #{rank}, 0, mem_id, NOW() " +
                         "FROM member " +
                         "ORDER BY mem_lvl DESC " +
-                        "LIMIT #{i}, 1")
-        int setLevelRank(int rank, int i);
+                        "LIMIT #{rank-1}, 1")
+        int setLevelRank(@RequestParam("rank") int rank);
 
         @Select("select mem_userid, mem_attend, mem_total_point, mem_lvl from member order by mem_attend desc limit 30")
         public int getAttendRank();
-
-        @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
-                        "SELECT #{rank}, 1, mem_id, NOW() " +
-                        "FROM member " +
-                        "ORDER BY mem_attend DESC " +
-                        "LIMIT #{i}, 1")
-        int setAttendRank(int rank, int i);
 
         @Select("select mem_userid, mem_win_count, mem_total_point, mem_lvl from member order by mem_win_count desc limit 30")
         public int getWinRateRank();
@@ -95,25 +89,25 @@ public interface SqlMapperInter {
                         "SELECT #{rank}, 2, mem_id, NOW() " +
                         "FROM member " +
                         "ORDER BY mem_win_count DESC " +
-                        "LIMIT #{i}, 1")
-        int setWinrateRank(int rank, int i);
+                        "LIMIT #{rank-1}, 1")
+        int setWinrateRank(@RequestParam("rank") int rank);
 
         @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
                         "SELECT #{rank}, 3, mem_id, NOW() " +
                         "FROM member " +
                         "ORDER BY mem_total_point DESC " +
-                        "LIMIT #{i}, 1")
-        int setTotalPointRank(int rank, int i);
+                        "LIMIT #{rank-1}, 1")
+        int setTotalPointRank(@RequestParam("rank") int rank);
 
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranklist r join member m on r.rank_code=0 and m.mem_id=r.mem_id")
         public List<LevelRankTO> getLevelrank();
-
-        @Select("select r.rank, m.mem_userid, m.mem_attend from ranklist r join member m on r.rank_code=1 and m.mem_id=r.mem_id")
-        public List<AttendRankTO> getAttendrank();
 
         @Select("select r.rank, m.mem_userid, (m.mem_win_count/m.mem_game_count)*100 as winrate from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
         public List<WinRankTO> getWinrank();
 
         @Select("select r.rank, m.mem_userid, (m.mem_win_count/m.mem_game_count)*100 as winrate from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
         public List<PointRankTO> getPointrank();
+
+        @Select("select distinct m.mem_nick, m.mem_lvl from ranklist r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
+        public List<RollingRankTO> getRol();
 }

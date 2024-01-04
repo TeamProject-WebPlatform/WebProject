@@ -7,12 +7,15 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
@@ -21,9 +24,9 @@ import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
-import platform.game.service.model.TO.AttendRankTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
+import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
@@ -38,6 +41,18 @@ public class MainController {
 
     @Autowired
     RankDAO rankDAO;
+
+    private List<RollingRankTO> rollingRankList;
+
+    public MainController(SqlMapperInter sqlMapperInter) {
+        this.sqlMapperInter = sqlMapperInter;
+        this.rollingRankList = sqlMapperInter.getRol(); // 초기화
+    }
+
+    @Scheduled(cron = "0 0/5 * * * *")
+    public void RollingTimer() {
+        rollingRankList = sqlMapperInter.getRol();
+    }
 
     @Autowired
     private PostInfoRepository postInfoRepository;
@@ -61,6 +76,13 @@ public class MainController {
 
     }
 
+    @PostMapping("/roll") // 메인화면 Rolling RandomList
+    @ResponseBody
+    public List<RollingRankTO> roll() {
+        List<RollingRankTO> list = rollingRankList;
+        return list;
+    }
+
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("list");
@@ -74,23 +96,19 @@ public class MainController {
     @GetMapping("/rank")
     public ModelAndView rank(ModelAndView modelAndView) {
         List<WinRankTO> WinRanklists = sqlMapperInter.getWinrank();
-        List<AttendRankTO> AttendRanklists = sqlMapperInter.getAttendrank();
         List<LevelRankTO> LevelRanklists = sqlMapperInter.getLevelrank();
         List<PointRankTO> PointRanklists = sqlMapperInter.getPointrank();
 
-        ArrayList<Integer> WinRanks = rankDAO.getWinList();
-        ArrayList<Integer> AttendRanks = rankDAO.getAttendList();
-        ArrayList<Integer> LevelRanks = rankDAO.getLevelList();
-        ArrayList<Integer> PointRanks = rankDAO.getPointList();
+        List<Integer> WinRanks = rankDAO.getWinList();
+        List<Integer> LevelLists = rankDAO.getLevelList();
+        List<Integer> PointRanks = rankDAO.getPointList();
 
         modelAndView.setViewName("rank");
         modelAndView.addObject("winlist", WinRanklists);
-        modelAndView.addObject("attendlist", AttendRanklists);
         modelAndView.addObject("levellist", LevelRanklists);
         modelAndView.addObject("pointlist", PointRanklists);
 
-        modelAndView.addObject("attendrank", AttendRanks);
-        modelAndView.addObject("levelrank", LevelRanks);
+        modelAndView.addObject("levels", LevelLists);
         modelAndView.addObject("winrank", WinRanks);
         modelAndView.addObject("pointrank", PointRanks);
 
