@@ -66,10 +66,10 @@ public class MainController {
         return new ModelAndView("list");
     }
 
-    @GetMapping("/show")
-    public ModelAndView show() {
-        return new ModelAndView("shop");
-    }
+    // @GetMapping("/show")
+    // public ModelAndView show() {
+    //     return new ModelAndView("shop");
+    // }
 
     @GetMapping("/rank")
     public ModelAndView rank(ModelAndView modelAndView) {
