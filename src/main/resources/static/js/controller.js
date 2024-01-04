@@ -3,7 +3,6 @@ const setPage = async function (page) {
     switch (page) {
         case "main":
             // 메인 페이지
-
             //DOM + 백엔드에서 변수받음 
             await fetch('/getMainFragment')
                     .then(response => response.text())
@@ -27,10 +26,11 @@ const setPage = async function (page) {
                     .catch(error => console.error('컨트롤러 공지사항 에러:', error));
             break;
 
-        case 2:
+        case 'fight':
             // 대전 게시판
+            
             break;
-        case 3:
+        case 'team':
             // 협동 게시판
             break;
         case 4:

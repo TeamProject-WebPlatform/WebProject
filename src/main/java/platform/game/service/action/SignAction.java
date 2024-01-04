@@ -253,9 +253,9 @@ public class SignAction {
             cookie = new Cookie("jwtTokenCookie", token);
             cookie.setMaxAge(JWT_EXPIRY_TIME);
             cookie.setPath("/");
-        } else {
-            return null;
-        }
+            } else {
+                return null;
+            }
         }catch(Exception e){System.out.println(e.getMessage());}
         
         

@@ -15,7 +15,6 @@ const SwiperData = async function() {
     return datalist;
 }
 const setSwiper = function () {
-    console.log("스와이퍼 set");
     const progressCircle = document.querySelector(".autoplay-progress svg");
     const progressContent = document.querySelector(".autoplay-progress span");
     var swiper = new Swiper(".memberSwiper", {
@@ -29,10 +28,10 @@ const setSwiper = function () {
             el: ".swiper-pagination",
             clickable: true
         },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev"
-        },
+        // navigation: {
+        //     nextEl: ".swiper-button-next",
+        //     prevEl: ".swiper-button-prev"
+        // },
         on: {
             autoplayTimeLeft(s, time, progress) {
                 // progressCircle.style.setProperty("--progress", 1 - progress);
@@ -78,12 +77,22 @@ const createSwiperProfile = function (nickname, level) {
                     </div>
                 </div>
             </a>
+            <div class="profile-dividing-line"></div>
             <div class="profile-main">
                 <div class="profile-introduction">
                     ${memIntroduction}
                 </div>
-                <div class="profile-badge">
-                    뱃지 나열 공간
+                <div class="profile-dividing-line"></div>
+                <div class="profile-badge-section">
+                <span class="badge">&#127774;</span>
+                <span class="badge">&#127775;</span>
+                <span class="badge">&#127806;</span>
+                <span class="badge">&#127851;</span>
+                <span class="badge">&#127774;</span>
+                <span class="badge">&#127775;</span>
+                <span class="badge">&#127806;</span>
+                <span class="badge">&#127851;</span>
+                <span class="badge">&#127774;</span>
                 </div>
             </div>
         </div>

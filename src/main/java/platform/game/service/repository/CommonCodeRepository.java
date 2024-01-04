@@ -16,7 +16,7 @@ public interface CommonCodeRepository extends JpaRepository<CommonCode, String> 
     Optional<CommonCode> findByCd(String code);
 
     @Modifying
-    @Query(value = "UPDATE common_code SET com_cd_param1 = :param WHERE com_cd = :code", nativeQuery = true)
+    @Query(value = "UPDATE common_code SET remark1 = :param WHERE cd = :code", nativeQuery = true)
     void updateRemark1ByCd(@Param("code") String code, @Param("param") String param);
 
 }
