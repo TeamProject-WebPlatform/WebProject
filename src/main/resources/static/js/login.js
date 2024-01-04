@@ -113,6 +113,9 @@ const openSignupForm = async function () {
         x.style.transition = "0.5s";
     });
     clearInput();
+
+    const logo = document.querySelector(".logo");
+    logo.style.transform = `translate(0, -50px)`;
 }
 const openSigninForm = async function () {
     const signin = document.querySelectorAll(".sign")[0];
@@ -130,6 +133,9 @@ const openSigninForm = async function () {
         x.style.transition = "0.5s";
     });
     clearInput();
+    
+    const logo = document.querySelector(".logo");
+    logo.style.transform = `translate(0, 0px)`;
 }
 const clearInput = function () {
     const input = document.querySelectorAll("input[clear='true']");
