@@ -36,7 +36,7 @@ const setPage = async function (page) {
         case 4:
             // 게시판
             break;
-        case 5:
+        case "rank": boardCd="20005";
             // 랭킹
             break;
         case 6:
