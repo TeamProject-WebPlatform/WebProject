@@ -69,28 +69,6 @@ public class MainController {
         return new ModelAndView("shop");
     }
 
-    // @GetMapping("/rank")
-    // public ModelAndView rank(ModelAndView modelAndView) {
-    // List<WinRankTO> WinRanklists = sqlMapperInter.getWinrank();
-    // List<LevelRankTO> LevelRanklists = sqlMapperInter.getLevelrank();
-    // List<PointRankTO> PointRanklists = sqlMapperInter.getPointrank();
-
-    // List<Integer> WinRanks = rankDAO.getWinList();
-    // List<Integer> LevelLists = rankDAO.getLevelList();
-    // List<Integer> PointRanks = rankDAO.getPointList();
-
-    // modelAndView.setViewName("rank");
-    // modelAndView.addObject("winlist", WinRanklists);
-    // modelAndView.addObject("levellist", LevelRanklists);
-    // modelAndView.addObject("pointlist", PointRanklists);
-
-    // modelAndView.addObject("levels", LevelLists);
-    // modelAndView.addObject("winrank", WinRanks);
-    // modelAndView.addObject("pointrank", PointRanks);
-
-    // return modelAndView;
-    // }
-
     @GetMapping("/getMainFragment")
     public String getMainFragment(Model model) {
         // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환

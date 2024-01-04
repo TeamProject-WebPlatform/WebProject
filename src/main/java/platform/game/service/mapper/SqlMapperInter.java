@@ -96,7 +96,7 @@ public interface SqlMapperInter {
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranklist r join member m on r.rank_code=0 and m.mem_id=r.mem_id")
         public List<LevelRankTO> getLevelrank();
 
-        @Select("select r.rank, m.mem_userid, (m.mem_win_count/m.mem_game_count)*100 as winrate from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
+        @Select("select r.rank, m.mem_userid, round((m.mem_win_count/m.mem_game_count)*100,2) as winrate from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
         public List<WinRankTO> getWinrank();
 
         @Select("select r.rank, m.mem_userid, m.mem_total_point from ranklist r join member m on r.rank_code=3 and m.mem_id=r.mem_id")

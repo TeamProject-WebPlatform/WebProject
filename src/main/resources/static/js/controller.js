@@ -41,16 +41,10 @@ const setPage = async function (page) {
             await fetch('/getRankFragment?board_cd=' + boardCd)
                 .then(response => response.text())
                 .then(html => {
-                    var str = html.substring(html.indexOf('<script>')+8,html.indexOf('</script>'));
-                    var script = document.createElement('script');
-                    var text = document.createTextNode(str);
-                    script.appendChild(text);
                     document.getElementById('center_main').innerHTML = html;
-                    var canvas = document.getElementById('levels');
-                    while(script.firstChild){
-                        canvas.appendChild(script.firstChild);
-                    }
-                    console.log(canvas);
+                    WinRateChart();
+                    PointChart();
+                    LevelChart();
                 })
                 .catch(error => console.log('컨트롤러 랭킹 에러'));
             break;
