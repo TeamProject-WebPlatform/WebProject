@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+<<<<<<< HEAD
 *{
     margin: 0;
     padding: 0;
@@ -215,6 +216,10 @@ nav > ul > li:hover{
     margin: 0 auto;
     /* border: 1px solid red; */
     position: relative;
+=======
+.list{
+    height: 90vh;
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 }
 
 /* 게시판 스타일 */

@@ -11,7 +11,10 @@
         <script src="./js/login_style.js"></script>
         <script type="text/javascript">
             function deletePost() {
+<<<<<<< HEAD
                 // 삭제 버튼 클릭 시 확인 및 폼 제출
+=======
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                 var confirmation = confirm('게시물을 삭제하시겠습니까?');
                 if (confirmation) {
                     document.dfrm.submit();
@@ -41,6 +44,7 @@
                         </ul>
                     </div>
                 </div>
+<<<<<<< HEAD
             </header>
             <nav>
                 <ul class="row">
@@ -71,6 +75,38 @@
                     </li>
                 </ul>
             </nav>
+=======
+                <nav>
+                    <ul class="row">
+                        <li><a href="../board/notice">공지사항</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/fight">대전</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="board/team">협동</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/list">게시판</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../rank">랭킹</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             <section>
                 <div class="row content">
                     <div class="list">
@@ -98,9 +134,13 @@
                                     
                                     <div class="btn_area">
                                         <div class="align_left">
+<<<<<<< HEAD
                                             <!-- <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list?cpage=<%=cpage %>'" /> -->
                                             <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'" />
                                             <input type="button" value="보기" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='view?post_id=${post.postId}'|" />
+=======
+                                            <a th:href="@{list(board_cd=${post.boardCd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                                         </div>
                                         <div class="align_right">
                                             <input type="button" id="dbtn" value="삭제" class="btn_write btn_txt01" style="cursor: pointer;" onclick="deletePost()"/>

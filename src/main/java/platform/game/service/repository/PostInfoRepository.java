@@ -1,13 +1,22 @@
 package platform.game.service.repository;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 
 import org.springframework.data.jpa.repository.JpaRepository;
+=======
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 import org.springframework.stereotype.Repository;
 
 import platform.game.service.entity.Post;
 
 @Repository
+<<<<<<< HEAD
 public interface PostInfoRepository extends JpaRepository<Post, Integer>{
     //게시물 전체 가져오기
     //게시판 별 게시물 가져오기 추가하기
@@ -17,5 +26,19 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer>{
     //공지사항 찾기
     ArrayList<Post> findByBoardCd(String boardCd);
     //게시물 삭제하기
+=======
+public interface PostInfoRepository extends JpaRepository<Post, Integer> {
+    // 게시물 전체 가져오기
+    // 게시판 별 게시물 가져오기 추가하기
+    ArrayList<Post> findAll();
+
+    // 게시물 찾기
+    Post findByPostId(int postId);
+
+    // 게시판에 맞는 리스트 찾기 찾기
+    ArrayList<Post> findByBoardCdOrderByPostIdDesc(String boardCd);
+
+    // 게시물 삭제하기
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     Post deleteByPostId(int postId);
 }

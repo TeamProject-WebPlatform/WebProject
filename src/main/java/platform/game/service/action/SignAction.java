@@ -241,19 +241,38 @@ public class SignAction {
 
     // JWT 토큰 만들기
     public Cookie generateToken(AuthRequest authRequest) {
+<<<<<<< HEAD
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
         Cookie cookie = null;
         if (authentication.isAuthenticated()) {
+=======
+        Cookie cookie = null;
+        Authentication authentication = null;
+        try{
+            authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
+            if (authentication.isAuthenticated()) {
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             String password = securityPassword.encode(authRequest.getMemPw());
             String token = jwtService.generateToken(authRequest.getMemUserid(), password);
 
             cookie = new Cookie("jwtTokenCookie", token);
             cookie.setMaxAge(JWT_EXPIRY_TIME);
             cookie.setPath("/");
+<<<<<<< HEAD
         } else {
             return null;
         }
+=======
+            } else {
+                return null;
+            }
+        }catch(Exception e){System.out.println(e.getMessage());}
+        
+        
+        
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
         return cookie;
     }
 

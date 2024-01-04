@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <nav th:fragment="navFragment" id="navigation">
+        <ul class="row">
+            <li style="cursor: pointer;" onclick="setPage('notice')">공지사항
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li style="cursor: pointer;" onclick="setPage('fight')">대전
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li style="cursor: pointer;" onclick="setPage('team')">협동
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li style="cursor: pointer;" onclick="setPage('board')">게시판</li>
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li><a href="../rank">랭킹</a>
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+<<<<<<< HEAD
 
 *{
     margin: 0;
@@ -45,6 +46,8 @@ header > h1{
     height: 70px;
 }
 
+=======
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 #frmLogin {
     border: 3px solid black;
     padding: 0px;

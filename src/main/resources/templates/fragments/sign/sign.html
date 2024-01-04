@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <!-- 로그인 폼 -->
+    <div class="content" th:fragment="signinFragment">
+        <script>let loginCnt=0;</script>
+        <h2>Sign In</h2>
+        <div class="form">
+            <div class="inputBox">
+                <input type="text" id="usernameLogin" clear="true" required> <i>Username</i>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="passwordLogin" clear="true" required> <i>Password</i>
+            </div>
+            <div class="links">
+                <a href="#">비밀번호 찾기</a>
+                <a href="#" onclick = "openSignupForm()">Signup</a>
+            </div>
+            <div class="inputBox">
+                <input type="submit" onclick="signin()"value="로그인">
+            </div>
+        </div>
+        <div class="line"></div>
+        <div class="form">
+            <div class="inputBox">
+                <a
+                    href="https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.return_to=http://localhost:8080/login/steam/callback&openid.realm=http://localhost:8080&openid.mode=checkid_setup">
+                    <input type="submit" value="스팀 로그인">
+                </a>
+            </div>
+            <div class="inputBox">
+                <a
+                    href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=6c633b1da1bdc67e6071145ed5723fec&redirect_uri=http://localhost:8080/login/kakao/callback">
+                    <input type="submit" value="카카오 로그인">
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 회원 가입 폼 -->
+    <div class="content" th:fragment="signupFragment">
+        <script> let emailCheckNumber=0</script>
+        <h2>Sign Up</h2>
+        <div class="form">
+            <div class="inputBox">
+                <input type="text" id="username" clear="true" pass="false" required oninput="verifyIdContraints()"> 
+                <i class="" id="usernameLabel">Username(8~15 only with letter,number)</i>
+                <div class="alert" id="usernameAlert"></div>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="password" clear="true" required oninput="comparePassword();verifyPasswordContraints();"> 
+                <i class="" id="passwordLabel">Password(10~20 with letter + number)</i>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="passwordCheck" clear="true" required oninput="comparePassword()"> 
+                <i class="" id="passwordCheckLabel">Password Check</i>
+                
+            </div>
+            <div class="inputBox">
+                <input type="text" id="nickname" clear="true" pass="false" required oninput="verifyNicknameContraints()"> 
+                <i class="" id="nicknameLabel">Nickname(4~10 only with letter,number)</i>
+                <div class="alert" id="nicknameAlert" ></div>
+            </div>
+            <div class="inputBox">
+                <input type="text" id="email" clear="true" pass="false" required oninput="verifyEmailContraints()"> 
+                <i class="" id="emailLabel">Email</i>
+                <div class="alert" id="emailAlert"></div>
+            </div>
+            <div class="inputBox" >
+                <input type="text" id="emailCode" clear="true" required oninput="verifyEmailCode()"> 
+                <i class="" id="emailCodeLabel">Email Code</i>
+            </div>
+            <div class="links">
+                <a id="alert"></a>
+                <a href="#" onclick="openSigninForm()">Signin</a>
+            </div>
+            <div class="inputBox">
+                <input type="submit" id="signupBtn" state="0" value="인증번호 보내기" onclick="signup()">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

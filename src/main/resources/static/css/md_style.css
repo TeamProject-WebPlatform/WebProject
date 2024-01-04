@@ -1,5 +1,18 @@
 @charset "utf-8";
 
+<<<<<<< HEAD
+=======
+:root{
+    --bg-opacity: rgba(43,44,47,0.5);
+    --text-black-white:#ffffff;
+    --text-black-black:#000000;
+    --outer-shadow: 3px 3px 3px #222327, -3px -3px  3px #363636;
+    --outer-shadow-0: 0 0 0 #222327, 0 0 0 #363636;
+    --inner-shadow: inset 3px 3px 3px #222327, inset -3px -3px 3px #363636;
+    --inner-shadow-0: inset 0 0 0 #222327, inset 0 0 0 #363636;
+}
+
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 *{
     margin: 0;
     padding: 0;
@@ -36,6 +49,25 @@ a{
     /* align-content: space-around; */
 }
 
+<<<<<<< HEAD
+=======
+.outer-shadow{
+    box-shadow: var(--outer-shadow);
+}
+
+.inner-shadow{
+    box-shadow: var(--inner-shadow);
+}
+
+.hover-in-shadow{
+    position: relative;
+    z-index: 1;
+}
+.hover-in-shadow:hover{
+    box-shadow: var(--outer-shadow-0);
+}
+
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 body{
     font: '돋음', dotum, sans-serif;
     font-size: 14px;
@@ -119,6 +151,10 @@ header > h1{
     cursor: pointer;
     /* color: var(--text-black-white); */
     /* outline:1px solid red; */
+<<<<<<< HEAD
+=======
+    background-color: #363636(--text-black-white);
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     transition: all 0.2s;
 }
 .login_info_list{
@@ -148,7 +184,11 @@ header > h1{
 .login_info_list > li{
     width: 15vh;
     height: 4vh;
+<<<<<<< HEAD
     color: black;
+=======
+    color: var(--text-black-black);
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     display : flex;
     justify-content : center;
     align-items : center;
@@ -159,7 +199,11 @@ header > h1{
 .login_info_list > li:hover{
     /* font-size: 25px; */
     overflow: visible;
+<<<<<<< HEAD
     color: black;
+=======
+    color: var(--text-black-black);
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* border-bottom: 2px solid white; */
 }
 
@@ -169,8 +213,11 @@ nav{
     /* position: absolute; */
     width: 1380px;
     margin: 0 auto;
+<<<<<<< HEAD
     justify-content:space-around;
 
+=======
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* margin-top: 10%; */
     /* outline: 1px solid red; */
     /* background-color: #f0f0f0; */
@@ -182,6 +229,7 @@ nav{
     clear: both;
 } */
 nav > ul{
+<<<<<<< HEAD
     /* width: 1380px; */
     /* height: 10vh; */
     /* margin: 0 auto; */
@@ -191,6 +239,16 @@ nav > ul{
     /* float: left; */
     /* outline: 1px dotted red; */
     
+=======
+    width: 1380px;
+    /* height: 10vh; */
+    /* margin: 0 auto; */
+    background-color: #f0f0f0;
+
+    /* float: left; */
+    /* outline: 1px dotted red; */
+    justify-content: center;
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 }
 nav > ul > li{
     width: 200px;
@@ -199,9 +257,16 @@ nav > ul > li{
     text-align: center;
     line-height: 50px;
     box-sizing: border-box;
+<<<<<<< HEAD
     /* margin-left: 45px; */
     /* outline:1px solid black; */
     font-size: 20px;
+=======
+    margin-left: 45px;
+    /* outline:1px solid black; */
+    font-size: 20px;
+    position: relative;
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* border-bottom: 1px solid black ; */
     /* float: left; */
     /* flex: 1 1 auto; */
@@ -211,7 +276,11 @@ nav > ul > li:hover{
     font-size: 35px;
     /* color: var(--text-black-white); */
     /* background-color: rgb(0, 73, 140); */
+<<<<<<< HEAD
     border-bottom: 1px solid black;
+=======
+    border-bottom: 1px solid var(--text-black-black);
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 }
 
 .action{

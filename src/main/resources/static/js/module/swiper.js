@@ -1,13 +1,20 @@
 
 const setSwiper = function () {
+<<<<<<< HEAD
     console.log("스와이퍼 set");
+=======
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     const progressCircle = document.querySelector(".autoplay-progress svg");
     const progressContent = document.querySelector(".autoplay-progress span");
     var swiper = new Swiper(".memberSwiper", {
         spaceBetween: 30,
         centeredSlides: true,
         autoplay: {
+<<<<<<< HEAD
             delay: 5000,
+=======
+            delay: 3000,
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             disableOnInteraction: false
         },
         pagination: {
@@ -20,14 +27,22 @@ const setSwiper = function () {
         },
         on: {
             autoplayTimeLeft(s, time, progress) {
+<<<<<<< HEAD
                 progressCircle.style.setProperty("--progress", 1 - progress);
                 progressContent.textContent = `${Math.ceil(time / 1000)}s`;
+=======
+                // progressCircle.style.setProperty("--progress", 1 - progress);
+                // progressContent.textContent = `${Math.ceil(time / 1000)}s`;
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             }
         }
     });
 }
 const setSwiperWrapper = function(){
+<<<<<<< HEAD
     console.log("스와이퍼래퍼 set");
+=======
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     const wrapper = document.querySelector('.swiper-wrapper');
     let slideNum = 4;
     let profilePerSlide = 4;
@@ -64,9 +79,15 @@ const createSwiperProfile = function (nickname) {
             <a href="/mypage/${memNickname}">
                 <div class="profile-header">
                     <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
+<<<<<<< HEAD
                     <div class="profile-info">
                         <p class="profile-level">Lv : ${memLevel}</p>
                         <p class="profile-nick">${memNickname}</p>
+=======
+                    <div class="profile-user_info">
+                        <p class="profile-user_level">Lv : ${memLevel}</p>
+                        <p class="profile-user_nick">${memNickname}</p>
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                         <img class="badge" src="../img/${memSymbolImageName}" alt="NO-SYMBOL">
                     </div>
                 </div>

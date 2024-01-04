@@ -42,7 +42,11 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/css/**", "/img/**", "/js/**").permitAll()
+<<<<<<< HEAD
                         .requestMatchers("/").permitAll()
+=======
+                        .requestMatchers("/**").permitAll()
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/board/**").permitAll()

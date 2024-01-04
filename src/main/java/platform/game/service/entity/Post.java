@@ -20,7 +20,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Post {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int postId;
@@ -41,4 +45,8 @@ public class Post {
     private int postReportCnt;
     private String postTags;
     private String boardCd;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 }
