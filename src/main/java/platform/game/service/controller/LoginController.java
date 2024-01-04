@@ -56,11 +56,7 @@ public class LoginController {
 
     @GetMapping("")
     public ModelAndView login() {
-<<<<<<< HEAD
-        return new ModelAndView("login");
-=======
         return new ModelAndView("login2");
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     }
 
     // 회원가입 요청
@@ -83,14 +79,6 @@ public class LoginController {
         MailAction mailAction = new MailAction(javaMailSender);
 
         String toEmail = userSignup.getMemEmail();
-<<<<<<< HEAD
-        String toName = userSignup.getMemNick();
-        int number = mailAction.createNumber();
-        // 메일 내용
-        String subject = toName + "님의 인증번호 입니다";
-        String content = "<h1>" + toName + "님의 인증 번호는 <br><span>" + number + "</span> 입니다.</h1>";
-        mailAction.sendMail(toEmail, toName, subject, content);
-=======
 
         int number = mailAction.createNumber();
         // 메일 내용
@@ -98,7 +86,6 @@ public class LoginController {
         String content = "<h1>인증 번호는 <br><span>" + number + "</span> 입니다.</h1>";
         Boolean success = mailAction.sendMail(toEmail, "new User", subject, content);
         if(!success) number = -1;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
         // 리턴 number 값을 반환
         return number;
     }
@@ -148,15 +135,10 @@ public class LoginController {
         if (cookie != null) {
             // 성공
             response.addCookie(cookie);
-<<<<<<< HEAD
-            return 0;
-        } else {
-=======
             System.out.println("로그인 성공");
             return 0;
         } else {
             System.out.println("로그인 실패");
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             return 1;
         }
     }

@@ -1,25 +1,14 @@
 package platform.game.service.controller;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
-import java.util.List;
-=======
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import platform.game.service.entity.Member;
-=======
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,18 +19,14 @@ import jakarta.transaction.Transactional;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.AttendRankTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.WinRankTO;
-<<<<<<< HEAD
-=======
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 import platform.game.service.service.MemberInfoDetails;
 
 // Spring Security의 /login 페이지 안되게
@@ -54,9 +39,6 @@ public class MainController {
     @Autowired
     RankDAO rankDAO;
 
-<<<<<<< HEAD
-    @RequestMapping("/")
-=======
     @Autowired
     private PostInfoRepository postInfoRepository;
 
@@ -64,17 +46,12 @@ public class MainController {
     private CommentInfoRepository commentInfoRepository;
 
     @RequestMapping({ "/", "/home" })
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
-<<<<<<< HEAD
-            if(member!=null){
-=======
             if (member != null) {
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                 mav.addObject("nickname", member.getMemNick());
             }
         } else {
@@ -84,14 +61,6 @@ public class MainController {
 
     }
 
-<<<<<<< HEAD
-    @GetMapping("/home")
-    public ModelAndView home() {
-        return new ModelAndView("index");
-    }
-
-=======
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     @GetMapping("/list")
     public ModelAndView list() {
         return new ModelAndView("list");
@@ -128,8 +97,6 @@ public class MainController {
         return modelAndView;
     }
 
-<<<<<<< HEAD
-=======
     @GetMapping("/getMainFragment")
     public String getMainFragment(Model model) {
         // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
@@ -577,5 +544,4 @@ public class MainController {
         }
 
     }
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 }

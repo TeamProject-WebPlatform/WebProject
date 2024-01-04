@@ -63,23 +63,15 @@ header > h1{
     height: 70px;
 }
 
-<<<<<<< HEAD
-#login{
-=======
 #login-section{
     outline : 1px solid red;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* background-color: #dadada; */
     float: right;
     margin-top: 1%;
     margin-right: 1%;
     opacity: 1;
 }
-<<<<<<< HEAD
-#login > p{
-=======
 #login-button{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     width: 15vh;
     height: 5vh;
     display : flex;
@@ -90,29 +82,9 @@ header > h1{
     font-size: 20px;
     margin-right: 15px;
 }
-<<<<<<< HEAD
-/* .log{
-    display: none;
-} */
-
-.logto{
-    /* width: 10vh; */
-    /* outline:1px solid red; */
-    display: none;
-
-    position: relative;
-    /* border: 1px solid black; */
-
-}
-.login_info{
-    width: 15vh;
-    height: 5vh;
-    display : flex;
-=======
 #login-info{
     width: 15vh;
     position: relative;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     justify-content : center;
     align-items : center;
     font-size: 20px;
@@ -121,34 +93,6 @@ header > h1{
     /* outline:1px solid red; */
     transition: all 0.2s;
 }
-<<<<<<< HEAD
-.login_info_list{
-    position: absolute;
-    height: 0;
-    left: 0;
-    /* outline:1px solid red; */
-    background-color: #c0c0c0;
-    visibility: hidden;
-    overflow: hidden;
-    transition: all 1s;
-    z-index: 9999;
-    opacity: 0;
-}
-
-.logto:hover > .login_info{
-    color: black;
-    background-color: #c0c0c0;
-    /* font-size: 20px; */
-    /* border-bottom: 5px solid white; */
-}
-.logto:hover > .login_info_list{
-    visibility: visible;
-    height: 16.5vh;
-    opacity: 1;
-}
-
-.login_info_list > li{
-=======
 #login-info > div{
     display: flex;
     align-items: flex-end;
@@ -179,7 +123,6 @@ header > h1{
 
 
 #login-info-section > li{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     width: 15vh;
     height: 4vh;
     color: black;
@@ -190,11 +133,7 @@ header > h1{
     /* border-bottom: 1px solid black; */
     transition: all .5s;
 }
-<<<<<<< HEAD
-.login_info_list > li:hover{
-=======
 #login-info-section > li:hover{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* font-size: 25px; */
     overflow: visible;
     color: black;
@@ -277,20 +216,13 @@ nav > ul > li:hover{
 .main_list{
     width: 250px;
     margin: 0 auto;
-<<<<<<< HEAD
-    /* margin-top: 3%; */
-=======
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     height: calc(100% - 50%);
     outline: 1px solid red;
 }
 
 .center_main{
     max-width: 1320px;
-<<<<<<< HEAD
-=======
     width: 1320px;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* height: 85vh; */
     /* margin: 0 auto; */
     outline: 1px solid darkgreen;
@@ -309,11 +241,7 @@ nav > ul > li:hover{
     justify-content:space-around;
 }
 
-<<<<<<< HEAD
-.user_profile{
-=======
 .profile{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     width: 20%;
     /* margin-left: 4%; */
     margin-top: 1%;
@@ -321,21 +249,13 @@ nav > ul > li:hover{
     outline: 1px solid black;
 }
 
-<<<<<<< HEAD
-.profile{
-=======
 .profile-header{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* width: 19%; */
     /* border: 1px solid red; */
     
 }
 
-<<<<<<< HEAD
-.user_icon{
-=======
 .profile-image{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     border: 1px solid black;
     width: 18vh;
     height: 18vh;
@@ -362,22 +282,14 @@ nav > ul > li:hover{
     border: 1px solid red; 
     display: inline-block;
 }
-<<<<<<< HEAD
-.user_info > .bagdge{
-=======
 .user_info > .badge{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     width: 50px;
     height: 50px;
     display: inline-block;
     object-fit: cover;
 }*/
 
-<<<<<<< HEAD
-.user_info {
-=======
 .profile-user_info {
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* width: 200px; */
     margin: 0 auto;
     font-size: 20px;
@@ -388,11 +300,7 @@ nav > ul > li:hover{
     justify-content: center;
 }
 
-<<<<<<< HEAD
-.user_level {
-=======
 .profile-user_level {
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* width: 80px; */
     /* margin-top: 2%; */
     /* margin-bottom: 2%; */
@@ -400,21 +308,13 @@ nav > ul > li:hover{
     /* outline: 1px solid red; */
 }
 
-<<<<<<< HEAD
-.user_nick {
-=======
 .profile-user_nick {
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* border: 1px solid red; */
     /* display: inline-block; */
     margin-left: 10px; /*Adjust the margin as needed*/
 }
 
-<<<<<<< HEAD
-.user_info > .bagdge {
-=======
 .profile-user_info > .badge {
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     width: 50px;
     height: 50px;
     /* display: inline-block; */
@@ -422,21 +322,13 @@ nav > ul > li:hover{
     margin-left: 10px; /* Adjust the margin as needed */
 }
 
-<<<<<<< HEAD
-.user_content{
-=======
 .profile-main{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     font-size: 30px;
     /* height: 18vh; */
     border: 1px solid black;
     /* background-color: #222327; */
 }
-<<<<<<< HEAD
-.battle{
-=======
 .board{
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     /* height: 30vh; */
     border: 1px solid black;
     /* background-color: rgba(43,44,47,0.5); */
@@ -446,12 +338,9 @@ nav > ul > li:hover{
     outline: 1px solid red;
     height:250px;
     width:50%;
-<<<<<<< HEAD
-=======
 }
 
 #footer{
     outline: 1px solid red;
     height: 150px;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 }

@@ -21,13 +21,10 @@
                         alert( '제목을 입력하셔야 합니다' );
                         return;
                     }
-<<<<<<< HEAD
-=======
                     if(document.wfrm.board_cd.value == ''){
                         alert("게시판을 선택하세요.");
                         return;
                     }
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                     document.wfrm.submit();
                 }
             }
@@ -55,38 +52,6 @@
                         </ul>
                     </div>
                 </div>
-<<<<<<< HEAD
-            </header>
-            <nav>
-                <ul class="row">
-                    <li><a href="../board/notice">공지사항</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../board/fight">대전</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="board/team">협동</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../board/list">게시판</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                    <li><a href="../rank">랭킹</a>
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-=======
                 <nav>
                     <ul class="row">
                         <li><a href="../board/notice">공지사항</a>
@@ -117,7 +82,6 @@
                     </ul>
                 </nav>
             </header>
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             <section>
                 <div class="row content">
                     <div class="list">
@@ -132,21 +96,11 @@
                                     <!--게시판-->
                                     <div class="board_write">
                                         <table>
-<<<<<<< HEAD
-                                        <!-- <tr>
-                                            <th class="top">글쓴이</th>
-                                            <td class="top"><input type="text" name="writer" value="" class="board_view_input_mail" maxlength="5" /></td>
-                                        </tr> -->
-=======
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                                         <tr>
                                             <th>제목</th>
                                             <td><input type="text" name="subject" value="" class="board_view_input" /></td>
                                         </tr>
                                         <tr>
-<<<<<<< HEAD
-                                            <th>테그</th>
-=======
                                             <th>게시판 코드</th>
                                             <td>
                                                 <select name="board_cd" class="board_view_input">
@@ -160,7 +114,6 @@
                                         </tr>
                                         <tr>
                                             <th>태그</th>
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                                             <td><input type="text" name="tags" value="" class="board_view_input" /></td>
                                         </tr>
                                         <tr>
@@ -192,11 +145,7 @@
                                     
                                     <div class="btn_area">
                                         <div class="align_left">
-<<<<<<< HEAD
-                                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'" />
-=======
                                             <a th:href="@{list(board_cd=${board_cd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                                         </div>
                                         <div class="align_right">
                                             <input type="button" id="wbtn" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" />

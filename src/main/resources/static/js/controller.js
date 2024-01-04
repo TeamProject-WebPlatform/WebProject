@@ -1,9 +1,4 @@
 const setPage = async function (page) {
-<<<<<<< HEAD
-    switch (page) {
-        case 0:
-            // 메인 페이지
-=======
     let boardCd="" 
     switch (page) {
         case "main":
@@ -17,20 +12,10 @@ const setPage = async function (page) {
                     })       
                     .catch(error => console.error('컨트롤러 메인 에러:', error));
             // DOM에 받은 변수로 세팅
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             setSwiperWrapper();
             setSwiper();
             
             break;
-<<<<<<< HEAD
-        case 1:
-            // 공지사항 게시판
-            break;
-        case 2:
-            // 대전 게시판
-            break;
-        case 3:
-=======
         case "notice": boardCd = "20001";
         case "board": if(!boardCd) boardCd = "20004";
             // 자유 게시판
@@ -48,7 +33,6 @@ const setPage = async function (page) {
             
             break;
         case 'team':
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             // 협동 게시판
             break;
         case 4:
@@ -63,12 +47,10 @@ const setPage = async function (page) {
         case 7:
             // 프로필
             break;
-        case 8:
+        case 'shop':
             // 아이템 샵
             break;
     }
-<<<<<<< HEAD
-=======
 }
 
 const setBoardListPage = async function (page, boardCd){
@@ -199,5 +181,4 @@ const setBoardCommentDeleteOkPage = async function (page, postId, commentId){
                 .catch(error => console.error('컨트롤러 공지사항 에러:', error));
             break;
     }
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
 }

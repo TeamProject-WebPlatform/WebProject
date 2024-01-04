@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-=======
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     <head>
         <meta charset="UTF-8">
         <meta name="author" content="우리팀">
@@ -15,17 +11,6 @@
         <script src="./js/login_style.js"></script>
 
         <!-- <link rel="stylesheet" type="text/css" href="../css/board_view.css"> -->
-<<<<<<< HEAD
-        <!-- 댓글 로그인 확인 스크립트 -->
-        <script th:inline="javascript">
-            var isLoggedIn = [[${loginCheck}]]; // Thymeleaf로부터 loginCheck 값을 받아옴
-        </script>
-        <!--댓글 로직-->
-        <script type="text/javascript">
-            window.onload = function() {
-                document.getElementById('cbtn').onclick = function() {
-                    checkLogin();
-=======
         <!-- 로그인 확인 스크립트 -->
         <script th:inline="javascript">
             var isLoggedIn = [[${loginCheck}]]; // Thymeleaf로부터 loginCheck 값을 받아옴
@@ -36,59 +21,14 @@
                 document.getElementById('cbtn').onclick = function() {
                     document.getElementsByName("ccontent").value;
                     document.getElementsByName("postId").value;
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                     document.cfrm.submit();
                 };
 	        };
         </script>
-<<<<<<< HEAD
-        <script>
-            function checkLogin() {
-                console.log(isLoggedIn);
-                if (isLoggedIn) {
-                    // 로그인 상태일 때 댓글 등록 처리
-                    // submitComment();
-                    document.getElementsByName("ccontent").value;
-                    document.getElementsByName("postId").value;
-                } else {
-                    // 로그인 상태가 아닐 때 로그인 여부 확인 창 표시
-                    var userResponse = confirm("로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?");
-                    
-                    if (userResponse) {
-                        window.location.href = "/login";
-                    } else {
-                        // 아니요를 선택한 경우 아무 동작 없음
-                    }
-                }
-            }
-        </script>
-        <script>
-            function modifyPost(postId) {
-                if (postId) {
-                    console.log(postId);
-                    location.href = 'modify?post_id=' + postId;
-                } else {
-                    alert('유효한 post_id가 없습니다.');
-                }
-            }
-        </script>
-        
-        <script>
-            function checkLoginAndNavigate() {
-                if (isLoggedIn === "true") {
-                    // 로그인이 되어 있으면 글쓰기 페이지로 이동
-                    location.href = 'write';
-                } else {
-                    // 로그인이 안되어 있으면 로그인 페이지로 이동
-                    alert('로그인이 필요합니다.');
-                    location.href = '/login';
-                }
-=======
         <!--로그인 알람-->
         <script>
             function checkLoginAndNavigate() {
                 alert('로그인이 필요합니다.');
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
             }
         </script>
     </head>
@@ -113,38 +53,6 @@
                 </ul>
             </div>
         </div>
-<<<<<<< HEAD
-    </header>
-    <nav>
-        <ul class="row">
-            <li><a href="../board/notice">공지사항</a>
-                <ul>
-                    <li></li>
-                </ul>
-            </li>
-            <li><a href="../board/fight">대전</a>
-                <ul>
-                    <li></li>
-                </ul>
-            </li>
-            <li><a href="board/team">협동</a>
-                <ul>
-                    <li></li>
-                </ul>
-            </li>
-            <li><a href="../board/list">게시판</a>
-                <ul>
-                    <li></li>
-                </ul>
-            </li>
-            <li><a href="../rank">랭킹</a>
-                <ul>
-                    <li></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-=======
         <nav>
             <ul class="row">
                 <li><a href="../board/notice">공지사항</a>
@@ -175,7 +83,6 @@
             </ul>
         </nav>
     </header>
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
     <!-- 상단 디자인 -->
     <section>
         <div class="content">
@@ -189,11 +96,7 @@
                         <table>
                             <tr>
                                 <th width="10%">제목</th>
-<<<<<<< HEAD
-                                <td width="60" th:text="${post.postTitle}"></td>
-=======
                                 <td width="60" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></td>
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                                 <th width="10%">등록일</th>
                                 <td width="20%" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
                             </tr>
@@ -212,10 +115,6 @@
                     <table>
                         <tr th:each="comment  : ${comment}">
                             <td class="coment_re" width="20%">
-<<<<<<< HEAD
-                                <!-- <strong th:text="${comment.member.memId}"></strong> (<span th:text="${comment.updatedAt}"></span>) -->
-=======
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                                 <strong>글쓴이 : <span th:text="${comment.member.memNick}"></span></strong> (<span th:text="${comment.updatedAt}"></span>)
                                 <br /><br /><strong>내용</strong><br />
                                 <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
@@ -233,9 +132,6 @@
                                     <textarea name="ccontent" cols="" rows="" class="coment_input_text" alt="내용 입력"title="내용 입력"></textarea>
                                 </td>
                                 <td align="right" class="bg01 bg02">
-<<<<<<< HEAD
-                                    <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01"/>
-=======
                                     <!-- <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01"/> -->
                                     <a th:if="${loginCheck}">
                                         <!-- 로그인 상태인 경우의 댓글 작성 -->
@@ -245,23 +141,10 @@
                                         <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
                                         <input type="button" value="댓글등록" class="btn_re btn_txt01" onclick="checkLoginAndNavigate()"/>
                                     </a>
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                                 </td>
                             </tr>
                         </table>
                     </form>
-<<<<<<< HEAD
-                    
-                    <div class="btn_area">
-                        <div class="align_left">
-                            <input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;" onclick="location.href='list'"/>
-                        </div>
-                        <div class="align_right">
-                            <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='modify?post_id=${post.postId}'|" />
-                            <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;" th:onclick="|window.location.href='delete?post_id=${post.postId}'|"/>
-                            <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"/>
-                        </div>
-=======
                     <script>
                         window.onload = function(){
                             var test = "free";
@@ -290,7 +173,6 @@
                                 <!-- 로그인 상태가 아닌 경우의 링크 -->
                                 <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()">
                             </a>
->>>>>>> 417321e7a093bfb72c7c554a358ec42ef6f641c4
                     </div>	
                     <!--//게시판-->
                 </div>
