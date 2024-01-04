@@ -49,6 +49,14 @@ const setPage = async function (page) {
             break;
         case 'shop':
             // 아이템 샵
+            await fetch('/getShopFragment')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('center_main').innerHTML = html;
+            })       
+            .catch(error => console.error('컨트롤러 메인 에러:', error));
+            // DOM에 받은 변수로 세팅
+    break;
             break;
     }
 }

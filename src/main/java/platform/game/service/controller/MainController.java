@@ -103,6 +103,12 @@ public class MainController {
 
         return "fragments/content/main";
     }
+    @GetMapping("/getShopFragment")
+    public String getShopFragment(Model model) {
+        // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
+
+        return "fragments/content/board/shop";
+    }
 
     @GetMapping("/getBoardListFragment")
     public String getBoardListFragment(@RequestParam("board_cd") String boardCd, Model model) {

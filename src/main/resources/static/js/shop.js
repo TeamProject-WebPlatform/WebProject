@@ -16,5 +16,5 @@ document.addEventListener('DOMContentLoaded', function(){
     const horror_bg_list = document.getElementById('horror_bg_list');
     const city_bg_list = document.getElementById('city_bg_list');
 
-    
+    const bnt = document.getElementById('select_button');
 });
