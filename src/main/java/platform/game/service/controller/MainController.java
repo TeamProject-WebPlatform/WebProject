@@ -381,6 +381,7 @@ public class MainController {
             System.out.println("delete_ok : " + boardCd);
             int RboardCd = Integer.parseInt(boardCd.replaceAll("\"", ""));
             System.out.println("delete_ok1 : " + RboardCd);
+            System.out.println("delete_ok1 : " + RboardCd);
             model.addAttribute("boardCd", RboardCd);
 
             model.addAttribute("lists", lists);
