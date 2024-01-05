@@ -83,6 +83,36 @@ public class MyPageController {
         return new ModelAndView("mypage");
     }
  
+    @GetMapping("/test")
+    public ModelAndView test(Model model) {
+        String markdownValueFormLocal = null;
+
+        try {
+            markdownValueFormLocal = mypageAction.getMarkdownValueFormLocal( mdDir, "doyun" );
+        } catch (Exception e) {
+            System.out.println( "[에러] MyPageController : " + e.getMessage() );
+        }
+
+        // Markdown을 HTML로 변환
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(markdownValueFormLocal);
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        String htmlContent = renderer.render(document);
+        // Markdown에서의 줄 바꿈을 <br> 태그로 대체
+        htmlContent = htmlContent.replaceAll("\n", "<br>");
+        // htmlContent에서 백슬래시와 * 문자 앞에 있는 백슬래시를 제거
+        String cleanedHtmlContent = htmlContent.replace("\\*", "*");
+
+
+        // 변환된 HTML을 모델에 추가
+        model.addAttribute("contents", cleanedHtmlContent);
+
+        System.out.println( "test 확인 : " + htmlContent);
+
+        // model.addAttribute("contents", markdownValueFormLocal);
+        return new ModelAndView("onlyViewer");
+    }
+
     @GetMapping("/summonerByName")
     public RiotInfo callSummonerByName(String summonerName){
         // String summonerName = "Java를자바";
