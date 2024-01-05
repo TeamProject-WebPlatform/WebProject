@@ -170,19 +170,7 @@
                                                 <!-- <div class="text-muted fst-italic mb-2" th:text="${post.member.memNick} + ', ' + ${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></div>
                                                 <div><br /></div>
                                                 -->
-                                                <table style="border-bottom: 3px solid lightgreen">
-                                                    <!-- <tr>
-                                                        <th width="10%">제목</th>
-                                                        <td width="60" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></td>
-                                                        <th width="10%">등록일</th>
-                                                        <td width="20%" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>글쓴이</th>
-                                                        <td th:text="${post.member.memNick}"></td>
-                                                        <th>조회</th>
-                                                        <td th:text="${post.postHit}"></td>
-                                                    </tr> -->
+                                                <table>
                                                     <tr>
                                                         <th width="10%">글쓴이</th>
                                                         <td width="10%" th:text="${post.member.memNick}"></td>
@@ -192,36 +180,36 @@
                                                         <td width="20%" th:text="${post.postHit}"></td>
                                                     </tr>
                                                 </table>
-                                                <!-- <div th:text="${post.postContent}"></div> -->
-                                                <table style="border-bottom: 3px solid lightgreen">
+                                                <table style="border-bottom: 3px solid #00FFFF; border-top: 3px solid #00FFFF;" width="100%">
                                                     <tr>
-                                                        <td colspan="4" valign="top" style="padding: 20px; line-height: 160%" th:text="${post.postContent}"></td>
+                                                        <td colspan="4" valign="top" style="padding: 20px; line-height: 160%" th:utext="${post.postContent}"></td>
                                                     </tr>
                                                 </table>
                                             </div>
                                             <form action="comment_delete_ok" method="post" name="dcfrm">
-                                                <table>
-                                                    <tr th:each="comment  : ${comment}">
-                                                        <td class="coment_re" width="20%">
-                                                            <strong>글쓴이 : <span th:text="${comment.member.memNick}"></span></strong> (<span th:text="${comment.updatedAt}"></span>)
-                                                            <!--댓글 삭제 버튼-->
-                                                            <a th:if="${writePost}">
-                                                                <span class="delete-comment" style="cursor: pointer; color: red;"> x </span>
-                                                            </a>
-                                                            <br /><br /><strong>내용</strong><br />
-                                                            <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                                <div class="uk-grid uk-grid-small uk-child-width-1-2@m" data-uk-grid>
+                                                    <div><br /><strong>댓글</strong>
+                                                        <div class="user-item --active" th:each="comment  : ${comment}">
+                                                            <div class="user-item__box">
+                                                                <strong><span th:text="${comment.member.memNick}"></span></strong> (<span th:text="${#dates.format(comment.updatedAt, 'yyyy-MM-dd hh:mm')}"></span>)
+                                                                <!--댓글 삭제 버튼-->
+                                                                <a th:if="${writePost}">
+                                                                    <span class="delete-comment" style="cursor: pointer; color: red;"> x </span>
+                                                                </a><br />
+                                                                <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </form>
                                             <form action="comment_write_ok" method="post" name="cfrm">
                                                 <!-- <input type="hidden" name="cpage" th:value="${cpage}" /> -->
                                                 <input type="hidden" name="postId" th:value="${post.postId}" />
                                                 <table>
                                                     <tr>
-                                                        <td class="bg01">
+                                                        <td class="bg01" width="100%">
                                                             <!-- 내용 입력<br/> -->
-                                                            <textarea name="ccontent" cols="" rows="" class="coment_input_text" alt="내용 입력"title="내용 입력"></textarea>
+                                                            <textarea name="ccontent" cols="" rows="" class="coment_input_text" alt="내용 입력" title="내용 입력" style="width: 100%;"></textarea>
                                                         </td>
                                                         <td align="right" class="bg01 bg02">
                                                             <a th:if="${loginCheck}">
@@ -230,7 +218,7 @@
                                                             </a>
                                                             <a th:unless="${loginCheck}" href="/login">
                                                                 <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
-                                                                <input type="button" value="댓글등록" class="btn_re btn_txt01" onclick="checkLoginAndNavigate()"/>
+                                                                <input type="button" value="댓글등록" class="btn_re btn_txt01" style="cursor: pointer; background-color: #00FFFF;" onclick="checkLoginAndNavigate()"/>
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -238,24 +226,24 @@
                                             </form>                                            
                                             <div class="btn_area">
                                                 <div class="align_left">
-                                                    <a th:href="@{list(board_cd=${post.boardCd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
+                                                    <a th:href="@{list(board_cd=${post.boardCd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer; background-color: #00FFFF;"></a>
                                                 </div>
                                                 <div class="align_right">
                                                     <a th:if="${writePost}" th:href="@{modify(post_id=${post.postId})}">
                                                         <!-- 본인이 작성한 글이면 보임 -->
-                                                        <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer;">
+                                                        <input type="button" value="수정" class="btn_list btn_txt02" style="cursor: pointer; background-color: #00FFFF;">
                                                     </a>
                                                     <a th:if="${writePost}" th:href="@{delete(post_id=${post.postId})}">
                                                         <!-- 본인이 작성한 글이면 보임 -->
-                                                        <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer;">
+                                                        <input type="button" value="삭제" class="btn_list btn_txt02" style="cursor: pointer; background-color: #00FFFF;">
                                                     </a>
                                                     <a th:if="${loginCheck}" th:href="@{write(board_cd=${post.boardCd})}">
                                                         <!-- 로그인 상태인 경우의 링크 -->
-                                                        <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                                                        <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;">
                                                     </a>
                                                     <a th:unless="${loginCheck}" href="/login">
                                                         <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                                        <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()">
+                                                        <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;" onclick="checkLoginAndNavigate()">
                                                     </a>
                                             </div>	
                                             <!--//게시판-->

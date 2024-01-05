@@ -111,19 +111,32 @@
                                     <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
                                 </div>
                             </div>
-                            <div><select class="js-select">
-                                    <option value="">Sort By: Price</option>
-                                    <option value="Price 1">Price 1</option>
-                                    <option value="Price 2">Price 2</option>
-                                    <option value="Price 3">Price 3</option>
-                                </select></div>
-                            <div><select class="js-select">
-                                    <option value="">Category: Strategy</option>
-                                    <option value="Category 1">Category 1</option>
-                                    <option value="Category 2">Category 2</option>
-                                    <option value="Category 3">Category 3</option>
-                                </select></div>
-                            <div><select class="js-select">
+                            <div class="uk-width-1-6"><select class="js-select">
+                                <option value="">게임 종류</option>
+                                <option value="Price 1">전체</option>
+                                <option value="Price 2">리그오브레전드</option>
+                                <option value="Price 3">배틀그라운드</option>
+                                <option value="Price 4">스팀</option>
+                            </select></div>
+                            
+                            <div class="uk-width-1-6"><select class="js-select">
+                                <option value="Category 1">10개씩</option>
+                                <option value="Category 2">20개씩</option>
+                                <option value="Category 3">30개씩</option>
+                            </select></div>
+                            <!-- <div class="uk-width-1-1">
+                                <div class="search">
+                                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search"></div>
+                                    <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
+                                </div>
+                            </div> -->
+                            <!-- <div class="uk-width-1-6"><select class="js-select">
+                                    <option value="">게시글 갯수</option>
+                                    <option value="Category 1">10</option>
+                                    <option value="Category 2">20</option>
+                                    <option value="Category 3">30</option>
+                                </select></div> -->
+                            <!-- <div><select class="js-select">
                                     <option value="">Platform: All</option>
                                     <option value="Platform 1">Platform 1</option>
                                     <option value="Platform 2">Platform 2</option>
@@ -134,11 +147,8 @@
                                     <option value="Platform 1">Platform 1</option>
                                     <option value="Platform 2">Platform 2</option>
                                     <option value="Platform 3">Platform 3</option>
-                                </select></div>
-                            <div>
-                                <!-- <div class="price-range"><label>Price</label><input class="uk-range" type="range" value="2" min="0" max="10" step="0.1"></div> -->
-                            </div>
-                            <div class="uk-text-right"><a th:text="'총 ' + ${#lists.size(lists)} + '건'"></a></div>
+                                </select></div> -->
+                            <!-- <div class="uk-text-right"><a th:text="'총 ' + ${#lists.size(lists)} + '건'"></a></div> -->
                         </div>
                     </div>
                 </div>
@@ -153,7 +163,7 @@
                                     <!-- <input type="hidden" name="cpage" value="<%= cpage %>" /> -->
                                         <div class="board_top">
                                             <table width="100%">
-                                                <tr style="background-color: lightgreen;">
+                                                <tr style="background-color: #00FFFF;">
                                                     <th width="10%" >번호</th>
                                                     <th >제목</th>
                                                     <th width="20%" >글쓴이</th>
@@ -191,16 +201,16 @@
                                                 <!-- <a th:href="@{write(board_cd=${boardCd})}"><input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"></a> -->
                                                 <!-- <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" /> -->
                                                 <!-- 로그인 상태인 경우의 링크 -->
-                                                <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
-                                                </a>
-                                                <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                                <a th:unless="${loginCheck}" href="/login">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()">
-                                                </a>
-                                                <!-- <a th:href="@{write(board_cd=${boardCd})}">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                                                <!-- <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;">
                                                 </a> -->
+                                                <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                                <!-- <a th:unless="${loginCheck}" href="/login">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;" onclick="checkLoginAndNavigate()">
+                                                </a> -->
+                                                <a th:href="@{write(board_cd=${boardCd})}">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                                                </a>
                                             </div>
                                             <!--페이지넘버-->
                                             <div class="paginate_regular" style="text-align: center;">

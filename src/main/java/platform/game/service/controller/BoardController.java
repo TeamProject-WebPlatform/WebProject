@@ -108,6 +108,9 @@ public class BoardController {
         modelAndView.addObject("comment", comment);
         modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("writePost", writePost);
+
+        modelAndView.addObject("sample", post.getPostContent());
+        System.out.println("post.getcontent : " + post.getPostContent());
         return modelAndView;
     }
 
