@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
@@ -91,5 +93,29 @@ public class RankController {
     public List<PointRankTO> getPointTable() {
         List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
         return getPointTable;
+    }
+
+    @RequestMapping("/levelrank")
+    public ModelAndView LevelRank() {
+        List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
+        ModelAndView mav = new ModelAndView("levelrank");
+        mav.addObject("level", getLevelTable);
+        return mav;
+    }
+
+    @RequestMapping("/winraterank")
+    public ModelAndView WinRateRank() {
+        List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
+        ModelAndView mav = new ModelAndView("winraterank");
+        mav.addObject("win", getWinRateTable);
+        return mav;
+    }
+
+    @RequestMapping("/pointrank")
+    public ModelAndView PointRank() {
+        List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
+        ModelAndView mav = new ModelAndView("pointrank");
+        mav.addObject("point", getPointTable);
+        return mav;
     }
 }

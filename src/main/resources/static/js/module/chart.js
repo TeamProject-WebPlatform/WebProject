@@ -1,3 +1,4 @@
+let myChart;
 const LevelData = async function() {
     var LevelData = [];
     try{
@@ -30,38 +31,6 @@ const LevelRanking = async function(){
     return LvlRankTable;
 }
 
-const WinRateRanking = async function(){
-    var WrRankTable = [];
-    try{
-        const response = await fetch('/getWinRateTable',{
-            method:'POST'
-        });
-        const data = await response.json();
-        for(let i=0;i<data.length;i++){
-            WrRankTable.push(data[i]);
-        }
-    } catch (error){
-        console.log(error);
-    }
-    return WrRankTable;
-}
-
-const PointRanking = async function(){
-    var PointRankTable = [];
-    try{
-        const response = await fetch('/getPointTable',{
-            method:'POST'
-        });
-        const data = await response.json();
-        for(let i=0;i<data.length;i++){
-            PointRankTable.push(data[i]);
-        }
-    } catch (error){
-        console.log(error);
-    }
-    return PointRankTable;
-}
-
 const WinRateData = async function() {
     var WinRateData = [];
     try{
@@ -76,6 +45,22 @@ const WinRateData = async function() {
         console.log("에러");
     }
     return WinRateData;
+}
+
+const WinRateRanking = async function(){
+    var WrRankTable = [];
+    try{
+        const response = await fetch('/getWinRateTable',{
+            method:'POST'
+        });
+        const data = await response.json();
+        for(let i=0;i<data.length;i++){
+            WrRankTable.push(data[i]);
+        }
+    } catch (error){
+        console.log(error);
+    }
+    return WrRankTable;
 }
 
 const PointData = async function() {
@@ -94,9 +79,28 @@ const PointData = async function() {
     return PointData;
 }
 
+const PointRanking = async function(){
+    var PointRankTable = [];
+    try{
+        const response = await fetch('/getPointTable',{
+            method:'POST'
+        });
+        const data = await response.json();
+        for(let i=0;i<data.length;i++){
+            PointRankTable.push(data[i]);
+        }
+    } catch (error){
+        console.log(error);
+    }
+    return PointRankTable;
+}
+
 const LevelChart = async function() {
+    if(myChart){
+        myChart.destroy();
+    }
     let Level = await LevelData();
-    var WinChart = new Chart(
+    myChart = new Chart(
         document.getElementById('levels'),
         {
             type: 'line',
