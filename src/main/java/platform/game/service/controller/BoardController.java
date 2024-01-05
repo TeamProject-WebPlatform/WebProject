@@ -36,10 +36,10 @@ public class BoardController {
     @Autowired
     private CommentInfoRepository commentInfoRepository;
 
-    @RequestMapping("/shop")
-    public String shop(){
-        return "shop";
-    }
+    // @RequestMapping("/shop")
+    // public String shop(){
+    //     return "shop";
+    // }
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd) {
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
