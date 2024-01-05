@@ -2,12 +2,67 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-
-    <header th:fragment="headerFragment" id="header">
+    <header th:fragment="headerFragment" class="page-header">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script type="text/javascript">
+            // 로고 색상 변경용
+            const logo_img_paths = ["./img/logo_white.png", "./img/logo_black.png"];
+            let currentThemeIndex = 0;  // 현재 이미지 경로 인덱스
+            // 메인 컬러 변경용
+            const root = document.documentElement; // :root 
+    
+            const main_color_values = [
+                getComputedStyle(root).getPropertyValue('--main-color-dark'),
+                getComputedStyle(root).getPropertyValue('--main-color-light')
+            ];
+            document.getElementById("toggle").addEventListener("click", function () {
+                document.getElementsByTagName('body')[0].classList.toggle("dark-theme");
+                
+                currentThemeIndex = 1 - currentThemeIndex;  // 0과 1을 번갈아가며 토글
+                // 이미지 경로를 토글
+                document.getElementById('logo_img').src = logo_img_paths[currentThemeIndex];
+    
+                // 메인 컬러 변경용
+                root.style.setProperty('--main-color-now', main_color_values[currentThemeIndex]);
+                console.log(root.style.getPropertyValue('--main-color-now'));
+            });
+        </script>
+        <div class="page-header__inner">
+            <!-- 헤더 사이드바(로고) -->
+            <div class="page-header__sidebar">
+                <div class="page-header__menu-btn"><button class="menu-btn ico_menu is-active"></button></div>
+                <a href="/" ><div class="page-header__logo"><img src="./img/logo_white.png" alt="logo" id="logo_img"><span class="page-header__logo_text" style="color:white">G A M M O A</span></div></a>
+            </div>
+            <!-- 헤더 컨텐츠 -->
+            <div class="page-header__content">
+                <div class="page-header__search">
+                    <div class="search">
+                        <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
+                                placeholder="Search"></div>
+                        <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
+                    </div>
+                </div>
+                <div class="page-header__action">
+                    <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
+                            class="animation-ripple-delay1"></span></a>
+                    <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
+                            class="ico_notification"></i><span class="animation-ripple-delay2"></span></a>
+                    <a th:if="${nickname}" th:href="@{logout}" class="action-btn"><i
+                            class="fa-solid fa-right-from-bracket ico_logout"></i></a>
+                    <a th:unless="${nickname}" th:href="@{login}" class="action-btn"><i
+                            class="fa-solid fa-right-to-bracket ico_fontawesome"></i></a>
+                            
+                    <a th:if="${nickname}" class="profile" href="08_wallet.html"><img src="./img/profile.png" alt="profile"></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- <header th:fragment="headerFragment" id="header">
         <script src="./js/login_style.js"></script>
         <h1 class="logo"><a href="/"><img src="./img/logo.png" alt="logo"></a></h1>
         <div id="login-section">
-            <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
             <a th:unless="${nickname}" th:href="@{login}">
                 <div id="login-button">로그인</div>
             </a>
@@ -25,7 +80,7 @@
             </div>
             
         </div>
-    </header>
+    </header> -->
 
 </body>
 

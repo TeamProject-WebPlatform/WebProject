@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,16 +60,20 @@ public class MainController {
 
     @Autowired
     private CommentInfoRepository commentInfoRepository;
-    @RequestMapping({ "/2", "/home" })
-    public ModelAndView main2() {
-    
-        ModelAndView mav = new ModelAndView("03_home_origin");
-        return mav;
+    @RequestMapping("/t/{no}")
+    public String template(@PathVariable("no") String no){
 
+        return "template/"+no;
+    }
+    @RequestMapping("/battle")
+    public ModelAndView battle(){
+        ModelAndView mav = new ModelAndView("battle");
+        
+        return mav;
     }
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
-        ModelAndView mav = new ModelAndView("03_home");
+        ModelAndView mav = new ModelAndView("index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();

@@ -135,7 +135,16 @@
     font-size: 30px;
     margin: auto;
 }
-.body.dark-theme .profile-background{
+.body .dark-theme .profile-background{
     background: #0C1826;
     box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
+}
+
+.body .swiper{
+    background-color: #F0f0f0;
+}
+
+.ico_fontawesome:before{
+    font-family : "Font Awesome 6 Free";
+    font-weight : 900;
 }
