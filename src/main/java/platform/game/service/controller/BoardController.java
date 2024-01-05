@@ -37,9 +37,10 @@ public class BoardController {
     private CommentInfoRepository commentInfoRepository;
 
     @RequestMapping("/shop")
-    public String shop(){
+    public String shop() {
         return "shop";
     }
+
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd) {
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
@@ -55,7 +56,7 @@ public class BoardController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("list");
+        modelAndView.setViewName("board_list");
         modelAndView.addObject("lists", lists);
         modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("boardCd", boardCd);
@@ -102,7 +103,7 @@ public class BoardController {
         ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("list_view");
+        modelAndView.setViewName("board_view");
         modelAndView.addObject("post", post);
         modelAndView.addObject("comment", comment);
         modelAndView.addObject("loginCheck", loginCheck);
@@ -142,12 +143,25 @@ public class BoardController {
         return "redirect:/board/view?post_id=" + postId;
     }
 
+    @PostMapping("/comment_delete_ok")
+    @Transactional
+    public String deleteComment(@RequestParam("board_cd") int boardCd,
+            @RequestParam("comment_id") int commentId) {
+
+        System.out.println("Controller_listdeleteOk 호출");
+
+        System.out.println("댓글 먼저 삭제");
+        commentInfoRepository.deleteByCommentId(commentId);
+
+        return "redirect:/board/list?board_cd=" + boardCd;
+    }
+
     @RequestMapping("/write")
     public ModelAndView listWrite(@RequestParam(name = "board_cd") String boardCd) {
         System.out.println("Controller_listWrite 호출");
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("list_write");
+        modelAndView.setViewName("board_write");
         modelAndView.addObject("board_cd", boardCd);
 
         return modelAndView;
@@ -199,7 +213,7 @@ public class BoardController {
         post = postInfoRepository.findByPostId(postId);
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("list_modify");
+        modelAndView.setViewName("board_modify");
         modelAndView.addObject("post", post);
 
         return modelAndView;
@@ -255,7 +269,7 @@ public class BoardController {
         post = postInfoRepository.findByPostId(postId);
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("list_delete");
+        modelAndView.setViewName("board_delete");
         modelAndView.addObject("post", post);
 
         return modelAndView;
