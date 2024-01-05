@@ -59,6 +59,13 @@ public class MainController {
 
     @Autowired
     private CommentInfoRepository commentInfoRepository;
+    @RequestMapping({ "/2", "/home" })
+    public ModelAndView main2() {
+    
+        ModelAndView mav = new ModelAndView("03_home_origin");
+        return mav;
+
+    }
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("03_home");

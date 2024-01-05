@@ -51,8 +51,7 @@
             root.style.setProperty('--main-color-now', main_color_values[currentThemeIndex]);
             console.log(root.style.getPropertyValue('--main-color-now'));
         });
-        setSwiperWrapper();
-        // setSwiper();
+
     </script>
 
 
@@ -93,10 +92,12 @@
                     <div class="page-header__action">
                         <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                                 class="animation-ripple-delay1"></span></a>
-                        <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i class="ico_notification"></i><span
-                                class="animation-ripple-delay2"></span></a>
-                        <a th:if="${nickname}" th:href="@{logout}" class="action-btn"><i class="fa-solid fa-right-from-bracket ico_logout"></i></a>
-                        <a th:unless="${nickname}" th:href="@{login}" class="action-btn"><i class="fa-solid fa-right-to-bracket ico_login"></i></a>
+                        <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
+                                class="ico_notification"></i><span class="animation-ripple-delay2"></span></a>
+                        <a th:if="${nickname}" th:href="@{logout}" class="action-btn"><i
+                                class="fa-solid fa-right-from-bracket ico_logout"></i></a>
+                        <a th:unless="${nickname}" th:href="@{login}" class="action-btn"><i
+                                class="fa-solid fa-right-to-bracket ico_login"></i></a>
                         <a class="profile" href="08_wallet.html"><img src="./img/profile.png" alt="profile"></a>
                     </div>
                 </div>
@@ -130,7 +131,8 @@
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l uk-width-3-3@m uk-width-3-3@s">
                         <div class="js-recommend">
-                            <div class="swiper .memberSwiper">
+                            <div class="profile-background">
+                            <div class="swiper">
                                 <div class="swiper-wrapper">
                                     <!-- 스와이퍼 프로필 들어가는 곳 -->
                                 </div>
@@ -139,7 +141,8 @@
                                     <div class="swiper-button-next"></div>
                                 </div>
                                 <div class="swiper-pagination"></div>
-                            </div>
+                            </div></div>
+
                         </div>
                     </div>
                     <!-- <div class="uk-width-1-3@l uk-width-3-3@m uk-width-3-3@s">
