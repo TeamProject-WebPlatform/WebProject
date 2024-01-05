@@ -42,10 +42,9 @@ public class MainController {
 
     @Autowired
     private CommentInfoRepository commentInfoRepository;
-
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
-        ModelAndView mav = new ModelAndView("index");
+        ModelAndView mav = new ModelAndView("03_home");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();

@@ -54,7 +54,7 @@ const setPage = async function (page) {
         case 7:
             // 프로필
             break;
-        case 8:
+        case 'shop':
             // 아이템 샵
             break;
     }

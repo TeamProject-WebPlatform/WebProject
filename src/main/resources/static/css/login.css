@@ -67,8 +67,7 @@ section .logo{
   translate: 0 -380px;
 }
 section .logo img{
-  
-  width: 455px;
+  width: 100px;
 }
 section .sign
 {
