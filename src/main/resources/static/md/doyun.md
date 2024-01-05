@@ -27,7 +27,7 @@ $$
 
 <br>
 
-## UML Plugin
+## 스피드런 공략
 
 $$uml
 partition Conductor {
