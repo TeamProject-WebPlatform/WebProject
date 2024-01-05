@@ -1,4 +1,19 @@
-
+const SwiperData = async function() {
+    let datalist = [];
+    try {
+        const response = await fetch("/roll", {
+            method: "POST"
+        });
+        const data = await response.json();
+        for (let i = 0; i < data.length; i++) {
+            datalist.push(data[i]);
+        }
+    } catch (error) {
+        console.log("에러", error);
+        throw error;  // 에러를 다시 던져서 호출하는 쪽에서 처리할 수 있도록 함
+    }
+    return datalist;
+}
 const setSwiper = function () {
     const progressCircle = document.querySelector(".autoplay-progress svg");
     const progressContent = document.querySelector(".autoplay-progress span");
@@ -13,10 +28,10 @@ const setSwiper = function () {
             el: ".swiper-pagination",
             clickable: true
         },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev"
-        },
+        // navigation: {
+        //     nextEl: ".swiper-button-next",
+        //     prevEl: ".swiper-button-prev"
+        // },
         on: {
             autoplayTimeLeft(s, time, progress) {
                 // progressCircle.style.setProperty("--progress", 1 - progress);
@@ -25,36 +40,29 @@ const setSwiper = function () {
         }
     });
 }
-const setSwiperWrapper = function(){
-    const wrapper = document.querySelector('.swiper-wrapper');
+const setSwiperWrapper = async function(){
+    let datalist = await SwiperData();
     let slideNum = 4;
     let profilePerSlide = 4;
-    let totalProfilNum = slideNum * profilePerSlide;
-    let members = []; // 메인페이지 프로필 전광판에 표시될 사람들의 닉네임 배열
-
-    for (var i = 0; i < totalProfilNum; i++) {
-        members[i] = "doyun"+i;
-    }
-
-    // 슬라이더 세팅
     let html = "";
     for(let i = 0;i<slideNum;i++){
         html += `
             <div class="swiper-slide">
                 <div class="row user">`;
         for(let j = 0;j<profilePerSlide;j++){
-            html += createSwiperProfile(members[4*i+j+1]);
+            html += createSwiperProfile(datalist[4*i+j].mem_nick, datalist[4*i+j].mem_lvl);
         }            
         html +=`
                 </div>
             </div>`;
     }
+    const wrapper = document.querySelector('.swiper-wrapper');
     wrapper.innerHTML = html;
 }
-const createSwiperProfile = function (nickname) {
+const createSwiperProfile = function (nickname, level) {
     let memNickname = nickname;
     let memImageName = "doyun_icon.png";
-    let memLevel = 100;
+    let memLevel = level;
     let memSymbolImageName = "starbucks.png";
     let memIntroduction = "안녕하세요";
     let membProfileHTML = `
@@ -69,15 +77,27 @@ const createSwiperProfile = function (nickname) {
                     </div>
                 </div>
             </a>
+            <div class="profile-dividing-line"></div>
             <div class="profile-main">
                 <div class="profile-introduction">
                     ${memIntroduction}
                 </div>
-                <div class="profile-badge">
-                    뱃지 나열 공간
+                <div class="profile-dividing-line"></div>
+                <div class="profile-badge-section">
+                <span class="badge">&#127774;</span>
+                <span class="badge">&#127775;</span>
+                <span class="badge">&#127806;</span>
+                <span class="badge">&#127851;</span>
+                <span class="badge">&#127774;</span>
+                <span class="badge">&#127775;</span>
+                <span class="badge">&#127806;</span>
+                <span class="badge">&#127851;</span>
+                <span class="badge">&#127774;</span>
                 </div>
             </div>
         </div>
     `
     return membProfileHTML;
 }
+
+document.addEventListener("DOMContentLoaded", SwiperData());

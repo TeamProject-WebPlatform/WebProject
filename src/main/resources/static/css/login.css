@@ -61,7 +61,14 @@ section span:hover
   background: #0ff;
   transition: 0s;
 }
-
+section .logo{
+  position: absolute;
+  z-index: 1000;
+  translate: 0 -380px;
+}
+section .logo img{
+  width: 100px;
+}
 section .sign
 {
   position: absolute;
