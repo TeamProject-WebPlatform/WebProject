@@ -152,18 +152,60 @@
     color : white;
 }
 
+
+
 .battle-profile-left{
     display: flex;
     align-items: center;
-    width: 30%;
+    width: 40%;
     justify-content: center;
-}
-.battle-card-info{
-    width:35%;
 }
 .battle-profile-right{
     display: flex;
     align-items: center;
-    width: 30%;
+    width: 40%;
     justify-content: center;
+}
+.battle-card-info{
+    width:30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+
+}
+.battle-card-info .info-title{
+    width: 100%;
+    height : 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.battle-card-info .info-title a{
+    color : white;
+    font-size:30px;
+}
+.battle-card-info .info-center{
+    width: 100%;
+    height : 10%;
+    margin-top:5%;
+    margin-bottom:5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.battle-card-info .info-center .vs{
+    
+    font-size : 30px;
+    font-weight: 600;
+    font-style : italic;
+}
+.battle-card-info .battle-point{
+    width: 100%;
+    height : 55%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: rgb(125, 39, 39);
 }
