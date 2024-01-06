@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="우리팀">
+    <meta name="description" content="팀포트폴리오">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
+    <!-- 메인 자바스크립트 -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script src="./js/module/swiper.js"></script>
+    <script src="./js/module/cookie.js"></script>
+    <script src="./js/controller.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setPage('main');
+        });
+
+    </script>
+    <!-- 메인 스타일 css -->
+    <link rel="stylesheet" href="./css/swiper.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <title>메인페이지</title>
+</head>
+
+<body>
+    <div id="web">
+        <header th:replace="~{fragments/header :: headerFragment}">
+            헤더
+        </header>
+        <nav th:replace="~{fragments/navigation :: navFragment}">
+            네비게이션
+        </nav>
+        <section class="home_content">
+            <div class="content">
+                <div class="row main">
+                    <div th:replace="~{fragments/lnb :: lnbFragment}">
+                        LNB
+                    </div>
+                    <div class="center_main" id="center_main">
+                        메인 컨텐츠
+                    </div>
+                    <div th:replace="~{fragments/rnb :: rnbFragment}">
+                        RNB
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer th:replace="~{fragments/footer :: footerFragment}">
+            푸터
+        </footer>
+    </div>
+</body>
+
+</html>

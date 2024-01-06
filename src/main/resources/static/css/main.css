@@ -96,8 +96,7 @@ h6 {
 .swiper-rtl .swiper-button-prev:before,
 .stream-item__media a:before,
 .stream-item__count:before,
-.ico_login:before,
-.ico_logout {
+.ico_fontawesome:before {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     display: inline-block;
@@ -111,11 +110,7 @@ h6 {
     text-transform: none;
 }
 
-.ico_login:before,
-.ico_logout {
-    font-family : "Font Awesome 6 Free";
-    font-weight : 900;
-}
+
 .ico_add-square:before {
     content: "";
 }
@@ -406,7 +401,7 @@ html #youzify-groups-list .item .item-title a {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #2e2e2e;
+    background: rgba(46, 46, 46, 0.5);
     z-index: 100500;
 }
 
@@ -730,7 +725,9 @@ html #youzify-groups-list .item .item-title a {
     background-color: #ffffff;
     content: "";
 }
-
+.page-home {
+    background-color: #F0F0f0;
+}
 .dark-theme {
     background-color: #15181f;
     color: #e5e5e5;
@@ -1528,6 +1525,7 @@ a:hover {
     display: block;
     position: relative;
     margin-left: -4px;
+    width:200px;
 }
 
 
@@ -1551,7 +1549,6 @@ a:hover {
     -ms-flex-pack: justify;
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
-    -webkit-box-shadow: 11px 7px 10px 0px #0000000f;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -1560,7 +1557,7 @@ a:hover {
     justify-content: space-between;
     height: 75px;
     padding: 0 45px;
-    box-shadow: 11px 7px 10px 0px #0000000f;
+    box-shadow: 0px 10px 10px -10px #0000000f
 }
 
 .page-header__search {
@@ -5216,22 +5213,21 @@ body.dark-theme #modal-help ul li {
 
 
 .preloader-1 {
-    width: 66px;
-    height: 12px;
+    height: 20px;
     position: absolute;
     left: 50%;
     top: 50%;
-    margin: -30px -30px 0 0;
+    translate : -110px -100px;
 }
 
 
 
 
 .preloader-1 .line {
-    width: 1px;
+    width: 5px;
     height: 12px;
     background: #fff;
-    margin: 0 1px;
+    margin: 0 7.4px;
     display: inline-block;
     animation: opacity-1 1000ms infinite ease-in-out;
 }
@@ -5289,7 +5285,7 @@ body.dark-theme #modal-help ul li {
     color: #fff;
     padding-bottom: 10px;
     text-transform: uppercase;
-    font-size: 15px;
+    font-size: 51px;
 }
 
 @keyframes opacity-1 {
@@ -5497,7 +5493,6 @@ html body.dark-theme #youzify-groups-list .action {
 
 
 html body.dark-theme .uk-button-danger {
-    background: var(--main-color-now);
 }
 
 
