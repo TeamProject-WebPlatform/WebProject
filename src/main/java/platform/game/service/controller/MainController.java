@@ -65,6 +65,10 @@ public class MainController {
 
         return "template/"+no;
     }
+    @RequestMapping("/loadertest")
+    public String loader(){
+        return "loadertest";
+    }
     @RequestMapping("/battle")
     public ModelAndView battle(){
         ModelAndView mav = new ModelAndView("battle");

@@ -401,7 +401,7 @@ html #youzify-groups-list .item .item-title a {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #2e2e2e;
+    background: rgba(46, 46, 46, 0.5);
     z-index: 100500;
 }
 
@@ -1525,6 +1525,7 @@ a:hover {
     display: block;
     position: relative;
     margin-left: -4px;
+    width:200px;
 }
 
 
