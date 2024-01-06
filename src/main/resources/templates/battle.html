@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -10,44 +10,32 @@
     <meta name="HandheldFriendly" content="true">
     <meta name="format-detection" content="telephone=no">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="./css/libs.min.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/main_custom.css" />
-    <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
-    <!-- 메인 자바스크립트 -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="./js/module/swiper.js"></script>
-    <script src="./js/libs.js"></script>
-    <script src="./js/module/chart.js"></script>
-    <script src="./js/module/swiper.js"></script>
-    <script src="./js/module/cookie.js"></script>
-    <script src="./js/main.js"></script>
+    <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/libs.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/main_custom.css" />
+    <script src="../js/libs.js"></script>
+    <script src="../js/main.js"></script>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
-
 </head>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const active = document.getElementById("nav-home");
+        const active = document.getElementById("nav-battle");
         active.classList.add("uk-active");
     });
 </script>
-
-<body class="page-home dark-theme">
-
+<body class="page-favourites dark-theme">
+    
     <input id="toggle" type="checkbox">
-
-
 
     <!-- Loader-->
     <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div>
     <!-- Loader end-->
+
 
     <div class="page-wrapper">
         <!-- 헤더 Fragment -->
@@ -55,26 +43,31 @@
         <!--  -->
         <div class="page-content">
             <!-- 사이드바 Fragment -->
-            <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss = "sidebar is-show" id="sidebar">사이드바 Fragment</aside>
+            <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss="sidebar is-show" id="sidebar">사이드바 Fragment</aside>
             <!--  -->
 
-            <!-- 메인 -->
             <main class="page-main">
                 <div class="uk-grid" data-uk-grid>
-                    <div class="uk-width-2-3@l uk-width-3-3@m uk-width-3-3@s">
-                        <div class="js-recommend">
-                            <div class="profile-background">
-                            <div class="swiper">
-                                <div class="swiper-wrapper">
-                                    <!-- 스와이퍼 프로필 들어가는 곳 -->
+                    <div class="uk-width-2-3@l">
+                        <div class="game-card --horizontal favourites-game">
+                            <div class="game-card__box">
+                                <div class="game-card__media"><a href="10_game-profile.html"><img src="./img/game-1.jpg"
+                                            alt="Werewolf Complex" /></a></div>
+                                <div class="game-card__info"><a class="game-card__title" href="10_game-profile.html">
+                                        Werewolf Complex</a>
+                                    <div class="game-card__genre">Strategy / Medieval </div>
+                                    <div class="game-card__rating-and-price">
+                                        <div class="game-card__rating"><span>3.9</span><i class="ico_star"></i></div>
+                                        <div class="game-card__price"><span>Free</span></div>
+                                    </div>
+                                    <div class="game-card__bottom">
+                                        <div class="game-card__platform"><i class="ico_windows"></i><i
+                                                class="ico_apple"></i></div>
+                                    </div>
                                 </div>
-                                <div class="swipper-nav">
-                                    <div class="swiper-button-prev"></div>
-                                    <div class="swiper-button-next"></div>
+                                <div class="game-card__more"><a href="10_game-profile.html"><i class="ico_more"></i></a>
                                 </div>
-                                <div class="swiper-pagination"></div>
-                            </div></div>
-
+                            </div>
                         </div>
                     </div>
                 </div>
