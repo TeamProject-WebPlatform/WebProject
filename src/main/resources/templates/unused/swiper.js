@@ -14,20 +14,32 @@ const SwiperData = async function() {
     }
     return datalist;
 }
-// const setSwiper = function () {
-//     var swiper = new Swiper(".memberSwiper", {
-//         spaceBetween: 30,
-//         centeredSlides: true,
-//         autoplay: {
-//             delay: 3000,
-//             disableOnInteraction: false
-//         },
-//         pagination: {
-//             el: ".swiper-pagination",
-//             clickable: true
-//         }
-//     });
-// }
+const setSwiper = function () {
+    const progressCircle = document.querySelector(".autoplay-progress svg");
+    const progressContent = document.querySelector(".autoplay-progress span");
+    var swiper = new Swiper(".memberSwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true
+        },
+        // navigation: {
+        //     nextEl: ".swiper-button-next",
+        //     prevEl: ".swiper-button-prev"
+        // },
+        on: {
+            autoplayTimeLeft(s, time, progress) {
+                // progressCircle.style.setProperty("--progress", 1 - progress);
+                // progressContent.textContent = `${Math.ceil(time / 1000)}s`;
+            }
+        }
+    });
+}
 const setSwiperWrapper = async function(){
     let datalist = await SwiperData();
     let slideNum = 4;
@@ -36,11 +48,11 @@ const setSwiperWrapper = async function(){
     for(let i = 0;i<slideNum;i++){
         html += `
             <div class="swiper-slide">
-                <div class="recommend-slide row user">`;
+                <div class="row user">`;
         for(let j = 0;j<profilePerSlide;j++){
             html += createSwiperProfile(datalist[4*i+j].mem_nick, datalist[4*i+j].mem_lvl);
         }            
-        html +=`   
+        html +=`
                 </div>
             </div>`;
     }
@@ -54,7 +66,7 @@ const createSwiperProfile = function (nickname, level) {
     let memSymbolImageName = "starbucks.png";
     let memIntroduction = "안녕하세요";
     let membProfileHTML = `
-        <div class="profile-card">
+        <div class="profile">
             <a href="/mypage/${memNickname}">
                 <div class="profile-header">
                     <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
