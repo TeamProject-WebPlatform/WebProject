@@ -80,14 +80,14 @@ public interface SqlMapperInter {
         int setLevelRank(@RequestParam("rank") int rank);
 
         @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
-                        "SELECT #{rank}, 2, mem_id, NOW() " +
+                        "SELECT #{rank}, 1, mem_id, NOW() " +
                         "FROM member " +
                         "ORDER BY mem_win_count DESC " +
                         "LIMIT #{rank-1}, 1")
         int setWinrateRank(@RequestParam("rank") int rank);
 
         @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
-                        "SELECT #{rank}, 3, mem_id, NOW() " +
+                        "SELECT #{rank}, 2, mem_id, NOW() " +
                         "FROM member " +
                         "ORDER BY mem_total_point DESC " +
                         "LIMIT #{rank-1}, 1")
@@ -96,10 +96,10 @@ public interface SqlMapperInter {
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranklist r join member m on r.rank_code=0 and m.mem_id=r.mem_id")
         public List<LevelRankTO> getLevelrank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_win_count/m.mem_game_count)*100,2) as winrate from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_win_count/m.mem_game_count)*100,2) as winrate from ranklist r join member m on r.rank_code=1 and m.mem_id=r.mem_id")
         public List<WinRankTO> getWinrank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranklist r join member m on r.rank_code=3 and m.mem_id=r.mem_id")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
         public List<PointRankTO> getPointrank();
 
         @Select("select distinct m.mem_nick, m.mem_lvl from ranklist r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
