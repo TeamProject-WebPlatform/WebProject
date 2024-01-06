@@ -151,3 +151,19 @@
 .page-header__logo_text{
     color : white;
 }
+
+.battle-profile-left{
+    display: flex;
+    align-items: center;
+    width: 30%;
+    justify-content: center;
+}
+.battle-card-info{
+    width:35%;
+}
+.battle-profile-right{
+    display: flex;
+    align-items: center;
+    width: 30%;
+    justify-content: center;
+}
