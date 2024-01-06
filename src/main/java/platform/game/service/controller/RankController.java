@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import platform.game.service.entity.Member;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
+import platform.game.service.service.MemberInfoDetails;
 
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.security" })
@@ -100,6 +103,16 @@ public class RankController {
         List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
         ModelAndView mav = new ModelAndView("levelrank");
         mav.addObject("level", getLevelTable);
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                mav.addObject("nickname", member.getMemNick());
+            }
+        } else {
+            System.out.println("멤버 없음");
+        }
+
         return mav;
     }
 
@@ -108,6 +121,16 @@ public class RankController {
         List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
         ModelAndView mav = new ModelAndView("winraterank");
         mav.addObject("win", getWinRateTable);
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                mav.addObject("nickname", member.getMemNick());
+            }
+        } else {
+            System.out.println("멤버 없음");
+        }
+
         return mav;
     }
 
@@ -116,6 +139,16 @@ public class RankController {
         List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
         ModelAndView mav = new ModelAndView("pointrank");
         mav.addObject("point", getPointTable);
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                mav.addObject("nickname", member.getMemNick());
+            }
+        } else {
+            System.out.println("멤버 없음");
+        }
+
         return mav;
     }
 }
