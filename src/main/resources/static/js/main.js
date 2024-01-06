@@ -41,29 +41,7 @@ jQuery(document).ready(function ($) {
 
     mediaHeader.addListener(handleHeader);
     handleHeader(mediaHeader);
-    const recommendSlider = new Swiper('.js-recommend .swiper', {
-        slidesPerView: 1,
-        spaceBetween: 40,
-        loop: true,
-        watchOverflow: true,
-        observeParents: true,
-        observeSlideChildren: true,
-        observer: true,
-        speed: 800,
-        autoplay: {
-            delay: 5000
-        },
-        navigation: {
-            nextEl: '.js-recommend .swiper-button-next',
-            prevEl: '.js-recommend .swiper-button-prev'
-        },
-        pagination: {
-            el: '.js-recommend .swiper-pagination',
-            type: 'bullets',
-            // 'bullets', 'fraction', 'progressbar'
-            clickable: true
-        }
-    });
+    
     const trendingSlider = new Swiper('.js-trending .swiper', {
         slidesPerView: 1,
         spaceBetween: 40,
@@ -87,6 +65,7 @@ jQuery(document).ready(function ($) {
             clickable: true
         }
     });
+
     const popularSlider = new Swiper('.js-popular .swiper', {
         slidesPerView: 1,
         spaceBetween: 25,

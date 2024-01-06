@@ -1,4 +1,13 @@
-const SwiperData = async function() {
+document.addEventListener('DOMContentLoaded', function () {
+    let profileSlidesPerView = 4;
+    setSwiperWrapper(profileSlidesPerView);
+    
+    // 창 크기가 변경될 때 Swiper 업데이트
+    window.addEventListener('resize', function() {
+        setSwiperWrapper(profileSlidesPerView);
+    });
+});
+const SwiperData = async function () {
     let datalist = [];
     try {
         const response = await fetch("/roll", {
@@ -14,50 +23,61 @@ const SwiperData = async function() {
     }
     return datalist;
 }
-const setSwiper = function () {
-    const progressCircle = document.querySelector(".autoplay-progress svg");
-    const progressContent = document.querySelector(".autoplay-progress span");
-    var swiper = new Swiper(".memberSwiper", {
-        spaceBetween: 30,
-        centeredSlides: true,
+const setSwiper = function(){
+    const profileSlider = new Swiper('.js-recommend .swiper', {
+        slidesPerView: profileSlidesPerView,
+        slidesPerGroup: profileSlidesPerView,
+        spaceBetween: 40,
+        loop: true,
+        watchOverflow: true,
+        observeParents: true,
+        observeSlideChildren: true,
+        observer: true,
+        speed: 800,
         autoplay: {
-            delay: 3000,
-            disableOnInteraction: false
+            delay: 4000
+        },
+        navigation: {
+            nextEl: '.js-recommend .swiper-button-next',
+            prevEl: '.js-recommend .swiper-button-prev'
         },
         pagination: {
-            el: ".swiper-pagination",
+            el: '.js-recommend .swiper-pagination',
+            type: 'bullets',
+            // 'bullets', 'fraction', 'progressbar'
             clickable: true
-        },
-        // navigation: {
-        //     nextEl: ".swiper-button-next",
-        //     prevEl: ".swiper-button-prev"
-        // },
-        on: {
-            autoplayTimeLeft(s, time, progress) {
-                // progressCircle.style.setProperty("--progress", 1 - progress);
-                // progressContent.textContent = `${Math.ceil(time / 1000)}s`;
-            }
         }
     });
 }
-const setSwiperWrapper = async function(){
+
+{/* <div class="recommend-slide row user"> */}
+const setSwiperWrapper = async function () {
     let datalist = await SwiperData();
-    let slideNum = 4;
-    let profilePerSlide = 4;
+    let slideNum = datalist.length
     let html = "";
-    for(let i = 0;i<slideNum;i++){
+    for (let i = 0; i < slideNum; i++) {
         html += `
-            <div class="swiper-slide">
-                <div class="row user">`;
-        for(let j = 0;j<profilePerSlide;j++){
-            html += createSwiperProfile(datalist[4*i+j].mem_nick, datalist[4*i+j].mem_lvl);
-        }            
-        html +=`
-                </div>
+            <div class="swiper-slide">`;
+
+            html += createSwiperProfile(datalist[i].mem_nick, datalist[i].mem_lvl);
+
+        html += `   
             </div>`;
     }
-    const wrapper = document.querySelector('.swiper-wrapper');
+    const wrapper = document.querySelectorAll('.swiper-wrapper')[0];
     wrapper.innerHTML = html;
+
+    if (window.innerWidth >= 1600) {
+        profileSlidesPerView = 4;
+    } else if (window.innerWidth >= 1250) {
+        profileSlidesPerView = 3;
+    } else if (window.innerWidth >= 630){
+        profileSlidesPerView = 2;
+    } else {
+        profileSlidesPerView = 1;
+    }
+    // Swiper 초기화 및 업데이트
+    setSwiper(profileSlidesPerView);
 }
 const createSwiperProfile = function (nickname, level) {
     let memNickname = nickname;
@@ -66,7 +86,7 @@ const createSwiperProfile = function (nickname, level) {
     let memSymbolImageName = "starbucks.png";
     let memIntroduction = "안녕하세요";
     let membProfileHTML = `
-        <div class="profile">
+        <div class="profile-card">
             <a href="/mypage/${memNickname}">
                 <div class="profile-header">
                     <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
