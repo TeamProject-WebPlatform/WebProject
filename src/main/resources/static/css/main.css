@@ -1732,6 +1732,18 @@ a:hover {
     /* transition: all 0.25s linear; */
 }
 
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background-color: #E2EBEC;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: var(--main-color-now);
+}
+
 .sidebar.is-show {
     left: 0;
 }
