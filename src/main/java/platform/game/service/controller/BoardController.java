@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
+import platform.game.service.model.TO.BoardCpageTO;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
@@ -42,7 +43,7 @@ public class BoardController {
     }
 
     @GetMapping("/list")
-    public ModelAndView list(@RequestParam("board_cd") String boardCd) {
+    public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
 
         String loginCheck = "true";
@@ -55,11 +56,42 @@ public class BoardController {
             loginCheck = "false";
         }
 
+        //cpage 작업
+        BoardCpageTO cpageTO = new BoardCpageTO();
+        int cpage = 1;
+        int recordPerPage = cpageTO.getRecordPerPage();
+		int blockPerPage = cpageTO.getBlockPerPage();
+		if( request.getParameter( "cpage" ) != null && !request.getParameter( "cpage" ).equals( "" ) ) {
+			cpage = Integer.parseInt( request.getParameter( "cpage" ) );
+		}
+
+        cpageTO.setCpage(cpage);
+        cpageTO.setTotalRecord( lists.size() );
+		cpageTO.setTotalPage( ( ( cpageTO.getTotalRecord() - 1 ) / recordPerPage ) + 1);
+		cpageTO.setStartBlock( cpage - ( cpage-1 ) % blockPerPage );
+		cpageTO.setEndBlock( cpage - ( cpage-1 ) % blockPerPage + blockPerPage - 1 );
+		if( cpageTO.getEndBlock() >= cpageTO.getTotalPage() ) {
+			cpageTO.setEndBlock( cpageTO.getTotalPage() );
+		}
+
+		// SKIP - 각 페이지 별 게시글 자르기
+		int skip = ( cpage - 1 ) * recordPerPage;
+		lists.subList(0, skip).clear();
+		// lists.subList(cpageTO.getRecordPerPage(), lists.size()).clear();
+        System.out.println("lists.size() : " + lists.size());
+        lists.subList(cpageTO.getRecordPerPage(), lists.size()).clear();
+		cpageTO.setBoardLists( lists );
+
+        // System.out.println("cpage 테스트 : " + cpageTO.getStartBlock());
+        // System.out.println("cpage 테스트 : " + cpageTO.getBlockPerPage());
+        // System.out.println("cpage 테스트 : " + cpageTO.getTotalPage());
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_list");
         modelAndView.addObject("lists", lists);
         modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("boardCd", boardCd);
+        modelAndView.addObject("cpage", cpageTO);
 
         return modelAndView;
     }
@@ -171,7 +203,7 @@ public class BoardController {
     }
 
     @RequestMapping("/write_ok")
-    public String listWriteOk(HttpServletRequest request, Model model) {
+    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request, Model model) {
         System.out.println("Controller_listWriteOk 호출");
         Post post = new Post();
         Date date = new Date();

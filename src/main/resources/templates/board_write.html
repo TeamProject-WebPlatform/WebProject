@@ -31,6 +31,36 @@
         active.classList.add("uk-active");
     });
 </script>
+<script type="text/javascript">
+    window.onload = function() {
+        document.getElementById( 'wbtn' ).onclick = function() {
+            if( document.wfrm.subject.value.trim() == '' ) {
+                alert( '제목을 입력하셔야 합니다' );
+                return;
+            }
+            document.wfrm.submit();
+        }
+    }
+</script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+<!-- Place the first <script> tag in your HTML's <head> -->
+<script src="https://cdn.tiny.cloud/1/11ke68tblqi9bteupd15i02mhw6968shdr0dv7jih3vpigpm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+        { value: 'First.Name', title: 'First Name' },
+        { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+    });
+</script>
 
 <body class="page-home dark-theme">
 
@@ -66,6 +96,7 @@
                                 <!-- <div class="con_txt"> -->
                                 <div class="widjet-game__title">
                                     <form action="write_ok" method="post" name="wfrm">
+                                        <input type="hidden" name="board_cd" th:value="${board_cd}" />
                                         <div class="contents_sub">	
                                             <!--게시판-->
                                             <div class="board_write">
@@ -73,16 +104,6 @@
                                                     <div class="form-row">
                                                         <label for="subject" class="form-label">제목</label>
                                                         <input type="text" name="subject" value="" class="board_view_input">
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <label for="board_cd" class="form-label">게시판 코드</label>
-                                                        <select name="board_cd" class="board_view_input">
-                                                            <option value="" selected>선택하세요</option>
-                                                            <option value="20001">공지사항</option>
-                                                            <option value="20002">대전</option>
-                                                            <option value="20003">협동</option>
-                                                            <option value="20004">게시판</option>
-                                                        </select>
                                                     </div>
                                                     <div class="form-row">
                                                         <label for="tags" class="form-label">태그</label>
@@ -93,25 +114,6 @@
                                                     </div>
                                                     <div class="form-input">
                                                         <textarea name="content" class="board_editor_area"></textarea>
-                                                    </div>
-                                                </div>
-                                            
-                                                <div class="form-container">
-                                                    <div class="form-row" style="text-align: left; border: 1px solid #e0e0e0; background-color: #f9f9f9; padding: 5px;">
-                                                        <div class="uk-width-1-1" style="padding-top: 7px; padding-bottom: 5px; font-weight: bold; padding-left: 7px; font-family: Gulim,Tahoma,verdana;">
-                                                            ※ 개인정보 수집 및 이용에 관한 안내
-                                                        </div>
-                                                        <div class="uk-width-1-1" style="padding-left: 10px;">
-                                                            <div style="width: 97%; height: 95px; font-size: 15px; letter-spacing: -0.1em; border: 1px solid #c5c5c5; background-color: #fff; padding-left: 14px; padding-top: 7px;">
-                                                                1. 수집 개인정보 항목 : 회사명, 담당자명, 메일 주소, 전화번호, 홈페이지 주소, 팩스번호, 주소 <br />
-                                                                2. 개인정보의 수집 및 이용목적 : 제휴신청에 따른 본인확인 및 원활한 의사소통 경로 확보 <br />
-                                                                3. 개인정보의 이용기간 : 모든 검토가 완료된 후 3개월간 이용자의 조회를 위하여 보관하며, 이후 해당정보를 지체 없이 파기합니다. <br />
-                                                                4. 그 밖의 사항은 개인정보취급방침을 준수합니다.
-                                                            </div>
-                                                        </div>
-                                                        <div class="uk-width-1-1" style="padding-top: 7px; padding-left: 5px; padding-bottom: 7px; font-family: Gulim,Tahoma,verdana;">
-                                                            <input type="checkbox" name="info" value="1" class="input_radio"> 개인정보 수집 및 이용에 대해 동의합니다.
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

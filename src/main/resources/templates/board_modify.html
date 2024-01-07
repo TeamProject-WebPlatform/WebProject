@@ -31,6 +31,34 @@
         active.classList.add("uk-active");
     });
 </script>
+<script type="text/javascript">
+    function modifyPost(){
+        var confirmation = confirm('게시물을 수정하시겠습니까?');
+        if (confirmation) {
+            document.mfrm.submit();
+        }
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+<!-- Place the first <script> tag in your HTML's <head> -->
+<script src="https://cdn.tiny.cloud/1/11ke68tblqi9bteupd15i02mhw6968shdr0dv7jih3vpigpm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+        { value: 'First.Name', title: 'First Name' },
+        { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+    });
+</script>
 
 <body class="page-home dark-theme">
 
@@ -71,20 +99,22 @@
                                         <div class="contents_sub">	
                                             <!--게시판-->
                                             <div class="board_write">
-                                                <table>
-                                                <tr>
-                                                    <th>제목</th>
-                                                    <td><input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>태그</th>
-                                                    <td><input type="text" name="tags" th:value="${post.postTags}" class="board_view_input" readonly/></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>내용</th>
-                                                    <td><textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea></td>
-                                                </tr>
-                                                </table>
+                                                <div class="form-container">
+                                                    <div class="form-row">
+                                                        <label for="subject" class="form-label">제목</label>
+                                                        <input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input" />
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <label for="tags" class="form-label">태그</label>
+                                                        <input type="text" name="tags" th:value="${post.postTags}" class="board_view_input" readonly/>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <label for="content" class="form-label">내용</label>
+                                                    </div>
+                                                    <div class="form-input">
+                                                        <textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="btn_area">
                                                 <div class="align_left">

@@ -31,6 +31,22 @@
         active.classList.add("uk-active");
     });
 </script>
+<!-- 댓글 작성 확인 함수 부분-->
+    <script type="text/javascript">
+        window.onload = function() {
+            document.getElementById('cbtn').onclick = function() {
+                document.getElementsByName("ccontent").value;
+                document.getElementsByName("postId").value;
+                document.cfrm.submit();
+            };
+        };
+    </script>
+    <!--로그인 알람-->
+    <script>
+        function checkLoginAndNavigate() {
+            alert('로그인이 필요합니다.');
+        }
+    </script>
 
 <body class="page-home dark-theme">
 
@@ -83,7 +99,7 @@
                                                         <td width="20%" th:text="${post.postHit}"></td>
                                                     </tr>
                                                 </table>
-                                                <table style="border-bottom: 3px solid #00FFFF; border-top: 3px solid #00FFFF;" width="100%">
+                                                <table class="board_view_table">
                                                     <tr>
                                                         <td colspan="4" valign="top" style="padding: 20px; line-height: 160%" th:utext="${post.postContent}"></td>
                                                     </tr>

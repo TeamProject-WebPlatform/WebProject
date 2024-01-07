@@ -31,6 +31,14 @@
         active.classList.add("uk-active");
     });
 </script>
+<script type="text/javascript">
+    function deletePost() {
+        var confirmation = confirm('게시물을 삭제하시겠습니까?');
+        if (confirmation) {
+            document.dfrm.submit();
+        }
+    }
+</script>
 
 <body class="page-home dark-theme">
 

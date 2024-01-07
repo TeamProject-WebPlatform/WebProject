@@ -31,6 +31,11 @@
         active.classList.add("uk-active");
     });
 </script>
+<script>
+    function checkLoginAndNavigate() {
+        alert('로그인이 필요합니다.');
+    }
+</script>
 
 <body class="page-home dark-theme">
 
@@ -130,31 +135,61 @@
                                                 <!-- <a th:href="@{write(board_cd=${boardCd})}"><input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"></a> -->
                                                 <!-- <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" /> -->
                                                 <!-- 로그인 상태인 경우의 링크 -->
-                                                <!-- <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
+                                                <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
                                                     <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;">
-                                                </a> -->
-                                                <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                                <!-- <a th:unless="${loginCheck}" href="/login">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;" onclick="checkLoginAndNavigate()">
-                                                </a> -->
-                                                <a th:href="@{write(board_cd=${boardCd})}">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
                                                 </a>
+                                                <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                                <a th:unless="${loginCheck}" href="/login">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;" onclick="checkLoginAndNavigate()">
+                                                </a>
+                                                <!-- <a th:href="@{write(board_cd=${boardCd})}">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                                                </a> -->
                                             </div>
+
                                             <!--페이지넘버-->
                                             <div class="paginate_regular" style="text-align: center;">
                                                 <div align="absmiddle">
-                                                    <span>&lt;&lt;</span>
+                                                    <span th:if="${cpage.startBlock} == 1">
+                                                        <a>&lt;&lt;</a>
+                                                    </span>
+                                                    <span th:unless="${cpage.startBlock} == 1">
+                                                        <a th:href="@{'list?cpage=' + (${cpage.startBlock} - ${cpage.blockPerPage})}">&lt;&lt;</a>
+                                                    </span>
                                                     &nbsp;
-                                                    <span>&lt;</span>
+                                                    
+                                                    <span th:if="${cpage.cpage} == 1">
+                                                        <a>&lt;</a>
+                                                    </span>
+                                                    <span th:unless="${cpage.cpage} == 1">
+                                                        <a th:href="@{'list?cpage=' + (${cpage.cpage} - 1)}">&lt;</a>
+                                                    </span>
                                                     &nbsp;&nbsp;
-                                                    <span>[ 1 ]</span>
-                                                    <span><a href="list">2</a></span>
-                                                    <span><a href="list">3</a></span>
+                                                    
+                                                    <th:block th:each="i: ${#numbers.sequence(cpage.startBlock, cpage.totalPage)}">
+                                                        <span th:if="${i == cpage.cpage}">
+                                                            <a th:text="'[' + ${i} + ']'"></a>
+                                                        </span>
+                                                        <span th:unless="${i == cpage.cpage}">
+                                                            <a th:href="@{'list?cpage=' + ${i}}" th:text="${i}"></a>
+                                                        </span>
+                                                    </th:block>
                                                     &nbsp;&nbsp;
-                                                    <span>&gt;</span>
+
+                                                    <span th:if="${cpage.cpage == cpage.totalPage}">
+                                                        <a>&gt;</a>
+                                                    </span>
+                                                    <span th:unless="${cpage.cpage == cpage.totalPage}">
+                                                        <a th:href="@{'./list?cpage=' + (cpage.cpage + 1)}">&gt;</a>
+                                                    </span>
                                                     &nbsp;
-                                                    <span>&gt;&gt;</span>
+                                                    
+                                                    <span th:if="${cpage.endBlock == cpage.totalPage}">
+                                                        <a>&gt;&gt;</a>
+                                                    </span>
+                                                    <span th:unless="${cpage.endBlock == cpage.totalPage}">
+                                                        <a th:href="@{'./list?cpage=' + (cpage.startBlock + cpage.blockPerPage)}">&gt;&gt;</a>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <!--//페이지넘버-->
