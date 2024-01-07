@@ -507,8 +507,8 @@ html #youzify-groups-list .item .item-title a {
 .nice-select {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-box-sizing: border-box;
-    -webkit-transition: all 0.2s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
+    /* -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out; */
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -531,7 +531,7 @@ html #youzify-groups-list .item .item-title a {
     text-align: left !important;
     white-space: nowrap;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    /* transition: all 0.2s ease-in-out; */
     user-select: none;
 }
 
