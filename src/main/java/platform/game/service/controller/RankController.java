@@ -77,26 +77,26 @@ public class RankController {
         return PointChart;
     }
 
-    @PostMapping("/getLevelTable")
-    @ResponseBody
-    public List<LevelRankTO> getLevelTable() {
-        List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
-        return getLevelTable;
-    }
+    // @PostMapping("/getLevelTable")
+    // @ResponseBody
+    // public List<LevelRankTO> getLevelTable() {
+    // List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
+    // return getLevelTable;
+    // }
 
-    @PostMapping("/getWinRateTable")
-    @ResponseBody
-    public List<WinRankTO> getWinRateTable() {
-        List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
-        return getWinRateTable;
-    }
+    // @PostMapping("/getWinRateTable")
+    // @ResponseBody
+    // public List<WinRankTO> getWinRateTable() {
+    // List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
+    // return getWinRateTable;
+    // }
 
-    @PostMapping("/getPointTable")
-    @ResponseBody
-    public List<PointRankTO> getPointTable() {
-        List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
-        return getPointTable;
-    }
+    // @PostMapping("/getPointTable")
+    // @ResponseBody
+    // public List<PointRankTO> getPointTable() {
+    // List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
+    // return getPointTable;
+    // }
 
     @RequestMapping("/levelrank")
     public ModelAndView LevelRank() {

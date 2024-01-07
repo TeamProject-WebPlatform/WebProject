@@ -7,28 +7,19 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
-import platform.game.service.mapper.SqlMapperInter;
-import platform.game.service.model.DAO.RankDAO;
-import platform.game.service.model.TO.LevelRankTO;
-import platform.game.service.model.TO.PointRankTO;
-import platform.game.service.model.TO.RollingRankTO;
-import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
@@ -43,21 +34,25 @@ public class MainController {
 
     @Autowired
     private CommentInfoRepository commentInfoRepository;
-    @RequestMapping("/t/{no}")
-    public String template(@PathVariable("no") String no){
 
-        return "template/"+no;
+    @RequestMapping("/t/{no}")
+    public String template(@PathVariable("no") String no) {
+
+        return "template/" + no;
     }
+
     @RequestMapping("/loadertest")
-    public String loader(){
+    public String loader() {
         return "loadertest";
     }
+
     @RequestMapping("/battle")
-    public ModelAndView battle(){
+    public ModelAndView battle() {
         ModelAndView mav = new ModelAndView("battle");
-        
+
         return mav;
     }
+
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
