@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
+import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
+import platform.game.service.model.TO.BattleTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
@@ -72,7 +74,17 @@ public class MainController {
     @RequestMapping("/battle")
     public ModelAndView battle(){
         ModelAndView mav = new ModelAndView("battle");
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                mav.addObject("nickname", member.getMemNick());
+            }
+        } else {
+        }
+        List<BattleTO> battleList = new BattleCardAction().getBattleList();
         
+        mav.addObject("battleList",battleList);
         return mav;
     }
     @RequestMapping({ "/", "/home" })

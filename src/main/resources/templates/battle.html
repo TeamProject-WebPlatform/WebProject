@@ -26,7 +26,27 @@
     document.addEventListener("DOMContentLoaded", function () {
         const active = document.getElementById("nav-battle");
         active.classList.add("uk-active");
+        document.getElementById("toggle").addEventListener("click", function () {
+
+            document.querySelectorAll('.vs > img').forEach(function (x) {
+                x.src = logo_img_paths[currentThemeIndex];
+            })
+        });
+        const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
+        const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
+
+        const pointLefts = document.querySelectorAll(".info-center-left .info-point-percent");
+        const pointRights = document.querySelectorAll(".info-center-right .info-point-percent");
+
+        for (let i = 0; i < pointBarLefts.length; i++) {
+            let pointBarLeft = pointBarLefts.item(i);
+            pointBarLeft.style.width = pointLefts[i].innerHTML;
+
+            let pointBarRight = pointBarRights.item(i);
+            pointBarRight.style.width = pointRights[i].innerHTML;
+        }
     });
+
 </script>
 
 <body class="page-favourites dark-theme">
@@ -50,58 +70,149 @@
 
             <main class="page-main">
                 <div class="uk-grid" data-uk-grid>
-                    <div class="uk-width-2-3@l">
-                        <div class="game-card --horizontal favourites-game">
+                    <div class="uk-width-2-3@l" id="battleCardSection">
+                        <div class="battle-card --horizontal hot-battle" th:each="battle : ${battleList}">
                             <div class="battle-card__box">
                                 <div class="battle-profile-left">
-                                    <div class="game-card__info"><a class="game-card__title"
-                                            href="10_game-profile.html">
-                                            Werewolf Complex</a>
-                                        <div class="game-card__genre">Strategy / Medieval </div>
-                                        <div class="game-card__rating-and-price">
-                                            <div class="game-card__rating"><span>3.9</span><i class="ico_star"></i>
-                                            </div>
-                                            <div class="game-card__price"><span>Free</span></div>
+                                    <div class="battle-profile-info">
+                                        <div class="battle-profile-nickname">
+                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.host.memLvl}">Lv
+                                                30</div>
+                                            <div th:text="${battle.host.memNick}"></div>
                                         </div>
-                                        <div class="game-card__bottom">
-                                            <div class="game-card__platform"><i class="ico_windows"></i><i
-                                                    class="ico_apple"></i></div>
+                                        <div class="battle-profile-history">
+                                            <div>
+                                                <div class="battle-profile-win"
+                                                    th:text="${battle.host.memGameWinCnt}+' 승'">77 승</div>
+                                                <div>&nbsp;/&nbsp;</div>
+                                                <div class="battle-profile-lose"
+                                                    th:text="${battle.host.memGameLoseCnt}+' 패'">25 패</div>
+                                            </div>
+                                            <div
+                                                th:with="rate=${(battle.host.memGameWinCnt * 100.0 / (battle.host.memGameWinCnt + battle.host.memGameLoseCnt))}">
+                                                <div class="battle-profile-win-rate"
+                                                    th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-main">
+                                            <div class="profile-dividing-line"></div>
+                                            <div class="profile-badge-section">
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="game-card__media"><a href="10_game-profile.html"><img
-                                        src="./img/game-1.jpg" alt="Werewolf Complex" /></a></div>
+                                    <div class="battle-profile-media">
+                                        <a href="10_game-profile.html">
+                                            <img src="../img/doyun_icon.png" alt="Werewolf Complex" />
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="battle-card-info">
-                                    <div class="info-title"><a href="/해당 게시판이동">타이틀</a></div>
+                                    <div class="info-title"><a href="/해당 게시판이동" th:text="${battle.title}"></a></div>
+                                    <div class="info-battle-point" th:text="${battle.point}">100000</div>
                                     <div class="info-center">
-                                        <div class="info-point" id="info-point-left">7777777777</div>
-                                        <div class="vs">V S</div>
-                                        <div class="info-point" id="info-point-right">23423562</div>
+                                        <div class="info-center-left">
+                                            <div class="info-center-header">
+                                                <div class="info-point-header-list">
+                                                    <div class="info-point-amount">
+                                                        <div class="icon_box"><i
+                                                                class="fa-solid fa-coins ico_fontawesome"></i></div>72.3
+                                                    </div>
+                                                    <div class="info-point-pno">
+                                                        <div class="icon_box"><i
+                                                                class="fa-solid fa-user ico_fontawesome"></i></div>310
+                                                    </div>
+                                                    <div class="info-point-ratio">
+                                                        <div class="icon_box"><i
+                                                                class="fa-solid fa-gem ico_fontawesome"></i></div>1:2.52
+                                                    </div>
+                                                </div>
+                                                <div class="info-point-percent">75%</div>
+                                            </div>
+                                            <div class="info-point-bar-box">
+                                                <div class="info-point-bar"></div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="vs"><img src="../img/logo_white.png"></div>
+
+
+                                        <div class="info-center-right">
+                                            <div class="info-center-header">
+                                                <div class="info-point-percent">25%</div>
+                                                <div class="info-point-header-list">
+                                                    <div class="info-point-amount">72.3<div class="icon_box"><i
+                                                                class="fa-solid fa-coins ico_fontawesome"></i></div>
+                                                    </div>
+                                                    <div class="info-point-pno">310<div class="icon_box"><i
+                                                                class="fa-solid fa-user ico_fontawesome"></i></div>
+                                                    </div>
+                                                    <div class="info-point-ratio">1:2.52<div class="icon_box"><i
+                                                                class="fa-solid fa-gem ico_fontawesome"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="info-point-bar-box">
+                                                <div class="info-point-bar"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="battle-point">
+                                    <div class="betting">
                                         <div class="battle-point-betting">포인트 배팅버튼(모달)</div>
                                     </div>
                                 </div>
                                 <div class="battle-profile-right">
-                                    <div class="game-card__media"><a href="10_game-profile.html"><img
-                                        src="./img/game-1.jpg" alt="Werewolf Complex" /></a></div>
-                                    <div class="game-card__info"><a class="game-card__title"
-                                            href="10_game-profile.html">
-                                            Werewolf Complex</a>
-                                        <div class="game-card__genre">Strategy / Medieval </div>
-                                        <div class="game-card__rating-and-price">
-                                            <div class="game-card__rating"><span>3.9</span><i class="ico_star"></i>
-                                            </div>
-                                            <div class="game-card__price"><span>Free</span></div>
+                                    <div class="battle-profile-media">
+                                        <a href="10_game-profile.html">
+                                            <img src="../img/doyun_icon.png" alt="Werewolf Complex" />
+                                        </a>
+                                    </div>
+                                    <div class="battle-profile-info">
+                                        <div class="battle-profile-nickname">
+                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.client.memLvl}">Lv
+                                                30</div>
+                                            <div th:text="${battle.client.memNick}"></div>
                                         </div>
-                                        <div class="game-card__bottom">
-                                            <div class="game-card__platform"><i class="ico_windows"></i><i
-                                                    class="ico_apple"></i></div>
+                                        <div class="battle-profile-history">
+                                            <div>
+                                                <div class="battle-profile-win"
+                                                    th:text="${battle.client.memGameWinCnt}+' 승'">77 승</div>
+                                                <div>&nbsp;/&nbsp;</div>
+                                                <div class="battle-profile-lose"
+                                                    th:text="${battle.client.memGameLoseCnt}+' 패'">25 패</div>
+                                            </div>
+                                            <div
+                                                th:with="rate=${(battle.client.memGameWinCnt * 100.0 / (battle.client.memGameWinCnt + battle.client.memGameLoseCnt))}">
+                                                <div class="battle-profile-win-rate"
+                                                    th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-main">
+                                            <div class="profile-dividing-line"></div>
+                                            <div class="profile-badge-section">
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -110,67 +221,8 @@
             </main>
         </div>
     </div>
-    <div class="page-modals">
-        <div class="uk-flex-top" id="modal-report" data-uk-modal>
-            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default"
-                    type="button" data-uk-close></button>
-                <h2 class="uk-modal-title">Report</h2>
-                <form class="uk-form-stacked" action="#">
-                    <div class="uk-margin">
-                        <div class="uk-form-label">Subject</div>
-                        <div class="uk-form-controls"><select class="js-select">
-                                <option value="">Choose Subject</option>
-                                <option value="Subject 1">Subject 1</option>
-                                <option value="Subject 2">Subject 2</option>
-                                <option value="Subject 3">Subject 3</option>
-                            </select></div>
-                    </div>
-                    <div class="uk-margin">
-                        <div class="uk-form-label">Details</div>
-                        <div class="uk-form-controls"><textarea class="uk-textarea" name="details"
-                                placeholder="Try to include all details..."></textarea></div>
-                        <div class="uk-form-controls uk-margin-small-top">
-                            <div data-uk-form-custom><input type="file"><button class="uk-button uk-button-default"
-                                    type="button" tabindex="-1"><i class="ico_attach-circle"></i><span>Attach
-                                        File</span></button></div>
-                        </div>
-                    </div>
-                    <div class="uk-margin">
-                        <div class="uk-grid uk-flex-right" data-uk-grid>
-                            <div><button class="uk-button uk-button-small uk-button-link">Cancel</button></div>
-                            <div><button class="uk-button uk-button-small uk-button-danger">Submit</button></div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="uk-flex-top" id="modal-help" data-uk-modal>
-            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default"
-                    type="button" data-uk-close></button>
-                <h2 class="uk-modal-title">Help</h2>
-                <div class="search">
-                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
-                            placeholder="Search"></div>
-                    <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
-                </div>
-                <div class="uk-margin-small-left uk-margin-small-bottom uk-margin-medium-top">
-                    <h4>Popular Q&A</h4>
-                    <ul>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Upload Your Developed
-                                Game</span></li>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Go Live Stream</span>
-                        </li>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>Get in touch with the Creator
-                                Support Team</span></li>
-                    </ul>
-                    <ul>
-                        <li><a href="#!">browse all articles</a></li>
-                        <li><a href="#!">Send Feedback</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
 
 </body>
 
