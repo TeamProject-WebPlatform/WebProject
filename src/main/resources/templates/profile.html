@@ -11,15 +11,17 @@
     <meta name="format-detection" content="telephone=no">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="./css/libs.min.css">
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="../css/libs.min.css">
+    <link rel="stylesheet" href="../css/main.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./css/main_custom.css" />
+    <link rel="stylesheet" href="../css/main_custom.css" />
+
+    <script src="../js/favoriteGame.js"></script>
 
 </head>
 
@@ -55,9 +57,9 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="user-info">
-                                    <div class="user-info__avatar"><img src="./img/profile.png" alt="profile"></div>
+                                    <div class="user-info__avatar"><img src="../img/profile.png" alt="profile"></div>
                                     <div class="user-info__box">
-                                        <div class="user-info__title">John Doe</div>
+                                        <div class="user-info__title" th:text="${member.memNick}">John Doe</div>
                                         <div class="user-info__text">Egypt, Member since May 2022</div>
                                     </div>
                                 </div><a class="uk-button uk-button-danger" href="04_profile.html"><i class="ico_edit"></i><span class="uk-margin-small-left">Edit Profile</span></a>
@@ -71,11 +73,11 @@
                                 <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
                                     <div><select id="first-game" class="js-select">
                                             <option value="">1순위 선호 게임 </option>
-                                            <option value="Game 1">리그 오브 레전드</option>
-                                            <option value="Game 2">배틀 그라운드</option>
-                                            <option value="Game 3">오버워치</option>
-                                            <option value="Game 4">발로란트</option>
-                                            <option value="Game 5">피파 온라인</option>
+                                            <option value="lol">리그 오브 레전드</option>
+                                            <option value="battleground">배틀 그라운드</option>
+                                            <option value="overwatch">오버워치</option>
+                                            <option value="valorant">발로란트</option>
+                                            <option value="fifa">피파 온라인</option>
                                         </select></div>
                                     <div><select id="second-game" class="js-select">
                                             <option value="">2순위 선호 게임</option>
@@ -157,9 +159,9 @@
                             </div>
                             <div class="widjet__body">
                                 <ul class="badges-list">
-                                    <li><img src="./img/badge-1.png" alt="badge"></li>
-                                    <li><img src="./img/badge-2.png" alt="badge"></li>
-                                    <li><img src="./img/badge-3.png" alt="badge"></li>
+                                    <li><img src="../img/badge-1.png" alt="badge"></li>
+                                    <li><img src="../img/badge-2.png" alt="badge"></li>
+                                    <li><img src="../img/badge-3.png" alt="badge"></li>
                                 </ul>
                             </div>
                         </div>
@@ -169,10 +171,10 @@
                             </div>
                             <div class="widjet__body">
                                 <ul class="games-list">
-                                    <li><img src="./img/game-1.jpg" alt="game"></li>
-                                    <li><img src="./img/game-2.jpg" alt="game"></li>
-                                    <li><img src="./img/game-3.jpg" alt="game"></li>
-                                    <li><img src="./img/game-4.jpg" alt="game"></li>
+                                    <li><img src="../img/game-1.jpg" alt="game"></li>
+                                    <li><img src="../img/game-2.jpg" alt="game"></li>
+                                    <li><img src="../img/game-3.jpg" alt="game"></li>
+                                    <li><img src="../img/game-4.jpg" alt="game"></li>
                                 </ul>
                             </div>
                         </div>
@@ -221,9 +223,9 @@
                 <div class="uk-margin-small-left uk-margin-small-bottom uk-margin-medium-top">
                     <h4>Popular Q&A</h4>
                     <ul>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Upload Your Developed Game</span></li>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Go Live Stream</span></li>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>Get in touch with the Creator Support Team</span></li>
+                        <li><img src="../img/svgico/clipboard-text.svg" alt="icon"><span>How to Upload Your Developed Game</span></li>
+                        <li><img src="../img/svgico/clipboard-text.svg" alt="icon"><span>How to Go Live Stream</span></li>
+                        <li><img src="../img/svgico/clipboard-text.svg" alt="icon"><span>Get in touch with the Creator Support Team</span></li>
                     </ul>
                     <ul>
                         <li><a href="04_profile.html">browse all articles</a></li>
@@ -234,8 +236,8 @@
         </div>
     </div>
 
-    <script src="./js/libs.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="../js/libs.js"></script>
+    <script src="../js/main.js"></script>
 </body>
 
 </html>
