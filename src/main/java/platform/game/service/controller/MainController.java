@@ -75,7 +75,7 @@ public class MainController {
         
         return mav;
     }
-    @RequestMapping({ "/", "/home" })
+    @RequestMapping({ "/", "/home"})
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -88,7 +88,6 @@ public class MainController {
             System.out.println("멤버 없음");
         }
         return mav;
-
     }
 
     @PostMapping("/roll") // 메인화면 Rolling RandomList
@@ -103,9 +102,9 @@ public class MainController {
         return new ModelAndView("list");
     }
 
-    // @GetMapping("/show")
-    // public ModelAndView show() {
-    //     return new ModelAndView("shop");
+    // @RequestMapping("/shop")
+    // public ModelAndView shop() {
+    //     return "shop";
     // }
 
     @GetMapping("/rank")

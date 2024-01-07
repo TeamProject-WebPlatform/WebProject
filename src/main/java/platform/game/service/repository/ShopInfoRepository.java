@@ -12,4 +12,5 @@ public interface ShopInfoRepository extends JpaRepository<Shop, Integer> {
     
     ArrayList<Shop> findAll();
     
+    long count();
 }    

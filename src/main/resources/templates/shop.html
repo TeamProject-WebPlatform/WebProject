@@ -52,14 +52,6 @@
                                         <!-- <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div> -->
                                     </div>
                                 </div>
-                                <!-- <div>
-                                    <select class="js-select">
-                                        <option value="">정렬 기준: point</option>
-                                        <option value="Price 1">Price 1</option>
-                                        <option value="Price 2">Price 2</option>
-                                        <option value="Price 3">Price 3</option>
-                                    </select>
-                                </div> -->
                                 <div>
                                     <select class="js-select">
                                         <option value="all" data-target="all">카테고리: all</option>
@@ -76,6 +68,14 @@
                                         <option value="Platform 3">Platform 3</option>
                                     </select>
                                 </div>
+                                 <!-- <div>
+                                    <select class="js-select">
+                                        <option value="">정렬 기준: point</option>
+                                        <option value="Price 1">Price 1</option>
+                                        <option value="Price 2">Price 2</option>
+                                        <option value="Price 3">Price 3</option>
+                                    </select>
+                                </div> -->
                                 <!-- <div>
                                     <select class="js-select">
                                         <option value=""># of Players: All</option>
@@ -87,8 +87,8 @@
                                 <!-- <div>
                                     <div class="price-range"><label>Price</label><input class="uk-range" type="range" value="2" min="0" max="10" step="0.1"></div>
                                 </div> -->
-                                <div class="uk-text-right"><a href="#!">My Point : 1000</a></div>
-                                <div class="uk-text-right"><a href="#!">25 items</a></div>
+                                <div class="uk-text-right"><a href="#!" th:text="'MyPint : ' + ${point}"></a></div>
+                                <div class="uk-text-right"><a href="#!" th:text="${totalItemCount} + ' items'"></a></div>
                             </div>
                         </div>
                     </div>
