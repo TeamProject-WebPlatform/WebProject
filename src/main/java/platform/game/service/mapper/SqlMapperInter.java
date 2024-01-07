@@ -104,4 +104,13 @@ public interface SqlMapperInter {
 
         @Select("select distinct m.mem_nick, m.mem_lvl from ranklist r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
         public List<RollingRankTO> getRol();
+
+        @Insert("INSERT INTO favorite_game values(1, #{mem_id}, #{game_cd})")
+        public int setFavoriteGame(long mem_id, String game_cd);
+
+        @Insert("insert into member_ranking (rank_code, mem_id, mem_rank) select #{rank_code}, #{mem_id}, RANK() OVER(order by mem_total_point desc) as mem_rank from member")
+        public int setMemberRanking(String rank_code, long mem_id);
+
+        @Insert("INSERT INTO member_game_match_record values(#{game_cd},#{mem_id}, default, default, default")
+        public int setMatchRecord(String game_cd, long mem_id);
 }

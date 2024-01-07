@@ -151,4 +151,10 @@ public class RankController {
 
         return mav;
     }
+
+    @RequestMapping("/profile")
+    public ModelAndView profile() {
+        ModelAndView mav = new ModelAndView("profile");
+        return mav;
+    }
 }

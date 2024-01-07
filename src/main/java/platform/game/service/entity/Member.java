@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Member { 
+public class Member {
 
     @Id
-    private long memId; 
-    private String memUserid; 
-    private String memPw; 
-    private String memNick; 
+    private long memId;
+    private String memUserid;
+    private String memPw;
+    private String memNick;
     private String memRoleCd;
     private String memEmail;
     private String memSteamid;
@@ -27,18 +27,15 @@ public class Member {
     private int memTotalPoint;
     private int memLvl;
     private int memAttend;
-    private int memGameCount;
-    private int memWinCount;
-    private int memLoseCount;
-    private int memPointRanking;
-    private int memLvlRanking;
-    private int memAttendRanking;
+    private int memTotalGameCnt;
+    private int memGameWinCnt;
+    private int memGameLoseCnt;
     private String loginKindCd;
     private String memCertified;
     private String memCreatedAt;
     private String memDeletedAt;
-    
-    public String getRole(String code){
+
+    public String getRole(String code) {
         switch (code) {
             case "10001":
                 return "ROLE_SUPERADMIN";
