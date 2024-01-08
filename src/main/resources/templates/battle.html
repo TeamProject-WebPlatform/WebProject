@@ -41,12 +41,30 @@
         for (let i = 0; i < pointBarLefts.length; i++) {
             let pointBarLeft = pointBarLefts.item(i);
             pointBarLeft.style.width = pointLefts[i].innerHTML;
+            console.log(Number(pointLefts[i].innerHTML.replace("%", "")));
+            pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+            pointLefts[i].style.color=getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
 
             let pointBarRight = pointBarRights.item(i);
             pointBarRight.style.width = pointRights[i].innerHTML;
+            pointBarRight.style.backgroundColor = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+            pointRights[i].style.color=getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+            
         }
     });
-
+    function getColorRatio(bettingRatio) {
+        if (bettingRatio >= 90) {
+            return '#FF0000'; // 빨간색
+        } else if (bettingRatio >= 70) {
+            return '#FFA500'; // 주황색
+        } else if (bettingRatio >= 50) {
+            return '#00FF00'; // 노란색
+        } else if (bettingRatio >= 30) {
+            return '#008000'; // 초록색
+        } else {
+            return '#00F0FF'; // 파란색
+        }
+    }
 </script>
 
 <body class="page-favourites dark-theme">
@@ -71,27 +89,28 @@
             <main class="page-main">
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l" id="battleCardSection">
-                        <div class="battle-card --horizontal hot-battle" th:each="battle : ${battleList}">
+                        <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}">
                             <div class="battle-card__box">
                                 <div class="battle-profile-left">
                                     <div class="battle-profile-info">
                                         <div class="battle-profile-nickname">
-                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.host.memLvl}">Lv
-                                                30</div>
-                                            <div th:text="${battle.host.memNick}"></div>
+                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.hostLvl}">Lv30
+                                            </div>
+                                            <div th:text="${battle.hostNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>
-                                                <div class="battle-profile-win"
-                                                    th:text="${battle.host.memGameWinCnt}+' 승'">77 승</div>
+                                                <div class="battle-profile-win" th:text="${battle.hostWin}+' 승'">77 승
+                                                </div>
                                                 <div>&nbsp;/&nbsp;</div>
-                                                <div class="battle-profile-lose"
-                                                    th:text="${battle.host.memGameLoseCnt}+' 패'">25 패</div>
+                                                <div class="battle-profile-lose" th:text="${battle.hostLose}+' 패'">25 패
+                                                </div>
                                             </div>
                                             <div
-                                                th:with="rate=${(battle.host.memGameWinCnt * 100.0 / (battle.host.memGameWinCnt + battle.host.memGameLoseCnt))}">
-                                                <div class="battle-profile-win-rate"
+                                                th:with="total = ${(battle.hostWin + battle.hostLose)}, rate=${(battle.hostWin * 100.0 / total)}">
+                                                <div th:if="${total > 0}" class="battle-profile-win-rate"
                                                     th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
+                                                <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
                                             </div>
                                         </div>
                                         <div class="profile-main">
@@ -111,31 +130,52 @@
                                     </div>
                                     <div class="battle-profile-media">
                                         <a href="10_game-profile.html">
-                                            <img src="../img/doyun_icon.png" alt="Werewolf Complex" />
+                                            <img th:src="@{'../img/' + ${battle.hostImgName}}" alt="NO IMG" />
                                         </a>
                                     </div>
                                 </div>
+
+
                                 <div class="battle-card-info">
-                                    <div class="info-title"><a href="/해당 게시판이동" th:text="${battle.title}"></a></div>
+                                    <div class="info-title"><a href="/battle/${battle.postId}"
+                                            th:text="${battle.title}"></a></div>
                                     <div class="info-battle-point" th:text="${battle.point}">100000</div>
+
+
                                     <div class="info-center">
+
+
                                         <div class="info-center-left">
                                             <div class="info-center-header">
                                                 <div class="info-point-header-list">
                                                     <div class="info-point-amount">
-                                                        <div class="icon_box"><i
-                                                                class="fa-solid fa-coins ico_fontawesome"></i></div>72.3
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                        </div>
+                                                        <div
+                                                            th:text="${battlePointTOList[iterStat.index].hostTotalPoint}">
+                                                            72.3</div>
                                                     </div>
                                                     <div class="info-point-pno">
-                                                        <div class="icon_box"><i
-                                                                class="fa-solid fa-user ico_fontawesome"></i></div>310
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-user ico_fontawesome"></i>
+                                                        </div>
+                                                        <div
+                                                            th:text="${battlePointTOList[iterStat.index].hostTotalMemNo}">
+                                                            0</div>
                                                     </div>
                                                     <div class="info-point-ratio">
-                                                        <div class="icon_box"><i
-                                                                class="fa-solid fa-gem ico_fontawesome"></i></div>1:2.52
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-gem ico_fontawesome"></i>
+                                                        </div>
+                                                        <div
+                                                            th:text="${'1:'+battlePointTOList[iterStat.index].hostPointRewardRatio}">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="info-point-percent">75%</div>
+                                                <div class="info-point-percent"
+                                                    th:text="${battlePointTOList[iterStat.index].hostPointRatio+'%'}">
+                                                    75%</div>
                                             </div>
                                             <div class="info-point-bar-box">
                                                 <div class="info-point-bar"></div>
@@ -148,16 +188,33 @@
 
                                         <div class="info-center-right">
                                             <div class="info-center-header">
-                                                <div class="info-point-percent">25%</div>
+                                                <div class="info-point-percent"
+                                                    th:text="${battlePointTOList[iterStat.index].clientPointRatio+'%'}">
+                                                    25%</div>
                                                 <div class="info-point-header-list">
-                                                    <div class="info-point-amount">72.3<div class="icon_box"><i
-                                                                class="fa-solid fa-coins ico_fontawesome"></i></div>
+                                                    <div class="info-point-amount">
+                                                        <div
+                                                            th:text="${battlePointTOList[iterStat.index].clientTotalPoint}">
+                                                            72.3</div>
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                        </div>
                                                     </div>
-                                                    <div class="info-point-pno">310<div class="icon_box"><i
-                                                                class="fa-solid fa-user ico_fontawesome"></i></div>
+                                                    <div class="info-point-pno">
+                                                        <div
+                                                            th:text="${battlePointTOList[iterStat.index].clientTotalMemNo}">
+                                                            0</div>
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-user ico_fontawesome"></i>
+                                                        </div>
                                                     </div>
-                                                    <div class="info-point-ratio">1:2.52<div class="icon_box"><i
-                                                                class="fa-solid fa-gem ico_fontawesome"></i></div>
+                                                    <div class="info-point-ratio">
+                                                        <div
+                                                            th:text="${'1:'+battlePointTOList[iterStat.index].clientPointRewardRatio}">
+                                                        </div>
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-gem ico_fontawesome"></i>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -165,35 +222,42 @@
                                                 <div class="info-point-bar"></div>
                                             </div>
                                         </div>
+
+
                                     </div>
+
+
                                     <div class="betting">
                                         <div class="battle-point-betting">포인트 배팅버튼(모달)</div>
                                     </div>
                                 </div>
+
+
                                 <div class="battle-profile-right">
                                     <div class="battle-profile-media">
                                         <a href="10_game-profile.html">
-                                            <img src="../img/doyun_icon.png" alt="Werewolf Complex" />
+                                            <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" />
                                         </a>
                                     </div>
                                     <div class="battle-profile-info">
                                         <div class="battle-profile-nickname">
-                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.client.memLvl}">Lv
-                                                30</div>
-                                            <div th:text="${battle.client.memNick}"></div>
+                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30
+                                            </div>
+                                            <div th:text="${battle.clientNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>
-                                                <div class="battle-profile-win"
-                                                    th:text="${battle.client.memGameWinCnt}+' 승'">77 승</div>
+                                                <div class="battle-profile-win" th:text="${battle.clientWin}+' 승'">77 승
+                                                </div>
                                                 <div>&nbsp;/&nbsp;</div>
-                                                <div class="battle-profile-lose"
-                                                    th:text="${battle.client.memGameLoseCnt}+' 패'">25 패</div>
+                                                <div class="battle-profile-lose" th:text="${battle.clientLose}+' 패'">25
+                                                    패</div>
                                             </div>
                                             <div
-                                                th:with="rate=${(battle.client.memGameWinCnt * 100.0 / (battle.client.memGameWinCnt + battle.client.memGameLoseCnt))}">
-                                                <div class="battle-profile-win-rate"
+                                                th:with="total = ${(battle.clientWin + battle.clientLose)}, rate=${(battle.clientWin * 100.0 / total)}">
+                                                <div th:if="${total > 0}" class="battle-profile-win-rate"
                                                     th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
+                                                <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
                                             </div>
                                         </div>
                                         <div class="profile-main">
