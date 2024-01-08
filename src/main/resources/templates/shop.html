@@ -20,7 +20,7 @@
             integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="./css/main_custom.css" />
-        <script src="./js/module/swiper2.js"></script>
+        
 
     </head>
 
@@ -45,19 +45,19 @@
                             <h3 class="uk-text-lead">Item Shop</h3>
                         </div>
                         <div class="widjet__body">
-                            <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-2@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
                                 <div class="uk-width-1-1">
                                     <div class="search">
-                                        <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search"></div>
-                                        <!-- <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div> -->
+                                        <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="Item_search"></div>
+                                        <div class="search__btn"><button type="button" onclick="changeCategori()"><i class="ico_search"></i></button></div>
                                     </div>
                                 </div>
                                 <div>
-                                    <select class="js-select">
-                                        <option value="all" data-target="all">카테고리: all</option>
-                                        <option value="board" data-target="board">카테고리 : 테두리</option>
-                                        <option value="badge" data-target="badge">카테고리 : 뱃지</option>
-                                        <option value="bg" data-target="bg">카테고리 : 프로필 배경</option>
+                                    <select class="js-select" id="categorySelect" onchange="changeCategori()">
+                                        <option value="all">카테고리: all</option>
+                                        <option value="board">카테고리 : 테두리</option>
+                                        <option value="badge">카테고리 : 뱃지</option>
+                                        <option value="bg">카테고리 : 프로필 배경</option>
                                     </select>
                                 </div>
                                 <div>
@@ -93,41 +93,23 @@
                         </div>
                     </div>
                     <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-3@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-                        <div th:each="shop, rowStat : ${lists}">
-                            <div class="game-card" data-category="${shop.itemCd}">
+                        <div th:each="item : ${items}">
+                            <div class="game-card" data-category="${item.itemKindCd}">
                                 <div class="game-card__box">
-                                    <div class="game-card__media"><a href="#"><img src="../img/game-1.jpg" alt="Struggle of Rivalry" /></a></div>
-                                    <div class="game-card__info"><a class="game-card__title" href="#" th:text="${shop.itemNm}"></a>
-                                        <div class="game-card__genre" th:text="${shop.itemInfo}"></div>
+                                    <div class="game-card__media"><a href="#"><img th:src="@{/img/game-1.jpg}" alt="Item Image" /></a></div>
+                                    <div class="game-card__info">
+                                        <a class="game-card__title" href="#" th:text="${item.itemNm}"></a>
+                                        <div class="game-card__genre" th:text="${item.itemInfo}"></div>
                                         <div class="game-card__rating-and-price">
-                                            <!-- <div class="game-card__rating"><span>4.8</span><i class="ico_star"></i></div> -->
-                                            <div class="game-card__price"><span th:text="${shop.itemPrice}"></span>&nbsp;<span>Point</span></div>
+                                            <div class="game-card__price"><span th:text="${item.itemCost}"></span>&nbsp;<span>Point</span>
+                                            </div>
                                             <input class="select" type="button" value="구매">
                                         </div>
-                                        <!-- <div class="button_item">
-                                            <input class="select" type="button" value="구매">
-                                        </div> -->
-                                        <!-- <div class="game-card__bottom">
-                                            <div class="game-card__platform"><i class="ico_windows"></i></div>
-                                            <div class="game-card__users">
-                                                 <ul class="users-list">
-                                                    <li><img src="assets/img/user-1.png" alt="user" /></li>
-                                                    <li><img src="assets/img/user-2.png" alt="user" /></li>
-                                                    <li><img src="assets/img/user-3.png" alt="user" /></li>
-                                                    <li><img src="assets/img/user-4.png" alt="user" /></li>
-                                                </ul> 
-                                            </div>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
-
-
-                </div>
             </main>
         </div>
         <div class="page-modals">
@@ -185,6 +167,8 @@
 
         <script src="../js/libs.js"></script>
         <script src="../js/main.js"></script>
+        <script th:src="@{/js/shop.js}" defer></script>
+        <!-- <script src="../js/shop.js"></script> -->
     </body>
     
 </html>
