@@ -51,7 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/steam/**").permitAll()
                         .requestMatchers("/kakao/**").permitAll()
                         .requestMatchers("/steamapi/**").permitAll()
-                        .requestMatchers("/profile/**").permitAll()
+                        .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/mypage/**").authenticated());
 
         http.formLogin(form -> form

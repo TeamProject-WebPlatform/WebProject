@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FavoriteGameTO {
-    private int favoriteGame_id;
-    private long memId;
-    private String gameCd;
+    private String firstgame;
+    private String secondgame;
+    private String thirdgame;
 }
