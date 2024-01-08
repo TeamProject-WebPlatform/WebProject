@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfo { 
-  
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private int id; 
@@ -21,5 +21,5 @@ public class UserInfo {
     private String email; 
     private String password; 
     private String roles; 
-  
+    
 }

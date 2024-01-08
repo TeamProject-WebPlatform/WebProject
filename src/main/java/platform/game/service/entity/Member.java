@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Member { 
+    
+    @Id 
+    private long memId;
 
-    private long memId; 
     private String memUserid; 
     private String memPw; 
     private String memNick; 
