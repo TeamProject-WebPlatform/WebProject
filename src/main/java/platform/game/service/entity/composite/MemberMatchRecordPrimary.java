@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class MemberMatchRecordPrimary implements Serializable {
 
-    private String game_cd;
-    private long mem_id;
+    private String gameCd;
+    private long memId;
 }

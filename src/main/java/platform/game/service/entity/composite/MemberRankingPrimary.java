@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class MemberRankingPrimary implements Serializable {
-    private String rank_code;
-    private long mem_id;
+    private String rankCode;
+    private long memId;
 }

@@ -1,5 +1,6 @@
 package platform.game.service.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -18,8 +19,13 @@ import platform.game.service.entity.composite.MemberRankingPrimary;
 public class MemberRanking {
 
     @Id
-    private String rank_code;
+    @Column(name = "rank_code")
+    private String rankCode;
+
     @Id
-    private long mem_id;
-    private int mem_rank;
+    @Column(name = "mem_id")
+    private long memId;
+
+    @Column(name = "mem_rank")
+    private int rank;
 }
