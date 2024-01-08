@@ -9,13 +9,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import platform.game.service.entity.composite.RankPrimary;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "ranklist")
+@Table(name = "ranking")
 @IdClass(RankPrimary.class)
 public class RankList {
 

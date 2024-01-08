@@ -72,37 +72,37 @@ public interface SqlMapperInter {
                         String mem_email, int mem_total_point, int mem_lvl, int mem_attend, int mem_game_count,
                         int mem_win_count, int mem_lose_count);
 
-        @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
+        @Insert("INSERT INTO ranking (rank, rank_code, mem_id, rank_update) " +
                         "SELECT #{rank}, 0, mem_id, NOW() " +
                         "FROM member " +
                         "ORDER BY mem_lvl DESC " +
                         "LIMIT #{rank-1}, 1")
         int setLevelRank(@RequestParam("rank") int rank);
 
-        @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
+        @Insert("INSERT INTO ranking (rank, rank_code, mem_id, rank_update) " +
                         "SELECT #{rank}, 1, mem_id, NOW() " +
                         "FROM member " +
                         "ORDER BY mem_win_count DESC " +
                         "LIMIT #{rank-1}, 1")
         int setWinrateRank(@RequestParam("rank") int rank);
 
-        @Insert("INSERT INTO ranklist (rank, rank_code, mem_id, rank_update) " +
+        @Insert("INSERT INTO ranking (rank, rank_code, mem_id, rank_update) " +
                         "SELECT #{rank}, 2, mem_id, NOW() " +
                         "FROM member " +
                         "ORDER BY mem_total_point DESC " +
                         "LIMIT #{rank-1}, 1")
         int setTotalPointRank(@RequestParam("rank") int rank);
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranklist r join member m on r.rank_code=0 and m.mem_id=r.mem_id")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code=0 and m.mem_id=r.mem_id")
         public List<LevelRankTO> getLevelrank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_win_count/m.mem_game_count)*100,2) as winrate from ranklist r join member m on r.rank_code=1 and m.mem_id=r.mem_id")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_win_count/m.mem_game_count)*100,2) as winrate from ranking r join member m on r.rank_code=1 and m.mem_id=r.mem_id")
         public List<WinRankTO> getWinrank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranklist r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code=2 and m.mem_id=r.mem_id")
         public List<PointRankTO> getPointrank();
 
-        @Select("select distinct m.mem_nick, m.mem_lvl from ranklist r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
+        @Select("select distinct m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
         public List<RollingRankTO> getRol();
 
         @Insert("INSERT INTO favorite_game values(1, #{mem_id}, #{game_cd})")
