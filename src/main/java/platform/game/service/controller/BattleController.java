@@ -10,11 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import platform.game.service.action.BattleCardAction;
-import platform.game.service.entity.Battle;
 import platform.game.service.entity.Member;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
-import platform.game.service.repository.BattleRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller

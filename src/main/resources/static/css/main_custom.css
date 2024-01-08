@@ -302,3 +302,11 @@ body.dark-theme .battle-card-info .info-title a{
     display: flex;
     justify-content: flex-end;
 }
+.info-battle-point{
+    background-color: rgb(130, 127, 143);
+    border-radius: 25px;
+    width: 55%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

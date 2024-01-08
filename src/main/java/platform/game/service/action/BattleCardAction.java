@@ -1,14 +1,12 @@
 package platform.game.service.action;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import platform.game.service.entity.Battle;
-import platform.game.service.entity.Member;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
 import platform.game.service.repository.BattleRepository;

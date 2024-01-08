@@ -21,9 +21,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+
+    <!-- 웹소켓 -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <script>
+    let stompClient = null;
     document.addEventListener("DOMContentLoaded", function () {
+        //console.log = function () {};
         const active = document.getElementById("nav-battle");
         active.classList.add("uk-active");
         document.getElementById("toggle").addEventListener("click", function () {
@@ -49,9 +56,73 @@
             pointBarRight.style.width = pointRights[i].innerHTML;
             pointBarRight.style.backgroundColor = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
             pointRights[i].style.color=getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
-            
         }
+
+        // websocket ------------------------------
+        
+        connect();
     });
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        const cards = document.querySelectorAll(".battle-card-info");
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            cards.forEach(function(card){
+                let btId = card.getAttribute("btId");
+                stompClient.subscribe(`/topic/pointbetting/`+btId, function (response) {
+                    try{
+                        let pointTO = JSON.parse(response.body);
+                        let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
+                        console.log(pointTO);
+                        
+                        pointInfo.querySelector(".host-total-point").innerHTML = formatNumber(pointTO.hostTotalPoint);
+                        pointInfo.querySelector(".host-total-mem-no").innerHTML = pointTO.hostTotalMemNo;
+                        pointInfo.querySelector(".host-point-reward-ratio").innerHTML = "1:"+pointTO.hostPointRewardRatio;
+                        let hostPointRatio = pointInfo.querySelector(".host-point-ratio");
+                        let pointBarLeft = pointInfo.querySelector(".info-center-left .info-point-bar");
+                        let pointLeft = pointInfo.querySelector(".info-center-left .info-point-percent");
+                        hostPointRatio.innerHTML = pointTO.hostPointRatio+"%";
+                        hostPointRatio.style.color=getColorRatio(Number(pointLeft.innerHTML.replace("%", "")));
+                        pointBarLeft.style.width = pointLeft.innerHTML;
+                        pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLeft.innerHTML.replace("%", "")));
+
+                        pointInfo.querySelector(".client-total-point").innerHTML = formatNumber(pointTO.clientTotalPoint);
+                        pointInfo.querySelector(".client-total-mem-no").innerHTML = pointTO.clientTotalMemNo;
+                        pointInfo.querySelector(".client-point-reward-ratio").innerHTML = "1:"+pointTO.clientPointRewardRatio;
+                        let clientPointRatio = pointInfo.querySelector(".client-point-ratio");
+                        let pointBarRight = pointInfo.querySelector(".info-center-right .info-point-bar");
+                        let pointRight = pointInfo.querySelector(".info-center-right .info-point-percent");
+                        clientPointRatio.innerHTML = pointTO.clientPointRatio+"%";
+                        clientPointRatio.style.color=getColorRatio(Number(pointRight.innerHTML.replace("%", "")));
+                        pointBarRight.style.width = pointRight.innerHTML;
+                        pointBarRight.style.backgroundColor = getColorRatio(Number(pointRight.innerHTML.replace("%", "")));
+
+                    }catch(err){    
+                        console.log("에러 : "+err);
+                    }
+                });
+            });
+        });
+    }
+    function betPoint(btId,flag) {
+        // 포인트 배팅
+        // flag : 0-왼 , 1-오
+        let pointInputs = document.getElementById("bettingId"+btId).querySelectorAll(".pointInput");
+        let point = 0;
+        if(flag===0){
+            point = pointInputs[0].value;
+            pointInputs[0].value = "";
+        }else if(flag===1){
+            point = pointInputs[1].value;
+            pointInputs[1].value = "";
+        }
+        if(point===""){
+            return;
+        }
+        stompClient.send(`/app/pointbetting/` + btId + "-" + flag, {}, JSON.stringify({ point: point }));
+    }
     function getColorRatio(bettingRatio) {
         if (bettingRatio >= 90) {
             return '#FF0000'; // 빨간색
@@ -66,7 +137,16 @@
         }
     }
 </script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
 
+    function formatNumber(value) {
+        var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
+        return formattedValue;
+    }
+
+    /*]]>*/
+</script>
 <body class="page-favourites dark-theme">
 
     <input id="toggle" type="checkbox">
@@ -136,15 +216,13 @@
                                 </div>
 
 
-                                <div class="battle-card-info">
+                                <div class="battle-card-info" th:attr="btId = ${battle.btId}">
                                     <div class="info-title"><a href="/battle/${battle.postId}"
                                             th:text="${battle.title}"></a></div>
                                     <div class="info-battle-point" th:text="${battle.point}">100000</div>
 
 
                                     <div class="info-center">
-
-
                                         <div class="info-center-left">
                                             <div class="info-center-header">
                                                 <div class="info-point-header-list">
@@ -152,15 +230,19 @@
                                                         <div class="icon_box">
                                                             <i class="fa-solid fa-coins ico_fontawesome"></i>
                                                         </div>
-                                                        <div
-                                                            th:text="${battlePointTOList[iterStat.index].hostTotalPoint}">
+                                                        <div class="host-total-point"
+                                                        th:utext="'<script>' +
+                                                            'var value = ' + ${battlePointTOList[iterStat.index].hostTotalPoint} + ';' +
+                                                            'var formattedValue = formatNumber(value);' +
+                                                            'document.write(formattedValue);' +
+                                                            '</script>'">
                                                             72.3</div>
                                                     </div>
                                                     <div class="info-point-pno">
                                                         <div class="icon_box">
                                                             <i class="fa-solid fa-user ico_fontawesome"></i>
                                                         </div>
-                                                        <div
+                                                        <div class="host-total-mem-no"
                                                             th:text="${battlePointTOList[iterStat.index].hostTotalMemNo}">
                                                             0</div>
                                                     </div>
@@ -168,12 +250,12 @@
                                                         <div class="icon_box">
                                                             <i class="fa-solid fa-gem ico_fontawesome"></i>
                                                         </div>
-                                                        <div
+                                                        <div class="host-point-reward-ratio"
                                                             th:text="${'1:'+battlePointTOList[iterStat.index].hostPointRewardRatio}">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="info-point-percent"
+                                                <div class="info-point-percent host-point-ratio"
                                                     th:text="${battlePointTOList[iterStat.index].hostPointRatio+'%'}">
                                                     75%</div>
                                             </div>
@@ -182,26 +264,28 @@
                                             </div>
                                         </div>
 
-
                                         <div class="vs"><img src="../img/logo_white.png"></div>
-
 
                                         <div class="info-center-right">
                                             <div class="info-center-header">
-                                                <div class="info-point-percent"
+                                                <div class="info-point-percent client-point-ratio"
                                                     th:text="${battlePointTOList[iterStat.index].clientPointRatio+'%'}">
                                                     25%</div>
                                                 <div class="info-point-header-list">
                                                     <div class="info-point-amount">
-                                                        <div
-                                                            th:text="${battlePointTOList[iterStat.index].clientTotalPoint}">
+                                                        <div class="client-total-point"
+                                                        th:utext="'<script>' +
+                                                            'var value = ' + ${battlePointTOList[iterStat.index].clientTotalPoint} + ';' +
+                                                            'var formattedValue = formatNumber(value);' +
+                                                            'document.write(formattedValue);' +
+                                                            '</script>'">
                                                             72.3</div>
                                                         <div class="icon_box">
                                                             <i class="fa-solid fa-coins ico_fontawesome"></i>
                                                         </div>
                                                     </div>
                                                     <div class="info-point-pno">
-                                                        <div
+                                                        <div class="client-total-mem-no"
                                                             th:text="${battlePointTOList[iterStat.index].clientTotalMemNo}">
                                                             0</div>
                                                         <div class="icon_box">
@@ -209,7 +293,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="info-point-ratio">
-                                                        <div
+                                                        <div class="client-point-reward-ratio"
                                                             th:text="${'1:'+battlePointTOList[iterStat.index].clientPointRewardRatio}">
                                                         </div>
                                                         <div class="icon_box">
@@ -222,13 +306,14 @@
                                                 <div class="info-point-bar"></div>
                                             </div>
                                         </div>
-
-
                                     </div>
 
 
                                     <div class="betting">
-                                        <div class="battle-point-betting">포인트 배팅버튼(모달)</div>
+                                        <div class="battle-point-betting" th:id="'bettingId' + ${battle.btId}">
+                                            <input type="text" class="pointInput"><div th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">왼쪽</div>
+                                            <input type="text" class="pointInput"><div th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">오른쪽</div>
+                                        </div>
                                     </div>
                                 </div>
 
