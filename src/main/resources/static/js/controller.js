@@ -36,8 +36,17 @@ const setPage = async function (page) {
         case 4:
             // 게시판
             break;
-        case "rank": boardCd="20005";
+        case "rank": boardCd = "20005";
             // 랭킹
+            await fetch('/getRankFragment?board_cd=' + boardCd)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('center_main').innerHTML = html;
+                    WinRateChart();
+                    PointChart();
+                    LevelChart();
+                })
+                .catch(error => console.log('컨트롤러 랭킹 에러'));
             break;
         case 6:
             // 회원 정보 관리
@@ -45,7 +54,7 @@ const setPage = async function (page) {
         case 7:
             // 프로필
             break;
-        case 'shop':
+        case 8:
             // 아이템 샵
             break;
     }
