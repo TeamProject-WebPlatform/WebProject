@@ -201,7 +201,7 @@
 }
 .battle-card-info .info-title{
     width: 100%;
-    height : 30%;
+    height : 40%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -227,7 +227,7 @@ body.dark-theme .battle-card-info .info-title a{
 .battle-card-info .info-center{
     width: 100%;
     height : 20%;
-    margin-top:5%;
+    margin-top:6%;
     margin-bottom:5%;
     display: flex;
     align-items: center;
@@ -302,11 +302,59 @@ body.dark-theme .battle-card-info .info-title a{
     display: flex;
     justify-content: flex-end;
 }
-.info-battle-point{
+.info-battle-point-section{
     background-color: rgb(130, 127, 143);
     border-radius: 25px;
+    height:10%;
     width: 55%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+}
+.info-battle-point-section i{
+    margin-left : 5%;
+    margin-right : 5%;
+    color:#ffbf00;
+    font-weight: 800;
+    font-size:20px;
+}
+.info-battle-point{
+    color:rgb(255, 255, 255);
+    font-weight: 800;
+    font-size:20px;
+    height:100%;
+    display: flex;
+    align-items: center;
     justify-content: center;
+}
+.betting-section{
+    width:100%;
+    height:19%;
+}
+.point-betting{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100%;
+}
+.point-betting-input{
+    height:85%;
+    width:35%;
+    pointer-events: none; 
+    /* 인풋 막기 */
+}
+.point-betting-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+    font-size:20px;
+    font-weight: 1000;
+    height:90%;
+    width: 20%;
+    background-color: rgb(130, 127, 143);
+    border-radius: 10px;
+}
+.point-betting-button:hover{
+    cursor: pointer;
 }

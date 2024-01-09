@@ -27,6 +27,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let nickname = /*[[${nickname}]]*/'';
+
+    function formatNumber(value) {
+        var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
+        return formattedValue;
+    }
+
+    /*]]>*/
+</script>
 <script>
     let stompClient = null;
     document.addEventListener("DOMContentLoaded", function () {
@@ -48,7 +59,6 @@
         for (let i = 0; i < pointBarLefts.length; i++) {
             let pointBarLeft = pointBarLefts.item(i);
             pointBarLeft.style.width = pointLefts[i].innerHTML;
-            console.log(Number(pointLefts[i].innerHTML.replace("%", "")));
             pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
             pointLefts[i].style.color=getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
 
@@ -68,14 +78,12 @@
 
         const cards = document.querySelectorAll(".battle-card-info");
         stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
             cards.forEach(function(card){
                 let btId = card.getAttribute("btId");
                 stompClient.subscribe(`/topic/pointbetting/`+btId, function (response) {
                     try{
                         let pointTO = JSON.parse(response.body);
                         let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
-                        console.log(pointTO);
                         
                         pointInfo.querySelector(".host-total-point").innerHTML = formatNumber(pointTO.hostTotalPoint);
                         pointInfo.querySelector(".host-total-mem-no").innerHTML = pointTO.hostTotalMemNo;
@@ -109,19 +117,32 @@
     function betPoint(btId,flag) {
         // 포인트 배팅
         // flag : 0-왼 , 1-오
-        let pointInputs = document.getElementById("bettingId"+btId).querySelectorAll(".pointInput");
-        let point = 0;
-        if(flag===0){
-            point = pointInputs[0].value;
-            pointInputs[0].value = "";
-        }else if(flag===1){
-            point = pointInputs[1].value;
-            pointInputs[1].value = "";
-        }
-        if(point===""){
+        const section = document.getElementById("bettingId"+btId);
+        let pointInputs = section.querySelector(".point-betting-input");
+        let point = pointInputs.value;
+        if(point==="" | isNaN(point)){
             return;
         }
-        stompClient.send(`/app/pointbetting/` + btId + "-" + flag, {}, JSON.stringify({ point: point }));
+        let buttons = section.querySelectorAll(".point-betting-button");
+        let button;
+        if(flag===0){
+            button = buttons[0];
+        }else{
+            button = buttons[1];
+        }
+        if(button.getAttribute("active")==="F"){
+            button.setAttribute("active","T");
+            button.innerHTML ="SUBMIT";
+            button.style.color ="red";
+        }else if(button.getAttribute("active")==="T"){
+
+            pointInputs.value = "";
+            
+            stompClient.send(`/app/pointbetting/` + btId + "-" + flag, {}, JSON.stringify({ point: point }));
+            button.setAttribute("active","F");
+            button.innerHTML = flag === 0? "LEFT" : "RIGHT";
+            button.style.color ="white";
+        }
     }
     function getColorRatio(bettingRatio) {
         if (bettingRatio >= 90) {
@@ -129,24 +150,15 @@
         } else if (bettingRatio >= 70) {
             return '#FFA500'; // 주황색
         } else if (bettingRatio >= 50) {
-            return '#00FF00'; // 노란색
+            return '#00FF00'; // 연두색
         } else if (bettingRatio >= 30) {
-            return '#008000'; // 초록색
+            return '#00F0FF'; // 민트색
         } else {
-            return '#00F0FF'; // 파란색
+            return '#0FCFA5'; // 검은색
         }
     }
 </script>
-<script th:inline="javascript">
-    /*<![CDATA[*/
 
-    function formatNumber(value) {
-        var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
-        return formattedValue;
-    }
-
-    /*]]>*/
-</script>
 <body class="page-favourites dark-theme">
 
     <input id="toggle" type="checkbox">
@@ -219,7 +231,11 @@
                                 <div class="battle-card-info" th:attr="btId = ${battle.btId}">
                                     <div class="info-title"><a href="/battle/${battle.postId}"
                                             th:text="${battle.title}"></a></div>
-                                    <div class="info-battle-point" th:text="${battle.point}">100000</div>
+                                    <div class="info-battle-point-section">
+                                        <i class="fa-solid fa-trophy"></i>
+                                        <div class="info-battle-point" th:text="${#numbers.formatInteger(#numbers.formatInteger(battle.point,0),0,'COMMA')}">100000</div>
+                                        <i class="fa-solid fa-trophy"></i>
+                                    </div>
 
 
                                     <div class="info-center">
@@ -309,10 +325,21 @@
                                     </div>
 
 
-                                    <div class="betting">
-                                        <div class="battle-point-betting" th:id="'bettingId' + ${battle.btId}">
-                                            <input type="text" class="pointInput"><div th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">왼쪽</div>
-                                            <input type="text" class="pointInput"><div th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">오른쪽</div>
+                                    <div class="betting-section">
+                                        <!-- <div class="uk-grid-margin">
+                                            <div class="nice-select js-select" tabindex="0"><span class="current">Game 2</span><ul class="list"><li data-value="" class="option">Game: All</li><li data-value="Game 1" class="option focus">Game 1</li><li data-value="Game 2" class="option selected">Game 2</li><li data-value="Game 3" class="option">Game 3</li></ul></div>
+                                        </div> -->
+                                        <div class="point-betting" th:id="'bettingId' + ${battle.btId}">
+                                            <div class="point-betting-button" active="F" th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">LEFT</div>
+                                            <!-- <input type="text" class="point-betting-input"> -->
+                                            <div class="search">
+                                                <div class="search__input">
+                                                    <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                    <input class="point-betting-input" type="search" name="search" placeholder="POINT BETTING HERE">
+                                                </div>
+                                            </div>
+                                            <div class="point-betting-button" active="F" th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">RIGHT</div>
+                                            <!-- <input type="text" class="point-betting-input"><div th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">오른쪽</div> -->
                                         </div>
                                     </div>
                                 </div>

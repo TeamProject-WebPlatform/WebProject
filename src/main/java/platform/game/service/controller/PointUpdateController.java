@@ -45,6 +45,9 @@ public class PointUpdateController {
         AtomicReference<Boolean> successFlag = new AtomicReference<>(true);        
         successFlag.set(true);
         transactionTemplate.execute(status -> {
+            // BATTLE 테이블에 포인트 정보 변경
+            // 성공한다면 멤버 포인트 정보에 추가
+            
             try {
                 if (flag.equals("0")) {
                     // 호스트
