@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
+import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
+import platform.game.service.model.TO.BattleTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
@@ -71,6 +73,7 @@ public class MainController {
     public String loader() {
         return "loadertest";
     }
+<<<<<<< HEAD
 
     @RequestMapping("/battle")
     public ModelAndView battle() {
@@ -79,6 +82,9 @@ public class MainController {
         return mav;
     }
 
+=======
+    
+>>>>>>> 54fba9739902ce6dbacdad250e249fdb78b22125
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
