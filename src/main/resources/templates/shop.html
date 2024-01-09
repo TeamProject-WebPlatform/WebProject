@@ -38,45 +38,104 @@
         <div class="page-content">
             <!-- 사이드바 Fragment -->
             <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss = "sidebar is-show" id="sidebar">사이드바 Fragment</aside>
-            <!--  -->
+            <!-- 메인 -->
                 <main class="page-main">
-                    <div class="widjet --filters">
-                        <div class="widjet__head">
-                            <h3 class="uk-text-lead">Item Shop</h3>
-                        </div>
-                        <div class="widjet__body">
-                            <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-2@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                <div class="uk-width-1-1">
-                                    <div class="search">
-                                        <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="Item_search"></div>
-                                        <div class="search__btn"><button type="button" onclick="changeCategori()"><i class="ico_search"></i></button></div>
+                    <div class="flex-container">
+                        <div class="widjet-container">
+                            <div class="widjet --filters">
+                                <div class="widjet__head">
+                                    <h3 class="uk-text-lead">Item Shop</h3>
+                                </div>
+                                <div class="widjet__body">
+                                    <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-2@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                        <div class="uk-width-1-1">
+                                            <div class="search">
+                                                <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="ItemSearch"></div>
+                                                <div class="search__btn"><button type="button"><i class="ico_search"></i></button></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <select class="js-select" id="categorySelect">
+                                                <option value="all">카테고리: all</option>
+                                                <option value="801">카테고리 : 테두리</option>
+                                                <option value="802">카테고리 : 뱃지</option>
+                                                <option value="803">카테고리 : 프로필 배경</option>
+                                            </select>
+                                        </div>
+                                        <div class="uk-text-right"><a href="#!" th:text="'MyPint : ' + ${point}"></a></div>
+                                        <div class="uk-text-right"><a href="#!" th:text="${totalItemCount} + ' items'"></a></div>
                                     </div>
                                 </div>
-                                <div>
-                                    <select class="js-select" id="categorySelect" onchange="changeCategori()">
-                                        <option value="all">카테고리: all</option>
-                                        <option value="board">카테고리 : 테두리</option>
-                                        <option value="badge">카테고리 : 뱃지</option>
-                                        <option value="bg">카테고리 : 프로필 배경</option>
-                                    </select>
+                            </div>
+                            <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-3@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                <div th:each="item : ${items}" data-category="${item.itemKindCd}">
+                                    <div class="game-card">
+                                    <!-- <div class="game-card"> -->
+                                        <div class="game-card__box">
+                                            <div class="game-card__media"><a href="#"><img th:src="@{/img/game-1.jpg}" alt="Item Image" /></a></div>
+                                            <div class="game-card__info">
+                                                <a class="game-card__title" href="#" th:text="${item.itemNm}"></a>
+                                                <div class="game-card__genre" th:text="${item.itemInfo}"></div>
+                                                <div class="game-card__rating-and-price">
+                                                    <div class="game-card__rating"></div>
+                                                    <div class="game-card__price"><span th:text="${item.itemCost}"></span>&nbsp;<span>Point</span>
+                                                    </div>
+                                                </div>
+                                                <div class="game-card__bottom">
+                                                    <input class="select1" type='submit' value='미리보기'>
+                                                    <form action=''>
+                                                        <input class="select2" type='submit' value='구매'>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="uk-text-right"><a href="#!" th:text="'MyPint : ' + ${point}"></a></div>
-                                <div class="uk-text-right"><a href="#!" th:text="${totalItemCount} + ' items'"></a></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-3@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-                        <div th:each="item : ${items}">
-                            <div class="game-card" data-category="${item.itemKindCd}">
-                                <div class="game-card__box">
-                                    <div class="game-card__media"><a href="#"><img th:src="@{/img/game-1.jpg}" alt="Item Image" /></a></div>
-                                    <div class="game-card__info">
-                                        <a class="game-card__title" href="#" th:text="${item.itemNm}"></a>
-                                        <div class="game-card__genre" th:text="${item.itemInfo}"></div>
-                                        <div class="game-card__rating-and-price">
-                                            <div class="game-card__price"><span th:text="${item.itemCost}"></span>&nbsp;<span>Point</span>
+                        <div class="shopPosition">
+                            <div class="widjet --filters shopfixed">
+                                <div class="widjet__head">
+                                    <h3 class="uk-text-lead">Thumbnail</h3>
+                                </div>
+                                <div class="widjet__body">
+                                    <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                        <!-- 태두리 -->
+                                        <div class="uk-width-1-1 profile-border">
+                                            <!-- 배경 -->
+                                            <div class="profile-card">
+                                                <!-- <a href="/mypage/${memNickname}"> -->
+                                                    <div class="profile-header">
+                                                        <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                                        <div class="profile-user_info">
+                                                            <p class="profile-user_level" th:text="'Lv : ' + ${level}"></p>
+                                                            <p class="profile-user_nick" th:text="${nickname}"></p>
+                                                            <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL">
+                                                        </div>
+                                                    </div>
+                                                <!-- </a> -->
+                                                <div class="profile-dividing-line"></div>
+                                                <div class="profile-main">
+                                                    <div class="profile-introduction">
+                                                        <p>안녕하세요</p>
+                                                    </div>
+                                                    <div class="profile-dividing-line"></div>
+                                                    <div class="profile-badge-section">
+                                                    <span class="badge">&#127774;</span>
+                                                    <span class="badge">&#127775;</span>
+                                                    <span class="badge">&#127806;</span>
+                                                    <span class="badge">&#127851;</span>
+                                                    <span class="badge">&#127774;</span>
+                                                    <span class="badge">&#127775;</span>
+                                                    <span class="badge">&#127806;</span>
+                                                    <span class="badge">&#127851;</span>
+                                                    <span class="badge">&#127774;</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <input class="select" type="button" value="구매">
+                                        </div>
+                                        <div class="uk-width-1-1">
+                                            <input class="reset_btn" type='submit' value='초기화'>
                                         </div>
                                     </div>
                                 </div>

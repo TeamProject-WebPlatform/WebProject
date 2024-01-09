@@ -58,9 +58,12 @@
 
     background-color: #222;
     color: white;
+    /* background-image: url("../img/acheivement-3.png"); */
 }
 .profile-header{
+    width: 100%;
     padding-top:20px;
+    background-image: url("../img/acheivement-2.png");
 }
 
 .profile-image{

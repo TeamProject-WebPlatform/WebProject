@@ -16,19 +16,20 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Item {
     @Id
-    private String itemCd;
-
-    @Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
-    private String itemNm;
-
-    @Column(columnDefinition = "CHAR(7) NOT NULL DEFAULT ''")
+    @Column(columnDefinition = "CHAR(5) NOT NULL DEFAULT ''")
+    private int itemCd;
+    
+    @Column(columnDefinition = "CHAR(3) NOT NULL DEFAULT ''")
     private String itemKindCd;
 
     @Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
-    private String itemEffect;
-
+    private String itemNm;
+    
     @Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
     private String itemInfo;
+    
+    @Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
+    private String itemEffect;
 
     @Column(columnDefinition = "INT NOT NULL DEFAULT 0")
     private int itemCost;

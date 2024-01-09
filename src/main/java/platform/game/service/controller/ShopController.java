@@ -4,7 +4,6 @@ package platform.game.service.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,7 +25,7 @@ public class ShopController {
 
     // @GetMapping
     // public ModelAndView shop(@RequestParam(required = false) String itemName,
-    //                          @RequestParam(required = false) String itemKindCd) {
+    //                         @RequestParam(required = false) String itemKindCd) {
     //     ModelAndView modelAndView = new ModelAndView("shop");
 
     //     long totalItemCount = itemInfoRepository.count();
@@ -53,13 +52,14 @@ public class ShopController {
     //     } else if (itemKindCd != null && !itemKindCd.isEmpty()) {
     //         // 아이템 종류에 따라 필터링
     //         items = itemInfoRepository.findByItemKindCd(itemKindCd);
+    //         modelAndView.addObject("items", items);
     //     } else {
     //         // 모든 아이템 가져오기
     //         items = itemInfoRepository.findAll();
+    //         modelAndView.addObject("items", items);
     //     }
-
+        
     //     modelAndView.addObject("totalItemCount", totalItemCount);
-    //     modelAndView.addObject("items", items);
     //     return modelAndView;
     // }
 
@@ -71,11 +71,15 @@ public class ShopController {
 
         ModelAndView modelAndView = new ModelAndView("shop");
         modelAndView.addObject("point", "로그인 해주세요.");
+        modelAndView.addObject("nickname", "");
+        modelAndView.addObject("level", "0");
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
             if (member != null) {
                 modelAndView.addObject("nickname", member.getMemNick());
+                modelAndView.addObject("level", member.getMemLvl());
+                // modelAndView.addObject("Introduction", member.getMemLvl());
                 modelAndView.addObject("point", member.getMemCurPoint());
             }
         } else {

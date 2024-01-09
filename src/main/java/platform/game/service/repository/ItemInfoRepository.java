@@ -9,7 +9,7 @@ import platform.game.service.entity.Item;
 import java.util.ArrayList;
 
 @Repository
-public interface ItemInfoRepository extends JpaRepository<Item, String> {
+public interface ItemInfoRepository extends JpaRepository<Item, Integer> {
     
     // 아이템 찾기
     Item findByItemNm(String itemNm);
