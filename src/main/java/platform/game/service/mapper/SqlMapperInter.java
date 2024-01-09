@@ -116,7 +116,7 @@ public interface SqlMapperInter {
         @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '2', mem_id, RANK() OVER(order by mem_total_point desc) as mem_rank from member")
         public int setMemberPointRanking(String rank_code);
 
-        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '3', mem_id, RANK() OVER(order by mem_lvl desc) as mem_rank from member")
+        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '3', mem_id, RANK() OVER (order by round((mem_game_win_cnt/mem_total_game_cnt)*100,2) desc) as mem_rank from member where mem_total_game_cnt>0")
         public int setMemberWinRateRanking(String rank_code);
 
         @Insert("INSERT INTO member_game_match_record values(#{game_cd},#{mem_id}, default, default, default")
@@ -128,6 +128,6 @@ public interface SqlMapperInter {
         @Select("select m.mem_lvl, m.mem_nick, m.mem_total_point from member m join member_favorite_game f on m.mem_id = f.mem_id and game_cd = #{game_cd} order by m.mem_total_point desc")
         public List<Map<Integer, String>> getOtherPointRank(String game_cd);
 
-        @Select("select m.mem_lvl, m.mem_nick, round((m.mem_win_count/m.mem_game_count)*100,2) from member m join member_favorite_game f on m.mem_id = f.mem_id and game_cd = #{game_cd} order by m.mem_lvl desc")
+        @Select("select m.mem_lvl, m.mem_nick, round((m.mem_win_count/m.mem_game_count)*100,2) as winrate from member m join member_favorite_game f on m.mem_id = f.mem_id and game_cd = #{game_cd} order by winrate desc")
         public List<Map<Integer, String>> getOtherWinRateRank(String game_cd);
 }

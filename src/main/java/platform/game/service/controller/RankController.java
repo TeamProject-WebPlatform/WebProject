@@ -71,11 +71,37 @@ public class RankController {
 
     @RequestMapping({ "/levelrank", "/levelrank/{game}" })
     public ModelAndView LevelRank(@PathVariable(name = "game", required = false) String game) {
-        List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
+
         ModelAndView mav = new ModelAndView("levelrank");
-        mav.addObject("level", getLevelTable);
-        if (game == null) {
-            game = "";
+
+        String game_cd = "";
+        switch (game) {
+            case "lol":
+                game_cd = "30001";
+                break;
+            case "battleground":
+                game_cd = "30002";
+                break;
+            case "overwatch":
+                game_cd = "30003";
+                break;
+            case "valorant":
+                game_cd = "30004";
+                break;
+            case "fifa":
+                game_cd = "30005";
+                break;
+            default:
+                game_cd = "";
+                break;
+        }
+
+        if (game_cd == "") {
+            List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
+            mav.addObject("level", getLevelTable);
+        } else {
+            List<Map<Integer, String>> LevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
+            mav.addObject("leveltable", LevelTable);
         }
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -93,12 +119,34 @@ public class RankController {
 
     @RequestMapping({ "/winraterank", "/winraterank/{game}" })
     public ModelAndView WinRateRank(@PathVariable(name = "game", required = false) String game) {
-        List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
+
         ModelAndView mav = new ModelAndView("winraterank");
-        mav.addObject("win", getWinRateTable);
-        if (game == null) {
-            game = "";
+
+        String game_cd = "";
+        switch (game) {
+            case "lol":
+                game_cd = "30001";
+                break;
+            case "battleground":
+                game_cd = "30002";
+                break;
+            case "overwatch":
+                game_cd = "30003";
+                break;
+            case "valorant":
+                game_cd = "30004";
+                break;
+            case "fifa":
+                game_cd = "30005";
+                break;
+            default:
+                game_cd = "";
+                break;
         }
+
+        List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
+        mav.addObject("win", getWinRateTable);
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
@@ -114,12 +162,34 @@ public class RankController {
 
     @RequestMapping({ "/pointrank", "/pointrank/{game}" })
     public ModelAndView PointRank(@PathVariable(name = "game", required = false) String game) {
-        List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
+
         ModelAndView mav = new ModelAndView("pointrank");
-        mav.addObject("point", getPointTable);
-        if (game == null) {
-            game = "";
+
+        String game_cd = "";
+        switch (game) {
+            case "lol":
+                game_cd = "30001";
+                break;
+            case "battleground":
+                game_cd = "30002";
+                break;
+            case "overwatch":
+                game_cd = "30003";
+                break;
+            case "valorant":
+                game_cd = "30004";
+                break;
+            case "fifa":
+                game_cd = "30005";
+                break;
+            default:
+                game_cd = "";
+                break;
         }
+
+        List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
+        mav.addObject("point", getPointTable);
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
