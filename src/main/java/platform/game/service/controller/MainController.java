@@ -7,19 +7,30 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
+import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
+import platform.game.service.mapper.SqlMapperInter;
+import platform.game.service.model.DAO.RankDAO;
+import platform.game.service.model.TO.BattleTO;
+import platform.game.service.model.TO.LevelRankTO;
+import platform.game.service.model.TO.PointRankTO;
+import platform.game.service.model.TO.RollingRankTO;
+import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
@@ -28,6 +39,24 @@ import platform.game.service.service.MemberInfoDetails;
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.security" })
 public class MainController {
+
+    @Autowired
+    SqlMapperInter sqlMapperInter;
+
+    @Autowired
+    RankDAO rankDAO;
+
+    private List<RollingRankTO> rollingRankList;
+
+    public MainController(SqlMapperInter sqlMapperInter) {
+        this.sqlMapperInter = sqlMapperInter;
+        this.rollingRankList = sqlMapperInter.getRol(); // 초기화
+    }
+
+    @Scheduled(cron = "0 0/5 * * * *")
+    public void RollingTimer() {
+        rollingRankList = sqlMapperInter.getRol();
+    }
 
     @Autowired
     private PostInfoRepository postInfoRepository;
@@ -46,13 +75,6 @@ public class MainController {
         return "loadertest";
     }
 
-    @RequestMapping("/battle")
-    public ModelAndView battle() {
-        ModelAndView mav = new ModelAndView("battle");
-
-        return mav;
-    }
-
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
@@ -67,6 +89,13 @@ public class MainController {
         }
         return mav;
 
+    }
+
+    @PostMapping("/roll") // 메인화면 Rolling RandomList
+    @ResponseBody
+    public List<RollingRankTO> roll() {
+        List<RollingRankTO> list = rollingRankList;
+        return list;
     }
 
     @GetMapping("/list")
