@@ -43,17 +43,6 @@ public class RankController {
         rollingRankList = sqlMapperInter.getRol();
     }
 
-    @Scheduled(cron = "0 0/5 * * * *")
-    public void RollingTimer() {
-        rollingRankList = sqlMapperInter.getRol();
-    }
-
-    @PostMapping("/roll") // 메인화면 Rolling RandomList
-    @ResponseBody
-    public List<RollingRankTO> roll() {
-        return rollingRankList;
-    }
-
     @GetMapping("/getRankFragment")
     public String getRankFragment(@RequestParam("board_cd") String boardCd, Model model) {
         return "fragments/content/rank";

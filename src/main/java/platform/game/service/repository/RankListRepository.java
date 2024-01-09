@@ -18,7 +18,7 @@ public interface RankListRepository extends JpaRepository<RankList, Integer> {
     @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_lvl / 10) * 10 AS levelRange FROM member GROUP BY levelRange ORDER BY levelRange")
     List<Integer> GetLevelRank();
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , ifnull(floor(mem_win_count/mem_game_count*10) * 10,0) AS win FROM member GROUP BY win ORDER BY win")
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , ifnull(floor(mem_game_win_cnt/mem_total_game_cnt*10) * 10,0) AS win FROM member GROUP BY win ORDER BY win")
     List<Integer> GetWinRank();
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_total_point / 400) * 400 as point FROM member GROUP BY point ORDER BY point")

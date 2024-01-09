@@ -1,4 +1,4 @@
-package platform.game.service.entity.compositekey;
+package platform.game.service.entity.compositeKey;
 
 import java.io.Serializable;
 

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import platform.game.service.entity.compositekey.MemberRankingPrimary;
+import platform.game.service.entity.compositeKey.MemberRankingPrimary;
 
 @Entity
 @Data
