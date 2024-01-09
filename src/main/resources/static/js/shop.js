@@ -67,7 +67,7 @@ function hidePreview() {
 
 function changeCategori() {
     let categorySelect = document.getElementById('categorySelect');
-    let gameCards = document.querySelectorAll('.game-card__box');
+    let gameCards = document.querySelectorAll('.game-card');
     let selectedCategory = categorySelect.value;
 
     console.log(categorySelect);
@@ -80,38 +80,34 @@ function changeCategori() {
         if (selectedCategory === 'all' || selectedCategory === cardCategory) {
             console.log('Displaying card:', cardCategory);
             card.classList.remove('card-hidden');
+            card.classList.add('card-visible');
         } else {
             console.log('Hiding card:', cardCategory);
+            card.classList.remove('card-visible');
             card.classList.add('card-hidden');
         }
+
+        // if(event.target.classList.contains("filter-itme")&&!event.target.classList.contains("active")){
+        //     // console.log("true");
+        //     // deactivate existing active 'filter-item
+        //     filterContainer.querySelector(".active").classList.remove("outer-shadow","active");
+        //     // activate new 'filter item'
+        //     event.target.classList.add("active","outer-shadow");
+        //     const target = event.target.getAttribute("data-target");
+        //     // console.log(target);
+        //     portfolioItems.forEach((item) =>{
+        //         if(target === item.getAttribute("data-category")||target==='all'){
+        //             item.classList.remove("hide");
+        //             item.classList.add("show");
+        //         }else{
+        //             item.classList.remove("show");
+        //             item.classList.add("hide");
+        //         }
+        //     })
+        // }else{
+        //     // console.log("false");
+        // }
         
-        // const filterContainer = document.querySelector(".portfolio-filter"),
-        // portfolioItemsContainer = document.querySelector(".portfolio-items"),
-        // portfolioItems = document.querySelectorAll(".portfolio-item");
-    
-        // filterContainer.addEventListener("click", function(event){
-        //     if(event.target.classList.contains("filter-itme")&&!event.target.classList.contains("active")){
-        //         // console.log("true");
-        //         // deactivate existing active 'filter-item
-        //         filterContainer.querySelector(".active").classList.remove("outer-shadow","active");
-        //         // activate new 'filter item'
-        //         event.target.classList.add("active","outer-shadow");
-        //         const target = event.target.getAttribute("data-target");
-        //         // console.log(target);
-        //         portfolioItems.forEach((item) =>{
-        //             if(target === item.getAttribute("data-category")||target==='all'){
-        //                 item.classList.remove("hide");
-        //                 item.classList.add("show");
-        //             }else{
-        //                 item.classList.remove("show");
-        //                 item.classList.add("hide");
-        //             }
-        //         })
-        //     }else{
-        //         console.log("false");
-        //     }
-        //     console.log(event.target);
-        // })
         // if (selectedCategory === 'all' || selectedCategory === cardCategory) {
         //     console.log('Displaying card:', cardCategory);
         //     card.style.display = 'block';
