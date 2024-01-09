@@ -335,7 +335,8 @@
                                             <div class="search">
                                                 <div class="search__input">
                                                     <i class="fa-solid fa-coins ico_fontawesome"></i>
-                                                    <input class="point-betting-input" type="search" name="search" placeholder="POINT BETTING HERE">
+                                                    <input th:if="${nickname}" class="point-betting-input" type="search" name="search" placeholder="POINT BETTING HERE">
+                                                    <input th:unless="${nickname}" class="point-betting-input" type="search" name="search" placeholder="LOGIN FIRST" readonly>
                                                 </div>
                                             </div>
                                             <div class="point-betting-button" active="F" th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">RIGHT</div>

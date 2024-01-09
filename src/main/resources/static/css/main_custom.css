@@ -340,8 +340,6 @@ body.dark-theme .battle-card-info .info-title a{
 .point-betting-input{
     height:85%;
     width:35%;
-    pointer-events: none; 
-    /* 인풋 막기 */
 }
 .point-betting-button{
     display: flex;
