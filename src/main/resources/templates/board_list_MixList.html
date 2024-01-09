@@ -116,6 +116,7 @@
                                 <!-- <div class="con_txt"> -->
                                 <div class="widjet-game__title">
                                     <input type="hidden" name="board_cd" th:value="${boardCd}" />
+                                    <!-- <input type="hidden" name="cpage" value="<%= cpage %>" /> -->
                                         <div class="board_top">
                                             <table width="100%">
                                                 <tr>
@@ -147,19 +148,27 @@
                                             </table>
                                         </div>
                                         <!--게시판-->
-                                        <!-- <div class="board">
-                                        </div> -->
+                                        <div class="board">
+                                            
+                                        </div>
+                                        
                                         <div class="btn_area">
                                             <div class="align_right" style="text-align: right;" >
+                                                <!-- <a th:href="@{write(board_cd=${boardCd})}"><input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"></a> -->
+                                                <!-- <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" /> -->
                                                 <!-- 로그인 상태인 경우의 링크 -->
                                                 <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;">
                                                 </a>
                                                 <!-- 로그인 상태가 아닌 경우의 링크 -->
                                                 <a th:unless="${loginCheck}" href="/login">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" onclick="checkLoginAndNavigate()">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;" onclick="checkLoginAndNavigate()">
                                                 </a>
+                                                <!-- <a th:href="@{write(board_cd=${boardCd})}">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                                                </a> -->
                                             </div>
+
                                             <!--페이지넘버-->
                                             <div class="paginate_regular" style="text-align: center;">
                                                 <div align="absmiddle">
@@ -167,30 +176,33 @@
                                                         <a>&lt;&lt;</a>
                                                     </span>
                                                     <span th:unless="${cpage.startBlock} == 1">
-                                                        <a th:href="@{'list?board_cd=' + ${boardCd} + '&cpage=' + ${(cpage.startBlock - cpage.blockPerPage)}}">&lt;&lt;</a>
+                                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.startBlock - cpage.blockPerPage)}}">&lt;&lt;</a>
                                                     </span>
                                                     &nbsp;
+                                                    
                                                     <span th:if="${cpage.cpage} == 1">
                                                         <a>&lt;</a>
                                                     </span>
                                                     <span th:unless="${cpage.cpage} == 1">
-                                                        <a th:href="@{'list?board_cd=' + ${boardCd} + '&cpage=' + ${(cpage.cpage - 1)}}">&lt;</a>
+                                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.cpage - 1)}}">&lt;</a>
                                                     </span>
                                                     &nbsp;&nbsp;
+                                                    
                                                     <th:block th:each="i: ${#numbers.sequence(cpage.startBlock, cpage.totalPage)}">
                                                         <span th:if="${i == cpage.cpage}">
                                                             <a th:text="'[' + ${i} + ']'"></a>
                                                         </span>
                                                         <span th:unless="${i == cpage.cpage}">
-                                                            <a th:href="@{'list?board_cd=' + ${boardCd} + '&cpage=' + ${i}}" th:text="${i}"></a>
+                                                            <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${i}}" th:text="${i}"></a>
                                                         </span>
                                                     </th:block>
                                                     &nbsp;&nbsp;
+
                                                     <span th:if="${cpage.cpage == cpage.totalPage}">
                                                         <a>&gt;</a>
                                                     </span>
                                                     <span th:unless="${cpage.cpage == cpage.totalPage}">
-                                                        <a th:href="@{'list?board_cd=' + ${boardCd} +  '&cpage='+ ${(cpage.cpage + 1)}}">&gt;</a>
+                                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage='+ ${(cpage.cpage + 1)}}">&gt;</a>
                                                     </span>
                                                     &nbsp;
 
@@ -198,7 +210,7 @@
                                                         <a>&gt;&gt;</a>
                                                     </span>
                                                     <span th:unless="${cpage.endBlock == cpage.totalPage}">
-                                                        <a th:href="@{'list?board_cd=' + ${boardCd} + '&cpage=' + ${(cpage.startBlock + cpage.blockPerPage)}}">&gt;&gt;</a>
+                                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.startBlock + cpage.blockPerPage)}}">&gt;&gt;</a>
                                                     </span>
                                                 </div>
                                             </div>
@@ -207,6 +219,7 @@
                                         <!--//게시판-->
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>

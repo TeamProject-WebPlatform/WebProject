@@ -1,0 +1,149 @@
+<link rel="stylesheet" type="text/css" href="../css/list_style.css">
+
+<div class="widjet --filters">
+    <div class="widjet__head">
+        <h3 class="uk-text-lead">자유게시판</h3>
+    </div>
+    <div class="widjet__body">
+        <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-3@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+            <div class="uk-width-1-6"><select class="js-select" id="s_btn">
+                <option value="title" th:selected="${list_search == 'title'}">제목</option>
+                <option value="content" th:selected="${list_search == 'content'}">내용</option>
+                <option value="title_content" th:selected="${list_search == 'title_content'}">제목+내용</option>
+                <option value="writer" th:selected="${list_search == 'writer'}">글쓴이</option>
+            </select></div>
+            <div class="uk-width-5-6">
+                <div class="search">
+                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="s_txt_btn" th:value="${searchValue}"></div>
+                    <div class="search__btn"><button type="button" onclick="onSelect()"><i class="ico_search"></i></button></div>
+                </div>
+            </div>
+            <div class="uk-width-1-6"><select class="js-select" id="list_tag" onchange="onSelect()">
+                <option value="All" th:selected="${list_tag == 'All'}">전체</option>
+                <option value="LeagueofLegends" th:selected="${list_tag == 'LeagueofLegends'}">리그오브레전드</option>
+                <option value="BattleGround" th:selected="${list_tag == 'BattleGround'}">배틀그라운드</option>
+                <option value="Steam" th:selected="${list_tag == 'Steam'}">스팀</option>
+            </select></div>
+            <div class="uk-width-1-6"><select class="js-select" id="list_size" onchange="onSelect()" >
+                <option value="10" th:selected="${recpage == 10}">10개씩</option>
+                <option value="20" th:selected="${recpage == 20}">20개씩</option>
+                <option value="30" th:selected="${recpage == 30}">30개씩</option>
+            </select></div>
+        </div>
+    </div>
+</div>
+<div class="widjet --filters">
+    <div class="widjet__body">
+        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+            <div class="uk-width-1-1">
+                <!--게시판 코드 들어가는 장소-->
+                <!-- <div class="con_txt"> -->
+                <div class="widjet-game__title">
+                    <input type="hidden" name="board_cd" th:value="${boardCd}" />
+                    <!-- <input type="hidden" name="cpage" value="<%= cpage %>" /> -->
+                        <div class="board_top">
+                            <table width="100%">
+                                <tr>
+                                    <th width="10%" >번호</th>
+                                    <th >제목</th>
+                                    <th width="20%" >글쓴이</th>
+                                    <th width="17%" >등록일</th>
+                                    <th width="10%" >조회</th>
+                                </tr>
+                                <tr th:each="post, rowStat : ${lists}">
+                                    <td th:text="${#lists.size(lists) - rowStat.index}" style="text-align: center;"></td>
+                                    <td class="left">
+                                        <!--게시물 클릭시 이동하도록 하는 구문-->
+                                        <a th:href="@{view(board_cd=${post.boardCd}, post_id=${post.postId})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
+                                        <!--게시물 댓글 갯수-->
+                                        <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
+                                        <!--새로운 글 작성시 보여지는 new 표시-->
+                                        <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
+                                            <img src="../img/icon_new.gif" alt="NEW">
+                                        </span>
+                                    </td>
+                                    <!--닉네임-->
+                                    <td style="text-align: center;" th:text="${post.member.memNick}"></td>
+                                    <!--글쓴 날짜-->
+                                    <td style="text-align: center;" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                                    <!--조회수-->
+                                    <td style="text-align: center;" th:text="${post.postHit}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--게시판-->
+                        <div class="board">
+                            
+                        </div>
+                        
+                        <div class="btn_area">
+                            <div class="align_right" style="text-align: right;" >
+                                <!-- <a th:href="@{write(board_cd=${boardCd})}"><input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"></a> -->
+                                <!-- <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" /> -->
+                                <!-- 로그인 상태인 경우의 링크 -->
+                                <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
+                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;">
+                                </a>
+                                <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                <a th:unless="${loginCheck}" href="/login">
+                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;" onclick="checkLoginAndNavigate()">
+                                </a>
+                                <!-- <a th:href="@{write(board_cd=${boardCd})}">
+                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
+                                </a> -->
+                            </div>
+
+                            <!--페이지넘버-->
+                            <div class="paginate_regular" style="text-align: center;">
+                                <div align="absmiddle">
+                                    <span th:if="${cpage.startBlock} == 1">
+                                        <a>&lt;&lt;</a>
+                                    </span>
+                                    <span th:unless="${cpage.startBlock} == 1">
+                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.startBlock - cpage.blockPerPage)}}">&lt;&lt;</a>
+                                    </span>
+                                    &nbsp;
+                                    
+                                    <span th:if="${cpage.cpage} == 1">
+                                        <a>&lt;</a>
+                                    </span>
+                                    <span th:unless="${cpage.cpage} == 1">
+                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.cpage - 1)}}">&lt;</a>
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    
+                                    <th:block th:each="i: ${#numbers.sequence(cpage.startBlock, cpage.totalPage)}">
+                                        <span th:if="${i == cpage.cpage}">
+                                            <a th:text="'[' + ${i} + ']'"></a>
+                                        </span>
+                                        <span th:unless="${i == cpage.cpage}">
+                                            <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${i}}" th:text="${i}"></a>
+                                        </span>
+                                    </th:block>
+                                    &nbsp;&nbsp;
+
+                                    <span th:if="${cpage.cpage == cpage.totalPage}">
+                                        <a>&gt;</a>
+                                    </span>
+                                    <span th:unless="${cpage.cpage == cpage.totalPage}">
+                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage='+ ${(cpage.cpage + 1)}}">&gt;</a>
+                                    </span>
+                                    &nbsp;
+
+                                    <span th:if="${cpage.endBlock == cpage.totalPage}">
+                                        <a>&gt;&gt;</a>
+                                    </span>
+                                    <span th:unless="${cpage.endBlock == cpage.totalPage}">
+                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.startBlock + cpage.blockPerPage)}}">&gt;&gt;</a>
+                                    </span>
+                                </div>
+                            </div>
+                            <!--//페이지넘버-->
+                        </div>
+                        <!--//게시판-->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

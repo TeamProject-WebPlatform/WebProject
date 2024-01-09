@@ -24,7 +24,7 @@ public class BoardCpageTO {
 	public BoardCpageTO() {
 		this.cpage = 1;
 		// 페이지 당 게시글 수. 10추천
-		this.recordPerPage = 5;
+		this.recordPerPage = 10;
 		this.blockPerPage = 5;
 		this.totalPage = 1;
 		this.totalRecord = 0;

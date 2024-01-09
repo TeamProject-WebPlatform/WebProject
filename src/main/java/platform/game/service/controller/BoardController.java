@@ -3,6 +3,7 @@ package platform.game.service.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,6 +24,7 @@ import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BoardCpageTO;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.CommentInfoRepository;
+import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -36,6 +38,9 @@ public class BoardController {
 
     @Autowired
     private CommentInfoRepository commentInfoRepository;
+
+    @Autowired
+    private MemberInfoRepository memberInfoRepository;
 
     @RequestMapping("/shop")
     public String shop() {
@@ -56,35 +61,31 @@ public class BoardController {
             loginCheck = "false";
         }
 
-        //cpage 작업
+        // cpage 작업
         BoardCpageTO cpageTO = new BoardCpageTO();
         int cpage = 1;
         int recordPerPage = cpageTO.getRecordPerPage();
-		int blockPerPage = cpageTO.getBlockPerPage();
-		if( request.getParameter( "cpage" ) != null && !request.getParameter( "cpage" ).equals( "" ) ) {
-			cpage = Integer.parseInt( request.getParameter( "cpage" ) );
-		}
+        int blockPerPage = cpageTO.getBlockPerPage();
+        if (request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")) {
+            cpage = Integer.parseInt(request.getParameter("cpage"));
+        }
 
         cpageTO.setCpage(cpage);
-        cpageTO.setTotalRecord( lists.size() );
-		cpageTO.setTotalPage( ( ( cpageTO.getTotalRecord() - 1 ) / recordPerPage ) + 1);
-		cpageTO.setStartBlock( cpage - ( cpage-1 ) % blockPerPage );
-		cpageTO.setEndBlock( cpage - ( cpage-1 ) % blockPerPage + blockPerPage - 1 );
-		if( cpageTO.getEndBlock() >= cpageTO.getTotalPage() ) {
-			cpageTO.setEndBlock( cpageTO.getTotalPage() );
-		}
+        cpageTO.setTotalRecord(lists.size());
+        cpageTO.setTotalPage(((cpageTO.getTotalRecord() - 1) / recordPerPage) + 1);
+        cpageTO.setStartBlock(cpage - (cpage - 1) % blockPerPage);
+        cpageTO.setEndBlock(cpage - (cpage - 1) % blockPerPage + blockPerPage - 1);
+        if (cpageTO.getEndBlock() >= cpageTO.getTotalPage()) {
+            cpageTO.setEndBlock(cpageTO.getTotalPage());
+        }
 
-		// SKIP - 각 페이지 별 게시글 자르기
-		int skip = ( cpage - 1 ) * recordPerPage;
-		lists.subList(0, skip).clear();
-		// lists.subList(cpageTO.getRecordPerPage(), lists.size()).clear();
-        System.out.println("lists.size() : " + lists.size());
-        lists.subList(cpageTO.getRecordPerPage(), lists.size()).clear();
-		cpageTO.setBoardLists( lists );
+        // SKIP - 각 페이지 별 게시글 자르기
+        int skip = (cpage - 1) * cpageTO.getRecordPerPage();
+        int startIndex = Math.min(skip, lists.size());
+        int endIndex = Math.min(startIndex + cpageTO.getRecordPerPage(), lists.size());
+        lists = new ArrayList<>(lists.subList(startIndex, endIndex));
 
-        // System.out.println("cpage 테스트 : " + cpageTO.getStartBlock());
-        // System.out.println("cpage 테스트 : " + cpageTO.getBlockPerPage());
-        // System.out.println("cpage 테스트 : " + cpageTO.getTotalPage());
+        cpageTO.setBoardLists(lists);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_list");
@@ -97,7 +98,9 @@ public class BoardController {
     }
 
     @GetMapping("/view")
-    public ModelAndView listView(@RequestParam(name = "post_id") int postId) {
+    public ModelAndView listView(@RequestParam("board_cd") int boardCd,
+            @RequestParam("post_id") int postId,
+            @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listView 호출");
 
         Post post = new Post();
@@ -140,55 +143,10 @@ public class BoardController {
         modelAndView.addObject("comment", comment);
         modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("writePost", writePost);
-
-        modelAndView.addObject("sample", post.getPostContent());
-        System.out.println("post.getcontent : " + post.getPostContent());
+        modelAndView.addObject("cpage", cpage);
+        modelAndView.addObject("board_cd", boardCd);
+        // System.out.println("post.getcontent : " + post.getPostContent());
         return modelAndView;
-    }
-
-    @RequestMapping("/comment_write_ok")
-    public String writeComment(@RequestParam("postId") int postId, @RequestParam("ccontent") String content) {
-        System.out.println("comment_write_ok 호출");
-        Member member = null;
-        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                    .getMember();
-        } else {
-            System.out.println("로그인을 하세요");
-        }
-        Date date = new Date();
-
-        Post post = new Post();
-        post = postInfoRepository.findByPostId(postId);
-
-        Comment comment = new Comment();
-        comment.setPost(post);
-        comment.setCommentContent(content);
-        comment.setCreatedAt(date);
-        comment.setUpdatedAt(date);
-        comment.setMember(member);
-        System.out.println("comment 확인 : " + comment);
-
-        commentInfoRepository.save(comment);
-        // 댓글 카운트 추가
-        post.setPostCommentCnt(post.getPostCommentCnt() + 1);
-        postInfoRepository.save(post);
-
-        // 댓글이 등록된 후에 해당 게시물로 이동
-        return "redirect:/board/view?post_id=" + postId;
-    }
-
-    @PostMapping("/comment_delete_ok")
-    @Transactional
-    public String deleteComment(@RequestParam("board_cd") int boardCd,
-            @RequestParam("comment_id") int commentId) {
-
-        System.out.println("Controller_listdeleteOk 호출");
-
-        System.out.println("댓글 먼저 삭제");
-        commentInfoRepository.deleteByCommentId(commentId);
-
-        return "redirect:/board/list?board_cd=" + boardCd;
     }
 
     @RequestMapping("/write")
@@ -203,7 +161,8 @@ public class BoardController {
     }
 
     @RequestMapping("/write_ok")
-    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request, Model model) {
+    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request,
+            Model model) {
         System.out.println("Controller_listWriteOk 호출");
         Post post = new Post();
         Date date = new Date();
@@ -241,7 +200,8 @@ public class BoardController {
     }
 
     @GetMapping("/modify")
-    public ModelAndView listModify(@RequestParam(name = "post_id") int postId) {
+    public ModelAndView listModify(@RequestParam(name = "post_id") int postId,
+            @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listModift 호출");
         Post post = new Post();
 
@@ -250,6 +210,7 @@ public class BoardController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_modify");
         modelAndView.addObject("post", post);
+        modelAndView.addObject("cpage", cpage);
 
         return modelAndView;
     }
@@ -258,7 +219,8 @@ public class BoardController {
     public String listModifyOk(@RequestParam(name = "post_id") int postId,
             @RequestParam(name = "subject") String title,
             @RequestParam(name = "tags") String tags,
-            @RequestParam(name = "content") String content) {
+            @RequestParam(name = "content") String content,
+            @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listModify_ok 호출");
         Date date = new Date();
 
@@ -288,7 +250,7 @@ public class BoardController {
 
         if (flag == 0) {
             // 글쓰기 성공 시 처리
-            return "redirect:/board/view?board_cd=" + post.getBoardCd() + "&post_id=" + postId;
+            return "redirect:/board/view?board_cd=" + post.getBoardCd() + "&post_id=" + postId + "&cpage=" + cpage;
         } else {
             // 글쓰기 실패 시 처리
             return "redirect:/error";
@@ -296,7 +258,7 @@ public class BoardController {
     }
 
     @GetMapping("/delete")
-    public ModelAndView listDelete(@RequestParam(name = "post_id") int postId) {
+    public ModelAndView listDelete(@RequestParam(name = "post_id") int postId, @RequestParam("cpage") int cpage) {
 
         System.out.println("Controller_listdelete 호출");
         Post post = new Post();
@@ -306,6 +268,7 @@ public class BoardController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_delete");
         modelAndView.addObject("post", post);
+        modelAndView.addObject("cpage", cpage);
 
         return modelAndView;
     }
@@ -326,4 +289,119 @@ public class BoardController {
 
         return "redirect:/board/list?board_cd=" + post.getBoardCd();
     }
+
+    @RequestMapping("/comment_write_ok")
+    public String writeComment(@RequestParam("board_cd") int boardCd,
+            @RequestParam("post_id") int postId,
+            @RequestParam("ccontent") String content,
+            @RequestParam("cpage") int cpage) {
+        System.out.println("comment_write_ok 호출");
+        Member member = null;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+        } else {
+            System.out.println("로그인을 하세요");
+        }
+        Date date = new Date();
+
+        Post post = new Post();
+        post = postInfoRepository.findByPostId(postId);
+
+        Comment comment = new Comment();
+        comment.setPost(post);
+        comment.setCommentContent(content);
+        comment.setCreatedAt(date);
+        comment.setUpdatedAt(date);
+        comment.setMember(member);
+        System.out.println("comment 확인 : " + comment);
+
+        commentInfoRepository.save(comment);
+        // 댓글 카운트 추가
+        post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
+        postInfoRepository.save(post);
+
+        // 댓글이 등록된 후에 해당 게시물로 이동
+        return "redirect:/board/view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
+    }
+
+    @PostMapping("/comment_delete_ok")
+    @Transactional
+    public String deleteComment(@RequestParam("board_cd") int boardCd,
+            @RequestParam("comment_id") int commentId,
+            @RequestParam("post_id") int postId,
+            @RequestParam("cpage") int cpage) {
+
+        System.out.println("Controller_listdeleteOk 호출");
+
+        System.out.println("댓글 먼저 삭제");
+        commentInfoRepository.deleteByCommentId(commentId);
+
+        Post post = new Post();
+        post = postInfoRepository.findByPostId(postId);
+        // 댓글 카운트 수정
+        post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
+        postInfoRepository.save(post);
+
+        return "redirect:/board/view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
+    }
+
+    @RequestMapping("/reply_comment_write_ok")
+    public String writeReplyComment(@RequestParam("board_cd") int boardCd,
+            @RequestParam("post_id") int postId,
+            @RequestParam("parent_comment_id") int commentId,
+            @RequestParam("rcontent") String content,
+            @RequestParam("cpage") int cpage) {
+        System.out.println("reply_comment_write_ok 호출");
+        Member member = null;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+        } else {
+            System.out.println("로그인을 하세요");
+        }
+        Date date = new Date();
+
+        Post post = new Post();
+        post = postInfoRepository.findByPostId(postId);
+
+        Comment comment = new Comment();
+        comment.setPost(post);
+        comment.setCommentContent(content);
+        comment.setCreatedAt(date);
+        comment.setUpdatedAt(date);
+        comment.setMember(member);
+        comment.setCommentGrp(commentId);
+        System.out.println("comment 확인 : " + comment);
+
+        commentInfoRepository.save(comment);
+        // 댓글 카운트 추가
+        post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
+        postInfoRepository.save(post);
+
+        // 댓글이 등록된 후에 해당 게시물로 이동
+        return "redirect:/board/view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
+    }
+
+    // @PostMapping("/comment_delete_ok")
+    // @Transactional
+    // public String deleteComment(@RequestParam("board_cd") int boardCd,
+    // @RequestParam("comment_id") int commentId,
+    // @RequestParam("post_id") int postId,
+    // @RequestParam("cpage") int cpage) {
+
+    // System.out.println("Controller_listdeleteOk 호출");
+
+    // System.out.println("댓글 먼저 삭제");
+    // commentInfoRepository.deleteByCommentId(commentId);
+
+    // Post post = new Post();
+    // post = postInfoRepository.findByPostId(postId);
+    // // 댓글 카운트 수정
+    // post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
+    // postInfoRepository.save(post);
+
+    // return "redirect:/board/view?board_cd=" + boardCd + "&post_id=" + postId +
+    // "&cpage=" + cpage;
+    // }
 }

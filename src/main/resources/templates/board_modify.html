@@ -95,7 +95,7 @@
                                 <div class="widjet-game__title">
                                     <form action="modify_ok" method="post" name="mfrm">
                                         <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                        <!-- <input type="hidden" name="cpage" value="<%= cpage %>" /> -->
+                                        <input type="hidden" name="cpage" th:value="${cpage}" />
                                         <div class="contents_sub">	
                                             <!--게시판-->
                                             <div class="board_write">
@@ -118,7 +118,7 @@
                                             </div>
                                             <div class="btn_area">
                                                 <div class="align_left">
-                                                    <a th:href="@{list(board_cd=${post.boardCd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
+                                                    <a th:href="@{list(board_cd=${post.boardCd}, cpage=${cpage})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
                                                 </div>
                                                 <div class="align_right">
                                                     <input type="button" id="mbtn" value="수정" class="btn_list btn_txt01" style="cursor: pointer;" onclick="modifyPost()">
