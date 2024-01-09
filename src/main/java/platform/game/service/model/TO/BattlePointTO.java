@@ -34,5 +34,5 @@ public class BattlePointTO {
     private String hostPointRewardRatio;
     private String clientPointRewardRatio;
 
-    private Long btId;
+    private int btId;
 }

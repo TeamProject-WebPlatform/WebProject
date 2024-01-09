@@ -50,7 +50,7 @@ public class BattleTO {
     public String clientImgName;
     // public String clientbadge; // 뱃지 추가할시
 
-    Long btId; // 배틀 ID
+    int btId; // 배틀 ID
     String title; // 배틀 타이틀
     int point; // 배틀 포인트
     String gameCd;

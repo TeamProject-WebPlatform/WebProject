@@ -16,6 +16,6 @@ public interface MemberBettingRepository extends JpaRepository<MemberBetting, Me
     @Async
     @Modifying
     @Query(value = "INSERT INTO member_betting values(now(),:point,:memId,:btId,:flag)", nativeQuery = true)
-    void insertData(@Param("point") int point,@Param("memId") long memId, @Param("btId") long btId,@Param("flag") int flag);
+    void insertData(@Param("point") int point,@Param("memId") long memId, @Param("btId") int btId,@Param("flag") int flag);
     // bet_at, bet_point, mem_id, bt_id, flag
 }
