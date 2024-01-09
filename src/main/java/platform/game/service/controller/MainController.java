@@ -73,18 +73,7 @@ public class MainController {
     public String loader() {
         return "loadertest";
     }
-<<<<<<< HEAD
 
-    @RequestMapping("/battle")
-    public ModelAndView battle() {
-        ModelAndView mav = new ModelAndView("battle");
-
-        return mav;
-    }
-
-=======
-    
->>>>>>> 54fba9739902ce6dbacdad250e249fdb78b22125
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
