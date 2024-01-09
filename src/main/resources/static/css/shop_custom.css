@@ -63,6 +63,9 @@
 .profile-header{
     width: 100%;
     padding-top:20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* background-position: left; */
     /* background-image: url("../img/acheivement-2.png"); */
 }
 

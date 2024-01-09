@@ -2448,6 +2448,16 @@ a:hover {
     margin-right: 1%;
 }
 
+.card-hidden {
+    display: none;
+    /* 또는 다른 크기를 변경하는 스타일 */
+}
+
+.card-visible {
+display: block;
+/* 또는 다른 크기를 변경하는 스타일 */
+}
+
 /* 버튼 디자인 */
 .reset_btn {
     width: 100%;
