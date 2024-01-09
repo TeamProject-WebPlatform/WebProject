@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="./css/main_custom.css" />
+        <link rel="stylesheet" href="./css/shop_custom.css" />
         
 
     </head>
@@ -72,7 +72,7 @@
                                     <div class="game-card">
                                     <!-- <div class="game-card"> -->
                                         <div class="game-card__box">
-                                            <div class="game-card__media"><a href="#"><img th:src="@{/img/shop_img/red_border.png}" alt="Item Image" /></a></div>
+                                            <div class="game-card__media"><a href="#"><img th:src="@{'../img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" /></a></div>
                                             <div class="game-card__info">
                                                 <a class="game-card__title" href="#" th:text="${item.itemNm}"></a>
                                                 <div class="game-card__genre" th:text="${item.itemInfo}"></div>
@@ -82,9 +82,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="game-card__bottom">
-                                                    <input class="select1" type='submit' value='미리보기'>
+                                                    <input class="select_btn" type='submit' value='미리보기'>
                                                     <form action=''>
-                                                        <input class="select2" type='submit' value='구매'>
+                                                        <input class="select_Get_btn" type='submit' value='구매'>
                                                     </form>
                                                 </div>
                                             </div>
@@ -122,14 +122,14 @@
                                                     <div class="profile-dividing-line"></div>
                                                     <div class="profile-badge-section">
                                                     <span class="badge">&#127774;</span>
-                                                    <span class="badge">&#127775;</span>
+                                                    <!-- <span class="badge">&#127775;</span>
                                                     <span class="badge">&#127806;</span>
                                                     <span class="badge">&#127851;</span>
                                                     <span class="badge">&#127774;</span>
                                                     <span class="badge">&#127775;</span>
                                                     <span class="badge">&#127806;</span>
                                                     <span class="badge">&#127851;</span>
-                                                    <span class="badge">&#127774;</span>
+                                                    <span class="badge">&#127774;</span> -->
                                                     </div>
                                                 </div>
                                             </div>

@@ -79,7 +79,6 @@ public class ShopController {
             if (member != null) {
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
-                // modelAndView.addObject("Introduction", member.getMemLvl());
                 modelAndView.addObject("point", member.getMemCurPoint());
             }
         } else {
