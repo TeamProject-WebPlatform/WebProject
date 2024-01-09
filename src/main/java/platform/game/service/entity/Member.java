@@ -34,6 +34,7 @@ public class Member {
     private String memCertified;
     private String memCreatedAt;
     private String memDeletedAt;
+
     
     public String getRole(String code){
         switch (code) {

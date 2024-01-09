@@ -62,16 +62,18 @@ public class MainController {
 
     @Autowired
     private CommentInfoRepository commentInfoRepository;
-    @RequestMapping("/t/{no}")
-    public String template(@PathVariable("no") String no){
 
-        return "template/"+no;
+    @RequestMapping("/t/{no}")
+    public String template(@PathVariable("no") String no) {
+
+        return "template/" + no;
     }
+
     @RequestMapping("/loadertest")
-    public String loader(){
+    public String loader() {
         return "loadertest";
     }
-    
+
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
