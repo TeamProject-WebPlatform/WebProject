@@ -51,7 +51,7 @@
                                         <div class="uk-width-1-1">
                                             <div class="search">
                                                 <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="ItemSearch"></div>
-                                                <div class="search__btn"><button type="button"><i class="ico_search"></i></button></div>
+                                                <!-- <div class="search__btn"><button type="button"><i class="ico_search"></i></button></div> -->
                                             </div>
                                         </div>
                                         <div>
@@ -68,21 +68,19 @@
                                 </div>
                             </div>
                             <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-3@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                <div th:each="item : ${items}" data-category="${item.itemKindCd}">
-                                    <div class="game-card">
-                                    <!-- <div class="game-card"> -->
+                                <div th:each="item : ${items}">
+                                    <div class="game-card" data-category="${item.itemKindCd}">
                                         <div class="game-card__box">
-                                            <div class="game-card__media"><a href="#"><img th:src="@{'../img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" /></a></div>
+                                            <div class="game-card__media"><a href="#"><img th:src="@{'./img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" /></a></div>
                                             <div class="game-card__info">
                                                 <a class="game-card__title" href="#" th:text="${item.itemNm}"></a>
                                                 <div class="game-card__genre" th:text="${item.itemInfo}"></div>
                                                 <div class="game-card__rating-and-price">
                                                     <div class="game-card__rating"></div>
-                                                    <div class="game-card__price"><span th:text="${item.itemCost}"></span>&nbsp;<span>Point</span>
-                                                    </div>
+                                                    <div class="game-card__price"><span th:text="${item.itemCost}"></span>&nbsp;<span>Point</span></div>
                                                 </div>
                                                 <div class="game-card__bottom">
-                                                    <input class="select_btn" type='submit' value='미리보기'>
+                                                    <input class="select_btn" type='submit' value='미리보기' th:onclick="showPreview('[[${item.itemNm}]]', '[[${item.itemKindCd}]]')">
                                                     <form action=''>
                                                         <input class="select_Get_btn" type='submit' value='구매'>
                                                     </form>
@@ -100,19 +98,19 @@
                                 </div>
                                 <div class="widjet__body">
                                     <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                        <!-- 태두리 -->
+                                        <!-- 배경 -->
                                         <div class="uk-width-1-1 profile-border">
-                                            <!-- 배경 -->
+                                            <!-- 태두리 -->
                                             <div class="profile-card">
                                                 <!-- <a href="/mypage/${memNickname}"> -->
-                                                    <div class="profile-header">
-                                                        <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
-                                                        <div class="profile-user_info">
-                                                            <p class="profile-user_level" th:text="'Lv : ' + ${level}"></p>
-                                                            <p class="profile-user_nick" th:text="${nickname}"></p>
-                                                            <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL">
-                                                        </div>
+                                                <div class="profile-header">
+                                                    <div class="profile-image"><img src="./img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                                    <div class="profile-user_info">
+                                                        <p class="profile-user_level" th:text="'Lv : ' + ${level}"></p>
+                                                        <p class="profile-user_nick" th:text="${nickname}"></p>
+                                                        <img class="badge" src="./img/starbucks.png" alt="NO-SYMBOL">
                                                     </div>
+                                                </div>
                                                 <!-- </a> -->
                                                 <div class="profile-dividing-line"></div>
                                                 <div class="profile-main">
@@ -199,7 +197,7 @@
 
         <script src="../js/libs.js"></script>
         <script src="../js/main.js"></script>
-        <script th:src="@{/js/shop.js}" defer></script>
+        <script src="../js/shop.js"></script>
         <!-- <script src="../js/shop.js"></script> -->
     </body>
     

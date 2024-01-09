@@ -71,7 +71,7 @@ public class ShopController {
 
         ModelAndView modelAndView = new ModelAndView("shop");
         modelAndView.addObject("point", "로그인 해주세요.");
-        modelAndView.addObject("nickname", "");
+        // modelAndView.addObject("nickname", "");
         modelAndView.addObject("level", "0");
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {

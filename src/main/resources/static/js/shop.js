@@ -1,68 +1,67 @@
-//  // 페이지 로드 시 실행
-//  document.addEventListener('DOMContentLoaded', function () {
-//     updateItemGrid();
-// });
+document.addEventListener('DOMContentLoaded', function () {
+    // categorySelect 요소 찾기
+    var categorySelect = document.getElementById('categorySelect');
 
-// // 카테고리 선택이 변경될 때 호출되는 함수
-// document.getElementById('categorySelect').addEventListener('change', function () {
-//     updateItemGrid();
-// });
+    // categorySelect 값이 변경될 때마다 호출되는 함수 등록
+    categorySelect.addEventListener('change', function () {
+        // 선택된 카테고리 값 가져오기
+        var selectedCategory = categorySelect.value;
 
-// // 상품 그리드 업데이트 함수
-// function updateItemGrid() {
-//     var selectedCategory = document.getElementById('categorySelect').value;
-//     var items = document.querySelectorAll('#itemGrid .game-card');
+        // 모든 game-card 요소 찾기
+        var gameCards = document.querySelectorAll('.game-card');
 
-//     // 모든 상품을 숨김
-//     items.forEach(function (item) {
-//         item.style.display = 'none';
-//     });
+        // 각 game-card에 대해 처리
+        gameCards.forEach(function (card) {
+            // 카테고리 데이터 속성 값 가져오기
+            var cardCategory = card.getAttribute('data-category');
 
-//     // 선택한 카테고리에 해당하는 상품만 표시
-//     if (selectedCategory === 'all') {
-//         items.forEach(function (item) {
-//             item.style.display = 'block';
-//         });
-//     } else {
-//         var selectedItems = document.querySelectorAll('#itemGrid .game-card[data-category="' + selectedCategory + '"]');
-//         selectedItems.forEach(function (item) {
-//             item.style.display = 'block';
-//         });
-//     }
-// }
+            // 선택된 카테고리가 'all'이거나 현재 카드의 카테고리와 일치하면 표시
+            if (selectedCategory === 'all' || selectedCategory === cardCategory) {
+                card.style.display = 'block';
+            } else {
+                // 아니면 숨김
+                card.style.display = 'none';
+            }
+        });
+    });
 
+    // 이하 기존의 showPreview, hidePreview 함수는 그대로 사용
+});
 
-
-
-// document.addEventListener('DOMContentLoaded', function () {
-//     // categorySelect 요소 찾기
-//     var categorySelect = document.getElementById('categorySelect');
-
-//     // categorySelect 값이 변경될 때마다 호출되는 함수 등록
-//     categorySelect.addEventListener('change', function () {
-//         // 선택된 카테고리 값 가져오기
-//         var selectedCategory = categorySelect.value;
-
-//         // 모든 game-card 요소 찾기
-//         var gameCards = document.querySelectorAll('.game-card');
-
-//         // 각 game-card에 대해 처리
-//         gameCards.forEach(function (card) {
-//             // 카테고리 데이터 속성 값 가져오기
-//             var cardCategory = card.getAttribute('data-category');
-
-//             // 선택된 카테고리가 'all'이거나 현재 카드의 카테고리와 일치하면 표시
-//             if (selectedCategory === 'all' || selectedCategory === cardCategory) {
-//                 card.style.display = 'block';
-//             } else {
-//                 // 아니면 숨김
-//                 card.style.display = 'none';
-//             }
-//         });
-//     });
-// });
+function showPreview(itemName, category) {
+    // 프로필 미리보기 div 선택
+    let previewheader = document.querySelector('.profile-header');
+    itemName = itemName.replace(/"/g, '');
+    console.log(itemName);
 
 
+    // 선택한 아이템에 맞는 이미지 경로 생성
+    let imagePath = './img/shop_img/' + itemName + '.png';
+    console.log(imagePath);
+    // 미리보기 div의 배경 이미지 변경
+    previewheader.style.backgroundImage = 'url("' + imagePath + '")';
+    console.log(previewheader);
+
+    // 각 분류에 따라 스타일 변경
+    if (category === '801') {
+        previewheader.classList.add('profile-header');
+        previewheader.classList.remove('badge', 'profile-border'); // 다른 스타일 초기화
+    } else if (category === '802') {
+        previewheader.classList.add('badge');
+        previewheader.classList.remove('profile-header', 'profile-border');
+    } else if (category === '803') {
+        previewheader.classList.add('profile-border');
+        previewheader.classList.remove('profile-header', 'badge');
+    }
+
+    // 미리보기 div를 화면에 보이도록 설정
+    previewheader.style.display = 'block';
+}
+
+function hidePreview() {
+    // 프로필 미리보기를 숨김
+    document.querySelector('.preview-profile').style.display = 'none';
+}
 
 
 // function changeCategori() {
