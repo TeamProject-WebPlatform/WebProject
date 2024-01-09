@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="우리팀">
+        <meta name="description" content="게시판">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../css/list_style.css">
+        <title>고객센터 페이지</title>
+    </head>
+    <body>
+        <div id="web">
+            <header>
+                <h1><a href="/home"><img src="http://placehold.it/300x70?text=logo" alt="logo"></a></h1>
+                <div id="login">
+                    <p><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p>
+                    <p><a href="#"><i class="fa-solid fa-user" alt="마이페이지" title="마이페이지"></i></a></p>
+                    <p><a href="main"><i class="fa-solid fa-headphones" alt="고객센터"title="고객센터"></i></a></p>
+                    <p><a href="#"><i class="fa-solid fa-magnifying-glass" alt="검색"title="검색"></i></a><input type="text" size="12px"></p>
+                </div>
+                <nav>
+                    <ul class="row">
+                        <li><a href="../notice">공지사항</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="fight">대전 / 협동</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/list">게시판</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="mypage/doyun">마이 페이지</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="shop">아이템샾</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <section>
+                <div class="row content">
+                    <div class="list">
+                        <div class="con_title">
+                            <h3>게시판</h3>
+                            <p>HOME &gt; <strong>게시판</strong></p>
+                        </div>
+                        <div class="con_txt">
+                            <div class="contents_sub">
+                                <div class="board_top">
+                                    <div class="bold">총 <span class="txt_orange">1</span>건</div>
+                                </div>
+                        
+                                <!--게시판-->
+                                <div class="board">
+                                    <table>
+                                    <tr>
+                                        <th width="3%">&nbsp;</th>
+                                        <th width="5%">번호</th>
+                                        <th>제목</th>
+                                        <th width="10%">글쓴이</th>
+                                        <th width="17%">등록일</th>
+                                        <th width="5%">조회</th>
+                                        <th width="3%">&nbsp;</th>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>1</td>
+                                        <td class="left"><a href="board_view1.jsp">adfas</a>&nbsp;<img src="../../images/icon_new.gif" alt="NEW"></td>
+                                        <td>asdfa</td>
+                                        <td>2017-01-31</td>
+                                        <td>6</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>2</td>
+                                        <td class="left"><img src="../../images/icon_re1.gif">&nbsp;&nbsp;<a href="board_view1.jsp">adfas</a>&nbsp;<img src="../../images/icon_new.gif" alt="NEW"></td>
+                                        <td>asdfa</td>
+                                        <td>2017-01-31</td>
+                                        <td>6</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    </table>
+                                </div>
+                                
+                                <div class="btn_area">
+                                    <div class="align_right">
+                                        <input type="button" value="새글쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="location.href='board_write1.jsp'" />
+                                    </div>
+                        
+                                    <!--페이지넘버-->
+                                    <div class="paginate_regular">
+                                        <div align="absmiddle">
+                                            <span>&lt;&lt;</span>
+                                            &nbsp;
+                                            <span>&lt;</span>
+                                            &nbsp;&nbsp;
+                                            <span>[ 1 ]</span>
+                                            <span><a href="board_list1.jsp">2</a></span>
+                                            <span><a href="board_list1.jsp">3</a></span>
+                                            &nbsp;&nbsp;
+                                            <span>&gt;</span>
+                                            &nbsp;
+                                            <span>&gt;&gt;</span>
+                                        </div>
+                                    </div>
+                                    <!--//페이지넘버-->
+                                </div>
+                                <!--//게시판-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer>
+                
+            </footer>
+        </div>
+    </body>
+</html>

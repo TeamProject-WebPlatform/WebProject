@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="우리팀">
+        <meta name="description" content="게시판">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="../css/list_style.css">
+        <script src="./js/login_style.js"></script>
+        <script type="text/javascript">
+            function deletePost() {
+                var confirmation = confirm('게시물을 삭제하시겠습니까?');
+                if (confirmation) {
+                    document.dfrm.submit();
+                }
+            }
+        </script>
+        <title>게시판</title>
+    </head>
+    <body>
+        <div id="web">
+            <header>
+                <h1 class="logo"><a href="/"><img src="../img/logo.png" alt="logo"></a></h1>
+                <div id="login">
+                    <!-- <p class="log"><a href="login"><i class="fa-solid fa-right-to-bracket" alt="로그인"title="로그인"></i></a></p> -->
+                    <p class="log"><a href="login">로그인</a></p>
+                    <div class="logto">
+                        <p class="login_info">
+                            <div th:if="${nickname}">
+                                <p th:text="${nickname}"></p>
+                            </div> &nbsp;&nbsp;
+                            <i class="fa-solid fa-caret-down"></i></p>
+                        <ul class="login_info_list">
+                            <li><a href="#">회원정보관리</a></li>
+                            <li><a href="mypage/doyun">프로필</a></li>
+                            <li><a href="board/shop">아이템 샵</a></li>
+                            <li class="logout"><a href="/logout">로그아웃</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <nav>
+                    <ul class="row">
+                        <li><a href="../board/notice">공지사항</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/fight">대전</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="board/team">협동</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../board/list">게시판</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li><a href="../rank">랭킹</a>
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <section>
+                <div class="row content">
+                    <div class="list">
+                        <div class="con_title">
+                            <h3>게시판</h3>
+                            <p>HOME &gt; 게시판 &gt; <strong>게시판</strong></p>
+                        </div>
+                        <div class="con_txt">
+                            <form action="delete_ok" method="post" name="dfrm">
+                                <input type="hidden" name="post_id" th:value="${post.postId}">
+                                <div class="contents_sub">	
+                                    <!--게시판-->
+                                    <div class="board_write">
+                                        <table>
+                                        <tr>
+                                            <th>제목</th>
+                                            <td><input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input" readonly/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>내용</th>
+                                            <td><textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea></td>
+                                        </tr>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="btn_area">
+                                        <div class="align_left">
+                                            <a th:href="@{list(board_cd=${post.boardCd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
+                                        </div>
+                                        <div class="align_right">
+                                            <input type="button" id="dbtn" value="삭제" class="btn_write btn_txt01" style="cursor: pointer;" onclick="deletePost()"/>
+                                        </div>
+                                    </div>
+                                    <!--//게시판-->
+                                </div>
+                            </form>
+                        </div>
+                        <!-- 하단 디자인 -->
+                
+                    </div>
+                </div>
+            </section>
+            <footer>
+                
+            </footer>
+        </div>
+    </body>
+</html>
