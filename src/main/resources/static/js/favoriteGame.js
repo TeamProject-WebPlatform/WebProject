@@ -31,8 +31,10 @@ const FavoriteGameAdd = async function(){
                 throw new Error("서버 응답이 실패했습니다");
             }
             const flag = await response.text();
-            if(flag=='0'){
-                alert("성공");
+            if(flag=='0') {
+                alert("수정 되었습니다.");
+            } else if (flag=='1') {
+                alert("등록 되었습니다.");
             } else {
                 alert("에러" + error.message);
             }

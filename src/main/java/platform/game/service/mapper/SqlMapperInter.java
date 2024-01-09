@@ -1,6 +1,7 @@
 package platform.game.service.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import platform.game.service.entity.Member;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
@@ -108,9 +110,24 @@ public interface SqlMapperInter {
         @Insert("INSERT INTO favorite_game values(1, #{mem_id}, #{game_cd})")
         public int setFavoriteGame(long mem_id, String game_cd);
 
-        @Insert("insert into member_ranking (rank_code, mem_id, mem_rank) select #{rank_code}, #{mem_id}, RANK() OVER(order by mem_total_point desc) as mem_rank from member")
-        public int setMemberRanking(String rank_code, long mem_id);
+        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '1', mem_id, RANK() OVER(order by mem_lvl desc) as mem_rank from member")
+        public int setMemberLevelRanking(String rank_code);
+
+        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '2', mem_id, RANK() OVER(order by mem_total_point desc) as mem_rank from member")
+        public int setMemberPointRanking(String rank_code);
+
+        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '3', mem_id, RANK() OVER(order by mem_lvl desc) as mem_rank from member")
+        public int setMemberWinRateRanking(String rank_code);
 
         @Insert("INSERT INTO member_game_match_record values(#{game_cd},#{mem_id}, default, default, default")
         public int setMatchRecord(String game_cd, long mem_id);
+
+        @Select("select m.mem_lvl, m.mem_nick from member m join member_favorite_game f on m.mem_id = f.mem_id and game_cd = #{game_cd} order by m.mem_lvl desc")
+        public List<Map<Integer, String>> getOtherLevelRank(String game_cd);
+
+        @Select("select m.mem_lvl, m.mem_nick, m.mem_total_point from member m join member_favorite_game f on m.mem_id = f.mem_id and game_cd = #{game_cd} order by m.mem_total_point desc")
+        public List<Map<Integer, String>> getOtherPointRank(String game_cd);
+
+        @Select("select m.mem_lvl, m.mem_nick, round((m.mem_win_count/m.mem_game_count)*100,2) from member m join member_favorite_game f on m.mem_id = f.mem_id and game_cd = #{game_cd} order by m.mem_lvl desc")
+        public List<Map<Integer, String>> getOtherWinRateRank(String game_cd);
 }

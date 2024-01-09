@@ -1,11 +1,12 @@
 package platform.game.service.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,32 +80,15 @@ public class RankController {
         return PointChart;
     }
 
-    // @PostMapping("/getLevelTable")
-    // @ResponseBody
-    // public List<LevelRankTO> getLevelTable() {
-    // List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
-    // return getLevelTable;
-    // }
-
-    // @PostMapping("/getWinRateTable")
-    // @ResponseBody
-    // public List<WinRankTO> getWinRateTable() {
-    // List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
-    // return getWinRateTable;
-    // }
-
-    // @PostMapping("/getPointTable")
-    // @ResponseBody
-    // public List<PointRankTO> getPointTable() {
-    // List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
-    // return getPointTable;
-    // }
-
-    @RequestMapping("/levelrank")
-    public ModelAndView LevelRank() {
+    @RequestMapping({ "/levelrank", "/levelrank/{game}" })
+    public ModelAndView LevelRank(@PathVariable(name = "game", required = false) String game) {
         List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
         ModelAndView mav = new ModelAndView("levelrank");
         mav.addObject("level", getLevelTable);
+        if (game == null) {
+            game = "";
+        }
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
@@ -118,11 +102,14 @@ public class RankController {
         return mav;
     }
 
-    @RequestMapping("/winraterank")
-    public ModelAndView WinRateRank() {
+    @RequestMapping({ "/winraterank", "/winraterank/{game}" })
+    public ModelAndView WinRateRank(@PathVariable(name = "game", required = false) String game) {
         List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
         ModelAndView mav = new ModelAndView("winraterank");
         mav.addObject("win", getWinRateTable);
+        if (game == null) {
+            game = "";
+        }
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
@@ -136,11 +123,14 @@ public class RankController {
         return mav;
     }
 
-    @RequestMapping("/pointrank")
-    public ModelAndView PointRank() {
+    @RequestMapping({ "/pointrank", "/pointrank/{game}" })
+    public ModelAndView PointRank(@PathVariable(name = "game", required = false) String game) {
         List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
         ModelAndView mav = new ModelAndView("pointrank");
         mav.addObject("point", getPointTable);
+        if (game == null) {
+            game = "";
+        }
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();

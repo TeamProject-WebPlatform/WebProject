@@ -56,7 +56,7 @@ public class ProfileController {
     public ResponseEntity<Integer> FavoriteGameRegister(@RequestBody FavoriteGameTO to, HttpServletResponse response) {
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
-
+        int flag = 0;
         int count = gameRepository.countByMemId(member.getMemId());
 
         if (count != 0) {
@@ -67,9 +67,9 @@ public class ProfileController {
             gameRepository.RegisterGame(1, member.getMemId(), to.getFirstgame());
             gameRepository.RegisterGame(2, member.getMemId(), to.getSecondgame());
             gameRepository.RegisterGame(3, member.getMemId(), to.getThirdgame());
+            flag = 1;
         }
 
-        int flag = 0;
         return new ResponseEntity<>(flag, HttpStatus.OK);
     }
 
