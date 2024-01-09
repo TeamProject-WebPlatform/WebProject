@@ -21,7 +21,7 @@ public class JwtService {
     @Value("${jwt.secret}")
     String SECRET;
     
-    public static final int JWT_EXPIRY_TIME = 600; // JWT 토큰 만료 시간 10분
+    public static final int JWT_EXPIRY_TIME = 6000; // JWT 토큰 만료 시간 100분
     
     public String generateToken(String userName, String userPassword) { 
         Map<String, Object> claims = new HashMap<>(); 

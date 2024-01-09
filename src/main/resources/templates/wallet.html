@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>GAMMOA</title>
+    <meta content="Templines" name="author">
+    <meta content="TeamHost" name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/libs.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/wallet.css">
+    <!-- <link rel="stylesheet" href="../css/main_custom.css" /> -->
+    <script src="../js/libs.js"></script>
+    <script src="../js/main.js"></script>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+
+
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log(1);
+        const active = document.getElementById("nav-wallet");
+        active.classList.add("uk-active");    
+        document.getElementById("toggle").addEventListener("click", function () {
+
+            document.querySelectorAll('.vs > img').forEach(function (x) {
+                x.src = logo_img_paths[currentThemeIndex];
+            })
+        });
+    });
+    
+
+</script>
+
+<body class="page-wallet dark-theme">
+
+    <input id="toggle" type="checkbox">
+
+    <!-- Loader-->
+    <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div>
+    <!-- Loader end-->
+
+    <div class="page-wrapper">
+        <!-- 헤더 Fragment -->
+        <header th:replace="~{fragments/header :: headerFragment}">헤더 Fragment</header>
+        <!--  -->
+
+        <div class="page-content">
+            <!-- 사이드바 Fragment -->
+            <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss="sidebar is-show" id="sidebar">사이드바
+                Fragment</aside>
+            <!--  -->
+
+            <main class="page-main">
+                <div class="uk-grid" data-uk-grid>
+                    <div class="uk-width-1-2@l">
+                        <div class="widjet --wallet">
+                            <div class="widjet__head">
+                                <h3 class="uk-text-lead">POINT</h3>
+                            </div>
+                            <div class="widjet__body">
+                                <div class="wallet-info">
+                                    <div class="wallet-info-point">
+                                        <div><i class="fa-solid fa-coins ico_fontawesome wallet"></i></div>
+                                        <div class="wallet-value"
+                                            th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}">
+                                            504.00 USD</div>
+                                    </div>
+                                    <div class="wallet-label">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2@l">
+                        <div class="widjet --payment-method">
+                            
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2@l">
+                        <div class="widjet --wallet-betting">
+                            <div class="widjet__head">
+                                <h3 class="uk-text-lead">BETTING PROCEEDING</h3>
+                            </div>
+                            <div class="widjet__body">
+                                <ul class="wallet-betting-list">
+                                    <li class="wallet-betting-item" th:each ="betting : ${memberBettingList}">
+                                        <div class="wallet-betting-header">
+                                            <div class="battle-profile-media">
+                                                <a href="10_game-profile.html">
+                                                    <!-- <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" /> -->
+                                                    <img th:src="@{'../img/' + 'starbucks.png'}" alt="NO IMG" />
+                                                </a>
+                                            </div>
+                                            <div class="vs"><img src="../img/logo_white.png"></div>
+                                            <div class="battle-profile-media">
+                                                <a href="10_game-profile.html">
+                                                    <!-- <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" /> -->
+                                                    <img th:src="@{'../img/' + 'game-5.jpg'}" alt="NO IMG" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="wallet-betting-div-line"></div>
+                                        <div class="wallet-betting-item__info">
+                                            <a class="wallet-betting-item__title" href="10_game-profile.html" > 타이틀
+                                                적히는곳</a>
+                                                
+                                            <div class="wallet-betting-item__game">게임 종류</div>
+                                            <div class="wallet-betting-item__point" th:text="${betting.betPoint}">HOST : 3000</div>
+                                        </div>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2@l">
+                        
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
+</body>
+
+</html>

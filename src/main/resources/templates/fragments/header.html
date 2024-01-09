@@ -48,6 +48,8 @@
                     </div>
                 </div>
                 <div class="page-header__action">
+                    <a th:if="${nickname}" class="action-btn wallet" href="/wallet"><i class="fa-solid fa-coins ico_fontawesome"></i></a>
+                    <div id="current-point" th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}"></div>
                     <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                             class="animation-ripple-delay1"></span></a>
                     <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
@@ -59,6 +61,7 @@
                             
                     <a th:if="${nickname}" class="profile" href="08_wallet.html"><img src="/img/profile.png" alt="profile"></a>
                 </div>
+
             </div>
         </div>
     </header>

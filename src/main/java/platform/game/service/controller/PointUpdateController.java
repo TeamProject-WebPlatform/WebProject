@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -63,11 +64,14 @@ public class PointUpdateController {
                 }
                 // 여기에 memId를 기준으로 member_betting에 정보 추가
                 // 이후에 추가된 정보로 베팅 현황 알수 있게
-                System.out.println(btId);
                 memberBettingRepository.insertData(point,memId,btId,flag);
 
+            } catch(DataIntegrityViolationException e){
+                // 이미 베팅한 곳에 또 베팅 하면 뜨는 에러
+                successFlag.set(false);
+                status.setRollbackOnly();
             } catch (Exception e) {
-                System.err.println("Exception in transaction: " + e.getMessage());
+                System.err.println("Transaction error : "+e.getMessage());
                 // 롤백을 수행하도록 표시
                 successFlag.set(false);
                 status.setRollbackOnly();
@@ -86,7 +90,7 @@ public class PointUpdateController {
             Optional<Battle> optionalBattle = battleRepository.findByBtId(btId);
             Battle battle = optionalBattle.get();
             BattlePointTO to = new BattlePointTO(battle);
-
+            to.setFlag(flag);
             String jsonString = objectMapper.writeValueAsString(to);
             // 메시지 전송
             messagingTemplate.convertAndSend(topic, jsonString);

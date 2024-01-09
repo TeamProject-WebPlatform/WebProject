@@ -26,6 +26,7 @@ public class BattleController {
 
     @RequestMapping("")
     public ModelAndView battle(){
+        long id = 0;
         ModelAndView mav = new ModelAndView("battle");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -33,10 +34,11 @@ public class BattleController {
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memId",member.getMemId());
+                id = member.getMemId();
             }
         } else {
         }
-        List[] battleList = battleCardAction.getBattleList();
+        List[] battleList = battleCardAction.getBattleList(id);
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
         

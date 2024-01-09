@@ -147,13 +147,8 @@
     background-color: #F0f0f0;
 }
 
-.ico_fontawesome:before{
-    font-family : "Font Awesome 6 Free";
-    font-weight : 900;
-}
-.page-header__logo_text{
-    color : white;
-}
+
+
 
 
 /* 배틀 카드 양옆 */
@@ -296,6 +291,8 @@ body.dark-theme .battle-card-info .info-title a{
     height: 5px;
     /* width: 30%; */
     border-radius: 10px;
+    transition-property: width;
+    transition-duration: 0.3s;
 }
 .info-center-left .info-point-bar-box {
     margin-top : 5px;
