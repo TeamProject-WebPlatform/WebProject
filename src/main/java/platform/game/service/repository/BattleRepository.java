@@ -20,10 +20,10 @@ public interface BattleRepository extends JpaRepository<Battle, Integer> {
     @Async    
     @Modifying
     @Query(value = "UPDATE battle SET bt_host_mem_bet_point = bt_host_mem_bet_point + :point, bt_host_mem_bet_cnt = bt_host_mem_bet_cnt + 1 WHERE bt_id = :btId", nativeQuery = true)
-    void updateHostBetPoint(@Param("btId") String btId, @Param("point") int point);
+    void updateHostBetPoint(@Param("btId") int btId, @Param("point") int point);
     
     @Async
     @Modifying
     @Query(value = "UPDATE battle SET bt_client_mem_bet_point = bt_client_mem_bet_point + :point, bt_client_mem_bet_cnt = bt_client_mem_bet_cnt + 1 WHERE bt_id = :btId", nativeQuery = true)
-    void updateClientBetPoint(@Param("btId") String btId, @Param("point") int point);
+    void updateClientBetPoint(@Param("btId") int btId, @Param("point") int point);
 }

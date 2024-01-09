@@ -25,7 +25,7 @@ public class Battle {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int btId;
+    private long btId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "btHostMemId", referencedColumnName = "memId")

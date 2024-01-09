@@ -29,7 +29,7 @@
 </head>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    let nickname = /*[[${nickname}]]*/'';
+    let memId = /*[[${memId}]]*/'';
     function formatNumber(value) {
         var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
         return formattedValue;
@@ -138,7 +138,12 @@
 
             pointInputs.value = "";
             
-            stompClient.send(`/app/pointbetting/` + btId + "-" + flag, {}, JSON.stringify({ point: point }));
+            stompClient.send(`/app/pointbetting`, {}, JSON.stringify({ 
+                point: point,
+                btId : btId, 
+                flag : flag,
+                memId : memId
+            }));
             button.setAttribute("active","F");
             button.innerHTML = flag === 0? "LEFT" : "RIGHT";
             button.style.color ="white";

@@ -37,7 +37,7 @@ public class MemberBetting {
     @MapsId("btId")
     private Battle battle;
 
-    private String betTarget; //'0': 호스트 / '1': 클라이언트
+    private String betFlag; //'0': 호스트 / '1': 클라이언트
     private int betPoint;
     private Date betAt; 
     

@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberBettingRepository extends JpaRepository<MemberBetting, MemberBettingId>{
         
-    // @Async
-    // @Modifying
-    // @Query(value = "INSERT INTO member_betting values(now(),3,3,3,3)", nativeQuery = true)
-    // void updateClientBetPoint(@Param("btId") String btId, @Param("point") int point);
-    // bet_at, bet_point, bet_target, mem_id, bt_id
+    @Async
+    @Modifying
+    @Query(value = "INSERT INTO member_betting values(now(),:point,:memId,:btId,:flag)", nativeQuery = true)
+    void insertData(@Param("point") int point,@Param("memId") long memId, @Param("btId") long btId,@Param("flag") int flag);
+    // bet_at, bet_point, mem_id, bt_id, flag
 }
