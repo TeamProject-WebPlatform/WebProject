@@ -41,6 +41,9 @@ public class BattleController {
         
         mav.addObject("battleTOList",battleTOList);
         mav.addObject("battlePointTOList",battlePointTOList);
+        System.out.println("1 : "+battleTOList);
+        System.out.println("2 : "+battlePointTOList);
+
         return mav;
     }
 }
