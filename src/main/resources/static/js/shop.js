@@ -11,6 +11,9 @@ function showPreview(itemName, category) {
 
     // 선택한 아이템에 맞는 이미지 경로 생성
     let imagePath = './img/shop_img/' + itemName + '.png';
+    // let imagePath = './img/shop_img/' + itemName + '.png';
+    // let imagePath = './img/shop_img/' + itemName + '.png';
+    // let imageTag = '<img src="' + imagePath + '" alt="Item Preview">';
 
     
     // 각 분류에 따라 스타일 변경
@@ -20,13 +23,11 @@ function showPreview(itemName, category) {
         // previewcard.style.backgroundImage = 'none';
         // previewshopbadge.style.backgroundImage = 'none';
     } else if (category === '802') {
-        previewshopbadge.style.backgroundImage = 'url(' + imagePath + ')';
-        // previewheader.style.backgroundImage = 'none';
-        // previewcard.style.backgroundImage = 'none';
-    } else if (category === '803') {
         previewcard.style.backgroundImage = 'url(' + imagePath + ')';
         // previewheader.style.backgroundImage = 'none';
         // previewshopbadge.style.backgroundImage = 'none';
+    } else if (category === '803') {
+        previewshopbadge.style.backgroundImage = 'url(' + imagePath + ')';
     }
 
     // 미리보기 div를 화면에 보이도록 설정
@@ -37,7 +38,7 @@ function hidePreview() {
     // 프로필 미리보기를 숨김
     document.querySelector('.profile-header').style.backgroundImage = 'none';
     document.querySelector('.profile-card').style.backgroundImage = 'none';
-    document.querySelector('.badge').style.backgroundImage = 'none';
+    document.querySelector('.shopbadge').style.backgroundImage = 'none';
 }
 
 
