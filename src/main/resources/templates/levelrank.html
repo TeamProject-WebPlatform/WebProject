@@ -87,7 +87,8 @@
                                     LevelChart();
                                 </script>
                                 <div></div>
-                                <div class="profile-card" th:each="to, i:${level}" th:if="${i.index < 5}" style="display: inline-block;">
+                                <!-- 통합 랭킹 카드 -->
+                                <div class="profile-card" th:if="${level!=null and i.index<5}" th:each="to, i:${level}" style="display: inline-block;">
                                     <a href="/mypage/${to.mem_userid}">
                                         <div class="profile-header">
                                             <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
@@ -105,6 +106,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- 특정 게임 랭크 카드 -->
+                                <div th:if="${otherlevel!=null and i.index<5}"  th:each="to, i:${otherlevel}">
+                                <div class="profile-card" th:each="entry:${to}" style="display: inline-block;">
+                                    <a href="/mypage/${entry.value}">
+                                        <div class="profile-header">
+                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${entry.key}"></p>
+                                                <p class="profile-user_nick" th:text="${entry.value}"></p>
+                                                <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="profile-dividing-line"></div>
+                                    <div class="profile-main">
+                                        <div class="profile-introduction">
+                                            안녕하세요
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
                                 <br><hr><br>
                                 <table>
                                     <tr>
@@ -112,11 +134,18 @@
                                         <th>닉네임</th>
                                         <th>레벨</th>
                                     </tr>
-                                    <tr th:each="to, i:${level}" th:if="${i.index>=5}">
+                                    <!-- 통합 레벨 랭크 테이블 -->
+                                    <tr th:if="${level!=null and i.index >=5}" th:each="to, i:${level}">
                                         <td th:text="${to.rank}"></td>
                                         <td th:text="${to.mem_userid}"></td>
                                         <td th:text="${to.mem_lvl}"></td>
                                     </tr>
+                                    <!-- 특정 게임 레벨 랭크 테이블 -->
+                                    <!-- <tr th:if="${otherlevel!=null and i.index>=5}" th:each="to, i:${otherlevel}">
+                                        <td th:text="${i}"></td>
+                                        <td th:text="${to.key}"></td>
+                                        <td th:text="${to.value}"></td>
+                                    </tr> -->
                                 </table>
                             </div>
                         </div>

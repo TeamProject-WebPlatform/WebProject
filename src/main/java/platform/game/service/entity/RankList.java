@@ -29,4 +29,7 @@ public class RankList {
     private int memId;
     @Column(name = "rank_update")
     private String rankUpdate;
+    @Id
+    @Column(name = "game_cd")
+    private String gameCd;
 }

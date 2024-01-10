@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberFavoriteGame;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
+import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -35,6 +37,9 @@ public class RankController {
 
     @Autowired
     RankDAO rankDAO;
+
+    @Autowired
+    MemberFavoriteGameRepository memberFavoriteGameRepository;
 
     private List<RollingRankTO> rollingRankList;
 
@@ -71,9 +76,9 @@ public class RankController {
 
     @RequestMapping({ "/levelrank", "/levelrank/{game}" })
     public ModelAndView LevelRank(@PathVariable(name = "game", required = false) String game) {
-
-        ModelAndView mav = new ModelAndView("levelrank");
-
+        if (game == null) {
+            game = "";
+        }
         String game_cd = "";
         switch (game) {
             case "lol":
@@ -96,12 +101,13 @@ public class RankController {
                 break;
         }
 
+        ModelAndView mav = new ModelAndView("levelrank");
         if (game_cd == "") {
-            List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
+            List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelRank();
             mav.addObject("level", getLevelTable);
         } else {
-            List<Map<Integer, String>> LevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
-            mav.addObject("leveltable", LevelTable);
+            List<LevelRankTO> LevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
+            mav.addObject("otherlevel", LevelTable);
         }
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -144,7 +150,7 @@ public class RankController {
                 break;
         }
 
-        List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
+        List<WinRankTO> getWinRateTable = sqlMapperInter.getWinRateRank();
         mav.addObject("win", getWinRateTable);
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -187,7 +193,7 @@ public class RankController {
                 break;
         }
 
-        List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
+        List<PointRankTO> getPointTable = sqlMapperInter.getPointRank();
         mav.addObject("point", getPointTable);
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
