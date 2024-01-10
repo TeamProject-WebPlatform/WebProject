@@ -12,13 +12,17 @@ import java.util.ArrayList;
 public interface ItemInfoRepository extends JpaRepository<Item, Integer> {
     
     // 아이템 찾기
-    Item findByItemNm(String itemNm);
 
     // 아이템 종류별로 찾기
     ArrayList<Item> findByItemKindCd(String itemKindCd);
 
     // 전체 아이템 목록
     ArrayList<Item> findAll();
+
+    // 아이템이름 + 종류 검색
+    ArrayList<Item> findByItemNmContainingAndItemKindCdContaining(String itemNm, String itemKindCd);
+
+    ArrayList<Item> findByItemNmContaining(String itemNm);
     
     // 아이템 갯수 조회
     long count();
