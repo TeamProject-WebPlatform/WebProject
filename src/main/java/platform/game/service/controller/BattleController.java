@@ -33,6 +33,7 @@ public class BattleController {
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint",member.getMemCurPoint());
                 mav.addObject("memId",member.getMemId());
                 id = member.getMemId();
             }
