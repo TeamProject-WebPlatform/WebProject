@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
+import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
+import platform.game.service.model.TO.BattleTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
@@ -37,6 +39,7 @@ import platform.game.service.service.MemberInfoDetails;
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.security" })
 public class MainController {
+
     @Autowired
     SqlMapperInter sqlMapperInter;
 
@@ -60,22 +63,19 @@ public class MainController {
 
     @Autowired
     private CommentInfoRepository commentInfoRepository;
-    @RequestMapping("/t/{no}")
-    public String template(@PathVariable("no") String no){
 
-        return "template/"+no;
+    @RequestMapping("/t/{no}")
+    public String template(@PathVariable("no") String no) {
+
+        return "template/" + no;
     }
+
     @RequestMapping("/loadertest")
-    public String loader(){
+    public String loader() {
         return "loadertest";
     }
-    @RequestMapping("/battle")
-    public ModelAndView battle(){
-        ModelAndView mav = new ModelAndView("battle");
-        
-        return mav;
-    }
-    @RequestMapping({ "/", "/home"})
+
+    @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
         ModelAndView mav = new ModelAndView("index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -83,11 +83,13 @@ public class MainController {
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint", member.getMemCurPoint());
             }
         } else {
             System.out.println("멤버 없음");
         }
         return mav;
+
     }
 
     @PostMapping("/roll") // 메인화면 Rolling RandomList
@@ -97,36 +99,14 @@ public class MainController {
         return list;
     }
 
-    @GetMapping("/list")
-    public ModelAndView list() {
-        return new ModelAndView("list");
-    }
-
-    // @RequestMapping("/shop")
-    // public ModelAndView shop() {
-    //     return "shop";
+    // @GetMapping("/list")
+    // public ModelAndView list() {
+    // return new ModelAndView("list");
     // }
 
-    @GetMapping("/rank")
-    public ModelAndView rank(ModelAndView modelAndView) {
-        List<WinRankTO> WinRanklists = sqlMapperInter.getWinrank();
-        List<LevelRankTO> LevelRanklists = sqlMapperInter.getLevelrank();
-        List<PointRankTO> PointRanklists = sqlMapperInter.getPointrank();
-
-        List<Integer> WinRanks = rankDAO.getWinList();
-        List<Integer> LevelLists = rankDAO.getLevelList();
-        List<Integer> PointRanks = rankDAO.getPointList();
-
-        modelAndView.setViewName("rank");
-        modelAndView.addObject("winlist", WinRanklists);
-        modelAndView.addObject("levellist", LevelRanklists);
-        modelAndView.addObject("pointlist", PointRanklists);
-
-        modelAndView.addObject("levels", LevelLists);
-        modelAndView.addObject("winrank", WinRanks);
-        modelAndView.addObject("pointrank", PointRanks);
-
-        return modelAndView;
+    @GetMapping("/show")
+    public ModelAndView show() {
+        return new ModelAndView("shop");
     }
 
     @GetMapping("/getMainFragment")
@@ -134,12 +114,6 @@ public class MainController {
         // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
 
         return "fragments/content/main";
-    }
-    @GetMapping("/getShopFragment")
-    public String getShopFragment(Model model) {
-        // 모델에 필요한 데이터를 추가하고, 템플릿 이름을 반환
-
-        return "fragments/content/board/shop";
     }
 
     @GetMapping("/getBoardListFragment")
@@ -418,6 +392,7 @@ public class MainController {
             // 쌍따옴표로 넘어와서 쌍따옴표 없에는 문구(원인 찾으면 없에도 됨)
             System.out.println("delete_ok : " + boardCd);
             int RboardCd = Integer.parseInt(boardCd.replaceAll("\"", ""));
+            System.out.println("delete_ok1 : " + RboardCd);
             System.out.println("delete_ok1 : " + RboardCd);
             model.addAttribute("boardCd", RboardCd);
 

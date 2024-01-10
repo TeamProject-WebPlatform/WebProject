@@ -21,15 +21,169 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+
+    <!-- 웹소켓 -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let memId = /*[[${memId}]]*/'';
+    function formatNumber(value) {
+        var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
+        return formattedValue;
+    }
+    /*]]>*/
+</script>
 <script>
+    let stompClient = null;
     document.addEventListener("DOMContentLoaded", function () {
+        //console.log = function () {};
+
         const active = document.getElementById("nav-battle");
         active.classList.add("uk-active");
+        document.getElementById("toggle").addEventListener("click", function () {
+
+            document.querySelectorAll('.vs > img').forEach(function (x) {
+                x.src = logo_img_paths[currentThemeIndex];
+            })
+        });
+        const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
+        const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
+
+        const pointLefts = document.querySelectorAll(".info-center-left .info-point-percent");
+        const pointRights = document.querySelectorAll(".info-center-right .info-point-percent");
+
+        for (let i = 0; i < pointBarLefts.length; i++) {
+            let pointBarLeft = pointBarLefts.item(i);
+            pointBarLeft.style.width = pointLefts[i].innerHTML;
+            pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+            pointLefts[i].style.color = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+
+            let pointBarRight = pointBarRights.item(i);
+            pointBarRight.style.width = pointRights[i].innerHTML;
+            pointBarRight.style.backgroundColor = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+            pointRights[i].style.color = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+        }
+
+        // websocket ------------------------------
+
+        connect();
     });
+
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        const cards = document.querySelectorAll(".battle-card-info");
+        stompClient.connect({}, function (frame) {
+            console.log(frame);
+            cards.forEach(function (card) {
+                let btId = card.getAttribute("btId");
+                stompClient.subscribe(`/topic/pointbetting/` + btId, function (response) {
+                    try {
+                        let pointTO = JSON.parse(response.body);
+                        let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
+
+                        pointInfo.querySelector(".host-total-point").innerHTML = formatNumber(pointTO.hostTotalPoint);
+                        pointInfo.querySelector(".host-total-mem-no").innerHTML = pointTO.hostTotalMemNo;
+                        pointInfo.querySelector(".host-point-reward-ratio").innerHTML = "1:" + pointTO.hostPointRewardRatio;
+                        let hostPointRatio = pointInfo.querySelector(".host-point-ratio");
+                        let pointBarLeft = pointInfo.querySelector(".info-center-left .info-point-bar");
+                        let pointLeft = pointInfo.querySelector(".info-center-left .info-point-percent");
+                        hostPointRatio.innerHTML = pointTO.hostPointRatio + "%";
+                        hostPointRatio.style.color = getColorRatio(Number(pointLeft.innerHTML.replace("%", "")));
+                        pointBarLeft.style.width = pointLeft.innerHTML;
+                        pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLeft.innerHTML.replace("%", "")));
+
+                        pointInfo.querySelector(".client-total-point").innerHTML = formatNumber(pointTO.clientTotalPoint);
+                        pointInfo.querySelector(".client-total-mem-no").innerHTML = pointTO.clientTotalMemNo;
+                        pointInfo.querySelector(".client-point-reward-ratio").innerHTML = "1:" + pointTO.clientPointRewardRatio;
+                        let clientPointRatio = pointInfo.querySelector(".client-point-ratio");
+                        let pointBarRight = pointInfo.querySelector(".info-center-right .info-point-bar");
+                        let pointRight = pointInfo.querySelector(".info-center-right .info-point-percent");
+                        clientPointRatio.innerHTML = pointTO.clientPointRatio + "%";
+                        clientPointRatio.style.color = getColorRatio(Number(pointRight.innerHTML.replace("%", "")));
+                        pointBarRight.style.width = pointRight.innerHTML;
+                        pointBarRight.style.backgroundColor = getColorRatio(Number(pointRight.innerHTML.replace("%", "")));
+
+
+                        let pointInputs = pointInfo.querySelector(".point-betting-input");
+                        pointInputs.placeholder = "YOU ALREADY BET";
+                        pointInputs.readOnly = true;
+                        let buttons = pointInfo.querySelectorAll(".point-betting-button");
+
+                        let button = null;
+
+                        if (pointTO.flag == 0) {
+                            button = buttons[0];
+                        } else if (pointTO.flag == 1) {
+                            button = buttons[1];
+                        }
+                        button.style.backgroundColor = "blueviolet"
+
+                    } catch (err) {
+                        console.log("에러 : " + err);
+                    }
+                });
+            });
+        });
+    }
+    function betPoint(btId, flag) {
+        // 포인트 배팅
+        // flag : 0-왼 , 1-오
+        const section = document.getElementById("bettingId" + btId);
+        let pointInputs = section.querySelector(".point-betting-input");
+        let point = pointInputs.value;
+        if (point === "" | isNaN(point)) {
+            return;
+        }
+        let buttons = section.querySelectorAll(".point-betting-button");
+        let button;
+        if (flag === 0) {
+            button = buttons[0];
+        } else {
+            button = buttons[1];
+        }
+        if (!button) return;
+        if (button.getAttribute("active") === "F") {
+            button.setAttribute("active", "T");
+            button.innerHTML = "SUBMIT";
+            button.style.color = "red";
+        } else if (button.getAttribute("active") === "T") {
+
+            pointInputs.value = "";
+
+            stompClient.send(`/app/pointbetting`, {}, JSON.stringify({
+                point: point,
+                btId: btId,
+                flag: flag,
+                memId: memId
+            }));
+            button.setAttribute("active", "F");
+            button.innerHTML = flag === 0 ? "LEFT" : "RIGHT";
+            button.style.color = "white";
+        }
+    }
+    function getColorRatio(bettingRatio) {
+        if (bettingRatio >= 90) {
+            return '#FF0000'; // 빨간색
+        } else if (bettingRatio >= 70) {
+            return '#FFA500'; // 주황색
+        } else if (bettingRatio >= 50) {
+            return '#00FF00'; // 연두색
+        } else if (bettingRatio >= 30) {
+            return '#00F0FF'; // 민트색
+        } else {
+            return '#0FCFA5'; // 검은색
+        }
+    }
 </script>
 
 <body class="page-favourites dark-theme">
+
 
     <input id="toggle" type="checkbox">
 
@@ -50,50 +204,231 @@
 
             <main class="page-main">
                 <div class="uk-grid" data-uk-grid>
-                    <div class="uk-width-2-3@l">
-                        <div class="game-card --horizontal favourites-game">
-                            <div class="game-card__box">
+                    <div class="uk-width-2-3@l" id="battleCardSection">
+                        <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}">
+                            <div class="battle-card__box">
                                 <div class="battle-profile-left">
-                                    <div class="game-card__info"><a class="game-card__title"
-                                            href="10_game-profile.html">
-                                            Werewolf Complex</a>
-                                        <div class="game-card__genre">Strategy / Medieval </div>
-                                        <div class="game-card__rating-and-price">
-                                            <div class="game-card__rating"><span>3.9</span><i class="ico_star"></i>
+                                    <div class="battle-profile-info">
+                                        <div class="battle-profile-nickname">
+                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.hostLvl}">Lv30
                                             </div>
-                                            <div class="game-card__price"><span>Free</span></div>
+                                            <div th:text="${battle.hostNick}"></div>
                                         </div>
-                                        <div class="game-card__bottom">
-                                            <div class="game-card__platform"><i class="ico_windows"></i><i
-                                                    class="ico_apple"></i></div>
+                                        <div class="battle-profile-history">
+                                            <div>
+                                                <div class="battle-profile-win" th:text="${battle.hostWin}+' 승'">77 승
+                                                </div>
+                                                <div>&nbsp;/&nbsp;</div>
+                                                <div class="battle-profile-lose" th:text="${battle.hostLose}+' 패'">25 패
+                                                </div>
+                                            </div>
+                                            <div
+                                                th:with="total = ${(battle.hostWin + battle.hostLose)}, rate=${(battle.hostWin * 100.0 / total)}">
+                                                <div th:if="${total > 0}" class="battle-profile-win-rate"
+                                                    th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
+                                                <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-main">
+                                            <div class="profile-dividing-line"></div>
+                                            <div class="profile-badge-section">
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="battle-profile-media">
+                                        <a href="10_game-profile.html">
+                                            <img th:src="@{'../img/' + ${battle.hostImgName}}" alt="NO IMG" />
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div class="battle-card-info" th:attr="btId = ${battle.btId}">
+                                    <div class="info-title"><a href="/battle/${battle.postId}"
+                                            th:text="${battle.title}"></a></div>
+                                    <div class="info-battle-point-section">
+                                        <i class="fa-solid fa-trophy"></i>
+                                        <div class="info-battle-point"
+                                            th:text="${#numbers.formatInteger(#numbers.formatInteger(battle.point,0),0,'COMMA')}">
+                                            100000</div>
+                                        <i class="fa-solid fa-trophy"></i>
+                                    </div>
+
+
+                                    <div class="info-center">
+                                        <div class="info-center-left">
+                                            <div class="info-center-header">
+                                                <div class="info-point-header-list">
+                                                    <div class="info-point-amount">
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                        </div>
+                                                        <div class="host-total-point" th:utext="'<script>' +
+                                                            'var value = ' + ${battlePointTOList[iterStat.index].hostTotalPoint} + ';' +
+                                                            'var formattedValue = formatNumber(value);' +
+                                                            'document.write(formattedValue);' +
+                                                            '</script>'">
+                                                            72.3</div>
+                                                    </div>
+                                                    <div class="info-point-pno">
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-user ico_fontawesome"></i>
+                                                        </div>
+                                                        <div class="host-total-mem-no"
+                                                            th:text="${battlePointTOList[iterStat.index].hostTotalMemNo}">
+                                                            0</div>
+                                                    </div>
+                                                    <div class="info-point-ratio">
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-gem ico_fontawesome"></i>
+                                                        </div>
+                                                        <div class="host-point-reward-ratio"
+                                                            th:text="${'1:'+battlePointTOList[iterStat.index].hostPointRewardRatio}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="info-point-percent host-point-ratio"
+                                                    th:text="${battlePointTOList[iterStat.index].hostPointRatio+'%'}">
+                                                    75%</div>
+                                            </div>
+                                            <div class="info-point-bar-box">
+                                                <div class="info-point-bar"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="vs"><img src="../img/logo_white.png"></div>
+
+                                        <div class="info-center-right">
+                                            <div class="info-center-header">
+                                                <div class="info-point-percent client-point-ratio"
+                                                    th:text="${battlePointTOList[iterStat.index].clientPointRatio+'%'}">
+                                                    25%</div>
+                                                <div class="info-point-header-list">
+                                                    <div class="info-point-amount">
+                                                        <div class="client-total-point" th:utext="'<script>' +
+                                                            'var value = ' + ${battlePointTOList[iterStat.index].clientTotalPoint} + ';' +
+                                                            'var formattedValue = formatNumber(value);' +
+                                                            'document.write(formattedValue);' +
+                                                            '</script>'">
+                                                            72.3</div>
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="info-point-pno">
+                                                        <div class="client-total-mem-no"
+                                                            th:text="${battlePointTOList[iterStat.index].clientTotalMemNo}">
+                                                            0</div>
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-user ico_fontawesome"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="info-point-ratio">
+                                                        <div class="client-point-reward-ratio"
+                                                            th:text="${'1:'+battlePointTOList[iterStat.index].clientPointRewardRatio}">
+                                                        </div>
+                                                        <div class="icon_box">
+                                                            <i class="fa-solid fa-gem ico_fontawesome"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="info-point-bar-box">
+                                                <div class="info-point-bar"></div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="game-card__media"><a href="10_game-profile.html"><img
-                                        src="./img/game-1.jpg" alt="Werewolf Complex" /></a></div>
+
+                                    <div class="betting-section">
+                                        <div class="point-betting" th:id="'bettingId' + ${battle.btId}">
+                                            <div th:if="${battlePointTOList[iterStat.index].flag==0}"
+                                                class="point-betting-button" style="background-color: blueviolet;">LEFT
+                                            </div>
+                                            <div th:unless="${battlePointTOList[iterStat.index].flag==0}"
+                                                class="point-betting-button" active="F"
+                                                th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">LEFT</div>
+                                            <div class="search">
+                                                <div class="search__input">
+                                                    <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                    <logincheck th:if="${nickname}">
+                                                        <input
+                                                            th:unless="${battlePointTOList[iterStat.index].alreadyBet==1}"
+                                                            class="point-betting-input" type="search" name="search"
+                                                            placeholder="BETTING HERE">
+                                                        <input
+                                                            th:if="${battlePointTOList[iterStat.index].alreadyBet==1}"
+                                                            class="point-betting-input" type="search" name="search"
+                                                            placeholder="YOU ALREADY BET" readonly>
+                                                    </logincheck>
+                                                    <input th:unless="${nickname}" class="point-betting-input"
+                                                        type="search" name="search" placeholder="LOGIN FIRST" readonly>
+                                                </div>
+                                            </div>
+                                            <div th:if="${battlePointTOList[iterStat.index].flag==1}"
+                                                class="point-betting-button" style="background-color: blueviolet;">RIGHT
+                                            </div>
+                                            <div th:unless="${battlePointTOList[iterStat.index].flag==1}"
+                                                class="point-betting-button" active="F"
+                                                th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">RIGHT</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="battle-card-info">
-                                    <div class="battle-title"><a href="/해당 게시판이동">타이틀</a></div>
-                                </div>
+
+
                                 <div class="battle-profile-right">
-                                    <div class="game-card__media"><a href="10_game-profile.html"><img
-                                        src="./img/game-1.jpg" alt="Werewolf Complex" /></a></div>
-                                    <div class="game-card__info"><a class="game-card__title"
-                                            href="10_game-profile.html">
-                                            Werewolf Complex</a>
-                                        <div class="game-card__genre">Strategy / Medieval </div>
-                                        <div class="game-card__rating-and-price">
-                                            <div class="game-card__rating"><span>3.9</span><i class="ico_star"></i>
+                                    <div class="battle-profile-media">
+                                        <a href="10_game-profile.html">
+                                            <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" />
+                                        </a>
+                                    </div>
+                                    <div class="battle-profile-info">
+                                        <div class="battle-profile-nickname">
+                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30
                                             </div>
-                                            <div class="game-card__price"><span>Free</span></div>
+                                            <div th:text="${battle.clientNick}"></div>
                                         </div>
-                                        <div class="game-card__bottom">
-                                            <div class="game-card__platform"><i class="ico_windows"></i><i
-                                                    class="ico_apple"></i></div>
+                                        <div class="battle-profile-history">
+                                            <div>
+                                                <div class="battle-profile-win" th:text="${battle.clientWin}+' 승'">77 승
+                                                </div>
+                                                <div>&nbsp;/&nbsp;</div>
+                                                <div class="battle-profile-lose" th:text="${battle.clientLose}+' 패'">25
+                                                    패</div>
+                                            </div>
+                                            <div
+                                                th:with="total = ${(battle.clientWin + battle.clientLose)}, rate=${(battle.clientWin * 100.0 / total)}">
+                                                <div th:if="${total > 0}" class="battle-profile-win-rate"
+                                                    th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
+                                                <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-main">
+                                            <div class="profile-dividing-line"></div>
+                                            <div class="profile-badge-section">
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -102,67 +437,9 @@
             </main>
         </div>
     </div>
-    <div class="page-modals">
-        <div class="uk-flex-top" id="modal-report" data-uk-modal>
-            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default"
-                    type="button" data-uk-close></button>
-                <h2 class="uk-modal-title">Report</h2>
-                <form class="uk-form-stacked" action="#">
-                    <div class="uk-margin">
-                        <div class="uk-form-label">Subject</div>
-                        <div class="uk-form-controls"><select class="js-select">
-                                <option value="">Choose Subject</option>
-                                <option value="Subject 1">Subject 1</option>
-                                <option value="Subject 2">Subject 2</option>
-                                <option value="Subject 3">Subject 3</option>
-                            </select></div>
-                    </div>
-                    <div class="uk-margin">
-                        <div class="uk-form-label">Details</div>
-                        <div class="uk-form-controls"><textarea class="uk-textarea" name="details"
-                                placeholder="Try to include all details..."></textarea></div>
-                        <div class="uk-form-controls uk-margin-small-top">
-                            <div data-uk-form-custom><input type="file"><button class="uk-button uk-button-default"
-                                    type="button" tabindex="-1"><i class="ico_attach-circle"></i><span>Attach
-                                        File</span></button></div>
-                        </div>
-                    </div>
-                    <div class="uk-margin">
-                        <div class="uk-grid uk-flex-right" data-uk-grid>
-                            <div><button class="uk-button uk-button-small uk-button-link">Cancel</button></div>
-                            <div><button class="uk-button uk-button-small uk-button-danger">Submit</button></div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="uk-flex-top" id="modal-help" data-uk-modal>
-            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default"
-                    type="button" data-uk-close></button>
-                <h2 class="uk-modal-title">Help</h2>
-                <div class="search">
-                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
-                            placeholder="Search"></div>
-                    <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
-                </div>
-                <div class="uk-margin-small-left uk-margin-small-bottom uk-margin-medium-top">
-                    <h4>Popular Q&A</h4>
-                    <ul>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Upload Your Developed
-                                Game</span></li>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Go Live Stream</span>
-                        </li>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>Get in touch with the Creator
-                                Support Team</span></li>
-                    </ul>
-                    <ul>
-                        <li><a href="#!">browse all articles</a></li>
-                        <li><a href="#!">Send Feedback</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
+
 
 </body>
 

@@ -36,7 +36,7 @@
             <!-- 헤더 사이드바(로고) -->
             <div class="page-header__sidebar">
                 <div class="page-header__menu-btn"><button class="menu-btn ico_menu is-active"></button></div>
-                <a href="/" ><div class="page-header__logo"><img src="./img/logo_white.png" alt="logo" id="logo_img"><span class="page-header__logo_text" >G A M M O A</span></div></a>
+                <a href="/" ><div class="page-header__logo"><img src="/img/logo_white.png" alt="logo" id="logo_img"><span class="page-header__logo_text" >G A M M O A</span></div></a>
             </div>
             <!-- 헤더 컨텐츠 -->
             <div class="page-header__content">
@@ -48,6 +48,8 @@
                     </div>
                 </div>
                 <div class="page-header__action">
+                    <a th:if="${nickname}" class="action-btn wallet" href="/wallet"><i class="fa-solid fa-coins ico_fontawesome"></i></a>
+                    <div id="current-point" th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}"></div>
                     <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                             class="animation-ripple-delay1"></span></a>
                     <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
@@ -57,8 +59,9 @@
                     <a th:unless="${nickname}" th:href="@{login}" class="action-btn"><i
                             class="fa-solid fa-right-to-bracket ico_fontawesome"></i></a>
                             
-                    <a th:if="${nickname}" class="profile" href="08_wallet.html"><img src="./img/profile.png" alt="profile"></a>
+                    <a th:if="${nickname}" class="profile" href="08_wallet.html"><img src="/img/profile.png" alt="profile"></a>
                 </div>
+
             </div>
         </div>
     </header>

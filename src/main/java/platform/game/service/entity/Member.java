@@ -1,7 +1,12 @@
 package platform.game.service.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +17,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Member { 
-    
-    @Id 
-    private long memId;
+public class Member {
 
-    private String memUserid; 
-    private String memPw; 
-    private String memNick; 
+    @Id
+    private long memId;
+    private String memUserid;
+    private String memPw;
+    private String memNick;
     private String memRoleCd;
     private String memEmail;
     private String memSteamid;
@@ -36,8 +40,10 @@ public class Member {
     private String memCreatedAt;
     private String memDeletedAt;
 
-    
-    public String getRole(String code){
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "member")
+    private List<MemberBetting> memBettingList = new ArrayList<>();
+
+    public String getRole(String code) {
         switch (code) {
             case "10001":
                 return "ROLE_SUPERADMIN";

@@ -357,7 +357,7 @@ a:hover {
 
 
 
-.game-card__title {
+.battle-profile-nickname {
     font-family: 'Inter', sans-serif;
 }
 
@@ -507,8 +507,8 @@ html #youzify-groups-list .item .item-title a {
 .nice-select {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-box-sizing: border-box;
-    -webkit-transition: all 0.2s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
+    /* -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out; */
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -531,7 +531,7 @@ html #youzify-groups-list .item .item-title a {
     text-align: left !important;
     white-space: nowrap;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    /* transition: all 0.2s ease-in-out; */
     user-select: none;
 }
 
@@ -1583,7 +1583,9 @@ a:hover {
 .page-header__action > * {
     margin-right: 24px;
 }
-
+.page-header__action > .wallet{
+    margin-right: 10px;
+}
 .page-header__action > *:last-child {
     margin-right: 0;
 }
@@ -1975,7 +1977,7 @@ a:hover {
     height: 60px;
 }
 
-.js-trending .game-card__media {
+.js-trending .battle-profile-media {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     -webkit-box-align: center;
@@ -1988,7 +1990,7 @@ a:hover {
     min-height: 325px;
 }
 
-.js-trending .game-card__media img {
+.js-trending .battle-profile-media img {
     height: 100%;
 }
 
@@ -2177,16 +2179,16 @@ a:hover {
     font-size: 24px;
 }
 
-.game-card {
+.battle-card {
     display: block;
     position: relative;
 }
 
-.game-card + .game-card {
+.battle-card + .battle-card {
     margin-top: 12px;
 }
 
-.game-card__box {
+.battle-card__box {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
@@ -2194,14 +2196,16 @@ a:hover {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     padding: 10px;
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    height:250px;
 }
 
-.game-card__media {
+.battle-profile-media {
     display: block;
     position: relative;
     height: 180px;
@@ -2209,7 +2213,7 @@ a:hover {
     border-radius: 5px;
 }
 
-.game-card__media img {
+.battle-profile-media img {
     -o-object-fit: cover;
     -o-object-position: top center;
     -webkit-transform: translate(-50%, -50%);
@@ -2224,12 +2228,12 @@ a:hover {
     object-position: top center;
     transform: translate(-50%, -50%);
 }
-
-.game-card__info {
-    padding: 6px;
+.ico_fontawesome:before{
+    font-family : "Font Awesome 6 Free";
+    font-weight : 900;
 }
 
-.game-card__title {
+.battle-profile-nickname {
     -o-text-overflow: ellipsis;
     overflow: hidden;
     color: #353535;
@@ -2243,7 +2247,7 @@ a:hover {
 }
 
 
-.js-popular .game-card__title {
+.js-popular .battle-profile-nickname {
     font-size: 16px;
 }
 
@@ -2274,18 +2278,6 @@ a:hover {
     display: inline-block;
     margin-left: 5px;
     color: #4aa138;
-}
-
-.game-card__rating-and-price {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    padding-top: 10px;
-
 }
 
 .js-popular .game-card__rating-and-price,
@@ -2374,7 +2366,7 @@ a:hover {
     color: var(--main-color-now);
 }
 
-.game-card.--horizontal .game-card__box {
+/* .battle-card.--horizontal .battle-card__box {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
@@ -2383,20 +2375,17 @@ a:hover {
     flex-direction: row;
     align-items: center;
 
-}
+} */
 
-.game-card.--horizontal .game-card__media {
-    width: 50%;
-    max-width: 180px;
+.battle-card.--horizontal .battle-profile-media {
+    /* width: 50%;
+    max-width: 180px; */
     max-height: 295px;
 }
 
-.game-card.--horizontal .game-card__info {
-    width: 50%;
-    padding: 10px 20px;
-}
 
-.game-card.--small .game-card__media {
+
+.battle-card.--small .battle-profile-media {
     width: 50%;
     max-width: 100px;
     max-height: 90px;
@@ -2973,9 +2962,9 @@ display: block;
     width: 100%;
 }
 
-.favourites-game .game-card__media {
+.hot-battle .battle-profile-media {
     min-height: 160px !important;
-    max-height: 160px !important;
+    max-height: 200px !important;
 }
 
 .widjet.--my-list .widjet__body {
@@ -4516,13 +4505,13 @@ body.dark-theme .recommend-slide {
     box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
 }
 
-body.dark-theme .game-card__box {
+body.dark-theme .battle-card__box {
     -webkit-box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
     background: #0C1826;
     box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
 }
 
-body.dark-theme .game-card__title,
+body.dark-theme .battle-profile-nickname,
 body.dark-theme .game-card__genre,
 body.dark-theme .game-card__rating,
 body.dark-theme .game-card__price,
@@ -5133,32 +5122,27 @@ body.dark-theme #modal-help ul li {
         margin: 0;
     }
 
-    .game-card.--horizontal .game-card__box {
+    .battle-card.--horizontal .battle-card__box {
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         -ms-flex-direction: column;
         flex-direction: column;
     }
 
-    .game-card.--horizontal .game-card__media {
+    .battle-card.--horizontal .battle-profile-media {
         width: 100%;
         max-width: 100%;
         min-height: 200px;
     }
 
-    .game-card.--horizontal .game-card__info {
-        width: 100%;
-        padding: 10px 0;
-    }
-
-    .game-card.--small .game-card__media {
+    .battle-card.--small .battle-profile-media {
         width: 100%;
         max-width: 100%;
         min-height: 90px;
         max-height: none;
     }
 
-    .favourites-game .game-card__media {
+    .hot-battle .battle-profile-media {
         min-height: auto !important;
         max-height: none !important;
     }
@@ -5261,10 +5245,10 @@ body.dark-theme #modal-help ul li {
     margin-bottom: 17px;
 }
 
-.game-card__title,
+.battle-profile-nickname,
 .my-game-item__title {
     color: #1f1f1f;
-    display: block;
+    display: flex;
     margin-bottom: 10px;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
@@ -5914,4 +5898,24 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
 .youzify-group-avatar {
     border: 8px solid transparent;
     background-color: rgba(255, 255, 255, .35);
+}
+
+.tab{float:left; width:600px; height:290px;}
+.tabnav{font-size:0; width:100%; border:1px solid #ddd; padding:0px;}
+.tabnav li{display: inline-block;  height:46px; text-align:center; border-right:1px solid #ddd;}
+.tabnav li a:before{content:""; position:absolute; left:0; top:0px; width:100%; height:3px; }
+.tabnav li a.active:before{background:#7ea21e;}
+.tabnav li a.active{border-bottom:1px solid #fff;}
+.tabnav li a{ position:relative; display:block; background: #f8f8f8; color: #000; padding:0 30px; line-height:46px; text-decoration:none; font-size:12px;}
+.tabnav li a:hover,
+.tabnav li a.active{background:#fff; color:#7ea21e; }
+
+
+#current-point{
+    font-size: 20px;
+    color: #F65100;
+}
+
+.page-header__logo_text{
+    color : white;
 }

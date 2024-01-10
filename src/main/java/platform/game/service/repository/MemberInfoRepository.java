@@ -32,4 +32,7 @@ public interface MemberInfoRepository extends JpaRepository<Member, Integer> {
     @Query(value = "select mem_pw from member where mem_userid = :mem_userid", nativeQuery = true)
     String findByMemPw(@Param("mem_userid") String mem_userid);
 
+    // 게시판 멤버 닉네임 검색해서 ID 가져오기
+    Member findByMemNick(String mem_nickname);
+
 }

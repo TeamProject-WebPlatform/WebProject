@@ -1,0 +1,195 @@
+.wallet-info-point {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wallet-info-point .ico_fontawesome {
+    color: #646464;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.33;
+    padding-bottom: 5px;
+    margin-right: 10px;
+}
+
+.dark-theme .wallet-info-point .ico_fontawesome {
+    color: #ffffff;
+}
+.wallet-betting-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 200px;
+}
+.battle-profile-media {    
+    width: 80px;
+    height : 80px;
+}
+.battle-profile-media img{
+    border-radius: 10px;
+    height: 100%;
+    
+}
+
+.wallet-betting-item .vs{
+    color:black;
+    margin-left:2%;
+    margin-right:2%;
+    width: 16%;
+}
+.wallet-betting-item__title{
+    font-family: 'Inter', sans-serif;
+}
+
+.widjet.--wallet-betting .widjet__body {
+    padding: 0;
+    background: none;
+}
+
+.wallet-betting-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.wallet-betting-div-line{
+    width: 1px;
+    background-color: #646464;
+    border-radius: 15px;
+    height: 100%;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+.dark-theme .wallet-betting-div-line{
+    background-color: #646464;
+}
+.wallet-betting-item {
+    height:150px;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.wallet-betting-item+.wallet-betting-item {
+    margin-top: 12px;
+}
+
+.wallet-betting-item__logo {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 65px;
+    flex: 0 0 65px;
+    width: 65px;
+    height: 65px;
+    margin-right: 10px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.wallet-betting-item__info {
+    height: 100%;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+}
+.wallet-betting-item__info a{
+    height : 40%;
+    font-size:15px;
+}
+.wallet-betting-item__title {
+    -o-text-overflow: ellipsis;
+    display: block;
+    overflow: hidden;
+    color: #353535;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.31;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wallet-betting-item__game {
+    height: 20%;
+    color: #767676;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.36;
+}
+
+.wallet-betting-item__point {
+    height: 40%;
+    color: #E60000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.36;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+body.dark-theme .wallet-betting-item {
+    background: #1A2634;
+}
+
+body.dark-theme .wallet-betting-item__title {
+    color: #fff;
+}
+
+body.dark-theme .wallet-betting-item__game {
+    color: #A1A1A1;
+}
+
+@media (max-width: 767px) {
+    .wallet-betting-item__title {
+        font-size: calc(12px + 6.8 * ((100vw - 320px) / 1920));
+    }
+
+    .wallet-betting-item__game {
+        font-size: calc(12px + 3.4 * ((100vw - 320px) / 1920));
+    }
+
+    .wallet-betting-item__point {
+        font-size: calc(12px + 3.4 * ((100vw - 320px) / 1920));
+    }
+}
+
+@media only screen and (max-width: 639px) {
+    .wallet-betting-item {
+        padding: 12px;
+    }
+
+    .wallet-betting-item__logo {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 40px;
+        flex: 0 0 40px;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media only screen and (max-width: 1920px) and (min-width: 767px) {
+    .wallet-betting-item__title {
+        font-size: calc(12px + 4 * (100vw / 1920));
+    }
+
+    .wallet-betting-item__game {
+        font-size: calc(12px + 2 * (100vw / 1920));
+    }
+
+    .wallet-betting-item__point {
+        font-size: calc(12px + 2 * (100vw / 1920));
+    }
+}

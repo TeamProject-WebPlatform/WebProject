@@ -51,26 +51,25 @@ public class SecurityConfig {
                         .requestMatchers("/steam/**").permitAll()
                         .requestMatchers("/kakao/**").permitAll()
                         .requestMatchers("/steamapi/**").permitAll()
+                        .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/mypage/**").authenticated());
 
         http.formLogin(form -> form
-            .loginPage("/login")
-            .permitAll()
-        );
+                .loginPage("/login")
+                .permitAll());
 
         http
-            .logout(logout -> logout
-            .logoutUrl("/logout")
-            .addLogoutHandler((request, response, auth) -> {
-                for (Cookie cookie : request.getCookies()) {
-                    String cookieName = cookie.getName();
-                    Cookie cookieToDelete = new Cookie(cookieName, null);
-                    cookieToDelete.setMaxAge(0);
-                    response.addCookie(cookieToDelete);
-                }
-            })
-            .logoutSuccessUrl("/")
-        );
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .addLogoutHandler((request, response, auth) -> {
+                            for (Cookie cookie : request.getCookies()) {
+                                String cookieName = cookie.getName();
+                                Cookie cookieToDelete = new Cookie(cookieName, null);
+                                cookieToDelete.setMaxAge(0);
+                                response.addCookie(cookieToDelete);
+                            }
+                        })
+                        .logoutSuccessUrl("/"));
 
         http.sessionManagement(management -> management
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
