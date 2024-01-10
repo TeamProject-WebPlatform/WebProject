@@ -17,7 +17,7 @@ import platform.game.service.repository.ItemInfoRepository;
 import java.util.ArrayList;
 
 @Controller
-@RequestMapping("/shop")
+
 public class ShopController {
 
     @Autowired
@@ -64,7 +64,7 @@ public class ShopController {
     // }
 
 
-    @GetMapping
+    @RequestMapping("/shop")
     public ModelAndView shop() {
         long totalItemCount = itemInfoRepository.count();
         ArrayList<Item> items = itemInfoRepository.findAll();
@@ -90,24 +90,37 @@ public class ShopController {
         return modelAndView;
     }
 
-    @GetMapping("/searchItem")
-    public ModelAndView searchItem(@RequestParam String itemName) {
-        Item foundItem = itemInfoRepository.findByItemNm(itemName);
-        
-        ModelAndView modelAndView = new ModelAndView("searchResult");
-        modelAndView.addObject("foundItem", foundItem);
-        
-        return modelAndView;
-    }
-    
-    @GetMapping("/listItemsByKind")
-    public ModelAndView listItemsByKind(@RequestParam String itemKindCd) {
-        // 수정: 아이템 종류별로 찾기 메서드 변경
-        ArrayList<Item> itemsByKind = itemInfoRepository.findByItemKindCd(itemKindCd);
-        
-        ModelAndView modelAndView = new ModelAndView("listItemsByKind");
-        modelAndView.addObject("itemsByKind", itemsByKind);
-        
+
+    @GetMapping("/shop_search")
+    public ModelAndView listItemsByKind(@RequestParam("ItemSearch") String itemName,
+            @RequestParam("categorySelect") String itemKindCd) {
+        System.out.println("listSearch 호출");
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+            if (member != null) {
+                modelAndView.addObject("nickname", member.getMemNick());
+                modelAndView.addObject("level", member.getMemLvl());
+                modelAndView.addObject("point", member.getMemCurPoint());
+            }
+        } else {
+            System.out.println("멤버 없음");
+        }
+        System.out.println(itemName);
+        System.out.println(itemKindCd);
+
+        ArrayList<Item> items = new ArrayList<>();
+        if(itemKindCd=="all"){
+            items = itemInfoRepository.findByItemNmContaining(itemName);
+        }else{
+            items = itemInfoRepository.findByItemNmContainingAndItemKindCdContaining(itemName,itemKindCd);
+        }
+
+        System.out.println("items : " +items);
+        modelAndView.setViewName("shop");
+        modelAndView.addObject("items", items);
+
         return modelAndView;
     }
 

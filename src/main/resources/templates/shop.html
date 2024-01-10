@@ -12,6 +12,7 @@
         <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
         <link rel="stylesheet" href="../css/libs.min.css">
         <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="./css/shop_custom.css" />
     
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
             rel="stylesheet">
@@ -19,9 +20,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="./css/shop_custom.css" />
-        
-
     </head>
 
     <body class="page-store dark-theme">
@@ -50,12 +48,14 @@
                                     <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-2@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
                                         <div class="uk-width-1-1">
                                             <div class="search">
-                                                <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="ItemSearch"></div>
+                                                <!-- <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="ItemSearch"></div> -->
                                                 <!-- <div class="search__btn"><button type="button"><i class="ico_search"></i></button></div> -->
+                                                <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="ItemSearch"></div>
+                                                <div class="search__btn"><button type="button" th:onclick="changeCategori()"><i class="ico_search"></i></button></div>
                                             </div>
                                         </div>
                                         <div>
-                                            <select class="js-select" id="categorySelect"  th:onchange="changeCategori()">
+                                            <select class="js-select" id="categorySelect" th:onchange="changeCategori()">
                                                 <option value="all">카테고리: all</option>
                                                 <option value="801">카테고리 : 테두리</option>
                                                 <option value="802">카테고리 : 뱃지</option>
@@ -119,7 +119,7 @@
                                                     </div>
                                                     <div class="profile-dividing-line"></div>
                                                     <div class="profile-badge-section">
-                                                    <span><img src="" alt="뱃지">&#127774;</span>
+                                                    <span><img src="" alt="" id="shopbadge"></span>
                                                     <!-- <span class="badge">&#127775;</span>
                                                     <span class="badge">&#127806;</span>
                                                     <span class="badge">&#127851;</span>
@@ -133,7 +133,7 @@
                                             </div>
                                         </div>
                                         <div class="uk-width-1-1">
-                                            <input class="reset_btn" type='submit' value='초기화'>
+                                            <input class="reset_btn" type='submit' value='초기화' th:onclick="hidePreview()">
                                         </div>
                                     </div>
                                 </div>
