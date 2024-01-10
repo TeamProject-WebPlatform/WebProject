@@ -62,7 +62,7 @@
                                                 <option value="803">카테고리 : 프로필 배경</option>
                                             </select>
                                         </div>
-                                        <div class="uk-text-right"><a href="#!" th:text="'MyPint : ' + ${point}"></a></div>
+                                        <!-- <div class="uk-text-right"><a href="#!" th:text="'MyPint : ' + ${point}"></a></div> -->
                                         <div class="uk-text-right"><a href="#!" th:text="${totalItemCount} + ' items'"></a></div>
                                     </div>
                                 </div>
@@ -130,7 +130,11 @@
                                                     <span class="badge">&#127774;</span> -->
                                                     </div>
                                                 </div>
+                                                <!-- <div class="profile-dividing-line"></div> -->
                                             </div>
+                                        </div>
+                                        <div class="setbtn">
+                                            <ul id="previewList"></ul>
                                         </div>
                                         <div class="uk-width-1-1">
                                             <input class="reset_btn" type='submit' value='초기화' th:onclick="hidePreview()">

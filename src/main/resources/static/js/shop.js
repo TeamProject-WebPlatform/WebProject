@@ -1,3 +1,27 @@
+  // 미리보기 목록에 아이템을 추가하는 함수
+function addToPreviewList(itemName, category) {
+    let previewList = document.getElementById('previewList');
+
+    // 미리보기 목록을 위한 리스트 아이템 생성
+    let listItem = document.createElement('li');
+    listItem.textContent = itemName;
+
+    // 리스트 아이템에 해당 아이템을 제거하는 버튼 생성
+    let deleteButton = document.createElement('button');
+    deleteButton.textContent = 'x';
+
+    // 클릭 이벤트를 연결하여 해당 아이템을 제거하는 함수 호출
+    deleteButton.addEventListener('click', function () {
+    removeFromPreviewList(listItem);
+    });
+
+    // 제거 버튼을 리스트 아이템에 추가
+    listItem.appendChild(deleteButton);
+
+    // 리스트 아이템을 미리보기 목록에 추가
+    previewList.appendChild(listItem);
+}
+
 function showPreview(itemName, category) {
     // 프로필 미리보기 div 선택
     let previewheader = document.querySelector('.profile-header');
@@ -27,6 +51,9 @@ function showPreview(itemName, category) {
 
     // 미리보기 div를 화면에 보이도록 설정
     previewheader.style.display = 'block';
+
+     // 미리보기 목록에 아이템 추가하는 함수 호출
+    addToPreviewList(itemName, category);
 }
 
 function hidePreview() {
@@ -34,6 +61,13 @@ function hidePreview() {
     document.querySelector('.profile-header').style.backgroundImage = 'none';
     document.querySelector('.profile-card').style.backgroundImage = 'none';
     document.querySelector('.shopbadge').style.backgroundImage = 'none';
+}
+
+// 미리보기 목록에서 아이템을 제거하는 함수
+function removeFromPreviewList(listItem) {
+    let previewList = document.getElementById('previewList');
+    // 미리보기 목록에서 해당 리스트 아이템 제거
+    previewList.removeChild(listItem);
 }
 
 

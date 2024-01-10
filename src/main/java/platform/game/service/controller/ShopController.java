@@ -39,6 +39,7 @@ public class ShopController {
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("point", member.getMemCurPoint());
+                modelAndView.addObject("memId",member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");
@@ -49,7 +50,7 @@ public class ShopController {
         return modelAndView;
     }
 
-
+    
     @GetMapping("/shop_search")
     public ModelAndView listItemsByKind(@RequestParam("ItemSearch") String itemName,
             @RequestParam("categorySelect") String itemKindCd) {
@@ -62,6 +63,7 @@ public class ShopController {
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("point", member.getMemCurPoint());
+                modelAndView.addObject("memId",member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");

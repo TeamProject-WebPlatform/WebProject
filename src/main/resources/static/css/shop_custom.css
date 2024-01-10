@@ -65,8 +65,9 @@
 .profile-header{
     width: 100%;
     padding-top:20px;
-    background-size: cover;
+    background-size: 270px 220px;
     background-repeat: no-repeat;
+    
     /* background-position: left; */
     /* background-image: url("../img/acheivement-2.png"); */
 }
@@ -79,6 +80,10 @@
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #0ff;
+    z-index: -99999;
+}
+.profile-image > img{
+    z-index: -99999;
 }
 
 .profile-user_info {
@@ -121,9 +126,10 @@
     font-size:15px;
 }
 .profile-dividing-line{
+    width: 216px;
+    margin: 0 auto;
     margin-top:2px;
     margin-bottom: 2px;
-    width: 216px;
     height:1px;
     background-color: #0ff;
 }
