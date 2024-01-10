@@ -22,8 +22,10 @@ jQuery(document).ready(function ($) {
 
 
 
-
-
+    // 드롭다운 메뉴 활성화
+    $('.dropdown-toggle').on('click', function () {
+        $(this).next('.dropdown-menu').slideToggle(300);
+    });
 
 
 
