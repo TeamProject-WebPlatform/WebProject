@@ -23,47 +23,6 @@ public class ShopController {
     @Autowired
     private ItemInfoRepository itemInfoRepository;
 
-    // @GetMapping
-    // public ModelAndView shop(@RequestParam(required = false) String itemName,
-    //                         @RequestParam(required = false) String itemKindCd) {
-    //     ModelAndView modelAndView = new ModelAndView("shop");
-
-    //     long totalItemCount = itemInfoRepository.count();
-    //     modelAndView.addObject("point", "로그인 해주세요.");
-
-    //     if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-    //         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-    //         if (member != null) {
-    //             modelAndView.addObject("nickname", member.getMemNick());
-    //             modelAndView.addObject("point", member.getMemCurPoint());
-    //         }
-    //     } else {
-    //         System.out.println("멤버 없음");
-    //     }
-
-    //     ArrayList<Item> items;
-    //     if (itemName != null && !itemName.isEmpty()) {
-    //         // 아이템 이름에 따라 필터링
-    //         Item foundItem = itemInfoRepository.findByItemNm(itemName);
-    //         items = new ArrayList<>();
-    //         if (foundItem != null) {
-    //             items.add(foundItem);
-    //         }
-    //     } else if (itemKindCd != null && !itemKindCd.isEmpty()) {
-    //         // 아이템 종류에 따라 필터링
-    //         items = itemInfoRepository.findByItemKindCd(itemKindCd);
-    //         modelAndView.addObject("items", items);
-    //     } else {
-    //         // 모든 아이템 가져오기
-    //         items = itemInfoRepository.findAll();
-    //         modelAndView.addObject("items", items);
-    //     }
-        
-    //     modelAndView.addObject("totalItemCount", totalItemCount);
-    //     return modelAndView;
-    // }
-
-
     @RequestMapping("/shop")
     public ModelAndView shop() {
         long totalItemCount = itemInfoRepository.count();

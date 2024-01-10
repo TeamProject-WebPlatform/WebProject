@@ -11,11 +11,6 @@ function showPreview(itemName, category) {
 
     // 선택한 아이템에 맞는 이미지 경로 생성
     let imagePath = './img/shop_img/' + itemName + '.png';
-    // let imagePath = './img/shop_img/' + itemName + '.png';
-    // let imagePath = './img/shop_img/' + itemName + '.png';
-    // let imageTag = '<img src="' + imagePath + '" alt="Item Preview">';
-
-    
     // 각 분류에 따라 스타일 변경
     if (category === '801') {
         // 미리보기 div의 배경 이미지 변경
