@@ -54,6 +54,38 @@
         location.href = "./list_MixList?board_cd=" + [[${boardCd}]] +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
     }
 </script>
+<!--사이드바 초록색-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        //console.log = function () {};
+
+        const active = document.getElementById("[[${navBoard}]]");
+        active.classList.add("uk-active");
+        document.getElementById("toggle").addEventListener("click", function () {
+
+            document.querySelectorAll('.vs > img').forEach(function (x) {
+                x.src = logo_img_paths[currentThemeIndex];
+            })
+        });
+        const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
+        const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
+
+        const pointLefts = document.querySelectorAll(".info-center-left .info-point-percent");
+        const pointRights = document.querySelectorAll(".info-center-right .info-point-percent");
+
+        for (let i = 0; i < pointBarLefts.length; i++) {
+            let pointBarLeft = pointBarLefts.item(i);
+            pointBarLeft.style.width = pointLefts[i].innerHTML;
+            pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+            pointLefts[i].style.color = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+
+            let pointBarRight = pointBarRights.item(i);
+            pointBarRight.style.width = pointRights[i].innerHTML;
+            pointBarRight.style.backgroundColor = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+            pointRights[i].style.color = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+        }
+    });
+</script>
 
 <body class="page-home dark-theme">
 

@@ -99,10 +99,10 @@ public class MainController {
         return list;
     }
 
-    @GetMapping("/list")
-    public ModelAndView list() {
-        return new ModelAndView("list");
-    }
+    // @GetMapping("/list")
+    // public ModelAndView list() {
+    // return new ModelAndView("list");
+    // }
 
     @GetMapping("/show")
     public ModelAndView show() {

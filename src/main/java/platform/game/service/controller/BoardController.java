@@ -30,7 +30,7 @@ import platform.game.service.service.MemberInfoDetails;
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.service.repository",
         "platform.game.service.model" })
-@RequestMapping("/board")
+// @RequestMapping("/board")
 public class BoardController {
 
     @Autowired
@@ -50,6 +50,39 @@ public class BoardController {
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
+
+        String boardCd_name = "Notice";
+        String navBoard = "nav-";
+
+        switch (boardCd) {
+            case "20001":
+                boardCd_name = "Notice";
+                navBoard = navBoard + "notice";
+                break;
+            case "20002":
+                boardCd_name = "Update";
+                navBoard = navBoard + "update";
+                break;
+            case "20003":
+                boardCd_name = "Event";
+                navBoard = navBoard + "event";
+                break;
+            case "20004":
+                boardCd_name = "Free Board";
+                navBoard = navBoard + "free";
+                break;
+            case "20005":
+                boardCd_name = "Sharing information";
+                navBoard = navBoard + "information";
+                break;
+            case "20006":
+                boardCd_name = "Share the strategy";
+                navBoard = navBoard + "strategy";
+                break;
+
+            default:
+                break;
+        }
 
         String loginCheck = "true";
 
@@ -93,6 +126,8 @@ public class BoardController {
         modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("boardCd", boardCd);
         modelAndView.addObject("cpage", cpageTO);
+        modelAndView.addObject("boardCd_name", boardCd_name);
+        modelAndView.addObject("navBoard", navBoard);
 
         return modelAndView;
     }
@@ -192,7 +227,7 @@ public class BoardController {
 
         if (flag == 0) {
             // 글쓰기 성공 시 처리
-            return "redirect:../board/list?board_cd=" + request.getParameter("board_cd");
+            return "redirect:./list?board_cd=" + request.getParameter("board_cd");
         } else {
             // 글쓰기 실패 시 처리
             return "redirect:/error";
@@ -250,7 +285,7 @@ public class BoardController {
 
         if (flag == 0) {
             // 글쓰기 성공 시 처리
-            return "redirect:/board/view?board_cd=" + post.getBoardCd() + "&post_id=" + postId + "&cpage=" + cpage;
+            return "redirect:./view?board_cd=" + post.getBoardCd() + "&post_id=" + postId + "&cpage=" + cpage;
         } else {
             // 글쓰기 실패 시 처리
             return "redirect:/error";
@@ -287,7 +322,7 @@ public class BoardController {
         System.out.println("게시글 삭제");
         postInfoRepository.deleteById(postId);
 
-        return "redirect:/board/list?board_cd=" + post.getBoardCd();
+        return "redirect:./list?board_cd=" + post.getBoardCd();
     }
 
     @RequestMapping("/comment_write_ok")
@@ -322,7 +357,7 @@ public class BoardController {
         postInfoRepository.save(post);
 
         // 댓글이 등록된 후에 해당 게시물로 이동
-        return "redirect:/board/view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
+        return "redirect:./view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
     }
 
     @PostMapping("/comment_delete_ok")
@@ -343,7 +378,7 @@ public class BoardController {
         post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
         postInfoRepository.save(post);
 
-        return "redirect:/board/view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
+        return "redirect:./view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
     }
 
     @RequestMapping("/reply_comment_write_ok")
@@ -380,7 +415,7 @@ public class BoardController {
         postInfoRepository.save(post);
 
         // 댓글이 등록된 후에 해당 게시물로 이동
-        return "redirect:/board/view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
+        return "redirect:./view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
     }
 
     // @PostMapping("/comment_delete_ok")
