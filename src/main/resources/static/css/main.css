@@ -780,7 +780,7 @@ body.no-scroll {
     align-items: stretch;
     padding-top: 75px;
 }
-
+/* 중앙크기 */
 .page-wrapper .page-main {
     scrollbar-color: var(--main-color-now) #E2EBEC;
     scrollbar-width: thin !important;
@@ -1731,6 +1731,18 @@ a:hover {
     /* transition: all 0.25s linear; */
 }
 
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background-color: #E2EBEC;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: var(--main-color-now);
+}
+
 .sidebar.is-show {
     left: 0;
 }
@@ -2296,7 +2308,7 @@ a:hover {
 }
 
 .game-card__price {
-    color: var(--main-color-now);
+    color: #F46119;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
@@ -2414,6 +2426,109 @@ a:hover {
     z-index: 1;
 }
 
+/* 매인정렬 */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.widjet-container{
+    flex-grow: 1;
+    margin-right: 1%;
+}
+
+.card-hidden {
+    display: none;
+    /* 또는 다른 크기를 변경하는 스타일 */
+}
+
+.card-visible {
+display: block;
+/* 또는 다른 크기를 변경하는 스타일 */
+}
+
+/* 버튼 디자인 */
+.reset_btn {
+    width: 100%;
+	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
+	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
+	background-color: #222;
+    /* box-sizing: border-box; */
+	border: none;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 12px;
+	text-decoration:none;
+}
+.reset_btn:hover {
+	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
+	background-color:#565c67;
+    color: var( --main-color-dark);
+}
+.reset_btn:active {
+	position:relative;
+	top:1px;
+}
+
+
+.select_btn {
+    /* width: 100%; */
+	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
+	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
+	background-color: #222;
+	border: none;
+	/* border:1px solid #343538; */
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 12px;
+	text-decoration:none;
+    box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
+}
+.select_btn:hover {
+	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
+	background-color:#565c67;
+    color: var( --main-color-dark);
+}
+.select_btn:active {
+	position:relative;
+	top:1px;
+}
+
+.select_Get_btn {
+    /* width: 100%; */
+	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
+	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
+	background-color: #222;
+	border: none;
+	/* border:1px solid #343538; */
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 12px;
+	text-decoration:none;
+}
+.select_Get_btn:hover {
+	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
+	background-color:#565c67;
+    color: var( --main-color-dark);
+}
+.select_Get_btn:active {
+	position:relative;
+	top:1px;
+}
+
+/* -------------------------------------------------------------------------------------------------- */
 .widjet {
     display: block;
     position: relative;

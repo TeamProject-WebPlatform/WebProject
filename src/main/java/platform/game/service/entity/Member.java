@@ -39,10 +39,10 @@ public class Member {
     private String memCertified;
     private String memCreatedAt;
     private String memDeletedAt;
-    
-    @OneToMany(fetch = FetchType.EAGER,mappedBy="member")
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "member")
     private List<MemberBetting> memBettingList = new ArrayList<>();
-    
+
     public String getRole(String code) {
         switch (code) {
             case "10001":

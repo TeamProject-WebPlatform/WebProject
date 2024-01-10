@@ -42,11 +42,10 @@ public class BoardController {
     @Autowired
     private MemberInfoRepository memberInfoRepository;
 
-    @RequestMapping("/shop")
-    public String shop() {
-        return "shop";
-    }
-
+    // @RequestMapping("/shop")
+    // public String shop(){
+    // return "shop";
+    // }
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
