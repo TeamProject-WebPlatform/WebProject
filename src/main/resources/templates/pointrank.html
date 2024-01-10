@@ -101,7 +101,8 @@
                                     PointChart();
                                 </script>
                                 <div></div>
-                                <div class="profile-card" th:each="to, i:${point}" th:if="${i.index < 5}" style="display: inline-block;">
+                                <!-- 통합 랭킹 카드 -->
+                                <div class="profile-card" th:if="${point!=null and i.index<5}" th:each="to, i:${point}" style="display: inline-block;">
                                     <a href="/mypage/${to.mem_userid}">
                                         <div class="profile-header">
                                             <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
@@ -121,6 +122,26 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- 특정 게임 랭크 카드 -->
+                                <div class="profile-card" th:if="${otherpoint!=null and i.index<5}"  th:each="to, i:${otherpoint}" style="display: inline-block;">
+                                    <a href="/mypage/${to.mem_userid}">
+                                        <div class="profile-header">
+                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL">
+                                            </div>
+                                            <p th:text="'포인트 보유량 : ' + ${to.mem_total_point}"></p>
+                                        </div>
+                                    </a>
+                                    <div class="profile-dividing-line"></div>
+                                    <div class="profile-main">
+                                        <div class="profile-introduction">
+                                            안녕하세요
+                                        </div>
+                                    </div>
+                                </div>
                                 <br><hr><br>
                                 <table>
                                     <tr>
@@ -129,7 +150,15 @@
                                         <th>레벨</th>
                                         <th>포인트 보유량</th>
                                     </tr>
-                                    <tr th:each="to, i:${point}" th:if="${i.index>=5}">
+                                    <!-- 통합 포인트 랭크 테이블 -->
+                                    <tr th:if="${point!=null and i.index >=5}" th:each="to, i:${point}">
+                                        <td th:text="${to.rank}"></td>
+                                        <td th:text="${to.mem_userid}"></td>
+                                        <td th:text="${to.mem_lvl}"></td>
+                                        <td th:text="${to.mem_total_point}"></td>
+                                    </tr>
+                                    <!-- 특정 게임 포인트 랭크 테이블 -->
+                                    <tr th:if="${otherpoint!=null and i.index>=5}" th:each="to, i:${otherpoint}">
                                         <td th:text="${to.rank}"></td>
                                         <td th:text="${to.mem_userid}"></td>
                                         <td th:text="${to.mem_lvl}"></td>

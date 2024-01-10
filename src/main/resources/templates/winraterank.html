@@ -72,12 +72,12 @@
                             </div>
                             <div class="uk-width-2-3@l">
                                 <ul class="tabnav">
-                                    <li class="uk-width-1-6"><a href="winraterank">전체</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/lol">리그오브레전드</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/battleground">배틀그라운드</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/overwatch">오버워치</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/valorant">발로란트</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/fifa">피파온라인</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank">전체</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/lol">리그오브레전드</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/battleground">배틀그라운드</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/overwatch">오버워치</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/valorant">발로란트</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/fifa">피파온라인</a></li>
                                 </ul>
                             </div>
                             <!-- <div class="widjet__body">
@@ -102,7 +102,29 @@
                                     WinRateChart();
                                 </script>
                                 <div></div>
-                                <div class="profile-card" th:each="to, i:${win}" th:if="${i.index < 5}" style="display: inline-block;">
+                                <!-- 통합 랭킹 카드 -->
+                                <div class="profile-card" th:if="${win!=null and i.index<5}" th:each="to, i:${win}" style="display: inline-block;">
+                                    <a href="/mypage/${to.mem_userid}">
+                                        <div class="profile-header">
+                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                            <div class="profile-user_info">
+                                                <!-- <i th:text="${to.rank}"></i> 1등~5등 뱃지 영역 -->
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL"> <!-- 개인 설정 뱃지 -->
+                                            </div>
+                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
+                                        </div>
+                                    </a>
+                                    <div class="profile-dividing-line"></div>
+                                    <div class="profile-main">
+                                        <div class="profile-introduction">
+                                            안녕하세요
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 특정 게임 랭크 카드 -->
+                                <div class="profile-card" th:if="${otherwin!=null and i.index<5}" th:each="to, i:${otherwin}" style="display: inline-block;">
                                     <a href="/mypage/${to.mem_userid}">
                                         <div class="profile-header">
                                             <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
@@ -130,7 +152,13 @@
                                         <th>레벨</th>
                                         <th>승률</th>
                                     </tr>
-                                    <tr th:each="to, i:${win}" th:if="${i.index>=5}">
+                                    <tr th:if="${win!=null and i.index >=5}" th:each="to, i:${win}">
+                                        <td th:text="${to.rank}"></td>
+                                        <td th:text="${to.mem_userid}"></td>
+                                        <td th:text="${to.mem_lvl}"></td>
+                                        <td th:text="${to.winrate} + '%'"></td>
+                                    </tr>
+                                    <tr th:if="${otherwin!=null and i.index >=5}" th:each="to, i:${otherwin}">
                                         <td th:text="${to.rank}"></td>
                                         <td th:text="${to.mem_userid}"></td>
                                         <td th:text="${to.mem_lvl}"></td>

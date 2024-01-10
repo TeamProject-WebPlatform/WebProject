@@ -74,14 +74,23 @@ public interface SqlMapperInter {
                         String mem_email, int mem_total_point, int mem_lvl, int mem_attend, int mem_game_count,
                         int mem_win_count, int mem_lose_count);
 
-        @Insert("insert into ranking2 (rank,rank_code,mem_id, rank_update) select rank() over(order by mem_lvl desc, mem_id desc) as rank, 'Level', mem_id, now() from member limit 50")
+        @Insert("insert into ranking (rank,rank_code,mem_id, rank_update,game_cd) select rank() over(order by mem_lvl desc, mem_id desc) as rank, 'Level', mem_id, now(), 0 from member limit 50")
         int setLevelRank();
 
-        @Insert("insert into ranking2 (rank,rank_code,mem_id, rank_update) select rank() over(order by round((mem_game_win_cnt/mem_total_game_cnt)*100,2) desc, mem_id desc) as rank, 'WinRate', mem_id, now() from member where mem_total_game_cnt >0 limit 50;")
+        @Insert("insert into ranking (rank,rank_code,mem_id, rank_update,game_cd) select rank() over(order by round((mem_game_win_cnt/mem_total_game_cnt)*100,2) desc, mem_id desc) as rank, 'WinRate', mem_id, now(),0 from member where mem_total_game_cnt >0 limit 50")
         int setWinRateRank();
 
-        @Insert("insert into ranking2 (rank,rank_code,mem_id, rank_update) select rank() over(order by mem_total_point desc, mem_id desc) as rank, 'Point', mem_id, now() from member limit 50")
+        @Insert("insert into ranking (rank,rank_code,mem_id, rank_update,game_cd) select rank() over(order by mem_total_point desc, mem_id desc) as rank, 'Point', mem_id, now(),0 from member limit 50")
         int setTotalPointRank();
+
+        @Insert("insert into ranking(rank,rank_code,mem_id,rank_update,game_cd) select rank() over (order by m.mem_lvl desc, m.mem_id desc) as rank,'Level', m.mem_id, now(), #{game_cd} from member m join member_favorite_game f on m.mem_id=f.mem_id where f.game_cd = #{game_cd} order by m.mem_lvl desc,m.mem_id desc limit 50;")
+        int setOtherLevelRank(String game_cd);
+
+        @Insert("insert into ranking(rank,rank_code,mem_id,rank_update,game_cd) select rank() over (order by m.mem_total_point desc, m.mem_id desc) as rank,'Point', m.mem_id, now(), #{game_cd} from member m join member_favorite_game f on m.mem_id=f.mem_id where f.game_cd = #{game_cd} order by m.mem_total_point desc,m.mem_id desc limit 50;")
+        int setOtherPointRank(String game_cd);
+
+        @Insert("insert into ranking(rank,rank_code,mem_id,rank_update,game_cd) select rank() over (order by round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) desc, m.mem_id desc) as rank,'WinRate', m.mem_id, now(), #{game_cd} from member m join member_favorite_game f on m.mem_id=f.mem_id where f.game_cd = #{game_cd} order by round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) desc,m.mem_id desc limit 50;")
+        int setOtherWinRateRank(String game_cd);
 
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0")
         public List<LevelRankTO> getLevelRank();
@@ -92,27 +101,28 @@ public interface SqlMapperInter {
         @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0")
         public List<PointRankTO> getPointRank();
 
-        @Select("select r.rank, m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='level';")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='level';")
         public List<LevelRankTO> getOtherLevelRank(String game_cd);
 
-        @Select("select r.rank, m.mem_nick, m.mem_lvl, m.mem_total_point from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='point';")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='point';")
         public List<PointRankTO> getOtherPointRank(String game_cd);
 
-        @Select("select r.rank, m.mem_nick, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='winrate';")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='winrate';")
         public List<WinRankTO> getOtherWinRateRank(String game_cd);
 
         @Select("select distinct m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
         public List<RollingRankTO> getRol();
 
-        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '1', mem_id, RANK() OVER(order by mem_lvl desc) as mem_rank from member")
+        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select 'Level', mem_id, RANK() OVER(order by mem_lvl desc) as mem_rank from member")
         public int setMemberLevelRanking(String rank_code);
 
-        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '2', mem_id, RANK() OVER(order by mem_total_point desc) as mem_rank from member")
+        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select 'Point', mem_id, RANK() OVER(order by mem_total_point desc) as mem_rank from member")
         public int setMemberPointRanking(String rank_code);
 
-        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select '3', mem_id, RANK() OVER (order by round((mem_game_win_cnt/mem_total_game_cnt)*100,2) desc) as mem_rank from member where mem_total_game_cnt>0")
+        @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select 'WinRate', mem_id, RANK() OVER (order by round((mem_game_win_cnt/mem_total_game_cnt)*100,2) desc) as mem_rank from member where mem_total_game_cnt>0")
         public int setMemberWinRateRanking(String rank_code);
 
         @Insert("INSERT INTO member_game_match_record values(#{game_cd},#{mem_id}, default, default, default")
         public int setMatchRecord(String game_cd, long mem_id);
+
 }

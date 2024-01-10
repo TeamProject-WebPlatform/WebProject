@@ -106,8 +106,8 @@ public class RankController {
             List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelRank();
             mav.addObject("level", getLevelTable);
         } else {
-            List<LevelRankTO> LevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
-            mav.addObject("otherlevel", LevelTable);
+            List<LevelRankTO> getOtherLevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
+            mav.addObject("otherlevel", getOtherLevelTable);
         }
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -126,8 +126,9 @@ public class RankController {
     @RequestMapping({ "/winraterank", "/winraterank/{game}" })
     public ModelAndView WinRateRank(@PathVariable(name = "game", required = false) String game) {
 
-        ModelAndView mav = new ModelAndView("winraterank");
-
+        if (game == null) {
+            game = "";
+        }
         String game_cd = "";
         switch (game) {
             case "lol":
@@ -150,8 +151,14 @@ public class RankController {
                 break;
         }
 
-        List<WinRankTO> getWinRateTable = sqlMapperInter.getWinRateRank();
-        mav.addObject("win", getWinRateTable);
+        ModelAndView mav = new ModelAndView("winraterank");
+        if (game_cd == "") {
+            List<WinRankTO> getWinRateTable = sqlMapperInter.getWinRateRank();
+            mav.addObject("win", getWinRateTable);
+        } else {
+            List<WinRankTO> getOtherWinRateTable = sqlMapperInter.getOtherWinRateRank(game_cd);
+            mav.addObject("otherwin", getOtherWinRateTable);
+        }
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -169,8 +176,9 @@ public class RankController {
     @RequestMapping({ "/pointrank", "/pointrank/{game}" })
     public ModelAndView PointRank(@PathVariable(name = "game", required = false) String game) {
 
-        ModelAndView mav = new ModelAndView("pointrank");
-
+        if (game == null) {
+            game = "";
+        }
         String game_cd = "";
         switch (game) {
             case "lol":
@@ -193,8 +201,14 @@ public class RankController {
                 break;
         }
 
-        List<PointRankTO> getPointTable = sqlMapperInter.getPointRank();
-        mav.addObject("point", getPointTable);
+        ModelAndView mav = new ModelAndView("pointrank");
+        if (game_cd == "") {
+            List<PointRankTO> getPointTable = sqlMapperInter.getPointRank();
+            mav.addObject("point", getPointTable);
+        } else {
+            List<PointRankTO> getOtherPointTable = sqlMapperInter.getOtherPointRank(game_cd);
+            mav.addObject("otherpoint", getOtherPointTable);
+        }
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
