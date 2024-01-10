@@ -47,12 +47,19 @@ function showPreview(itemName, category) {
     // console.log(previewheader);
 
     // 각 분류에 따라 스타일 변경
+    // 각 분류에 따라 스타일 변경
     if (category === '801') {
-        previewheader.classList.add('profile-header');
+        previewDiv.classList.add('profile-header');
+        previewCard.classList.remove('profile-card');
+        previewBadge.classList.remove('badge');
     } else if (category === '802') {
-        previebadge.classList.add('badge');
+        previewBadge.classList.add('badge');
+        previewCard.classList.remove('profile-card');
+        previewDiv.classList.remove('profile-header');
     } else if (category === '803') {
-        previewcard.classList.add('profile-card');
+        previewCard.classList.add('profile-card');
+        previewBadge.classList.remove('badge');
+        previewDiv.classList.remove('profile-header');
     }
 
     // 미리보기 div를 화면에 보이도록 설정

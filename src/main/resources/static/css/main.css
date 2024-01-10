@@ -2444,7 +2444,7 @@ a:hover {
 }
 
 .widjet-container{
-    /* flex-grow: 1; */
+    flex-grow: 1;
     margin-right: 1%;
 }
 
