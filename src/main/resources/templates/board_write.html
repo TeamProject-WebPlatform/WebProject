@@ -101,14 +101,21 @@
                                             <!--게시판-->
                                             <div class="board_write">
                                                 <div class="form-container">
-                                                    <div class="form-row">
+                                                    <div class="form-row uk-width-1-6">
                                                         <label for="subject" class="form-label">제목</label>
                                                         <input type="text" name="subject" value="" class="board_view_input">
                                                     </div>
-                                                    <div class="form-row">
+                                                    <br />
+                                                    <div class="form-row uk-width-1-6">
                                                         <label for="tags" class="form-label">태그</label>
-                                                        <input type="text" name="tags" value="" class="board_view_input">
+                                                        <select class="js-select" name="tags">
+                                                            <option value="All">전체</option>
+                                                            <option value="LeagueofLegends">리그오브레전드</option>
+                                                            <option value="BattleGround">배틀그라운드</option>
+                                                            <option value="Steam">스팀</option>
+                                                        </select>
                                                     </div>
+                                                    <br />
                                                     <div class="form-row">
                                                         <label for="content" class="form-label">내용</label>
                                                     </div>
