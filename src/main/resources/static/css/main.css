@@ -2454,12 +2454,12 @@ display: block;
 /* 또는 다른 크기를 변경하는 스타일 */
 }
 /* 메뉴 드랍다운 */
-/* .board-submenu,
+.board-submenu,
 .rank-submenu {
     display: none;
 }
 
-.board-submenu li,
+/*.board-submenu li,
 .rank-submenu li {
     list-style-type: none;
 } */
