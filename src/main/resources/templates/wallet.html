@@ -93,7 +93,7 @@
                             </div>
                             <div class="widjet__body">
                                 <ul class="wallet-betting-list">
-                                    <li class="wallet-betting-item" th:each ="betting : ${memberBettingList}">
+                                    <li class="wallet-betting-item" th:each ="betting : ${memberBettingTOList}"> <!--  -->
                                         <div class="wallet-betting-header">
                                             <div class="battle-profile-media">
                                                 <a href="10_game-profile.html">
@@ -101,7 +101,7 @@
                                                     <img th:src="@{'../img/' + 'starbucks.png'}" alt="NO IMG" />
                                                 </a>
                                             </div>
-                                            
+
                                             <div class="vs"><img src="../img/logo_white.png"></div>
 
                                             <div class="battle-profile-media">
@@ -113,11 +113,11 @@
                                         </div>
                                         <div class="wallet-betting-div-line"></div>
                                         <div class="wallet-betting-item__info">
-                                            <a class="wallet-betting-item__title" href="10_game-profile.html" > 타이틀
+                                            <a class="wallet-betting-item__title" href="10_game-profile.html" th:text="${betting.btPostTitle}"> 타이틀 <!-- -->
                                                 적히는곳</a>
                                                 
                                             <div class="wallet-betting-item__game">게임 종류</div>
-                                            <div class="wallet-betting-item__point" th:text="${betting.betPoint}">HOST : 3000</div>
+                                            <div class="wallet-betting-item__point" th:text="${betting.betPoint}">HOST : 3000</div> <!---->
                                         </div>
 
                                     </li>
@@ -128,11 +128,11 @@
                         <!-- BETTING TERMIATED -->
                         <div class="widjet --wallet-betting">
                             <div class="widjet__head">
-                                <h3 class="uk-text-lead">BETTING TERMINATED</h3>
+                                <h3 class="uk-text-lead">BETTING PROCEEDING</h3>
                             </div>
                             <div class="widjet__body">
                                 <ul class="wallet-betting-list">
-                                    <li class="wallet-betting-item" th:each ="betting : ${memberBettingList}">
+                                    <li class="wallet-betting-item" th:each ="betting : ${memberBettingTOList}"> <!--  -->
                                         <div class="wallet-betting-header">
                                             <div class="battle-profile-media">
                                                 <a href="10_game-profile.html">
@@ -140,7 +140,9 @@
                                                     <img th:src="@{'../img/' + 'starbucks.png'}" alt="NO IMG" />
                                                 </a>
                                             </div>
+
                                             <div class="vs"><img src="../img/logo_white.png"></div>
+
                                             <div class="battle-profile-media">
                                                 <a href="10_game-profile.html">
                                                     <!-- <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" /> -->
@@ -150,11 +152,11 @@
                                         </div>
                                         <div class="wallet-betting-div-line"></div>
                                         <div class="wallet-betting-item__info">
-                                            <a class="wallet-betting-item__title" href="10_game-profile.html" > 타이틀
+                                            <a class="wallet-betting-item__title" href="10_game-profile.html" th:text="${betting.btPostTitle}"> 타이틀 <!-- -->
                                                 적히는곳</a>
                                                 
                                             <div class="wallet-betting-item__game">게임 종류</div>
-                                            <div class="wallet-betting-item__point" th:text="${betting.betPoint}">HOST : 3000</div>
+                                            <div class="wallet-betting-item__point" th:text="${betting.betPoint}">HOST : 3000</div> <!---->
                                         </div>
 
                                     </li>
@@ -176,11 +178,10 @@
                                         </div>
                                         <div class="wallet-betting-div-line"></div>
                                         <div class="wallet-betting-item__info">
-                                            <a class="wallet-betting-item__title" href="10_game-profile.html" > 타이틀
-                                                적히는곳</a>
+                                            <a class="wallet-betting-item__title" href="10_game-profile.html" th:text="${pointHistory.pointKindCd}">포인트 종류</a>
                                                 
-                                            <div class="wallet-betting-item__game">게임 종류</div>
-                                            <div class="wallet-betting-item__point" th:text="${betting.betPoint}">HOST : 3000</div>
+                                            <div class="wallet-betting-item__game" th:text="${pointHistory.createdAt}">날짜</div>
+                                            <div class="wallet-betting-item__point" th:text="${pointHistory.pointCnt}">포인트 수량</div>
                                         </div>
 
                                     </li>

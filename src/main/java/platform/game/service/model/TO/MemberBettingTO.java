@@ -2,14 +2,17 @@ package platform.game.service.model.TO;
 
 import lombok.Data;
 import platform.game.service.entity.Battle;
+import platform.game.service.entity.MemberBetting;
+import platform.game.service.entity.Post;
 
 @Data
 public class MemberBettingTO {
-    public MemberBettingTO(Battle battle){
+    public MemberBettingTO(Battle battle,Post post,MemberBetting memberBetting){
         this.HostMemId = battle.getHostMember().getMemId();
         this.ClientMemId = battle.getClientMember().getMemId();
         this.btPostTitle = battle.getBtPost().getPost().getPostTitle();
-        
+        this.betFlag = memberBetting.getBetFlag();
+        this.betPoint = memberBetting.getBetPoint();
     }
     private Long HostMemId;
     private Long ClientMemId;

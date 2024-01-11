@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import platform.game.service.entity.Battle;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberBetting;
 import platform.game.service.model.TO.MemberBettingTO;
@@ -37,13 +38,15 @@ public class WalletController {
                 List<MemberBetting> memberBettingList = member.getMemBettingList();
                 List<MemberBettingTO> memberBettingTOList = new ArrayList<>();
                 for(var e : memberBettingList){
-                    e.getBattle().getBtId();
-                    e.getBattle().getBtPost();
+                    Battle battle = e.getBattle();
+                    MemberBettingTO to = new MemberBettingTO(battle,battle.getBtPost().getPost(),e);
+                    memberBettingTOList.add(to);
                 }
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("memId",member.getMemId());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("totalPoint", member.getMemTotalPoint());
-                mav.addObject("memberBettingList",member.getMemBettingList());
+                mav.addObject("memberBettingTOList",memberBettingTOList);
                 mav.addObject("memberPointHistoryList", member.getMemPointHistoryList());
             }
         } else {

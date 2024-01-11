@@ -44,6 +44,7 @@ public class HeaderWebSocketController {
     @MessageMapping("/memPointChange")
     public void memPointChange(@Payload HeaderInfoTO to) throws JsonMappingException, JsonProcessingException {
         // Long memId = Long.parseLong(memIdstr);
+       
         long memId = to.getMemId();
         String pointKindCd = to.getPointKindCd();
         int pointCnt = to.getPointChange();

@@ -25,15 +25,16 @@ public class UpdatePointHistoryImpl implements UpdatePointHistory {
     public int insertPointHistoryByMemId(long memId, String pointKindCd, int pointCnt) {
         // 업데이트후 currentPoint를 리턴
         int currentPoint;
-        // Member 테이블의 멤버 point 정보 확인
+        // Member 테이블의 멤버 point 정보 확인    
         Optional<Member> member = memberInfoRepository.findById(memId);
         if (member.isPresent()) {
             currentPoint = member.get().getMemCurPoint();
             if (currentPoint + pointCnt < 0) {
                 return -1;
             }
-        } else
+        } else{
             return -1;
+        }
 
         // Member 테이블의 멤버 point 정보 업데이트
         Query query = entityManager.createNativeQuery(
@@ -59,8 +60,8 @@ public class UpdatePointHistoryImpl implements UpdatePointHistory {
 
         // PointHistory 테이블 인서트
         query = entityManager.createNativeQuery(
-                "INSERT INTO point_history (mem_id,point_history_id,point_kind_cd, point_cnt) " +
-                        "VALUES(:memId,:pointHistoryId,:pointKindCd,:pointCnt)");
+                "INSERT INTO point_history (mem_id,point_history_id,point_kind_cd, point_cnt,created_at) " +
+                        "VALUES(:memId,:pointHistoryId,:pointKindCd,:pointCnt,now())");
         query.setParameter("memId", memId);
         query.setParameter("pointHistoryId", maxPointHistoryId);
         query.setParameter("pointKindCd", pointKindCd);
@@ -73,7 +74,7 @@ public class UpdatePointHistoryImpl implements UpdatePointHistory {
         return currentPoint + pointCnt;
     }
 
-    private int findMaxPointHistoryId(Long memId) {
+    private Integer findMaxPointHistoryId(Long memId) {
         // 현재 member의 pointHistoryId 중 최대값 조회
         String jpql = "SELECT MAX(ph.pointHistoryId) FROM PointHistory ph WHERE ph.member.memId = :memId";
         TypedQuery<Integer> query = entityManager.createQuery(jpql, Integer.class);
