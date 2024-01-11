@@ -948,8 +948,11 @@ a:hover {
 .search__btn {
     margin-left: 12px;
 }
-
-.search__btn button {
+.search__refresh{
+    margin-left: 0px;
+}
+.search__btn button,
+.search__refresh button{
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     -webkit-box-align: center;
@@ -977,7 +980,11 @@ a:hover {
 .search__btn button:hover,
 .search__btn button:focus,
 .search__btn button:active,
-.search__btn button.nice-select.open {
+.search__btn button.nice-select.open,
+.search__refresh button:hover,
+.search__refresh button:focus,
+.search__refresh button:active,
+.search__refresh button.nice-select.open {
     color: var(--main-color-now);
 }
 

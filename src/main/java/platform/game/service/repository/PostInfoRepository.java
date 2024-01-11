@@ -1,10 +1,6 @@
 package platform.game.service.repository;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.javassist.compiler.ast.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -13,5 +13,6 @@ public interface CommentInfoRepository extends JpaRepository<Comment, Integer> {
 
     int countByPost_PostId(int postId);
 
+    void deleteByCommentGrp(int commentGrp);
     void deleteByCommentId(int commentId);
 }

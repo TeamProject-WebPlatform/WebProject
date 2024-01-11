@@ -27,7 +27,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const active = document.getElementById("nav-home");
+        const active = document.getElementById("[[${navBoard}]]");
         active.classList.add("uk-active");
     });
 </script>
@@ -63,7 +63,7 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <h3 class="uk-text-lead">자유게시판</h3>
+                        <h3 class="uk-text-lead" th:text='${boardCd_name}'></h3>
                     </div>
                 </div>
                 <div class="widjet --filters">
