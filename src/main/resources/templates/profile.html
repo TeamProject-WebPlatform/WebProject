@@ -59,7 +59,7 @@
                                 <div class="user-info">
                                     <div class="user-info__avatar"><img src="../img/profile.png" alt="profile"></div>
                                     <div class="user-info__box">
-                                        <div class="user-info__title" th:text="${member.memNick}"></div>
+                                        <div class="user-info__title" th:text="${'LV : ' + member.memLvl + ' &nbsp ' + member.memNick}"></div>
                                         <div class="user-info__text" th:text="${memberProfile.profileIntro}"></div>
                                     </div>
                                 </div><a class="uk-button uk-button-danger" href="04_profile.html"><i class="ico_edit"></i><span class="uk-margin-small-left">Edit Profile</span></a>
@@ -101,48 +101,23 @@
                                         
                                 </div>
                             </div>
-                        </div>
-                        <!-- <div class="widjet --activity">
+                            <br>
+                        <div class="widjet --bio">
                             <div class="widjet__head">
-                                <h3 class="uk-text-lead">Recent Activity</h3><a href="04_profile.html">View All</a>
+                                <h3 class="uk-text-lead">내 랭킹 정보</h3>
                             </div>
                             <div class="widjet__body">
-                                <div class="widjet-game">
-                                    <div class="widjet-game__media"><a href="10_game-profile.html"><img src="./img/game-2.jpg" alt="image"></a></div>
-                                    <div class="widjet-game__info"><a class="widjet-game__title" href="10_game-profile.html"> Chrome Fear</a>
-                                        <div class="widjet-game__record">3 hours on record</div>
-                                        <div class="widjet-game__last-played">last played on 18 Feb, 2022</div>
+                                <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                    <div th:each="to:${memberRanking}">
+                                        <div class="user-info__title" th:text="${to.rankCode+' : '+to.rank+'위'}"></div>
+                                    </div>
+                                    <div>
+                                        <button id="game-submit" class="uk-button uk-button-secondary" type="button">세부 랭킹 보러 가기</button>
                                     </div>
                                 </div>
-                                <div class="widjet-game-info">
-                                    <div class="widjet-game-info__title">Achievement Progress</div>
-                                    <div class="widjet-game-info__progress"><span>50 of 150</span>
-                                        <div class="progress-box">
-                                            <div class="progress-line" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="widjet-game-info__acheivement">
-                                        <ul>
-                                            <li><img src="./img/acheivement-1.png" alt="acheivement"></li>
-                                            <li><img src="./img/acheivement-2.png" alt="acheivement"></li>
-                                            <li><img src="./img/acheivement-3.png" alt="acheivement"></li>
-                                            <li><img src="./img/acheivement-4.png" alt="acheivement"></li>
-                                            <li><img src="./img/acheivement-5.png" alt="acheivement"></li>
-                                            <li><span>+10</span></li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="widjet__body">
-                                <div class="widjet-game">
-                                    <div class="widjet-game__media"><a href="10_game-profile.html"><img src="./img/game-3.jpg" alt="image"></a></div>
-                                    <div class="widjet-game__info"><a class="widjet-game__title" href="10_game-profile.html"> Retaliate of Prosecution</a>
-                                        <div class="widjet-game__record">0.2 hours on record</div>
-                                        <div class="widjet-game__last-played">last played on 25 Apr, 2022</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="uk-width-1-2@l">
                         <div class="widjet --badges">

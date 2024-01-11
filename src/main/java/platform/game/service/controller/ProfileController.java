@@ -1,5 +1,7 @@
 package platform.game.service.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberProfile;
+import platform.game.service.entity.MemberRanking;
 import platform.game.service.model.TO.FavoriteGameTO;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberProfileRepository;
+import platform.game.service.repository.MemberRankingRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -35,9 +39,12 @@ public class ProfileController {
     @Autowired
     private MemberProfileRepository profileRepository;
 
+    @Autowired
+    private MemberRankingRepository rankingRepository;
+
     @GetMapping("")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ModelAndView profilepage() {
+    public ModelAndView Profile() {
 
         ModelAndView mav = new ModelAndView("profile");
 
@@ -46,8 +53,10 @@ public class ProfileController {
                     .getMember();
             if (member != null) {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
+                List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
+                mav.addObject("memberRanking", memberRanking);
             }
         } else {
             System.out.println("멤버 없음");
@@ -78,5 +87,19 @@ public class ProfileController {
         }
 
         return new ResponseEntity<>(flag, HttpStatus.OK);
+    }
+
+    @GetMapping("/editprofile")
+    public ModelAndView EditProfie() {
+
+        ModelAndView mav = new ModelAndView("editprofile");
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
+        MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
+
+        mav.addObject("member", member);
+        mav.addObject("profile", memberProfile);
+
+        return mav;
     }
 }
