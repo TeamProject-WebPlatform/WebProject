@@ -1,12 +1,9 @@
 package platform.game.service.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import platform.game.service.entity.Member;
-import platform.game.service.entity.MemberFavoriteGame;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
-import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.service.MemberInfoDetails;
@@ -40,13 +35,6 @@ public class RankController {
 
     @Autowired
     MemberFavoriteGameRepository memberFavoriteGameRepository;
-
-    private List<RollingRankTO> rollingRankList;
-
-    public RankController(SqlMapperInter sqlMapperInter) {
-        this.sqlMapperInter = sqlMapperInter;
-        rollingRankList = sqlMapperInter.getRol();
-    }
 
     @GetMapping("/getRankFragment")
     public String getRankFragment(@RequestParam("board_cd") String boardCd, Model model) {
@@ -76,10 +64,14 @@ public class RankController {
 
     @RequestMapping({ "/levelrank", "/levelrank/{game}" })
     public ModelAndView LevelRank(@PathVariable(name = "game", required = false) String game) {
+        String navRank = "nav-levelrank";
+
         if (game == null) {
             game = "";
         }
+
         String game_cd = "";
+
         switch (game) {
             case "lol":
                 game_cd = "30001";
@@ -110,11 +102,15 @@ public class RankController {
             mav.addObject("otherlevel", getOtherLevelTable);
         }
 
+        mav.addObject("navRank", navRank);
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");
@@ -125,11 +121,14 @@ public class RankController {
 
     @RequestMapping({ "/winraterank", "/winraterank/{game}" })
     public ModelAndView WinRateRank(@PathVariable(name = "game", required = false) String game) {
+        String navRank = "nav-winraterank";
 
         if (game == null) {
             game = "";
         }
+
         String game_cd = "";
+
         switch (game) {
             case "lol":
                 game_cd = "30001";
@@ -160,11 +159,15 @@ public class RankController {
             mav.addObject("otherwin", getOtherWinRateTable);
         }
 
+        mav.addObject("navRank", navRank);
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");
@@ -175,11 +178,14 @@ public class RankController {
 
     @RequestMapping({ "/pointrank", "/pointrank/{game}" })
     public ModelAndView PointRank(@PathVariable(name = "game", required = false) String game) {
+        String navRank = "nav-pointrank";
 
         if (game == null) {
             game = "";
         }
+
         String game_cd = "";
+
         switch (game) {
             case "lol":
                 game_cd = "30001";
@@ -210,11 +216,15 @@ public class RankController {
             mav.addObject("otherpoint", getOtherPointTable);
         }
 
+        mav.addObject("navRank", navRank);
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");

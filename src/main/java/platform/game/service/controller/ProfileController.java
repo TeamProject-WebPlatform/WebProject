@@ -16,8 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.model.TO.FavoriteGameTO;
 import platform.game.service.repository.MemberFavoriteGameRepository;
+import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -30,6 +32,9 @@ public class ProfileController {
     @Autowired
     private MemberFavoriteGameRepository gameRepository;
 
+    @Autowired
+    private MemberProfileRepository profileRepository;
+
     @GetMapping("")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView profilepage() {
@@ -40,7 +45,9 @@ public class ProfileController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
@@ -72,5 +79,4 @@ public class ProfileController {
 
         return new ResponseEntity<>(flag, HttpStatus.OK);
     }
-
 }

@@ -59,8 +59,8 @@
                                 <div class="user-info">
                                     <div class="user-info__avatar"><img src="../img/profile.png" alt="profile"></div>
                                     <div class="user-info__box">
-                                        <div class="user-info__title" th:text="${member.memNick}">John Doe</div>
-                                        <div class="user-info__text">Egypt, Member since May 2022</div>
+                                        <div class="user-info__title" th:text="${member.memNick}"></div>
+                                        <div class="user-info__text" th:text="${memberProfile.profileIntro}"></div>
                                     </div>
                                 </div><a class="uk-button uk-button-danger" href="04_profile.html"><i class="ico_edit"></i><span class="uk-margin-small-left">Edit Profile</span></a>
                             </div>

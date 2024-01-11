@@ -24,7 +24,7 @@ public class RankList {
     private int rank;
     @Id
     @Column(name = "rank_code")
-    private int rankCode;
+    private String rankCode;
     @Column(name = "mem_id")
     private int memId;
     @Column(name = "rank_update")
