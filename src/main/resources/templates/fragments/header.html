@@ -37,7 +37,7 @@
             });
 
             // websocket ~~~~~~~~
-            let currentPoint = 0;
+            let currentPoint = /*[[${currentPoint}]]*/0;
             let memInfoStompClient = null;
             let memId = 0;
             document.addEventListener("DOMContentLoaded", function () {
@@ -54,14 +54,21 @@
                     memInfoStompClient.subscribe(`/topic/headerInfo/` + memId, function (response) {
                         try {
                             let headerInfo = JSON.parse(response.body);
-                            if(headerInfo.flag===-1){
-                                // 에러임 포인트 부족
-                                //
+                            console.log(headerInfo);
+                            if(headerInfo.flag===1){
+                                // 정상
+                                
+                                if(currentPoint === headerInfo.currentPoint){
+                                    // 포인트 변화 없음, 포인트 부족
+                                    alert("포인트 부족");
+                                }else{
+                                    currentPoint = headerInfo.currentPoint;
+                                    document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
+                                }
                             }else if(headerInfo.flag===0){
-                                // 정상 처리
+                                // 에러
+                                alert("에러");
                             }
-                            currentPoint = headerInfo.currentPoint;
-                            document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
                         } catch (err) {
                             console.log("에러 : " + err);
                         }
@@ -71,8 +78,10 @@
 
             function sendPointChange(point) {
                 memInfoStompClient.send(`/app/memPointChange`, {},JSON.stringify({
+                    currentPoint: Number(currentPoint),
                     pointChange: Number(point),
-                    memId: Number(memId)
+                    memId: Number(memId),
+                    flag : -1
                 }));
             }
         </script>
@@ -96,7 +105,8 @@
                 </div>
 
                 <div class="page-header__action">
-                    <div onclick="sendPointChange(4)">버튼1</div>
+                    <div onclick="sendPointChange(100)">100 포인트 추가</div>
+                    <div onclick="sendPointChange(-100)">100 포인트 감소</div>
                     <a th:if="${nickname}" class="action-btn wallet" href="/wallet"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
                     <div id="current-point"

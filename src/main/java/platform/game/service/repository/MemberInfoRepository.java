@@ -4,13 +4,16 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
 import platform.game.service.entity.Member;
 
 @Repository
-public interface MemberInfoRepository extends JpaRepository<Member, Integer> {
+public interface MemberInfoRepository extends JpaRepository<Member, Long>, UpdateMemberRepositry{
+    
     Optional<Member> findByMemUserid(String mem_userid);
 
     Optional<Member> findByMemSteamid(String memSteamid);

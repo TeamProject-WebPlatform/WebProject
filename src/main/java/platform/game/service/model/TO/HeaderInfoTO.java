@@ -7,5 +7,5 @@ public class HeaderInfoTO {
     long memId;
     int pointChange;
     int currentPoint;
-    int flag = 0; // -1은 실패 0은 성공
+    int flag = 0; // -1은 실패 0은 default 1은 성공
 }
