@@ -55,17 +55,14 @@
                         try {
                             let headerInfo = JSON.parse(response.body);
                             console.log(headerInfo);
+                            if(headerInfo.flag===2){
+                                alert("포인트 부족");
+                            }
                             if(headerInfo.flag===1){
                                 // 정상
-                                
-                                if(currentPoint === headerInfo.currentPoint){
-                                    // 포인트 변화 없음, 포인트 부족
-                                    alert("포인트 부족");
-                                }else{
-                                    currentPoint = headerInfo.currentPoint;
-                                    document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
-                                }
-                            }else if(headerInfo.flag===0){
+                                currentPoint = headerInfo.currentPoint;
+                                document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
+                            }else if(headerInfo.flag===0 || headerInfo.flag===-1){
                                 // 에러
                                 alert("에러");
                             }
@@ -76,11 +73,12 @@
                 });
             }
 
-            function sendPointChange(point) {
+            function sendPointChange(point,pointKindCd) {
                 memInfoStompClient.send(`/app/memPointChange`, {},JSON.stringify({
+                    memId: Number(memId),
+                    pointKindCd : pointKindCd,
                     currentPoint: Number(currentPoint),
                     pointChange: Number(point),
-                    memId: Number(memId),
                     flag : -1
                 }));
             }
@@ -105,8 +103,8 @@
                 </div>
 
                 <div class="page-header__action">
-                    <div onclick="sendPointChange(100)">100 포인트 추가</div>
-                    <div onclick="sendPointChange(-100)">100 포인트 감소</div>
+                    <div onclick="sendPointChange(100,'50001')">100 포인트 추가</div>
+                    <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
                     <a th:if="${nickname}" class="action-btn wallet" href="/wallet"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
                     <div id="current-point"

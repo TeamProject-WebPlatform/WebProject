@@ -24,11 +24,12 @@ import platform.game.service.model.TO.BettingInfoTO;
 import platform.game.service.model.TO.HeaderInfoTO;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.UpdateMemberRepositryImpl;
+import platform.game.service.repository.UpdatePointHistoryImpl;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
 public class HeaderWebSocketController {
-    
+
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
@@ -36,7 +37,7 @@ public class HeaderWebSocketController {
     @Autowired
     private TransactionTemplate transactionTemplate;
     @Autowired
-    private UpdateMemberRepositryImpl updateMemberRepositryImpl;
+    private UpdatePointHistoryImpl updatePointHistoryImpl;
     @Autowired
     private MemberInfoRepository memberInfoRepository;
 
@@ -44,34 +45,31 @@ public class HeaderWebSocketController {
     public void memPointChange(@Payload HeaderInfoTO to) throws JsonMappingException, JsonProcessingException {
         // Long memId = Long.parseLong(memIdstr);
         long memId = to.getMemId();
-        int pointChange = to.getPointChange();
+        String pointKindCd = to.getPointKindCd();
+        int pointCnt = to.getPointChange();
         // 여기서 이제 DB에 포인트 업데이트하고 가져오기
         // 여기서 포인트 0이하라 부족할때 못사는 로직
-        AtomicReference<Boolean> successFlag = new AtomicReference<>(true);        
+        AtomicReference<Boolean> successFlag = new AtomicReference<>(true);
         successFlag.set(true);
-        transactionTemplate.execute(status -> {
-            try {
-                int flag = updateMemberRepositryImpl.updateMemCurPointByMemId(memId, pointChange);
-                if(flag==1){
-                    to.setFlag(flag);
-                }else{
-                    successFlag.set(false);
-                }
-            } catch (Exception e) {
-                System.err.println("Transaction error : "+e.getMessage());
-                // 롤백을 수행하도록 표시
-                successFlag.set(false);
-                status.setRollbackOnly();
+        try {
+            int currentPoint = updatePointHistoryImpl.insertPointHistoryByMemId(memId, pointKindCd, pointCnt);
+            if(currentPoint==-1){
+                // 포인트 부족
+                to.setFlag(2);
+            }else{
+                to.setCurrentPoint(currentPoint);
+                to.setFlag(1);
             }
-            return null;
-        });
-        // to.setCurrentPoint(point);
-        String topic = "/topic/headerInfo/" + memId;
-        Optional<Member> member = memberInfoRepository.findById(memId);
-        if(member.isPresent()){
-            int point = member.get().getMemCurPoint();
-            to.setCurrentPoint(point);
+        } catch (Exception e) {
+            System.err.println("Transaction error : " + e.getMessage());
+            // 롤백을 수행하도록 표시
+            successFlag.set(false);
         }
+        if(!successFlag.get()) to.setFlag(-1);
+
+        
+        String topic = "/topic/headerInfo/" + memId;
+
         String jsonString = objectMapper.writeValueAsString(to);
         messagingTemplate.convertAndSend(topic, jsonString);
     }

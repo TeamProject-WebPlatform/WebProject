@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import platform.game.service.entity.Member;
 
 @Repository
-public interface MemberInfoRepository extends JpaRepository<Member, Long>, UpdateMemberRepositry{
+public interface MemberInfoRepository extends JpaRepository<Member, Long>{
     
     Optional<Member> findByMemUserid(String mem_userid);
 
