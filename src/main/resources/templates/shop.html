@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8">
-        <title>Shop</title>
+        <title>GAMMOA</title>
         <meta content="Templines" name="author">
         <meta content="TeamHost" name="description">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +12,12 @@
         <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
         <link rel="stylesheet" href="../css/libs.min.css">
         <link rel="stylesheet" href="../css/main.css">
-        <link rel="stylesheet" href="./css/shop_custom.css" />
-    
+        <link rel="stylesheet" href="../css/shop_custom.css" />
+        
+        <script src="../js/libs.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/shop.js"></script>
+
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
             rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
@@ -71,7 +75,7 @@
                                 <div th:each="item : ${items}">
                                     <div class="game-card card-visible" th:data-category="${item.itemKindCd}">
                                         <div class="game-card__box">
-                                            <div class="game-card__media"><a href="#"><img th:src="@{'./img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" /></a></div>
+                                            <div class="game-card__media"><a href="#"><img th:src="@{'./img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" th:onclick="openPopup(this)"/></a></div>
                                             <div class="game-card__info">
                                                 <a class="game-card__title" href="#" th:text="${item.itemNm}"></a>
                                                 <div class="game-card__genre" th:text="${item.itemInfo}"></div>
@@ -148,6 +152,13 @@
                 </main>
         </div>
         <div class="page-modals">
+
+            <div class="popup" id="popup">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <img class="popup-content" id="popupImage">
+            </div>
+
+
             <div class="uk-flex-top" id="modal-report" data-uk-modal>
                 <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default" type="button" data-uk-close></button>
                     <h2 class="uk-modal-title">Report</h2>
@@ -199,11 +210,6 @@
                 </div>
             </div>
         </div>
-
-        <script src="../js/libs.js"></script>
-        <script src="../js/main.js"></script>
-        <script src="../js/shop.js"></script>
-        <!-- <script src="../js/shop.js"></script> -->
     </body>
     
 </html>

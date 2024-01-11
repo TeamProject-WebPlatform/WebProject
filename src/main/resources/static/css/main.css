@@ -2447,7 +2447,7 @@ display: block;
 /* 또는 다른 크기를 변경하는 스타일 */
 }
 /* 메뉴 드랍다운 */
-.board-submenu,
+/* .board-submenu,
 .rank-submenu {
     display: none;
 }
@@ -2455,7 +2455,7 @@ display: block;
 .board-submenu li,
 .rank-submenu li {
     list-style-type: none;
-}
+} */
 
 /* 버튼 디자인 */
 .reset_btn {
@@ -5928,4 +5928,38 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
 
 .page-header__logo_text{
     color : white;
+}
+
+
+/* 모달 */
+
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 500px;
+    overflow: auto;
+    background-color: rgba(0,0,0, 0.9);
+    padding-top: 60px;
+}
+
+.popup-content {
+    margin: auto;
+    display: block;
+    width: 270px;
+    height: auto;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
 }

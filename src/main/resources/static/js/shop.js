@@ -70,6 +70,21 @@ function removeFromPreviewList(listItem) {
     previewList.removeChild(listItem);
 }
 
+// 팝업 띄우기
+function openPopup(imgElement) {
+    var popup = document.getElementById('popup');
+    var popupImg = document.getElementById('popupImage');
+
+    popup.style.display = 'block';
+    popupImg.src = imgElement.src;
+}
+
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+
+// 데이터 전송
 
 function changeCategori(){
     var ItemSearch = document.getElementById("ItemSearch").value;
