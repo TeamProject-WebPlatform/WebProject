@@ -26,6 +26,7 @@ public class ShopController {
     @RequestMapping("/shop")
     public ModelAndView shop() {
         long totalItemCount = itemInfoRepository.count();
+        String navShop = "nav-shop";
         ArrayList<Item> items = itemInfoRepository.findAll();
 
         ModelAndView modelAndView = new ModelAndView("shop");
@@ -45,6 +46,7 @@ public class ShopController {
             System.out.println("멤버 없음");
         }
 
+        modelAndView.addObject("navshop", navShop);
         modelAndView.addObject("totalItemCount", totalItemCount);
         modelAndView.addObject("items", items);
         return modelAndView;
@@ -55,6 +57,7 @@ public class ShopController {
     public ModelAndView listItemsByKind(@RequestParam("ItemSearch") String itemName,
             @RequestParam("categorySelect") String itemKindCd) {
         System.out.println("listSearch 호출");
+        String navShop = "nav-shop";
         ModelAndView modelAndView = new ModelAndView();
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -80,6 +83,8 @@ public class ShopController {
 
         System.out.println("items : " +items);
         modelAndView.setViewName("shop");
+        modelAndView.addObject("navshop", navShop);
+
         modelAndView.addObject("items", items);
 
         return modelAndView;
