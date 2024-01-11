@@ -167,11 +167,11 @@
                                                 <!-- <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" /> -->
                                                 <!-- 로그인 상태인 경우의 링크 -->
                                                 <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01">
                                                 </a>
                                                 <!-- 로그인 상태가 아닌 경우의 링크 -->
                                                 <a th:unless="${loginCheck}" href="/login">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer; background-color: #00FFFF;" onclick="checkLoginAndNavigate()">
+                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" onclick="checkLoginAndNavigate()">
                                                 </a>
                                                 <!-- <a th:href="@{write(board_cd=${boardCd})}">
                                                     <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
