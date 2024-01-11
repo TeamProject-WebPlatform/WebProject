@@ -1,6 +1,8 @@
 package platform.game.service.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -15,6 +17,7 @@ import jakarta.transaction.Transactional;
 import platform.game.service.entity.Battle;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberBetting;
+import platform.game.service.entity.PointHistory;
 import platform.game.service.model.TO.MemberBettingTO;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -47,7 +50,9 @@ public class WalletController {
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("totalPoint", member.getMemTotalPoint());
                 mav.addObject("memberBettingTOList",memberBettingTOList);
-                mav.addObject("memberPointHistoryList", member.getMemPointHistoryList());
+                List<PointHistory> list =member.getMemPointHistoryList();
+                Collections.sort(list,Collections.reverseOrder(Comparator.comparing(PointHistory::getCreatedAt)));
+                mav.addObject("memberPointHistoryList", list);
             }
         } else {
             System.out.println("멤버 없음");

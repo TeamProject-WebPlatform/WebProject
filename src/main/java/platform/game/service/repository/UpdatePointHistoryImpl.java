@@ -25,10 +25,12 @@ public class UpdatePointHistoryImpl implements UpdatePointHistory {
     public int insertPointHistoryByMemId(long memId, String pointKindCd, int pointCnt) {
         // 업데이트후 currentPoint를 리턴
         int currentPoint;
+        int totalPoint;
         // Member 테이블의 멤버 point 정보 확인    
         Optional<Member> member = memberInfoRepository.findById(memId);
         if (member.isPresent()) {
             currentPoint = member.get().getMemCurPoint();
+            totalPoint = member.get().getMemTotalPoint();
             if (currentPoint + pointCnt < 0) {
                 return -1;
             }
@@ -60,13 +62,15 @@ public class UpdatePointHistoryImpl implements UpdatePointHistory {
 
         // PointHistory 테이블 인서트
         query = entityManager.createNativeQuery(
-                "INSERT INTO point_history (mem_id,point_history_id,point_kind_cd, point_cnt,created_at) " +
-                        "VALUES(:memId,:pointHistoryId,:pointKindCd,:pointCnt,now())");
+                "INSERT INTO point_history (mem_id,point_history_id,point_kind_cd, point_cnt,created_at,cur_point,total_point) " +
+                        "VALUES(:memId,:pointHistoryId,:pointKindCd,:pointCnt,now(),:currentPoint,:totalPoint)");
         query.setParameter("memId", memId);
         query.setParameter("pointHistoryId", maxPointHistoryId);
         query.setParameter("pointKindCd", pointKindCd);
         query.setParameter("pointCnt", pointCnt);
-
+        query.setParameter("currentPoint", currentPoint + pointCnt);
+        if(pointCnt>0) query.setParameter("totalPoint", totalPoint + pointCnt);
+        else query.setParameter("totalPoint", totalPoint);
         flag = query.executeUpdate();
         if (flag != 1)
             throw new RuntimeException("UpdatePointHistoryImtl 트랜잭션 롤백");

@@ -13,7 +13,114 @@
     padding-bottom: 5px;
     margin-right: 10px;
 }
+/* 포인트 내역 */
+.widjet.--wallet-ph .widjet__body {
+    padding: 0;
+    background: none;
+}
+.wallet-ph-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.wallet-ph-item {
+    height:150px;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-radius: 5px;
+    background-color: #fff;
+}
 
+.wallet-ph-item+.wallet-ph-item {
+    margin-top: 12px;
+}
+body.dark-theme .wallet-ph-item {
+    background: #1A2634;
+}
+.wallet-ph-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 200px;
+}
+.wallet-ph-div-line{
+    width: 1px;
+    background-color: #646464;
+    border-radius: 15px;
+    height: 100%;
+    margin-left: 1%;
+    margin-right: 3%;
+}
+.dark-theme .wallet-ph-div-line{
+    background-color: #646464;
+}
+.wallet-ph-info {
+    height: 100%;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+}
+
+.wallet-ph-title {
+    height : 20%;
+    font-size:15px;
+    -o-text-overflow: ellipsis;
+    display: block;
+    overflow: hidden;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.31;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.wallet-ph-datetime {
+    height: 20%;
+    color: #767676;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.36;
+}
+.wallet-ph-details{
+    display: flex;
+    flex-direction: column;
+    height: 60%;
+    justify-content: center;
+}
+.wallet-ph-details > div{
+    font-size : 15px;
+    display: flex;
+    align-items: center;
+
+}
+.wallet-ph-details div > div:nth-child(1){
+    width: 20%;
+}
+.dark-theme .wallet-ph-point{
+    color:#ffffff;
+}
+.wallet-ph-point {
+    height: 40%;
+    color: #000000;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.36;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+/* 베팅 내역 */
 .dark-theme .wallet-info-point .ico_fontawesome {
     color: #ffffff;
 }
@@ -43,7 +150,9 @@
 .wallet-betting-item__title{
     font-family: 'Inter', sans-serif;
 }
-
+.wallet-ph-item__title{
+    font-family: 'Inter', sans-serif;
+}
 .widjet.--wallet-betting .widjet__body {
     padding: 0;
     background: none;
@@ -60,7 +169,7 @@
     border-radius: 15px;
     height: 100%;
     margin-left: 1%;
-    margin-right: 1%;
+    margin-right: 3%;
 }
 .dark-theme .wallet-betting-div-line{
     background-color: #646464;
@@ -147,21 +256,32 @@ body.dark-theme .wallet-betting-item {
 body.dark-theme .wallet-betting-item__title {
     color: #fff;
 }
-
+body.dark-theme .wallet-ph-item__title {
+    color: #fff;
+}
 body.dark-theme .wallet-betting-item__game {
     color: #A1A1A1;
 }
-
+body.dark-theme .wallet-ph-item__game {
+    color: #A1A1A1;
+}
 @media (max-width: 767px) {
     .wallet-betting-item__title {
         font-size: calc(12px + 6.8 * ((100vw - 320px) / 1920));
     }
-
+    .wallet-ph-item__title {
+        font-size: calc(12px + 6.8 * ((100vw - 320px) / 1920));
+    }
     .wallet-betting-item__game {
         font-size: calc(12px + 3.4 * ((100vw - 320px) / 1920));
     }
-
+    .wallet-ph-item__game {
+        font-size: calc(12px + 3.4 * ((100vw - 320px) / 1920));
+    }
     .wallet-betting-item__point {
+        font-size: calc(12px + 3.4 * ((100vw - 320px) / 1920));
+    }
+    .wallet-ph-point {
         font-size: calc(12px + 3.4 * ((100vw - 320px) / 1920));
     }
 }
@@ -170,7 +290,9 @@ body.dark-theme .wallet-betting-item__game {
     .wallet-betting-item {
         padding: 12px;
     }
-
+    .wallet-ph-item {
+        padding: 12px;
+    }
     .wallet-betting-item__logo {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 40px;
@@ -184,12 +306,20 @@ body.dark-theme .wallet-betting-item__game {
     .wallet-betting-item__title {
         font-size: calc(12px + 4 * (100vw / 1920));
     }
-
+    .wallet-ph-item__title {
+        font-size: calc(12px + 4 * (100vw / 1920));
+    }
     .wallet-betting-item__game {
         font-size: calc(12px + 2 * (100vw / 1920));
     }
-
+    .wallet-ph-item__game {
+        font-size: calc(12px + 2 * (100vw / 1920));
+    }
     .wallet-betting-item__point {
         font-size: calc(12px + 2 * (100vw / 1920));
     }
+    .wallet-ph-point {
+        font-size: calc(12px + 2 * (100vw / 1920));
+    }
 }
+

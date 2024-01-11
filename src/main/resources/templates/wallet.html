@@ -69,6 +69,7 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="wallet-info">
+                                    
                                     <div class="wallet-info-point">
                                         <div><i class="fa-solid fa-coins ico_fontawesome wallet"></i></div>
                                         <div class="wallet-value"
@@ -81,8 +82,28 @@
                         </div>
                     </div>
                     <div class="uk-width-1-2@l">
-                        <div class="widjet --payment-method">
-                            
+                        <div class="widjet --wallet">
+                            <div class="widjet__head">
+                                <h3 class="uk-text-lead">LEVEL</h3>
+                            </div>
+                            <div class="widjet__body">
+                                <div class="wallet-info">
+                                    <div class="wallet-info-point">
+                                        토탈 : 
+                                        <div><i class="fa-solid fa-coins ico_fontawesome wallet"></i></div>
+                                        <div class="wallet-value"
+                                            th:text="${#numbers.formatInteger(#numbers.formatInteger(totalPoint,0),0,'COMMA')}">
+                                            TOTAL POINT</div>
+                                    </div>
+                                    <div class="wallet-info-point">
+                                        레벨 : 
+                                        <div><i class="fa-solid fa-coins ico_fontawesome wallet"></i></div>
+                                        <div class="wallet-value"
+                                            th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}">
+                                            LEVEL</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="uk-width-1-2@l">
@@ -166,22 +187,37 @@
                     </div>
                     <!-- POINT HISTORY -->
                     <div class="uk-width-1-2@l">
-                        <div class="widjet --wallet-betting">
+                        <div class="widjet --wallet-ph">
                             <div class="widjet__head">
                                 <h3 class="uk-text-lead">POINT HISTORY</h3>
                             </div>
                             <div class="widjet__body">
-                                <ul class="wallet-betting-list">
-                                    <li class="wallet-betting-item" th:each ="pointHistory : ${memberPointHistoryList}">
-                                        <div class="wallet-betting-header">
+                                <ul class="wallet-ph-list">
+                                    <li class="wallet-ph-item" th:each ="pointHistory : ${memberPointHistoryList}">
+                                        <!-- <div class="wallet-ph-header">
                                             헤더
-                                        </div>
-                                        <div class="wallet-betting-div-line"></div>
-                                        <div class="wallet-betting-item__info">
-                                            <a class="wallet-betting-item__title" href="10_game-profile.html" th:text="${pointHistory.pointKindCd}">포인트 종류</a>
+                                        </div> -->
+                                        <div class="wallet-ph-div-line"></div>
+                                        <div class="wallet-ph-info">
+                                            <div class="wallet-ph-title" href="10_game-profile.html" th:text="${pointHistory.pointKindCd}">포인트 종류</div>
                                                 
-                                            <div class="wallet-betting-item__game" th:text="${pointHistory.createdAt}">날짜</div>
-                                            <div class="wallet-betting-item__point" th:text="${pointHistory.pointCnt}">포인트 수량</div>
+                                            <div class="wallet-ph-datetime" th:text="${pointHistory.createdAt}">날짜</div>
+                                            <div class="wallet-ph-details">
+                                                <div class="wallet-ph-pointCnt">
+                                                    <div>P O I N T : </div>
+                                                    <div th:if="${pointHistory.pointCnt>0}" style="color:rgb(116, 116, 245)"class="wallet-ph-point" th:text="${pointHistory.pointCnt}">포인트 수량</div>
+                                                    <div th:unless="${pointHistory.pointCnt>0}" style="color:rgb(255, 121, 172)"class="wallet-ph-point" th:text="${pointHistory.pointCnt}">포인트 수량</div>
+                                                </div>
+                                                <div class="wallet-ph-current">
+                                                    <div>S T O C K : </div>
+                                                    <div class="wallet-ph-point" th:text="${#numbers.formatInteger(#numbers.formatInteger(pointHistory.curPoint,0),0,'COMMA')}">current Point</div>
+                                                </div>
+                                                <div class="wallet-ph-total">
+                                                    <div>T O T A L : </div>
+                                                    <div class="wallet-ph-point" th:text="${#numbers.formatInteger(#numbers.formatInteger(pointHistory.totalPoint,0),0,'COMMA')}">total Point</div>
+                                                </div>
+                                            </div>
+ 
                                         </div>
 
                                     </li>
