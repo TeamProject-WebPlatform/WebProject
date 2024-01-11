@@ -54,6 +54,11 @@
         location.href = "./list_MixList?board_cd=" + [[${boardCd}]] +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
     }
 </script>
+<script>
+    function reSelect(){
+        location.href = "./list?board_cd=" + [[${boardCd}]];
+    }
+</script>
 
 <body class="page-home dark-theme">
 
@@ -95,16 +100,20 @@
                                 </div>
                             </div>
                             <div class="uk-width-1-6"><select class="js-select" id="list_tag" onchange="onSelect()">
-                                <option value="All" th:selected="${list_tag == 'All'}">전체</option>
-                                <option value="LeagueofLegends" th:selected="${list_tag == 'LeagueofLegends'}">리그오브레전드</option>
-                                <option value="BattleGround" th:selected="${list_tag == 'BattleGround'}">배틀그라운드</option>
-                                <option value="Steam" th:selected="${list_tag == 'Steam'}">스팀</option>
+                                <option value="All" th:selected="${list_tag == 'All'}">All</option>
+                                <option value="LeagueofLegends" th:selected="${list_tag == 'LeagueofLegends'}">LeagueofLegends</option>
+                                <option value="BattleGround" th:selected="${list_tag == 'BattleGround'}">BattleGround</option>
+                                <option value="Steam" th:selected="${list_tag == 'Steam'}">Steam</option>
                             </select></div>
                             <div class="uk-width-1-6"><select class="js-select" id="list_size" onchange="onSelect()" >
                                 <option value="10" th:selected="${recpage == 10}">10개씩</option>
                                 <option value="20" th:selected="${recpage == 20}">20개씩</option>
                                 <option value="30" th:selected="${recpage == 30}">30개씩</option>
                             </select></div>
+                            <div class="search__btn uk-width-1-6"><button type="button"  onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
                         </div>
                     </div>
                 </div>
