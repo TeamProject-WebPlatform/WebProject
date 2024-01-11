@@ -971,10 +971,13 @@ a:hover {
     height: 24px;
     border: none;
     outline: none;
-    color: #646464;
     font-size: 24px;
     cursor: pointer;
     transition: all 0.25s linear;
+    color: #646464
+}
+.dark-theme .search__refresh button{
+    color: #ffffff;
 }
 
 .search__btn button:hover,
