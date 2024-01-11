@@ -47,7 +47,7 @@ public class PointUpdateController {
         int btId = bettingInfo.getBtId();
         Long memId = bettingInfo.getMemId();
         String topic = "/topic/pointbetting/" + btId;
-
+        
         AtomicReference<Boolean> successFlag = new AtomicReference<>(true);        
         successFlag.set(true);
         transactionTemplate.execute(status -> {

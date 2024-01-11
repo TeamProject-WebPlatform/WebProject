@@ -6,15 +6,19 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script type="text/javascript">
-            let currentThemeIndex = 0; 
+        <!-- 웹소켓 -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script th:inline="javascript">
+            let currentThemeIndex = 0;
             // 로고 색상 변경용
             const logo_img_paths = ["./img/logo_white.png", "./img/logo_black.png"];
-            const logo_text = ["white","black"];
+            const logo_text = ["white", "black"];
 
             // 메인 컬러 변경용
             const root = document.documentElement; // :root 
-            
+
             const main_color_values = [
                 getComputedStyle(root).getPropertyValue('--main-color-dark'),
                 getComputedStyle(root).getPropertyValue('--main-color-light')
@@ -22,7 +26,7 @@
 
             document.getElementById("toggle").addEventListener("click", function () {
                 document.getElementsByTagName('body')[0].classList.toggle("dark-theme");
-                
+
                 currentThemeIndex = 1 - currentThemeIndex;  // 0과 1을 번갈아가며 토글
                 // 이미지 경로를 토글
                 document.getElementById('logo_img').src = logo_img_paths[currentThemeIndex];
@@ -31,12 +35,62 @@
                 root.style.setProperty('--main-color-now', main_color_values[currentThemeIndex]);
                 console.log(root.style.getPropertyValue('--main-color-now'));
             });
+
+            // websocket ~~~~~~~~
+            let currentPoint = /*[[${currentPoint}]]*/0;
+            let memInfoStompClient = null;
+            let memId = 0;
+            document.addEventListener("DOMContentLoaded", function () {
+                memId = /*[[${memId}]]*/0;
+                if(memId!==0) pointConnect();
+            });
+            
+            function pointConnect() {
+                var socket = new SockJS('/ws');
+
+                memInfoStompClient = Stomp.over(socket);
+
+                memInfoStompClient.connect({}, function (frame) {
+                    memInfoStompClient.subscribe(`/topic/headerInfo/` + memId, function (response) {
+                        try {
+                            let headerInfo = JSON.parse(response.body);
+                            console.log(headerInfo);
+                            if(headerInfo.flag===2){
+                                alert("포인트 부족");
+                            }
+                            if(headerInfo.flag===1){
+                                // 정상
+                                currentPoint = headerInfo.currentPoint;
+                                document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
+                            }else if(headerInfo.flag===0 || headerInfo.flag===-1){
+                                // 에러
+                                alert("에러");
+                            }
+                        } catch (err) {
+                            console.log("에러 : " + err);
+                        }
+                    });
+                });
+            }
+
+            function sendPointChange(point,pointKindCd) {
+                memInfoStompClient.send(`/app/memPointChange`, {},JSON.stringify({
+                    memId: Number(memId),
+                    pointKindCd : pointKindCd,
+                    currentPoint: Number(currentPoint),
+                    pointChange: Number(point),
+                    flag : -1
+                }));
+            }
         </script>
         <div class="page-header__inner">
             <!-- 헤더 사이드바(로고) -->
             <div class="page-header__sidebar">
                 <div class="page-header__menu-btn"><button class="menu-btn ico_menu is-active"></button></div>
-                <a href="/" ><div class="page-header__logo"><img src="/img/logo_white.png" alt="logo" id="logo_img"><span class="page-header__logo_text" >G A M M O A</span></div></a>
+                <a href="/">
+                    <div class="page-header__logo"><img src="/img/logo_white.png" alt="logo" id="logo_img"><span
+                            class="page-header__logo_text">G A M M O A</span></div>
+                </a>
             </div>
             <!-- 헤더 컨텐츠 -->
             <div class="page-header__content">
@@ -47,9 +101,14 @@
                         <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
                     </div>
                 </div>
+
                 <div class="page-header__action">
-                    <a th:if="${nickname}" class="action-btn wallet" href="/wallet"><i class="fa-solid fa-coins ico_fontawesome"></i></a>
-                    <div id="current-point" th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}"></div>
+                    <div onclick="sendPointChange(100,'50001')">100 포인트 추가</div>
+                    <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
+                    <a th:if="${nickname}" class="action-btn wallet" href="/wallet"><i
+                            class="fa-solid fa-coins ico_fontawesome"></i></a>
+                    <div id="current-point"
+                        th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}"></div>
                     <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                             class="animation-ripple-delay1"></span></a>
                     <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
@@ -58,36 +117,19 @@
                             class="fa-solid fa-right-from-bracket ico_logout"></i></a>
                     <a th:unless="${nickname}" th:href="@{login}" class="action-btn"><i
                             class="fa-solid fa-right-to-bracket ico_fontawesome"></i></a>
-                            
-                    <a th:if="${nickname}" class="profile" href="08_wallet.html"><img src="/img/profile.png" alt="profile"></a>
+
+                    <a th:if="${nickname}" class="profile" href="08_wallet.html"><img src="/img/profile.png"
+                            alt="profile"></a>
                 </div>
 
             </div>
         </div>
+        <script>
+            function formatNumber(number) {
+                return new Intl.NumberFormat('en-US').format(number);
+            }
+        </script>
     </header>
-    <!-- <header th:fragment="headerFragment" id="header">
-        <script src="./js/login_style.js"></script>
-        <h1 class="logo"><a href="/"><img src="./img/logo.png" alt="logo"></a></h1>
-        <div id="login-section">
-            <a th:unless="${nickname}" th:href="@{login}">
-                <div id="login-button">로그인</div>
-            </a>
-            <div th:if="${nickname}" id="login-info">
-                <div>
-                    <p th:text="${nickname}">&nbsp;&nbsp;</p>
-                    <i class="fa-solid fa-caret-down"></i>
-                </div>
-                <ul id="login-info-section">
-                    <li><a href="#">회원정보관리</a></li>
-                    <li><a href="mypage/doyun">프로필</a></li>
-                    <!-- <li style="cursor: pointer;" onclick="setPage('shop')">아이템 샵</li>
-                    <li><a href="board/shop">아이템 샵</a></li>
-                    <li id="login-info-logout"><a href="/logout">로그아웃</a></li>
-                </ul>
-            </div>
-            
-        </div>
-    </header> -->
 
 </body>
 

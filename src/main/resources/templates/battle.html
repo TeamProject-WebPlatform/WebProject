@@ -22,15 +22,13 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
 
-    <!-- 웹소켓 -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
 </head>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
     let memId = /*[[${memId}]]*/'';
+    let currentPoint =/*[[${currentPoint}]]*/0;
     function formatNumber(value) {
         var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
         return formattedValue;
@@ -38,7 +36,6 @@
     /*]]>*/
 </script>
 <script>
-    let stompClient = null;
     document.addEventListener("DOMContentLoaded", function () {
         //console.log = function () {};
 
@@ -70,19 +67,22 @@
 
         // websocket ------------------------------
 
-        connect();
+        battleCardConnect();
     });
-
-    function connect() {
+    let battleCardStompClient = null;
+    function battleCardConnect() {
         var socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
-
+        let battleCardStompClient = null;
+        battleCardStompClient = Stomp.over(socket);
+        // 보유 포인트 구독
+        
+        // 배틀 전광판 구독
         const cards = document.querySelectorAll(".battle-card-info");
-        stompClient.connect({}, function (frame) {
+        battleCardStompClient.connect({}, function (frame) {
             console.log(frame);
             cards.forEach(function (card) {
                 let btId = card.getAttribute("btId");
-                stompClient.subscribe(`/topic/pointbetting/` + btId, function (response) {
+                battleCardStompClient.subscribe(`/topic/pointbetting/` + btId, function (response) {
                     try {
                         let pointTO = JSON.parse(response.body);
                         let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
@@ -119,10 +119,12 @@
 
                         if (pointTO.flag == 0) {
                             button = buttons[0];
+                            button.style.backgroundColor = "blueviolet"
                         } else if (pointTO.flag == 1) {
                             button = buttons[1];
+                            button.style.backgroundColor = "blueviolet"
                         }
-                        button.style.backgroundColor = "blueviolet"
+                        
 
                     } catch (err) {
                         console.log("에러 : " + err);
@@ -138,6 +140,10 @@
         let pointInputs = section.querySelector(".point-betting-input");
         let point = pointInputs.value;
         if (point === "" | isNaN(point)) {
+            return;
+        }
+        if(point > currentPoint){
+            alert("포인트 부족");
             return;
         }
         let buttons = section.querySelectorAll(".point-betting-button");
@@ -156,7 +162,7 @@
 
             pointInputs.value = "";
 
-            stompClient.send(`/app/pointbetting`, {}, JSON.stringify({
+            battleCardStompClient.send(`/app/pointbetting`, {}, JSON.stringify({
                 point: point,
                 btId: btId,
                 flag: flag,
@@ -232,15 +238,21 @@
                                         <div class="profile-main">
                                             <div class="profile-dividing-line"></div>
                                             <div class="profile-badge-section">
-                                                <span class="badge">&#127774;</span>
-                                                <span class="badge">&#127775;</span>
-                                                <span class="badge">&#127806;</span>
-                                                <span class="badge">&#127851;</span>
-                                                <span class="badge">&#127774;</span>
-                                                <span class="badge">&#127775;</span>
-                                                <span class="badge">&#127806;</span>
-                                                <span class="badge">&#127851;</span>
-                                                <span class="badge">&#127774;</span>
+                                                <div class="badge-line">
+                                                    <span class="badge">&#127774;</span>
+                                                    <span class="badge">&#127775;</span>
+                                                    <span class="badge">&#127806;</span>
+                                                </div>
+                                                <div class="badge-line">
+                                                    <span class="badge">&#127851;</span>
+                                                    <span class="badge">&#127774;</span>
+                                                    <span class="badge">&#127775;</span>
+                                                </div>
+                                                <div class="badge-line">
+                                                    <span class="badge">&#127806;</span>
+                                                    <span class="badge">&#127851;</span>
+                                                    <span class="badge">&#127774;</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -415,15 +427,21 @@
                                         <div class="profile-main">
                                             <div class="profile-dividing-line"></div>
                                             <div class="profile-badge-section">
-                                                <span class="badge">&#127774;</span>
-                                                <span class="badge">&#127775;</span>
-                                                <span class="badge">&#127806;</span>
-                                                <span class="badge">&#127851;</span>
-                                                <span class="badge">&#127774;</span>
-                                                <span class="badge">&#127775;</span>
-                                                <span class="badge">&#127806;</span>
-                                                <span class="badge">&#127851;</span>
-                                                <span class="badge">&#127774;</span>
+                                                <div class="badge-line">
+                                                    <span class="badge">&#127774;</span>
+                                                    <span class="badge">&#127775;</span>
+                                                    <span class="badge">&#127806;</span>
+                                                </div>
+                                                <div class="badge-line">
+                                                    <span class="badge">&#127851;</span>
+                                                    <span class="badge">&#127774;</span>
+                                                    <span class="badge">&#127775;</span>
+                                                </div>
+                                                <div class="badge-line">
+                                                    <span class="badge">&#127806;</span>
+                                                    <span class="badge">&#127851;</span>
+                                                    <span class="badge">&#127774;</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

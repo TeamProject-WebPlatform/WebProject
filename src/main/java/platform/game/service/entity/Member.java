@@ -40,8 +40,11 @@ public class Member {
     private String memCreatedAt;
     private String memDeletedAt;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "member")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<MemberBetting> memBettingList = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    private List<PointHistory> memPointHistoryList = new ArrayList<>();
 
     public String getRole(String code) {
         switch (code) {
