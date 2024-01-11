@@ -1,6 +1,7 @@
 package platform.game.service.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import net.minidev.json.JSONObject;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.MemberRanking;
@@ -101,5 +103,20 @@ public class ProfileController {
         mav.addObject("profile", memberProfile);
 
         return mav;
+    }
+
+    @PostMapping("/updateintroduce")
+    public ResponseEntity<String> UpdateIntroduce(@RequestBody Map<String, String> introduce) {
+        int flag = 0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
+
+        String introduction = introduce.get("introduce");
+
+        if (profileRepository.IntroduceModify(introduction, member.getMemId()) == 1) {
+            flag = 1;
+        }
+
+        return ResponseEntity.ok(String.valueOf(flag));
     }
 }

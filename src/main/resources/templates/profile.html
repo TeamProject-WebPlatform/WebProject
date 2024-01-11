@@ -23,6 +23,12 @@
 
     <script src="/js/favoriteGame.js"></script>
 
+    <script>
+        const EditProfile = function(){
+            window.open("/profile/editprofile","editprofile","width=700, height=700");
+        }
+    </script>
+
 </head>
 
 <script>
@@ -62,7 +68,7 @@
                                         <div class="user-info__title" th:text="${'LV : ' + member.memLvl + ' &nbsp ' + member.memNick}"></div>
                                         <div class="user-info__text" th:text="${memberProfile.profileIntro}"></div>
                                     </div>
-                                </div><a class="uk-button uk-button-danger" href="04_profile.html"><i class="ico_edit"></i><span class="uk-margin-small-left">Edit Profile</span></a>
+                                </div><a class="uk-button uk-button-danger" onclick="EditProfile()"><i class="ico_edit"></i><span class="uk-margin-small-left">Edit Profile</span></a>
                             </div>
                         </div>
                         <div class="widjet --bio">
@@ -98,7 +104,6 @@
                                         <div>
                                             <button id="game-submit" class="uk-button uk-button-secondary" type="button">등록</button>
                                         </div>
-                                        
                                 </div>
                             </div>
                             <br>
