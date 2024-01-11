@@ -128,12 +128,22 @@
     font-size:12px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     padding: 18px;
     padding-top: 5px;
 }
+.profile-badge-section .badge-line{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 99%;
+    height: 33%;
+}
+
 .profile-badge-section .badge{
-    height: 40px;
-    width: 50px;
+    height: 99%;
+    width: 33%;
     /* size: 40px; */
     font-size: 30px;
     margin: auto;

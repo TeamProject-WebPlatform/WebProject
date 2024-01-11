@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     let profileSlidesPerView = 4;
     setSwiperWrapper(profileSlidesPerView);
-    
+
     // 창 크기가 변경될 때 Swiper 업데이트
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         setSwiperWrapper(profileSlidesPerView);
     });
 });
@@ -23,7 +23,7 @@ const SwiperData = async function () {
     }
     return datalist;
 }
-const setSwiper = function(){
+const setSwiper = function () {
     const profileSlider = new Swiper('.js-recommend .swiper', {
         slidesPerView: profileSlidesPerView,
         slidesPerGroup: profileSlidesPerView,
@@ -50,7 +50,7 @@ const setSwiper = function(){
     });
 }
 
-{/* <div class="recommend-slide row user"> */}
+{/* <div class="recommend-slide row user"> */ }
 const setSwiperWrapper = async function () {
     let datalist = await SwiperData();
     let slideNum = datalist.length
@@ -59,7 +59,7 @@ const setSwiperWrapper = async function () {
         html += `
             <div class="swiper-slide">`;
 
-            html += createSwiperProfile(datalist[i].mem_nick, datalist[i].mem_lvl);
+        html += createSwiperProfile(datalist[i].mem_nick, datalist[i].mem_lvl);
 
         html += `   
             </div>`;
@@ -71,7 +71,7 @@ const setSwiperWrapper = async function () {
         profileSlidesPerView = 4;
     } else if (window.innerWidth >= 1250) {
         profileSlidesPerView = 3;
-    } else if (window.innerWidth >= 630){
+    } else if (window.innerWidth >= 630) {
         profileSlidesPerView = 2;
     } else {
         profileSlidesPerView = 1;
@@ -104,15 +104,21 @@ const createSwiperProfile = function (nickname, level) {
                 </div>
                 <div class="profile-dividing-line"></div>
                 <div class="profile-badge-section">
-                <span class="badge">&#127774;</span>
-                <span class="badge">&#127775;</span>
-                <span class="badge">&#127806;</span>
-                <span class="badge">&#127851;</span>
-                <span class="badge">&#127774;</span>
-                <span class="badge">&#127775;</span>
-                <span class="badge">&#127806;</span>
-                <span class="badge">&#127851;</span>
-                <span class="badge">&#127774;</span>
+                    <div class="badge-line">
+                        <span class="badge">&#127774;</span>
+                        <span class="badge">&#127775;</span>
+                        <span class="badge">&#127806;</span>
+                    </div>
+                    <div class="badge-line">
+                        <span class="badge">&#127851;</span>
+                        <span class="badge">&#127774;</span>
+                        <span class="badge">&#127775;</span>
+                    </div>
+                    <div class="badge-line">
+                        <span class="badge">&#127806;</span>
+                        <span class="badge">&#127851;</span>
+                        <span class="badge">&#127774;</span>
+                    </div>
                 </div>
             </div>
         </div>
