@@ -27,6 +27,7 @@ import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.MemberRankingRepository;
 import platform.game.service.service.MemberInfoDetails;
+import platform.game.service.service.jwt.SecurityPassword;
 
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.env.config", "platform.game.model",
@@ -43,6 +44,9 @@ public class ProfileController {
 
     @Autowired
     private MemberRankingRepository rankingRepository;
+
+    @Autowired
+    private SecurityPassword securityPassword;
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -114,6 +118,37 @@ public class ProfileController {
         String introduction = introduce.get("introduce");
 
         if (profileRepository.IntroduceModify(introduction, member.getMemId()) == 1) {
+            flag = 1;
+        }
+
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    @PostMapping("/changepassword")
+    public ResponseEntity<String> ChangePassword(@RequestBody Map<String, String> password) {
+        int flag = 0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
+
+        String NewPassword = securityPassword.encode(password.get("ModifyPassword"));
+
+        if (profileRepository.UpdatePassword(NewPassword, member.getMemId()) == 1) {
+            flag = 1;
+        }
+
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    @PostMapping("/changenick")
+    public ResponseEntity<String> ChangeNick(@RequestBody Map<String, String> nickname) {
+        int flag = 0;
+
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
+
+        String NewNickname = nickname.get("Nickname");
+
+        if (profileRepository.UpdateNick(NewNickname, member.getMemId()) == 1) {
             flag = 1;
         }
 
