@@ -59,14 +59,15 @@
     background-color: #222;
     color: white;
     /* background-image: url("../img/acheivement-3.png"); */
-    background-size: cover;
+    background-size: 270px 500px;
     background-repeat: no-repeat;
 }
 .profile-header{
     width: 100%;
     padding-top:20px;
-    background-size: 270px 220px;
+    background-size: 230px 230px;
     background-repeat: no-repeat;
+    background-position: 20px 0;
     
     /* background-position: left; */
     /* background-image: url("../img/acheivement-2.png"); */

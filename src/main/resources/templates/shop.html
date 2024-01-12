@@ -91,9 +91,20 @@
                                                 </div>
                                                 <div class="game-card__bottom">
                                                     <input class="select_btn" type='submit' value='미리보기' th:onclick="showPreview('[[${item.itemNm}]]', '[[${item.itemKindCd}]]')">
-                                                    <form action=''>
-                                                        <input class="select_Get_btn" type='submit' value='구매'>
-                                                    </form>
+                                                    <div th:if="${memId eq null}">
+                                                        <input class="select_Get_btn" type='button' value='구매' onclick="return showLoginAlert()">
+                                                        <script th:inline="javascript">
+                                                            function showLoginAlert() {
+                                                                alert('로그인이 필요합니다.');
+                                                            }
+                                                        </script>
+                                                    </div>
+                                                    <div th:if="${memId ne null}">
+                                                        <!-- memId가 있는 경우, 구매 버튼을 표시 -->
+                                                        <form action=''>
+                                                            <input class="select_Get_btn" type='submit' value='구매' th:onclick="getItem('[[-${item.itemCost}]]','5001')">
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

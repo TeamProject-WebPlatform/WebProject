@@ -1,4 +1,5 @@
-  // 미리보기 목록에 아이템을 추가하는 함수
+
+// 미리보기 목록에 아이템을 추가하는 함수
 function addToPreviewList(itemName, category) {
     let previewList = document.getElementById('previewList');
 
@@ -83,6 +84,14 @@ function closePopup() {
     document.getElementById('popup').style.display = 'none';
 }
 
+// 아이템 구매
+function getItem(point,pointKindCd) {
+    if (confirm("정말 구매 하시겠습니까??") == true){    //확인
+        sendPointChange(point, pointKindCd);
+    }else{   //취소
+        return false;
+    }
+}
 
 // 데이터 전송
 
@@ -100,4 +109,8 @@ function changeCategori(){
     }else{
         location.href = "./shop_search?ItemSearch=" + ItemSearch +"&categorySelect=" + categorySelect;
     }
+}
+
+function purchase(){
+    location.href = "./shop_purchase?";
 }
