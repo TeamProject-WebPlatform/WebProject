@@ -3,7 +3,88 @@
     align-items: center;
     justify-content: center;
 }
-
+.wallet-info-totalPoint {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.33;
+    width: 100%;
+}
+.wallet-info-memberLevel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.33;
+    width: 100%;
+}
+.wallet-info-level {
+    position: relative;
+    /* z-index: 1; 또는 필요한 값으로 설정 */
+}
+.wallet-info-level:hover .level-table-section{
+    display: block;
+}
+.level-table-section{
+    position: absolute;
+    display: none;
+    z-index: 1;
+    background-color: #222;
+}
+.level-table{
+    display: flex;
+    border-top : 3px solid #F65100;
+    border-bottom: 3px solid #F65100;
+    color: #e5e5e5;
+}
+.level-table tbody{
+    width:150px;
+}
+.level-table tbody tr td:nth-child(2) {
+    border-right: 2px solid orange;
+}
+.level-table tbody:last-child tr td:nth-child(2){
+    border-right: none;
+}
+.level-table tbody:last-child {
+    border-right: none;
+}
+.level-table tbody tr td:nth-child(2) div{
+    width: 82px;
+    margin-left : 10px;
+}
+.level-table-memberLevel {
+    font-weight: 800px;
+    color : #F65100;
+}
+.level-table tbody tr td:first-child{
+    width: 50px;
+    border-right:1px solid orange;
+    display: flex;
+    justify-content: center;
+}
+.level-table-blank{
+    height: 10px;
+    background-color: orange;
+}
+.wallet-info-totalPoint > div{
+    margin-right:15px;
+}
+.wallet-info-memberLevel > div{
+    margin-right:15px;
+}
+.wallet-value {
+    color: #F65100;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.33;
+}
 .wallet-info-point .ico_fontawesome {
     color: #646464;
     font-size: 36px;

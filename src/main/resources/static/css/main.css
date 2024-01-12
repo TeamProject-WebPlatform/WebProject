@@ -3832,14 +3832,14 @@ display: block;
     align-items: flex-start;
 }
 
-.wallet-value {
+/* .wallet-value {
     color: #F65100;
     font-size: 36px;
     font-style: normal;
     font-weight: 700;
     line-height: 1.33;
     padding-bottom: 5px;
-}
+} */
 
 .wallet-label {
     color: #4aa138;

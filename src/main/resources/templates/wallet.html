@@ -37,7 +37,6 @@
             })
         });
     });
-    
 
 </script>
 
@@ -88,19 +87,79 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="wallet-info">
-                                    <div class="wallet-info-point">
-                                        토탈 : 
-                                        <div><i class="fa-solid fa-coins ico_fontawesome wallet"></i></div>
+                                    <div class="wallet-info-totalPoint">
+                                        <div> TOTAL :</div> 
+                                        <!-- <div><i class="fa-solid fa-wallet ico_fontawesome"></div> -->
                                         <div class="wallet-value"
                                             th:text="${#numbers.formatInteger(#numbers.formatInteger(totalPoint,0),0,'COMMA')}">
                                             TOTAL POINT</div>
                                     </div>
-                                    <div class="wallet-info-point">
-                                        레벨 : 
-                                        <div><i class="fa-solid fa-coins ico_fontawesome wallet"></i></div>
-                                        <div class="wallet-value"
-                                            th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}">
-                                            LEVEL</div>
+                                    <div class="wallet-info-level">
+                                        <div class="wallet-info-memberLevel">
+                                            <div>Lv :</div> 
+                                            <div class="wallet-value" th:text="${memberLevel}">LEVEL</div>
+                                        </div>
+                                        <div class="level-table-section">
+                                            <table class="level-table">
+                                                <tbody>
+                                                    <tr class="level-table-blank"><td></td><td></td></tr>
+                                                    <tr th:each="point, level : ${levelDesign}" th:if="${level.index+1 <= 25}">
+                                                        <td>
+                                                            <div th:unless="${level.index+1==memberLevel}" th:text="${level.index+1}"></div>
+                                                            <div th:if="${level.index+1==memberLevel}" class="level-table-memberLevel" th:text="${level.index+1}"></div>
+                                                        </td>
+                                                        <td>
+                                                            <div th:unless="${level.index+1==memberLevel}" th:text="${#numbers.formatInteger(#numbers.formatInteger(point,0),0,'COMMA')}"></div>
+                                                            <div th:if="${level.index+1==memberLevel}" class="level-table-memberLevel" th:text="${#numbers.formatInteger(#numbers.formatInteger(point,0),0,'COMMA')}"></div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="level-table-blank"><td></td><td></td></tr>
+                                                </tbody>
+                                                <tbody>
+                                                    <tr class="level-table-blank"><td></td><td></td></tr>
+                                                    <tr th:each="point, level : ${levelDesign}" th:if="${level.index+1 >25 && level.index+1 <= 50}">
+                                                        <td>
+                                                            <div th:unless="${level.index+1==memberLevel}" th:text="${level.index+1}"></div>
+                                                            <div th:if="${level.index+1==memberLevel}" class="level-table-memberLevel" th:text="${level.index+1}"></div>
+                                                        </td>
+                                                        <td>
+                                                            <div th:unless="${level.index+1==memberLevel}" th:text="${#numbers.formatInteger(#numbers.formatInteger(point,0),0,'COMMA')}"></div>
+                                                            <div th:if="${level.index+1==memberLevel}" class="level-table-memberLevel" th:text="${#numbers.formatInteger(#numbers.formatInteger(point,0),0,'COMMA')}"></div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="level-table-blank"><td></td><td></td></tr>
+                                                </tbody>
+                                                <tbody>
+                                                    <tr class="level-table-blank"><td></td><td></td></tr>
+                                                    <tr th:each="point, level : ${levelDesign}" th:if="${level.index+1 > 50 && level.index+1 <=75}">
+                                                        <td>
+                                                            <div th:unless="${level.index+1==memberLevel}" th:text="${level.index+1}"></div>
+                                                            <div th:if="${level.index+1==memberLevel}" class="level-table-memberLevel" th:text="${level.index+1}"></div>
+                                                        </td>
+                                                        <td>
+                                                            <div th:unless="${level.index+1==memberLevel}" th:text="${#numbers.formatInteger(#numbers.formatInteger(point,0),0,'COMMA')}"></div>
+                                                            <div th:if="${level.index+1==memberLevel}" class="level-table-memberLevel" th:text="${#numbers.formatInteger(#numbers.formatInteger(point,0),0,'COMMA')}"></div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="level-table-blank"><td></td><td></td></tr>
+                                                </tbody>
+                                                <tbody>
+                                                    <tr class="level-table-blank"><td></td><td></td></tr>
+                                                    <tr th:each="point, level : ${levelDesign}" th:if="${level.index+1 > 75 && level.index+1 <=100}">
+                                                        <td>
+                                                            <div th:unless="${level.index+1==memberLevel}" th:text="${level.index+1}"></div>
+                                                            <div th:if="${level.index+1==memberLevel}" class="level-table-memberLevel" th:text="${level.index+1}"></div>
+                                                        </td>
+                                                        <td>
+                                                            <div th:unless="${level.index+1==memberLevel}" th:text="${#numbers.formatInteger(#numbers.formatInteger(point,0),0,'COMMA')}"></div>
+                                                            <div th:if="${level.index+1==memberLevel}" class="level-table-memberLevel" th:text="${#numbers.formatInteger(#numbers.formatInteger(point,0),0,'COMMA')}"></div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="level-table-blank"><td></td><td></td></tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -138,7 +197,8 @@
                                                 적히는곳</a>
                                                 
                                             <div class="wallet-betting-item__game">게임 종류</div>
-                                            <div class="wallet-betting-item__point" th:text="${betting.betPoint}">HOST : 3000</div> <!---->
+                                            <div th:if="${betting.betFlag==0}" class="wallet-betting-item__point" th:text="${'HOST : '+betting.betPoint}">HOST : 3000</div> 
+                                            <div th:if="${betting.betFlag==1}" class="wallet-betting-item__point" th:text="${'CLIENT : '+betting.betPoint}">CLIENT : 3000</div> 
                                         </div>
 
                                     </li>

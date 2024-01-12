@@ -35,12 +35,8 @@ public class HeaderWebSocketController {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private TransactionTemplate transactionTemplate;
-    @Autowired
     private UpdatePointHistoryImpl updatePointHistoryImpl;
-    @Autowired
-    private MemberInfoRepository memberInfoRepository;
-
+    
     @MessageMapping("/memPointChange")
     public void memPointChange(@Payload HeaderInfoTO to) throws JsonMappingException, JsonProcessingException {
         // Long memId = Long.parseLong(memIdstr);

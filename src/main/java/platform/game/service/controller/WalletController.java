@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberBetting;
 import platform.game.service.entity.PointHistory;
 import platform.game.service.model.TO.MemberBettingTO;
+import platform.game.service.service.LevelService;
 import platform.game.service.service.MemberInfoDetails;
 
 @RequestMapping("/wallet")
@@ -26,37 +28,48 @@ import platform.game.service.service.MemberInfoDetails;
 public class WalletController {
     @Autowired
     EntityManager entityManager;
+    @Autowired
+    LevelService levelService;
 
     @Transactional
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @RequestMapping("")
-    public ModelAndView wallet(){
+    public ModelAndView wallet() {
         ModelAndView mav = new ModelAndView("wallet");
+        Member member = null;
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
-            if (member != null) {
-                member = entityManager.merge(member);
-                updateMemberData(member);
-
-                List<MemberBetting> memberBettingList = member.getMemBettingList();
-                List<MemberBettingTO> memberBettingTOList = new ArrayList<>();
-                for(var e : memberBettingList){
-                    Battle battle = e.getBattle();
-                    MemberBettingTO to = new MemberBettingTO(battle,battle.getBtPost().getPost(),e);
-                    memberBettingTOList.add(to);
-                }
-                mav.addObject("nickname", member.getMemNick());
-                mav.addObject("memId",member.getMemId());
-                mav.addObject("currentPoint", member.getMemCurPoint());
-                mav.addObject("totalPoint", member.getMemTotalPoint());
-                mav.addObject("memberBettingTOList",memberBettingTOList);
-                List<PointHistory> list =member.getMemPointHistoryList();
-                Collections.sort(list,Collections.reverseOrder(Comparator.comparing(PointHistory::getCreatedAt)));
-                mav.addObject("memberPointHistoryList", list);
+            if (member == null) {
+                return new ModelAndView("login");
             }
-        } else {
-            System.out.println("멤버 없음");
         }
+        member = entityManager.merge(member);
+        updateMemberData(member);
+
+        List<MemberBetting> memberBettingList = member.getMemBettingList();
+        List<MemberBettingTO> memberBettingTOList = new ArrayList<>();
+        for (var e : memberBettingList) {
+            Battle battle = e.getBattle();
+            MemberBettingTO to = new MemberBettingTO(battle, battle.getBtPost().getPost(), e);
+            memberBettingTOList.add(to);
+        }
+        mav.addObject("nickname", member.getMemNick());
+        mav.addObject("memId", member.getMemId());
+        mav.addObject("currentPoint", member.getMemCurPoint());
+        mav.addObject("totalPoint", member.getMemTotalPoint());
+        mav.addObject("memberBettingTOList", memberBettingTOList);
+        // 포인트 히스토리 정렬
+        List<PointHistory> list = member.getMemPointHistoryList();
+        Collections.sort(list, Collections.reverseOrder(Comparator.comparing(PointHistory::getPointHistoryId)));
+        mav.addObject("memberPointHistoryList", list);
+        
+        
+        // 레벨 디자인
+        mav.addObject("memberLevel", member.getMemLvl());
+        List<Integer> levelDesign = levelService.getLevelDesign();
+        mav.addObject("levelDesign",levelDesign);
+
         return mav;
     }
 
@@ -65,4 +78,5 @@ public class WalletController {
         Hibernate.initialize(member.getMemBettingList());
         Hibernate.initialize(member.getMemPointHistoryList());
     }
+
 }
