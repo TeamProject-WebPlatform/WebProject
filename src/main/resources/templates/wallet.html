@@ -25,9 +25,8 @@
 
 
 </head>
-<script>
+<script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
-        console.log(1);
         const active = document.getElementById("nav-wallet");
         active.classList.add("uk-active");    
         document.getElementById("toggle").addEventListener("click", function () {
@@ -35,6 +34,16 @@
             document.querySelectorAll('.vs > img').forEach(function (x) {
                 x.src = logo_img_paths[currentThemeIndex];
             })
+        });
+
+        let phCnt = 1;
+        let phMaxCnt = 15;
+        let phList = document.querySelectorAll(".wallet-ph-item");
+        phList.forEach(function(ph){
+            if(phCnt > phMaxCnt){
+                ph.style.display = 'none';
+            }
+            phCnt++;
         });
     });
 
@@ -250,13 +259,11 @@
                         <div class="widjet --wallet-ph">
                             <div class="widjet__head">
                                 <h3 class="uk-text-lead">POINT HISTORY</h3>
+                                <div>여기에 ph 갯수설정 </div>
                             </div>
                             <div class="widjet__body">
                                 <ul class="wallet-ph-list">
-                                    <li class="wallet-ph-item" th:each ="pointHistory : ${memberPointHistoryList}">
-                                        <!-- <div class="wallet-ph-header">
-                                            헤더
-                                        </div> -->
+                                    <li class="wallet-ph-item" th:each="pointHistory, iterStat : ${memberPointHistoryList}">
                                         <div class="wallet-ph-div-line"></div>
                                         <div class="wallet-ph-info">
                                             <div class="wallet-ph-title" href="10_game-profile.html" th:text="${pointHistory.pointKindCd}">포인트 종류</div>
@@ -277,9 +284,7 @@
                                                     <div class="wallet-ph-point" th:text="${#numbers.formatInteger(#numbers.formatInteger(pointHistory.totalPoint,0),0,'COMMA')}">total Point</div>
                                                 </div>
                                             </div>
- 
                                         </div>
-
                                     </li>
                                 </ul>
                             </div>

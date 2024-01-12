@@ -238,7 +238,18 @@ body.dark-theme .wallet-ph-item {
     padding: 0;
     background: none;
 }
-
+.widjet.--wallet-betting{
+    background-color: #181818;
+    padding: 10px;
+}
+.widjet.--wallet-ph{
+    max-height: 1000px;
+    background-color: #181818;
+    padding: 10px;
+    
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 .wallet-betting-list {
     margin: 0;
     padding: 0;
