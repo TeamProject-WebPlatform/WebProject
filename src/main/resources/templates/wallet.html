@@ -37,7 +37,7 @@
         });
 
         let phCnt = 1;
-        let phMaxCnt = 15;
+        let phMaxCnt = 10;
         let phList = document.querySelectorAll(".wallet-ph-item");
         phList.forEach(function(ph){
             if(phCnt > phMaxCnt){
@@ -181,7 +181,7 @@
                                 <h3 class="uk-text-lead">BETTING PROCEEDING</h3>
                             </div>
                             <div class="widjet__body">
-                                <ul class="wallet-betting-list">
+                                <ul class="wallet-betting-list overflow-scroll">
                                     <li class="wallet-betting-item" th:each ="betting : ${memberBettingTOList}"> <!--  -->
                                         <div class="wallet-betting-header">
                                             <div class="battle-profile-media">
@@ -218,10 +218,10 @@
                         <!-- BETTING TERMIATED -->
                         <div class="widjet --wallet-betting">
                             <div class="widjet__head">
-                                <h3 class="uk-text-lead">BETTING PROCEEDING</h3>
+                                <h3 class="uk-text-lead">BETTING TERMINATED</h3>
                             </div>
                             <div class="widjet__body">
-                                <ul class="wallet-betting-list">
+                                <ul class="wallet-betting-list overflow-scroll">
                                     <li class="wallet-betting-item" th:each ="betting : ${memberBettingTOList}"> <!--  -->
                                         <div class="wallet-betting-header">
                                             <div class="battle-profile-media">
@@ -262,7 +262,7 @@
                                 <div>여기에 ph 갯수설정 </div>
                             </div>
                             <div class="widjet__body">
-                                <ul class="wallet-ph-list">
+                                <ul class="wallet-ph-list overflow-scroll">
                                     <li class="wallet-ph-item" th:each="pointHistory, iterStat : ${memberPointHistoryList}">
                                         <div class="wallet-ph-div-line"></div>
                                         <div class="wallet-ph-info">

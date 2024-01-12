@@ -94,15 +94,40 @@
     padding-bottom: 5px;
     margin-right: 10px;
 }
+.widjet__head{
+    height :40px;
+}
 /* 포인트 내역 */
 .widjet.--wallet-ph .widjet__body {
     padding: 0;
     background: none;
 }
+.widjet.--wallet-ph{
+    max-height: 1000px;
+    background-color: #181818;
+    padding: 10px;
+}
+.overflow-scroll{
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.overflow-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.dark-theme .overflow-scroll::-webkit-scrollbar-track {
+    background-color: #05353a;
+}
+.overflow-scroll::-webkit-scrollbar-track {
+    background-color: #11909e;
+}
+.overflow-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--main-color-now);
+}
 .wallet-ph-list {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    max-height: 840px;
 }
 .wallet-ph-item {
     height:150px;
@@ -237,23 +262,19 @@ body.dark-theme .wallet-ph-item {
 .widjet.--wallet-betting .widjet__body {
     padding: 0;
     background: none;
+    max-height: 507px;
 }
 .widjet.--wallet-betting{
     background-color: #181818;
     padding: 10px;
+    max-height: 547px;
 }
-.widjet.--wallet-ph{
-    max-height: 1000px;
-    background-color: #181818;
-    padding: 10px;
-    
-    overflow-x: hidden;
-    overflow-y: auto;
-}
+
 .wallet-betting-list {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    max-height: 470px;
 }
 .wallet-betting-div-line{
     width: 1px;
