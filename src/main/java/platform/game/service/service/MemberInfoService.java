@@ -10,32 +10,79 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import platform.game.service.entity.Member;
+import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.repository.MemberProfileRepository;
+import platform.game.service.repository.MemberRankingRepository;
 
 @Service
-public class MemberInfoService implements UserDetailsService{
+public class MemberInfoService implements UserDetailsService {
     @Autowired
-    private MemberInfoRepository repository; 
-  
+    private MemberInfoRepository repository;
+
     @Autowired
-    private PasswordEncoder encoder; 
+    private MemberRankingRepository rankingRepository;
+
+    @Autowired
+    MemberProfileRepository profileRepository;
+
+    @Autowired
+    MemberFavoriteGameRepository favoriteGameRepository;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
-    public UserDetails loadUserByUsername(String mem_userid) throws UsernameNotFoundException { 
-  
-        Optional<Member> memberDetail = repository.findByMemUserid(mem_userid); 
-  
-        // Converting userDetail to UserDetails 
-        return memberDetail.map(MemberInfoDetails::new) 
-                .orElseThrow(() -> new UsernameNotFoundException("User not found " + mem_userid)); 
-    } 
-  
-    public boolean addUser(Member member) { 
-        try{
-            member.setMemPw(encoder.encode(member.getMemPw())); 
-            repository.save(member); 
+    public UserDetails loadUserByUsername(String mem_userid) throws UsernameNotFoundException {
+
+        Optional<Member> memberDetail = repository.findByMemUserid(mem_userid);
+
+        // Converting userDetail to UserDetails
+        return memberDetail.map(MemberInfoDetails::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found " + mem_userid));
+    }
+
+    public boolean addUser(Member member) {
+        try {
+            member.setMemPw(encoder.encode(member.getMemPw()));
+            repository.save(member);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 멤버 랭킹 추가
+    public boolean addUserRanking(Member member) {
+        try {
+            rankingRepository.SetMemberRanking("Level", member.getMemId(), repository.countBy());
+            rankingRepository.SetMemberRanking("Point", member.getMemId(), repository.countBy());
+            rankingRepository.SetMemberRanking("WinRate", member.getMemId(), repository.countBy());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addUserProfile(Member member) {
+        try {
+            profileRepository.setAddUserProfile(member.getMemId());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addUserFavGame(Member member) {
+        try {
+            favoriteGameRepository.setAddUserFavGame(1, member.getMemId());
+            favoriteGameRepository.setAddUserFavGame(2, member.getMemId());
+            favoriteGameRepository.setAddUserFavGame(3, member.getMemId());
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

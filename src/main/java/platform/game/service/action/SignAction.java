@@ -99,9 +99,11 @@ public class SignAction {
                 System.out.println("signupAction > 멤버 객체 생성 성공 " + member.toString());
                 // memService bean에서 addUser로 만든 member를 DB에 추가(service 내에서 비번 암호화)
                 boolean flag = memService.addUser(member);
+                boolean addRank = memService.addUserRanking(member);
+                boolean addProfile = memService.addUserProfile(member);
                 System.out.println("signupAction > 멤버 객체 추가 성공");
                 // 성공하면 common code의 값 update
-                if (flag) {
+                if (flag && addRank && addProfile) {
                     comCdRepo.updateRemark1ByCd(idCode, String.valueOf(lastid));
                 } else {
                     System.out.println("롤백 1");
@@ -243,23 +245,23 @@ public class SignAction {
     public Cookie generateToken(AuthRequest authRequest) {
         Cookie cookie = null;
         Authentication authentication = null;
-        try{
+        try {
             authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
+                    new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
             if (authentication.isAuthenticated()) {
-            String password = securityPassword.encode(authRequest.getMemPw());
-            String token = jwtService.generateToken(authRequest.getMemUserid(), password);
+                String password = securityPassword.encode(authRequest.getMemPw());
+                String token = jwtService.generateToken(authRequest.getMemUserid(), password);
 
-            cookie = new Cookie("jwtTokenCookie", token);
-            cookie.setMaxAge(JWT_EXPIRY_TIME);
-            cookie.setPath("/");
+                cookie = new Cookie("jwtTokenCookie", token);
+                cookie.setMaxAge(JWT_EXPIRY_TIME);
+                cookie.setPath("/");
             } else {
                 return null;
             }
-        }catch(Exception e){System.out.println(e.getMessage());}
-        
-        
-        
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         return cookie;
     }
 

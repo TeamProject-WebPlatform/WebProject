@@ -25,12 +25,12 @@ public class MemberMatchRecord {
     @Column(name = "mem_id")
     private long memId;
 
-    @Column(name = "mem_game_totalmatch_cnt")
+    @Column(name = "mem_bt_total_game_cnt")
     private int matchCnt;
 
-    @Column(name = "mem_game_match_win_cnt")
+    @Column(name = "mem_bt_win_cnt")
     private int winCnt;
 
-    @Column(name = "mem_game_match_lost_cnt")
+    @Column(name = "mem_bt_lose_cnt")
     private int loseCnt;
 }

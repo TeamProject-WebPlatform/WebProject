@@ -35,4 +35,7 @@ public interface MemberInfoRepository extends JpaRepository<Member, Integer> {
     // 게시판 멤버 닉네임 검색해서 ID 가져오기
     Member findByMemNick(String mem_nickname);
 
+    // 멤버 생성 시 랭킹 테이블 맨 아래로 등록하기 위한 멤버수 구하기
+    Long countBy();
+
 }
