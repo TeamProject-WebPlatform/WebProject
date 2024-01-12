@@ -4,16 +4,16 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import platform.game.service.entity.RankList;
+import platform.game.service.entity.Ranking;
 
 @Repository
-public interface RankListRepository extends JpaRepository<RankList, Integer> {
+public interface RankingRepository extends JpaRepository<Ranking, Integer> {
 
-    List<RankList> findAll();
+    List<Ranking> findAll();
 
-    List<RankList> findTop50ByOrderByRankCodeAsc();
+    List<Ranking> findTop50ByOrderByRankCodeAsc();
 
-    List<RankList> findTop50ByOrderByRankDesc();
+    List<Ranking> findTop50ByOrderByRankDesc();
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_lvl / 10) * 10 AS levelRange FROM member GROUP BY levelRange ORDER BY levelRange")
     List<Integer> GetLevelRank();
