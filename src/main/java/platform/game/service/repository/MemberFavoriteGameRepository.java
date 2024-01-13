@@ -17,6 +17,9 @@ public interface MemberFavoriteGameRepository extends JpaRepository<MemberFavori
     @Query(value = "select * from member_favorite_game m where m.mem_id=:mem_id", nativeQuery = true)
     List<MemberFavoriteGame> findByMemID(@Param("mem_id") long mem_id);
 
+    @Query(value = "insert into member_favorite_game values(:rank ,:mem_id,default)", nativeQuery = true)
+    Integer setAddUserFavGame(int rank, long mem_id);
+
     @Query(value = "insert into member_favorite_game values (:rank,:mem_id,:game_cd)", nativeQuery = true)
     void RegisterGame(int rank, long mem_id, String game_cd);
 

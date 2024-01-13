@@ -2,8 +2,14 @@ package platform.game.service.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,8 +29,12 @@ public class MemberRanking {
     private String rankCode;
 
     @Id
-    @Column(name = "mem_id")
+    @Column(name = "memId")
     private long memId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memId", referencedColumnName = "memId")
+    private Member member;
 
     @Column(name = "mem_rank")
     private int rank;

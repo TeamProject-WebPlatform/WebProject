@@ -5851,6 +5851,40 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
 .tabnav li a:hover,
 .tabnav li a.active{background:#fff; color:#7ea21e; }
 
+/* 프로필 수정 페이지 */
+.user-info__detail {
+    margin-top: 0px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-style: sans-serif;
+    font-weight: normal;
+    line-height: 2;
+}
+
+/* 프로필 자기소개 수정 */
+.uk-textarea {
+    height: 80px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+    background: #F5F5F5;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.36;
+    resize: none;
+}
+
+#label {
+    font-family: "Nunito";
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+
 
 #current-point{
     font-size: 20px;
