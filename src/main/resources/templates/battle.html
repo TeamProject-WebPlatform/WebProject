@@ -121,7 +121,6 @@
                             button.style.backgroundColor = "blueviolet"
                         }
 
-
                     } catch (err) {
                         console.log("에러 : " + err);
                     }
@@ -136,6 +135,10 @@
         let pointInputs = section.querySelector(".point-betting-input");
         let point = pointInputs.value;
         if (point === "" | isNaN(point)) {
+            return;
+        }
+        if(point > currentPoint){
+            alert("포인트 부족");
             return;
         }
         let buttons = section.querySelectorAll(".point-betting-button");

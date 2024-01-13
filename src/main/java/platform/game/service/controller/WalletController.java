@@ -78,5 +78,4 @@ public class WalletController {
         Hibernate.initialize(member.getMemBettingList());
         Hibernate.initialize(member.getMemPointHistoryList());
     }
-
 }

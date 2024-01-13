@@ -243,23 +243,23 @@ public class SignAction {
     public Cookie generateToken(AuthRequest authRequest) {
         Cookie cookie = null;
         Authentication authentication = null;
-        try{
+        try {
             authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
+                    new UsernamePasswordAuthenticationToken(authRequest.getMemUserid(), authRequest.getMemPw()));
             if (authentication.isAuthenticated()) {
-            String password = securityPassword.encode(authRequest.getMemPw());
-            String token = jwtService.generateToken(authRequest.getMemUserid(), password);
+                String password = securityPassword.encode(authRequest.getMemPw());
+                String token = jwtService.generateToken(authRequest.getMemUserid(), password);
 
-            cookie = new Cookie("jwtTokenCookie", token);
-            cookie.setMaxAge(JWT_EXPIRY_TIME);
-            cookie.setPath("/");
+                cookie = new Cookie("jwtTokenCookie", token);
+                cookie.setMaxAge(JWT_EXPIRY_TIME);
+                cookie.setPath("/");
             } else {
                 return null;
             }
-        }catch(Exception e){System.out.println(e.getMessage());}
-        
-        
-        
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         return cookie;
     }
 
