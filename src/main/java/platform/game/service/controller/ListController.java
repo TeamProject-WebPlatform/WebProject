@@ -64,15 +64,15 @@ public class ListController {
                 navBoard = navBoard + "event";
                 break;
             case "20004":
-                boardCd_name = "Free Board";
+                boardCd_name = "free";
                 navBoard = navBoard + "free";
                 break;
             case "20005":
-                boardCd_name = "Sharing information";
+                boardCd_name = "information";
                 navBoard = navBoard + "information";
                 break;
             case "20006":
-                boardCd_name = "Share the strategy";
+                boardCd_name = "strategy";
                 navBoard = navBoard + "strategy";
                 break;
 
