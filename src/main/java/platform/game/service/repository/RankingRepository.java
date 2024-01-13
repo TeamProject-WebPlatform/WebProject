@@ -15,12 +15,12 @@ public interface RankingRepository extends JpaRepository<Ranking, Integer> {
 
     List<Ranking> findTop50ByOrderByRankDesc();
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_lvl / 10) * 10 AS levelRange FROM member GROUP BY levelRange ORDER BY levelRange")
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_lvl / 5) * 5 AS levelRange FROM member GROUP BY levelRange ORDER BY levelRange")
     List<Integer> GetLevelRank();
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , ifnull(floor(mem_game_win_cnt/mem_total_game_cnt*10) * 10,0) AS win FROM member GROUP BY win ORDER BY win")
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange, ifnull(FLOOR((mem_game_win_cnt / mem_total_game_cnt * 100) / 5) * 5,0) AS winRange FROM member GROUP BY winRange ORDER BY winRange;")
     List<Integer> GetWinRank();
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_total_point / 400) * 400 as point FROM member GROUP BY point ORDER BY point")
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_total_point / 150) * 150 as point FROM member GROUP BY point ORDER BY point")
     List<Integer> GetPointRank();
 }

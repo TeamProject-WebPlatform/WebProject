@@ -109,7 +109,7 @@ const LevelChart = async function() {
                 datasets: [
                     {
                     label: '레벨 구간 별 유저수',
-                    data: ({0:Level[0], 10:Level[1], 20:Level[2], 30:Level[3], 40:Level[4], 50:Level[5], 60:Level[6], 70:Level[7], 80:Level[8], 90:Level[9]}),
+                    data: ({0:Level[0], 5:Level[1], 10:Level[2], 15:Level[3], 20:Level[4], 25:Level[5], 30:Level[6], 35:Level[7], 40:Level[8], 45:Level[9], 50:Level[10], 55:Level[11], 60:Level[12], 65:Level[13], 70:Level[14], 75:Level[15], 80:Level[16], 85:Level[17], 90:Level[18], 95:Level[19]}),
                     borderColor: 'rgb(75, 0, 192)',
                     fill: false,
                     stepped: false,
@@ -148,7 +148,7 @@ const WinRateChart = async function() {
                 datasets: [
                     {
                     label: '승률 별 유저수',
-                    data: ({0:WinRate[0], 10:WinRate[1], 20:WinRate[2], 30:WinRate[3], 40:WinRate[4], 50:WinRate[5], 60:WinRate[6], 70:WinRate[7], 80:WinRate[8], 90:WinRate[9]}),
+                    data: ({0:WinRate[0], 5:WinRate[1], 10:WinRate[2], 15:WinRate[3], 20:WinRate[4], 25:WinRate[5], 30:WinRate[6], 35:WinRate[7], 40:WinRate[8], 45:WinRate[9], 50:WinRate[10], 55:WinRate[11], 60:WinRate[12], 65:WinRate[13], 70:WinRate[14], 75:WinRate[15], 80:WinRate[16], 85:WinRate[17], 90:WinRate[18], 95:WinRate[19]}),
                     borderColor: 'rgb(75, 0, 192)',
                     fill: false,
                     stepped: false,
@@ -187,7 +187,7 @@ const PointChart = async function() {
                 datasets: [
                     {
                     label: '포인트 보유 별 유저수',
-                    data: ({0:Point[0], 400:Point[1], 800:Point[2], 1200:Point[3], 1600:Point[4]}),
+                    data: ({0:Point[0], 150:Point[1], 300:Point[2], 450:Point[3], 600:Point[4], 750:Point[5], 900:Point[6], 1050:Point[7], 1200:Point[8], 1350:Point[9], 1500:Point[10], 1650:Point[11], 1800:Point[12], 1950:Point[13]}),
                     borderColor: 'rgb(75, 0, 192)',
                     fill: false,
                     stepped: false,
@@ -206,6 +206,7 @@ const PointChart = async function() {
                 title: {
                     display: true,
                     text: (ctx) => '포인트 보유량 유저 분포도',
+                    color:'magenta'
                 },
                 legend:{
                     display : false
