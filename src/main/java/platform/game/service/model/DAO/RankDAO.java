@@ -5,24 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import platform.game.service.repository.RankListRepository;
+import platform.game.service.repository.RankingRepository;
 
 @Repository
 public class RankDAO {
 
     @Autowired
-    RankListRepository rankListRepository;
+    RankingRepository rankingRepository;
 
     public List<Integer> getLevelList() {
-        return rankListRepository.GetLevelRank();
+        return rankingRepository.GetLevelRank();
     }
 
     public List<Integer> getWinList() {
-        return rankListRepository.GetWinRank();
+        return rankingRepository.GetWinRank();
     }
 
     public List<Integer> getPointList() {
-        return rankListRepository.GetPointRank();
+        return rankingRepository.GetPointRank();
     }
 
 }

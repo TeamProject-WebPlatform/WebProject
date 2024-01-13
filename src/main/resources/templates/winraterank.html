@@ -25,6 +25,37 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="/js/module/chart.js"></script>
     <script src="/js/controller.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            //console.log = function () {};
+
+            const active = document.getElementById("[[${navRank}]]");
+            active.classList.add("uk-active");
+            document.getElementById("toggle").addEventListener("click", function () {
+
+                document.querySelectorAll('.vs > img').forEach(function (x) {
+                    x.src = logo_img_paths[currentThemeIndex];
+                })
+            });
+            const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
+            const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
+
+            const pointLefts = document.querySelectorAll(".info-center-left .info-point-percent");
+            const pointRights = document.querySelectorAll(".info-center-right .info-point-percent");
+
+            for (let i = 0; i < pointBarLefts.length; i++) {
+                let pointBarLeft = pointBarLefts.item(i);
+                pointBarLeft.style.width = pointLefts[i].innerHTML;
+                pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+                pointLefts[i].style.color = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+
+                let pointBarRight = pointBarRights.item(i);
+                pointBarRight.style.width = pointRights[i].innerHTML;
+                pointBarRight.style.backgroundColor = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+                pointRights[i].style.color = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+            }
+        });
+    </script>
     <style>
         table {
             border:1px solid black;
@@ -72,37 +103,46 @@
                             </div>
                             <div class="uk-width-2-3@l">
                                 <ul class="tabnav">
-                                    <li class="uk-width-1-6"><a href="winraterank">전체</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/lol">리그오브레전드</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/battleground">배틀그라운드</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/overwatch">오버워치</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/valorant">발로란트</a></li>
-                                    <li class="uk-width-1-6"><a href="winraterank/fifa">피파온라인</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank">전체</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/lol">리그오브레전드</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/battleground">배틀그라운드</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/overwatch">오버워치</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/valorant">발로란트</a></li>
+                                    <li class="uk-width-1-6"><a href="../winraterank/fifa">피파온라인</a></li>
                                 </ul>
                             </div>
-                            <!-- <div class="widjet__body">
-                                <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                    <div class="uk-width-1-1">
-                                        <div class="search">
-                                            <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search"></div>
-                                            <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
-                                            <input type="radio" name="Rank" id="LevelRanking" value="Level" onclick="charts()" checked> Level
-                                            <input type="radio" name="Rank" id="WinRateRanking" value="Win" onclick="charts()"> WinRate
-                                            <input type="radio" name="Rank" id="PointRanking" value="Point" onclick="charts()"> Point
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                         <div class="widjet --market">
                             <div class="widjet__body" style="text-align: center; display:block;">
-                                    <canvas id="win" style='width:600px; height:30vh; margin: auto;' ></canvas>
+                                    <canvas id="win" style='width:85%; height:30vh; margin: auto;' ></canvas>
 
                                 <script type="text/javascript">
                                     WinRateChart();
                                 </script>
                                 <div></div>
-                                <div class="profile-card" th:each="to, i:${win}" th:if="${i.index < 5}" style="display: inline-block;">
+                                <!-- 통합 랭킹 카드 -->
+                                <div class="profile-card" th:if="${win!=null and i.index<5}" th:each="to, i:${win}" style="display: inline-block;">
+                                    <a href="/mypage/${to.mem_userid}">
+                                        <div class="profile-header">
+                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                            <div class="profile-user_info">
+                                                <!-- <i th:text="${to.rank}"></i> 1등~5등 뱃지 영역 -->
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL"> <!-- 개인 설정 뱃지 -->
+                                            </div>
+                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
+                                        </div>
+                                    </a>
+                                    <div class="profile-dividing-line"></div>
+                                    <div class="profile-main">
+                                        <div class="profile-introduction">
+                                            안녕하세요
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 특정 게임 랭크 카드 -->
+                                <div class="profile-card" th:if="${otherwin!=null and i.index<5}" th:each="to, i:${otherwin}" style="display: inline-block;">
                                     <a href="/mypage/${to.mem_userid}">
                                         <div class="profile-header">
                                             <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
@@ -130,7 +170,13 @@
                                         <th>레벨</th>
                                         <th>승률</th>
                                     </tr>
-                                    <tr th:each="to, i:${win}" th:if="${i.index>=5}">
+                                    <tr th:if="${win!=null and i.index >=5}" th:each="to, i:${win}">
+                                        <td th:text="${to.rank}"></td>
+                                        <td th:text="${to.mem_userid}"></td>
+                                        <td th:text="${to.mem_lvl}"></td>
+                                        <td th:text="${to.winrate} + '%'"></td>
+                                    </tr>
+                                    <tr th:if="${otherwin!=null and i.index >=5}" th:each="to, i:${otherwin}">
                                         <td th:text="${to.rank}"></td>
                                         <td th:text="${to.mem_userid}"></td>
                                         <td th:text="${to.mem_lvl}"></td>

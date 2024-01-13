@@ -44,7 +44,6 @@
                 memId = /*[[${memId}]]*/0;
                 if(memId!==0) pointConnect();
             });
-            
             function pointConnect() {
                 var socket = new SockJS('/ws');
 
@@ -62,10 +61,14 @@
                                 // 정상
                                 currentPoint = headerInfo.currentPoint;
                                 document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
+
+                                
                             }else if(headerInfo.flag===0 || headerInfo.flag===-1){
                                 // 에러
                                 alert("에러");
                             }
+
+
                         } catch (err) {
                             console.log("에러 : " + err);
                         }

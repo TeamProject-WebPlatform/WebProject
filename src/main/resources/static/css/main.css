@@ -841,7 +841,8 @@ a {
     -webkit-transition: all 0.25s linear;
     -o-transition: all 0.25s linear;
     color: var(--main-color-now);
-    font-size: 16px;
+    /* 폰트크기 */
+    /* font-size: 16px; */
     font-style: normal;
     font-weight: 700;
     line-height: 1.31;
@@ -971,10 +972,13 @@ a:hover {
     height: 24px;
     border: none;
     outline: none;
-    color: #646464;
     font-size: 24px;
     cursor: pointer;
     transition: all 0.25s linear;
+    color: #646464
+}
+.dark-theme .search__refresh button{
+    color: #ffffff;
 }
 
 .search__btn button:hover,
@@ -2454,96 +2458,17 @@ display: block;
 /* 또는 다른 크기를 변경하는 스타일 */
 }
 /* 메뉴 드랍다운 */
-.board-submenu,
+/* .board-submenu,
 .rank-submenu {
     display: none;
-}
+} */
 
 /*.board-submenu li,
 .rank-submenu li {
     list-style-type: none;
 } */
 
-/* 버튼 디자인 */
-.reset_btn {
-    width: 100%;
-	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
-	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
-	background-color: #222;
-    /* box-sizing: border-box; */
-	border: none;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:13px;
-	font-weight:bold;
-	padding:6px 12px;
-	text-decoration:none;
-}
-.reset_btn:hover {
-	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
-	background-color:#565c67;
-    color: var( --main-color-dark);
-}
-.reset_btn:active {
-	position:relative;
-	top:1px;
-}
 
-
-.select_btn {
-    /* width: 100%; */
-	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
-	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
-	background-color: #222;
-	border: none;
-	/* border:1px solid #343538; */
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:13px;
-	font-weight:bold;
-	padding:6px 12px;
-	text-decoration:none;
-    box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
-}
-.select_btn:hover {
-	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
-	background-color:#565c67;
-    color: var( --main-color-dark);
-}
-.select_btn:active {
-	position:relative;
-	top:1px;
-}
-
-.select_Get_btn {
-    /* width: 100%; */
-	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
-	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
-	background-color: #222;
-	border: none;
-	/* border:1px solid #343538; */
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:13px;
-	font-weight:bold;
-	padding:6px 12px;
-	text-decoration:none;
-}
-.select_Get_btn:hover {
-	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
-	background-color:#565c67;
-    color: var( --main-color-dark);
-}
-.select_Get_btn:active {
-	position:relative;
-	top:1px;
-}
 
 /* -------------------------------------------------------------------------------------------------- */
 .widjet {
@@ -3849,14 +3774,14 @@ display: block;
     align-items: flex-start;
 }
 
-.wallet-value {
+/* .wallet-value {
     color: #F65100;
     font-size: 36px;
     font-style: normal;
     font-weight: 700;
     line-height: 1.33;
     padding-bottom: 5px;
-}
+} */
 
 .wallet-label {
     color: #4aa138;
@@ -4535,7 +4460,7 @@ body.dark-theme .game-card__price,
 body.dark-theme .game-card__platform {
     color: #fff;
 }
-
+/* 다크모드 적용 */
 body.dark-theme .widjet__body {
     -webkit-box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
     background: #0C1826;
@@ -5926,6 +5851,40 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
 .tabnav li a{ position:relative; display:block; background: #f8f8f8; color: #000; padding:0 30px; line-height:46px; text-decoration:none; font-size:12px;}
 .tabnav li a:hover,
 .tabnav li a.active{background:#fff; color:#7ea21e; }
+
+/* 프로필 수정 페이지 */
+.user-info__detail {
+    margin-top: 0px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-style: sans-serif;
+    font-weight: normal;
+    line-height: 2;
+}
+
+/* 프로필 자기소개 수정 */
+.uk-textarea {
+    height: 80px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+    background: #F5F5F5;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.36;
+    resize: none;
+}
+
+#label {
+    font-family: "Nunito";
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
 
 
 #current-point{

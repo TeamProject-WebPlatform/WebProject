@@ -25,6 +25,37 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="/js/module/chart.js"></script>
     <script src="/js/controller.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            //console.log = function () {};
+
+            const active = document.getElementById("[[${navRank}]]");
+            active.classList.add("uk-active");
+            document.getElementById("toggle").addEventListener("click", function () {
+
+                document.querySelectorAll('.vs > img').forEach(function (x) {
+                    x.src = logo_img_paths[currentThemeIndex];
+                })
+            });
+            const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
+            const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
+
+            const pointLefts = document.querySelectorAll(".info-center-left .info-point-percent");
+            const pointRights = document.querySelectorAll(".info-center-right .info-point-percent");
+
+            for (let i = 0; i < pointBarLefts.length; i++) {
+                let pointBarLeft = pointBarLefts.item(i);
+                pointBarLeft.style.width = pointLefts[i].innerHTML;
+                pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+                pointLefts[i].style.color = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+
+                let pointBarRight = pointBarRights.item(i);
+                pointBarRight.style.width = pointRights[i].innerHTML;
+                pointBarRight.style.backgroundColor = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+                pointRights[i].style.color = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+            }
+        });
+    </script>
     <style>
         table {
             border:1px solid black;
@@ -80,28 +111,16 @@
                                     <li class="uk-width-1-6"><a href="../pointrank/fifa">피파온라인</a></li>
                                 </ul>
                             </div>
-                            <!-- <div class="widjet__body">
-                                <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                    <div class="uk-width-1-1">
-                                        <div class="search">
-                                            <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search"></div>
-                                            <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
-                                            <input type="radio" name="Rank" id="LevelRanking" value="Level" onclick="charts()" checked> Level
-                                            <input type="radio" name="Rank" id="WinRateRanking" value="Win" onclick="charts()"> WinRate
-                                            <input type="radio" name="Rank" id="PointRanking" value="Point" onclick="charts()"> Point
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                         <div class="widjet --market">
                             <div class="widjet__body" style="text-align: center; display:block;">
-                                <canvas id="point" style='width:600px; height:30vh; margin: auto; '></canvas> 
+                                <canvas id="point" style='width:85%; height:30vh; margin: auto; '></canvas> 
                                 <script type="text/javascript">
                                     PointChart();
                                 </script>
                                 <div></div>
-                                <div class="profile-card" th:each="to, i:${point}" th:if="${i.index < 5}" style="display: inline-block;">
+                                <!-- 통합 랭킹 카드 -->
+                                <div class="profile-card" th:if="${point!=null and i.index<5}" th:each="to, i:${point}" style="display: inline-block;">
                                     <a href="/mypage/${to.mem_userid}">
                                         <div class="profile-header">
                                             <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
@@ -121,6 +140,26 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- 특정 게임 랭크 카드 -->
+                                <div class="profile-card" th:if="${otherpoint!=null and i.index<5}"  th:each="to, i:${otherpoint}" style="display: inline-block;">
+                                    <a href="/mypage/${to.mem_userid}">
+                                        <div class="profile-header">
+                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL">
+                                            </div>
+                                            <p th:text="'포인트 보유량 : ' + ${to.mem_total_point}"></p>
+                                        </div>
+                                    </a>
+                                    <div class="profile-dividing-line"></div>
+                                    <div class="profile-main">
+                                        <div class="profile-introduction">
+                                            안녕하세요
+                                        </div>
+                                    </div>
+                                </div>
                                 <br><hr><br>
                                 <table>
                                     <tr>
@@ -129,7 +168,15 @@
                                         <th>레벨</th>
                                         <th>포인트 보유량</th>
                                     </tr>
-                                    <tr th:each="to, i:${point}" th:if="${i.index>=5}">
+                                    <!-- 통합 포인트 랭크 테이블 -->
+                                    <tr th:if="${point!=null and i.index >=5}" th:each="to, i:${point}">
+                                        <td th:text="${to.rank}"></td>
+                                        <td th:text="${to.mem_userid}"></td>
+                                        <td th:text="${to.mem_lvl}"></td>
+                                        <td th:text="${to.mem_total_point}"></td>
+                                    </tr>
+                                    <!-- 특정 게임 포인트 랭크 테이블 -->
+                                    <tr th:if="${otherpoint!=null and i.index>=5}" th:each="to, i:${otherpoint}">
                                         <td th:text="${to.rank}"></td>
                                         <td th:text="${to.mem_userid}"></td>
                                         <td th:text="${to.mem_lvl}"></td>

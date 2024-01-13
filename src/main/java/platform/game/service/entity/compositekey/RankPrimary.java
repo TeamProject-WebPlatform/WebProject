@@ -10,4 +10,5 @@ public class RankPrimary implements Serializable {
 
     private int rank;
     private int rankCode;
+    private String gameCd;
 }

@@ -109,6 +109,11 @@ public class MainController {
     public ModelAndView show() {
         return new ModelAndView("shop");
     }
+    
+    @GetMapping("/battle_view")
+    public ModelAndView battleView() {
+        return new ModelAndView("battle_view");
+    }
 
     @GetMapping("/getMainFragment")
     public String getMainFragment(Model model) {

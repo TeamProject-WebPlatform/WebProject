@@ -20,18 +20,7 @@ jQuery(document).ready(function ($) {
         }
     }
 
-// 드롭다운
 
-
-$(document).ready(function () {
-    var active = $("#[[${navBoard}]]");
-    var main = $(".board-submenu");
-
-    if (active.length) {
-        active.addClass("uk-active");
-        main.css("display", "block");
-    }
-});
 
 
 
