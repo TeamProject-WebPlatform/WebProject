@@ -13,6 +13,7 @@ import platform.game.service.entity.Item;
 import platform.game.service.entity.Member;
 import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.repository.ItemInfoRepository;
+import platform.game.service.repository.MemberItemInfoRepository;
 
 import java.util.ArrayList;
 
@@ -22,10 +23,13 @@ public class ShopController {
 
     @Autowired
     private ItemInfoRepository itemInfoRepository;
+    @Autowired
+    private MemberItemInfoRepository memberItemInfoRepository; 
 
     @RequestMapping("/shop")
     public ModelAndView shop() {
         long totalItemCount = itemInfoRepository.count();
+        String navShop = "nav-shop";
         ArrayList<Item> items = itemInfoRepository.findAll();
 
         ModelAndView modelAndView = new ModelAndView("shop");
@@ -45,6 +49,7 @@ public class ShopController {
             System.out.println("멤버 없음");
         }
 
+        modelAndView.addObject("navshop", navShop);
         modelAndView.addObject("totalItemCount", totalItemCount);
         modelAndView.addObject("items", items);
         return modelAndView;
@@ -55,6 +60,7 @@ public class ShopController {
     public ModelAndView listItemsByKind(@RequestParam("ItemSearch") String itemName,
             @RequestParam("categorySelect") String itemKindCd) {
         System.out.println("listSearch 호출");
+        String navShop = "nav-shop";
         ModelAndView modelAndView = new ModelAndView();
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -62,7 +68,7 @@ public class ShopController {
             if (member != null) {
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
-                modelAndView.addObject("point", member.getMemCurPoint());
+                // modelAndView.addObject("point", member.getMemCurPoint());
                 modelAndView.addObject("memId",member.getMemId());
             }
         } else {
@@ -80,30 +86,16 @@ public class ShopController {
 
         System.out.println("items : " +items);
         modelAndView.setViewName("shop");
+        modelAndView.addObject("navshop", navShop);
+
         modelAndView.addObject("items", items);
 
         return modelAndView;
     }
 
-    // @GetMapping("/search")
-    // public ModelAndView shop(@RequestParam("categorySelect") String categorySelect,
-    //         @RequestParam("ItemSearch") String ItemSearch) {
+    @GetMapping("/shop_purchase")
+    public ModelAndView ItemPurchase() {
         
-    //     System.out.println(categorySelect);
-    //     System.out.println(ItemSearch);
-        
-    //     ArrayList<Item> lists = new ArrayList<>();
-
-    //     // lists= ItemInfoRepository.findByItemNm("%" + ItemSearch + "%");
-    //     if(categorySelect == "all"){
-            
-
-    //         System.out.println(lists);
-    //     }else{
-
-    //     }
-        
-    //     return null;
-    // }
-
+        return new ModelAndView();
+    }
 }

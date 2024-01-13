@@ -221,12 +221,15 @@
                                             </tr>
                                         </table>
                                     </form>
-                                    <div class="btn_area">
+                                    <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-3@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small btn_area" data-uk-grid>
                                         <div class="align_left">
                                             <a th:href="@{list(board_cd=${post.boardCd}, cpage=${cpage})}"><input
                                                     type="button" value="목록" class="btn_list btn_txt02"></a>
                                         </div>
-                                        <div class="align_right">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div class="width-1-5 align_right">
                                             <a th:if="${writePost}"
                                                 th:href="@{modify(post_id=${post.postId}, cpage=${cpage})}">
                                                 <!-- 본인이 작성한 글이면 보임 -->
