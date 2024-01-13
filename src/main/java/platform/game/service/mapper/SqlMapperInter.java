@@ -101,13 +101,13 @@ public interface SqlMapperInter {
         @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0")
         public List<PointRankTO> getPointRank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='level';")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='level' order by m.mem_lvl desc;")
         public List<LevelRankTO> getOtherLevelRank(String game_cd);
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='point';")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='point' order by m.mem_total_point desc;")
         public List<PointRankTO> getOtherPointRank(String game_cd);
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='winrate';")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='winrate' order by winrate desc;")
         public List<WinRankTO> getOtherWinRateRank(String game_cd);
 
         @Select("select distinct m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
