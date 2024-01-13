@@ -89,11 +89,11 @@
 </script>
 
 <!--로그인 알람-->
-<script>
+<!-- <script>
     function checkLoginAndNavigate() {
         alert('로그인이 필요합니다.');
     }
-</script>
+</script> -->
 
 <body class="page-home dark-theme">
 
@@ -171,7 +171,7 @@
                                                                 <div class="coment_re_txt" th:text="${commentNode.comment.commentContent}"></div>
                                                     
                                                                 <!-- 대댓글 쓰기 -->
-                                                                <a th:if="${loginCheck}">
+                                                                <a>
                                                                     <span class="reply-text" th:attr="data-comment-id=${commentNode.comment.commentId}" onclick="toggleReplyForm(this)">답글 쓰기</span>
                                                                     <div class="reply-form" th:attr="data-comment-id=${commentNode.comment.commentId}" style="display: none;">
                                                                         <form action="reply_comment_write_ok" method="post" name="rfrm" id="rfrm">
@@ -213,15 +213,9 @@
                                                         placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
                                                 </td>
                                                 <td align="right" class="bg01 bg02">
-                                                    <a th:if="${loginCheck}">
-                                                        <!-- 로그인 상태인 경우의 댓글 작성 -->
+                                                    <a>
                                                         <input type="button" id="cbtn" value="댓글등록"
                                                             class="btn_re btn_txt01" />
-                                                    </a>
-                                                    <a th:unless="${loginCheck}" href="/login">
-                                                        <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
-                                                        <input type="button" value="댓글등록" class="btn_re btn_txt01"
-                                                            style="cursor: pointer;" />
                                                     </a>
                                                 </td>
                                             </tr>
@@ -243,14 +237,9 @@
                                                 <!-- 본인이 작성한 글이면 보임 -->
                                                 <input type="button" value="삭제" class="btn_list btn_txt02">
                                             </a>
-                                            <a th:if="${loginCheck}" th:href="@{write(board_cd=${post.boardCd})}">
+                                            <a th:href="@{write(board_cd=${post.boardCd})}">
                                                 <!-- 로그인 상태인 경우의 링크 -->
                                                 <input type="button" value="쓰기" class="btn_write btn_txt01">
-                                            </a>
-                                            <a th:unless="${loginCheck}" href="/login">
-                                                <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                                <input type="button" value="쓰기" class="btn_write btn_txt01"
-                                                    onclick="checkLoginAndNavigate()">
                                             </a>
                                         </div>
                                         <!--//게시판-->

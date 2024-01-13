@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,10 +41,6 @@ public class BoardController {
     @Autowired
     private CommentInfoRepository commentInfoRepository;
 
-    // @RequestMapping("/shop")
-    // public String shop(){
-    // return "shop";
-    // }
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
         ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
@@ -80,16 +77,6 @@ public class BoardController {
                 break;
         }
 
-        String loginCheck = "true";
-
-        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            System.out.println("멤버 있음 ");
-            loginCheck = "true";
-        } else {
-            System.out.println("멤버 없음");
-            loginCheck = "false";
-        }
-
         // cpage 작업
         BoardCpageTO cpageTO = new BoardCpageTO();
         int cpage = 1;
@@ -119,7 +106,6 @@ public class BoardController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_list");
         modelAndView.addObject("lists", lists);
-        modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("boardCd", boardCd);
         modelAndView.addObject("cpage", cpageTO);
         modelAndView.addObject("boardCd_name", boardCd_name);
@@ -170,7 +156,6 @@ public class BoardController {
         post = postInfoRepository.findByPostId(postId);
 
         Member member = null;
-        String loginCheck = "true";
         long id = 1; // 멤버 비교를 위한 변수
         long pid = post.getMember().getMemId(); // 멤버 비교를 위한 게시물 변수
         String writePost = "false"; // 결과 보내주는 변수
@@ -182,10 +167,7 @@ public class BoardController {
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
-            loginCheck = "true";
             id = member.getMemId();
-        } else {
-            loginCheck = "false";
         }
 
         if (id == pid) {
@@ -205,7 +187,6 @@ public class BoardController {
         modelAndView.setViewName("board_view");
         modelAndView.addObject("post", post);
         modelAndView.addObject("comment", comment);
-        modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("writePost", writePost);
         modelAndView.addObject("cpage", cpage);
         modelAndView.addObject("board_cd", boardCd);
@@ -216,6 +197,7 @@ public class BoardController {
     }
 
     @RequestMapping("/write")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView listWrite(@RequestParam(name = "board_cd") String boardCd) {
         System.out.println("Controller_listWrite 호출");
 
@@ -300,6 +282,7 @@ public class BoardController {
     }
 
     @GetMapping("/modify")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView listModify(@RequestParam(name = "post_id") int postId,
             @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listModift 호출");
@@ -307,7 +290,6 @@ public class BoardController {
         Post post = new Post();
 
         post = postInfoRepository.findByPostId(postId);
-        
 
         String boardCd_name = "Notice";
         String navBoard = "nav-";
@@ -394,6 +376,7 @@ public class BoardController {
     }
 
     @GetMapping("/delete")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView listDelete(@RequestParam(name = "post_id") int postId,
             @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listdelete 호출");
@@ -402,7 +385,6 @@ public class BoardController {
 
         post = postInfoRepository.findByPostId(postId);
 
-        
         String boardCd_name = "Notice";
         String navBoard = "nav-";
         switch (post.getBoardCd()) {
@@ -463,6 +445,7 @@ public class BoardController {
     }
 
     @RequestMapping("/comment_write_ok")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public String writeComment(@RequestParam("board_cd") int boardCd,
             @RequestParam("post_id") int postId,
             @RequestParam("ccontent") String content,
@@ -498,6 +481,7 @@ public class BoardController {
     }
 
     @PostMapping("/comment_delete_ok")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @Transactional
     public String deleteComment(@RequestParam("board_cd") int boardCd,
             @RequestParam("comment_id") int commentId,
@@ -520,6 +504,7 @@ public class BoardController {
     }
 
     @RequestMapping("/reply_comment_write_ok")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public String writeReplyComment(@RequestParam("board_cd") int boardCd,
             @RequestParam("post_id") int postId,
             @RequestParam("parent_comment_id") int commentId,

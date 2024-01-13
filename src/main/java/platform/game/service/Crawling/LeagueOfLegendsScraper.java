@@ -32,7 +32,7 @@ public class LeagueOfLegendsScraper {
     public ModelAndView leagueOfLegendsScraper() {
         System.out.println("크롤링 호출");
         Crawling crawling = new Crawling();
-
+        int i = 0;
         try {
             // 웹 페이지를 JSoup을 사용하여 가져옵니다.
             String url = "https://www.leagueoflegends.com/ko-kr/news/notices/";
@@ -63,7 +63,7 @@ public class LeagueOfLegendsScraper {
                 document = Jsoup.connect(url).get();
                 Elements DivTags = document.select("div.style__Wrapper-sc-1wsvmz4-0.bJOeIp");
 
-                crawling.setCrawlingId(crawling.getCrawlingId()+1);
+                crawling.setCrawlingId(crawling.getCrawlingId() + 1);
                 crawling.setCrawlingTitle(title);
                 crawling.setCrawlingDate(date);
                 crawling.setCrawlingImageUrl(imageUrl);
@@ -72,6 +72,7 @@ public class LeagueOfLegendsScraper {
 
                 System.out.println("ceawling" + crawling);
                 crawlingRepository.save(crawling);
+                System.out.println("i :" + i++);
             }
 
         } catch (IOException e) {
@@ -81,18 +82,3 @@ public class LeagueOfLegendsScraper {
         return null;
     }
 }
-
-
-
-                // 결과 출력
-                // System.out.println("Title: " + title); // 제목
-                // System.out.println("Date: " + date); // 날짜
-                // System.out.println("Image URL: " + imageUrl); // 이미지 주소
-                // System.out.println("Article Link: " + BoardLink);
-                // System.out.println("DivTags: " + DivTags);
-                // System.out.println("DivTags: " + DivTags.html());
-                // for (Element divTag : DivTags) {
-                // String content = divTag.html();
-                // System.out.println("Div Content: " + content);
-                // }
-                // System.out.println("===================================================");

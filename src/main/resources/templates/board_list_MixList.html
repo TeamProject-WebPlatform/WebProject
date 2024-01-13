@@ -163,21 +163,11 @@
                                         
                                         <div class="btn_area">
                                             <div class="align_right" style="text-align: right;" >
-                                                <!-- <a th:href="@{write(board_cd=${boardCd})}"><input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()"></a> -->
-                                                <!-- <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" onclick="checkLoginAndNavigate()" /> -->
                                                 <!-- 로그인 상태인 경우의 링크 -->
-                                                <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
+                                                <a th:href="@{write(board_cd=${boardCd})}">
                                                     <input type="button" value="쓰기" class="btn_write btn_txt01">
                                                 </a>
-                                                <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                                <a th:unless="${loginCheck}" href="/login">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" onclick="checkLoginAndNavigate()">
-                                                </a>
-                                                <!-- <a th:href="@{write(board_cd=${boardCd})}">
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;">
-                                                </a> -->
                                             </div>
-
                                             <!--페이지넘버-->
                                             <div class="paginate_regular" style="text-align: center;">
                                                 <div align="absmiddle">
