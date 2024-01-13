@@ -215,6 +215,7 @@ public class BoardController {
         return modelAndView;
     }
 
+
     @RequestMapping("/write")
     public ModelAndView listWrite(@RequestParam(name = "board_cd") String boardCd) {
         System.out.println("Controller_listWrite 호출");
