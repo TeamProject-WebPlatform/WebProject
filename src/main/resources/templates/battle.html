@@ -34,14 +34,30 @@
     /*]]>*/
     document.addEventListener("DOMContentLoaded", function () {
         //console.log = function () {};
-
+        const vs = document.querySelectorAll('.vs img');
+        let isDark = getCookie('darkMode');
+        vs.forEach(function(x){
+                if (isDark === 'true') {
+                    x.src = logo_img_paths[0];
+                }
+                else {
+                    x.src = logo_img_paths[1];
+                }
+            })
         const active = document.getElementById("nav-battle");
         active.classList.add("uk-active");
         document.getElementById("toggle").addEventListener("click", function () {
-
-            document.querySelectorAll('.vs > img').forEach(function (x) {
-                x.src = logo_img_paths[currentThemeIndex];
+            isDark = getCookie('darkMode');
+            vs.forEach(function(x){
+                if (isDark === 'true') {
+                    x.src = logo_img_paths[0];
+                }
+                else {
+                    x.src = logo_img_paths[1];
+                }
             })
+            
+
         });
         const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
         const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
@@ -165,7 +181,7 @@
                 memId: memId
             }));
             button.setAttribute("active", "F");
-            button.innerHTML = flag === 0 ? "LEFT" : "RIGHT";
+            button.innerHTML = flag === 0 ? "HOST" : "CLIENT";
             button.style.color = "white";
         }
     }
@@ -365,11 +381,11 @@
                                     <div class="betting-section">
                                         <div class="point-betting" th:id="'bettingId' + ${battle.btId}">
                                             <div th:if="${battlePointTOList[iterStat.index].flag==0}"
-                                                class="point-betting-button" style="background-color: blueviolet;">LEFT
+                                                class="point-betting-button" style="background-color: blueviolet;">HOST
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==0}"
                                                 class="point-betting-button" active="F"
-                                                th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">LEFT</div>
+                                                th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">HOST</div>
                                             <div class="search">
                                                 <div class="search__input">
                                                     <i class="fa-solid fa-coins ico_fontawesome"></i>
@@ -399,11 +415,11 @@
                                                 </div>
                                             </div>
                                             <div th:if="${battlePointTOList[iterStat.index].flag==1}"
-                                                class="point-betting-button" style="background-color: blueviolet;">RIGHT
+                                                class="point-betting-button" style="background-color: blueviolet;">CLIENT
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==1}"
                                                 class="point-betting-button" active="F"
-                                                th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">RIGHT</div>
+                                                th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">CLIENT</div>
                                         </div>
                                     </div>
                                 </div>

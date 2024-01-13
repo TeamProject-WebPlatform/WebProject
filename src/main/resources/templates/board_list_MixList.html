@@ -107,20 +107,21 @@
                                     <div class="search__btn"><button type="button" onclick="onSelect()"><i class="ico_search"></i></button></div>
                                     &nbsp;
                                     <!-- &nbsp; -->
-                                    <div class="search__refresh"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div>
+                                    <!-- <div class="search__refresh"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div> -->
                                 <!-- </div> -->
                             </div>
-                            <div class="uk-width-1-6"><select class="js-select" id="list_tag" onchange="onSelect()">
+                            <!-- <div class="uk-width-1-6"><select class="js-select" id="list_tag" onchange="onSelect()">
                                 <option value="All" th:selected="${list_tag == 'All'}">All</option>
                                 <option value="LeagueofLegends" th:selected="${list_tag == 'LeagueofLegends'}">LeagueofLegends</option>
                                 <option value="BattleGround" th:selected="${list_tag == 'BattleGround'}">BattleGround</option>
                                 <option value="Steam" th:selected="${list_tag == 'Steam'}">Steam</option>
-                            </select></div>
+                            </select></div> -->
                             <div class="uk-width-1-6"><select class="js-select" id="list_size" onchange="onSelect()" >
                                 <option value="10" th:selected="${recpage == 10}">10개씩</option>
                                 <option value="20" th:selected="${recpage == 20}">20개씩</option>
                                 <option value="30" th:selected="${recpage == 30}">30개씩</option>
                             </select></div>
+                            <div class="uk-width-1-6"></div>
                             <div class="uk-width-1-6"></div>
                             <div class="uk-width-1-6"></div>
                             <div class="uk-width-1-6"></div>
