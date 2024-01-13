@@ -31,11 +31,6 @@
         active.classList.add("uk-active");
     });
 </script>
-<!-- <script>
-    function checkLoginAndNavigate() {
-        alert('로그인이 필요합니다.');
-    }
-</script> -->
 <!--모든 기능 다 합친 스크립트-->
 <script>
     function onSelect() {
@@ -232,12 +227,8 @@
                                         <!--//페이지넘버-->
                                         <div class="align_right" style="text-align: right;" >
                                             <!-- 로그인 상태인 경우의 링크 -->
-                                            <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
+                                            <a th:href="@{write(board_cd=${boardCd})}">
                                                 <input type="button" value="쓰기" class="btn_write btn_txt01">
-                                            </a>
-                                            <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                            <a th:unless="${loginCheck}" href="/login">
-                                                <input type="button" value="쓰기" class="btn_write btn_txt01" onclick="checkLoginAndNavigate()">
                                             </a>
                                         </div>
                                     </div>    <!--//게시판-->

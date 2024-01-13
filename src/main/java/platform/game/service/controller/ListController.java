@@ -80,16 +80,6 @@ public class ListController {
                 break;
         }
 
-        String loginCheck = "false";
-
-        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            System.out.println("멤버 있음 ");
-            loginCheck = "true";
-        } else {
-            System.out.println("멤버 없음");
-            loginCheck = "false";
-        }
-
         // 검색 조건 체크하는 곳
         if ("title".equals(selectedOption)) { // 제목
             // 태그 체크
@@ -159,7 +149,6 @@ public class ListController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_list_MixList");
         modelAndView.addObject("lists", lists);
-        modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("boardCd", boardCd);
         modelAndView.addObject("cpage", cpageTO);
         modelAndView.addObject("recpage", recordPerPage);
