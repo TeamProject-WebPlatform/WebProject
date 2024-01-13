@@ -25,27 +25,7 @@
 
 
 <body class="page-home dark-theme">
-    <input id="toggle" type="checkbox">
-    <script>
-        const root = document.documentElement; // :root 
-            
-            const main_color_values = [
-                getComputedStyle(root).getPropertyValue('--main-color-dark'),
-                getComputedStyle(root).getPropertyValue('--main-color-light')
-            ];
 
-            document.getElementById("toggle").addEventListener("click", function () {
-                document.getElementsByTagName('body')[0].classList.toggle("dark-theme");
-                
-                currentThemeIndex = 1 - currentThemeIndex;  // 0과 1을 번갈아가며 토글
-                // 이미지 경로를 토글
-                document.getElementById('logo_img').src = logo_img_paths[currentThemeIndex];
-                document.querySelector(".page-header__logo_text").style.color = logo_text[currentThemeIndex];
-                // 메인 컬러 변경용
-                root.style.setProperty('--main-color-now', main_color_values[currentThemeIndex]);
-                console.log(root.style.getPropertyValue('--main-color-now'));
-            });
-    </script>
     
     <div class="page-wrapper">
         <main class="page-main">
