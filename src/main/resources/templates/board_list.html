@@ -10,13 +10,13 @@
     <meta name="HandheldFriendly" content="true">
     <meta name="format-detection" content="telephone=no">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="../css/libs.min.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/main_custom.css" />
-    <script src="../js/module/swiper.js"></script>
-    <script src="../js/libs.js"></script>
-    <script src="../js/main.js"></script>
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/libs.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/main_custom.css" />
+    <script src="./js/module/swiper.js"></script>
+    <script src="./js/libs.js"></script>
+    <script src="./js/main.js"></script>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -106,44 +106,25 @@
                                     <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="s_txt_btn" th:value="${searchValue}"></div>
                                     <div class="search__btn"><button type="button" onclick="onSelect()"><i class="ico_search"></i></button></div>
                                     &nbsp;
+                                    &nbsp;
                                     <!-- &nbsp; -->
                                     <div class="search__refresh"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div>
                                 <!-- </div> -->
                             </div>
-                            <div class="uk-width-1-6"><select class="js-select" id="list_tag" onchange="onSelect()">
-                                <option value="All" th:selected="${list_tag == 'All'}">All</option>
-                                <option value="LeagueofLegends" th:selected="${list_tag == 'LeagueofLegends'}">LeagueofLegends</option>
-                                <option value="BattleGround" th:selected="${list_tag == 'BattleGround'}">BattleGround</option>
-                                <option value="Steam" th:selected="${list_tag == 'Steam'}">Steam</option>
-                            </select></div>
-                            <div class="uk-width-1-6"><select class="js-select" id="list_size" onchange="onSelect()" >
-                                <option value="10" th:selected="${recpage == 10}">10개씩</option>
-                                <option value="20" th:selected="${recpage == 20}">20개씩</option>
-                                <option value="30" th:selected="${recpage == 30}">30개씩</option>
-                            </select></div>
-                            <div class="uk-width-1-6"></div>
-                            <div class="uk-width-1-6"></div>
-                            <div class="uk-width-1-6"></div>
-                            <div class="search__refresh uk-width-1-6"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right ico_fontawesome"></i></button></div>
                         </div>
                     </div>
                 </div>
                 <div class="widjet --filters">
                     <div class="widjet__body">
-                        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-                            <div class="uk-width-1-1">
+                        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+            
                                 <!--게시판 코드 들어가는 장소-->
                                 <!-- <div class="con_txt"> -->
                                 <div class="widjet-game__title">
                                     <input type="hidden" name="board_cd" th:value="${boardCd}" />
-                                    <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
+                                    <div class="uk-width-1-1 uk-flex uk-flex-right">
                                         <div class="uk-width-1-6">
-                                            <select class="js-select" id="list_size" onchange="onSelect()" >
+                                            <select class="js-select" id="list_size" onchange="onSelect()">
                                                 <option value="10" th:selected="${recpage == 10}">10개씩</option>
                                                 <option value="20" th:selected="${recpage == 20}">20개씩</option>
                                                 <option value="30" th:selected="${recpage == 30}">30개씩</option>
@@ -153,18 +134,18 @@
                                     <br>
                                     <div class="board_top">
                                         <table width="100%">
-                                            <tr>
+                                            <tr class="board_top_tr">
                                                 <th width="10%" >번호</th>
                                                 <th >제목</th>
                                                 <th width="20%" >글쓴이</th>
                                                 <th width="17%" >등록일</th>
                                                 <th width="10%" >조회</th>
                                             </tr>
-                                            <tr th:each="post, rowStat : ${lists}">
+                                            <tr class="board_center_tr" th:each="post, rowStat : ${lists}">
                                                 <td th:text="${#lists.size(lists) - rowStat.index}" style="text-align: center;"></td>
                                                 <td class="left">
                                                     <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                    <a th:href="@{view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
+                                                    <a class="board_ccenter_tr_a" th:href="@{view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
                                                     <!--게시물 댓글 갯수-->
                                                     <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                     <!--새로운 글 작성시 보여지는 new 표시-->
@@ -242,14 +223,13 @@
                                         </div>
                                     </div>    <!--//게시판-->
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </main>
         </div>
     </div>
-    <div class="page-modals">
+    <!-- <div class="page-modals">
         <div class="uk-flex-top" id="modal-report" data-uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default"
                     type="button" data-uk-close></button>
@@ -309,7 +289,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </body>
 
 </html>
