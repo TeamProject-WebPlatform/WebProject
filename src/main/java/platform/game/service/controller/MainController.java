@@ -83,8 +83,8 @@ public class MainController {
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
-                mav.addObject("currentPoint",member.getMemCurPoint());
-                mav.addObject("memId",member.getMemId());
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");

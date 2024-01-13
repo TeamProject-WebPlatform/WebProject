@@ -24,7 +24,7 @@ public class ShopController {
     @Autowired
     private ItemInfoRepository itemInfoRepository;
     @Autowired
-    private MemberItemInfoRepository memberItemInfoRepository; 
+    private MemberItemInfoRepository memberItemInfoRepository;
 
     @RequestMapping("/shop")
     public ModelAndView shop() {
@@ -38,12 +38,13 @@ public class ShopController {
         modelAndView.addObject("level", "0");
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
             if (member != null) {
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("point", member.getMemCurPoint());
-                modelAndView.addObject("memId",member.getMemId());
+                modelAndView.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");
@@ -55,39 +56,38 @@ public class ShopController {
         return modelAndView;
     }
 
-    
     @GetMapping("/shop_search")
     public ModelAndView listItemsByKind(@RequestParam("ItemSearch") String itemName,
             @RequestParam("categorySelect") String itemKindCd) {
+        int totalItemCount = itemInfoRepository.countByItemKindCd(itemKindCd);
         System.out.println("listSearch 호출");
         String navShop = "nav-shop";
         ModelAndView modelAndView = new ModelAndView();
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
             if (member != null) {
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 // modelAndView.addObject("point", member.getMemCurPoint());
-                modelAndView.addObject("memId",member.getMemId());
+                modelAndView.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");
         }
-        System.out.println(itemName);
-        System.out.println(itemKindCd);
 
         ArrayList<Item> items = new ArrayList<>();
-        if(itemKindCd=="all"){
+        if (itemKindCd == "all") {
             items = itemInfoRepository.findByItemNmContaining(itemName);
-        }else{
-            items = itemInfoRepository.findByItemNmContainingAndItemKindCdContaining(itemName,itemKindCd);
+        } else {
+            items = itemInfoRepository.findByItemNmContainingAndItemKindCdContaining(itemName, itemKindCd);
         }
 
-        System.out.println("items : " +items);
+        System.out.println("items : " + items);
         modelAndView.setViewName("shop");
         modelAndView.addObject("navshop", navShop);
-
+        modelAndView.addObject("totalItemCount", totalItemCount);
         modelAndView.addObject("items", items);
 
         return modelAndView;
@@ -95,7 +95,7 @@ public class ShopController {
 
     @GetMapping("/shop_purchase")
     public ModelAndView ItemPurchase() {
-        
+
         return new ModelAndView();
     }
 }

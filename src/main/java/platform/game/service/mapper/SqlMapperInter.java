@@ -92,13 +92,13 @@ public interface SqlMapperInter {
         @Insert("insert into ranking(rank,rank_code,mem_id,rank_update,game_cd) select rank() over (order by round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) desc, m.mem_id desc) as rank,'WinRate', m.mem_id, now(), #{game_cd} from member m join member_favorite_game f on m.mem_id=f.mem_id where f.game_cd = #{game_cd} order by round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) desc,m.mem_id desc limit 50;")
         int setOtherWinRateRank(String game_cd);
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<LevelRankTO> getLevelRank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.rank_code='WinRate' and m.mem_id=r.mem_id and r.game_cd=0")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.rank_code='WinRate' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<WinRankTO> getWinRateRank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0")
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<PointRankTO> getPointRank();
 
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='level' order by m.mem_lvl desc;")
