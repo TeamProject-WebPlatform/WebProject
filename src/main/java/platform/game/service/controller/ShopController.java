@@ -94,8 +94,8 @@ public class ShopController {
     }
 
     @GetMapping("/shop_purchase")
-    public ModelAndView ItemPurchase() {
-
-        return new ModelAndView();
+    public int ItemPurchase() {
+        int flag = 0;
+        return flag;
     }
 }
