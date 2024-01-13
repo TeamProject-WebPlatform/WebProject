@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -18,11 +19,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import platform.game.service.entity.Battle;
+import platform.game.service.entity.Member;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BettingInfoTO;
 import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.MemberBettingRepository;
+import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.UpdatePointHistoryImpl;
+import platform.game.service.service.MemberInfoDetails;
 
 @Controller
 public class PointUpdateController {
@@ -38,13 +42,14 @@ public class PointUpdateController {
     private TransactionTemplate transactionTemplate;
     @Autowired
     private UpdatePointHistoryImpl updatePointHistoryImpl;
-
+    @Autowired
+    private MemberInfoRepository memberInfoRepository;
 
     @MessageMapping("/pointbetting")
     public void pointUpdate(@Payload BettingInfoTO bettingInfo)
             throws JsonMappingException, JsonProcessingException {
         // 메시지 처리 로직
-
+                
         int point = bettingInfo.getPoint();
         int flag = bettingInfo.getFlag();
         int btId = bettingInfo.getBtId();
@@ -56,8 +61,19 @@ public class PointUpdateController {
         transactionTemplate.execute(status -> {
             // BATTLE 테이블에 포인트 정보 변경
             // 성공한다면 멤버 포인트 정보에 추가
-            
             try {
+                Optional<Member> optionalMember = memberInfoRepository.findById(memId);
+                if(optionalMember.isPresent()){
+                    Member member = optionalMember.get();
+                    if(member.getMemCurPoint()<point) {
+                        successFlag.set(false);
+                        return null;
+                    }
+                }else {
+                    successFlag.set(false);
+                    return null;
+                }
+
                 if (flag==0) {
                     // 호스트
                     battleRepository.updateHostBetPoint(btId, point);
@@ -84,21 +100,23 @@ public class PointUpdateController {
 
 
         try {
-            if(!successFlag.get()){
-                messagingTemplate.convertAndSend(topic, "");
-                return;
-            }
+            
             // 객체를 JSON 문자열로 변환
             Optional<Battle> optionalBattle = battleRepository.findByBtId(btId);
             Battle battle = optionalBattle.get();
             BattlePointTO to = new BattlePointTO(battle);
-            to.setFlag(flag);
+            
+            if(!successFlag.get()){
+                to.setFlag(-1);
+            }else{
+                to.setFlag(flag);
+            }
             String jsonString = objectMapper.writeValueAsString(to);
             // 메시지 전송
             messagingTemplate.convertAndSend(topic, jsonString);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            messagingTemplate.convertAndSend(topic, "");
+            messagingTemplate.convertAndSend(topic, "{}");
             // JSON 변환 오류 처리
         }
     }

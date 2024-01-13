@@ -70,18 +70,19 @@
         var socket = new SockJS('/ws');
         battleCardStompClient = Stomp.over(socket);
         // 보유 포인트 구독
-        
+
         // 배틀 전광판 구독
         const cards = document.querySelectorAll(".battle-card-info");
         battleCardStompClient.connect({}, function (frame) {
-            console.log(frame);
             cards.forEach(function (card) {
                 let btId = card.getAttribute("btId");
                 battleCardStompClient.subscribe(`/topic/pointbetting/` + btId, function (response) {
                     try {
                         let pointTO = JSON.parse(response.body);
                         let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
-
+                        if(pointTO.flag===-1){
+                            return;
+                        }
                         pointInfo.querySelector(".host-total-point").innerHTML = formatNumberTok(pointTO.hostTotalPoint);
                         pointInfo.querySelector(".host-total-mem-no").innerHTML = pointTO.hostTotalMemNo;
                         pointInfo.querySelector(".host-point-reward-ratio").innerHTML = "1:" + pointTO.hostPointRewardRatio;
@@ -119,7 +120,7 @@
                             button = buttons[1];
                             button.style.backgroundColor = "blueviolet"
                         }
-                        
+
 
                     } catch (err) {
                         console.log("에러 : " + err);
@@ -153,20 +154,19 @@
 
             pointInputs.value = "";
 
-            sendPointChange(-point,'50003');
-            if(pointFlag===1){
-                battleCardStompClient.send(`/app/pointbetting`, {}, JSON.stringify({
-                    point: point,
-                    btId: btId,
-                    flag: flag,
-                    memId: memId
-                }));    
-            }
+            sendPointChange(-point, '50003');
+            battleCardStompClient.send(`/app/pointbetting`, {}, JSON.stringify({
+                point: point,
+                btId: btId,
+                flag: flag,
+                memId: memId
+            }));
             button.setAttribute("active", "F");
             button.innerHTML = flag === 0 ? "LEFT" : "RIGHT";
             button.style.color = "white";
         }
     }
+
     function getColorRatio(bettingRatio) {
         if (bettingRatio >= 90) {
             return '#FF0000'; // 빨간색
@@ -382,15 +382,16 @@
                                                                 placeholder="YOU ALREADY BET" readonly>
                                                         </logincheck>
                                                         <input th:unless="${nickname}" class="point-betting-input"
-                                                            type="search" name="search" placeholder="LOGIN FIRST" readonly>
+                                                            type="search" name="search" placeholder="LOGIN FIRST"
+                                                            readonly>
                                                     </battleStateCheck>
                                                     <battleStateCheck th:if="${battle.state=='P'}">
-                                                        <input class="point-betting-input"
-                                                            type="search" name="search" placeholder="PROCEEDING" readonly>
+                                                        <input class="point-betting-input" type="search" name="search"
+                                                            placeholder="PROCEEDING" readonly>
                                                     </battleStateCheck>
                                                     <battleStateCheck th:if="${battle.state=='T'}">
-                                                        <input class="point-betting-input"
-                                                            type="search" name="search" placeholder="TERMINATED" readonly>
+                                                        <input class="point-betting-input" type="search" name="search"
+                                                            placeholder="TERMINATED" readonly>
                                                     </battleStateCheck>
                                                 </div>
                                             </div>
