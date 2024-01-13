@@ -44,7 +44,7 @@
                 memId = /*[[${memId}]]*/0;
                 if(memId!==0) pointConnect();
             });
-            
+            var pointFlag = -1; // 아무 실행x
             function pointConnect() {
                 var socket = new SockJS('/ws');
 
@@ -66,6 +66,7 @@
                                 // 에러
                                 alert("에러");
                             }
+                            pointFlag = heaerInfo.flag;
                         } catch (err) {
                             console.log("에러 : " + err);
                         }

@@ -22,6 +22,7 @@ import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BettingInfoTO;
 import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.MemberBettingRepository;
+import platform.game.service.repository.UpdatePointHistoryImpl;
 
 @Controller
 public class PointUpdateController {
@@ -35,6 +36,8 @@ public class PointUpdateController {
     private ObjectMapper objectMapper;
     @Autowired
     private TransactionTemplate transactionTemplate;
+    @Autowired
+    private UpdatePointHistoryImpl updatePointHistoryImpl;
 
 
     @MessageMapping("/pointbetting")
@@ -65,7 +68,6 @@ public class PointUpdateController {
                 // 여기에 memId를 기준으로 member_betting에 정보 추가
                 // 이후에 추가된 정보로 베팅 현황 알수 있게
                 memberBettingRepository.insertData(point,memId,btId,flag);
-
             } catch(DataIntegrityViolationException e){
                 // 이미 베팅한 곳에 또 베팅 하면 뜨는 에러
                 successFlag.set(false);

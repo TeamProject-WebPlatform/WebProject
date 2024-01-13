@@ -23,7 +23,6 @@ import platform.game.service.entity.Member;
 import platform.game.service.model.TO.BettingInfoTO;
 import platform.game.service.model.TO.HeaderInfoTO;
 import platform.game.service.repository.MemberInfoRepository;
-import platform.game.service.repository.UpdateMemberRepositryImpl;
 import platform.game.service.repository.UpdatePointHistoryImpl;
 import platform.game.service.service.MemberInfoDetails;
 
