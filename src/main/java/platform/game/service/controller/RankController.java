@@ -1,12 +1,9 @@
 package platform.game.service.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,8 +20,8 @@ import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
-import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
+import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -36,12 +33,8 @@ public class RankController {
     @Autowired
     RankDAO rankDAO;
 
-    private List<RollingRankTO> rollingRankList;
-
-    public RankController(SqlMapperInter sqlMapperInter) {
-        this.sqlMapperInter = sqlMapperInter;
-        rollingRankList = sqlMapperInter.getRol();
-    }
+    @Autowired
+    MemberFavoriteGameRepository memberFavoriteGameRepository;
 
     @GetMapping("/getRankFragment")
     public String getRankFragment(@RequestParam("board_cd") String boardCd, Model model) {
@@ -71,18 +64,53 @@ public class RankController {
 
     @RequestMapping({ "/levelrank", "/levelrank/{game}" })
     public ModelAndView LevelRank(@PathVariable(name = "game", required = false) String game) {
-        List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelrank();
-        ModelAndView mav = new ModelAndView("levelrank");
-        mav.addObject("level", getLevelTable);
+        String navRank = "nav-levelrank";
+
         if (game == null) {
             game = "";
         }
+
+        String game_cd = "";
+
+        switch (game) {
+            case "lol":
+                game_cd = "30001";
+                break;
+            case "battleground":
+                game_cd = "30002";
+                break;
+            case "overwatch":
+                game_cd = "30003";
+                break;
+            case "valorant":
+                game_cd = "30004";
+                break;
+            case "fifa":
+                game_cd = "30005";
+                break;
+            default:
+                game_cd = "";
+                break;
+        }
+
+        ModelAndView mav = new ModelAndView("levelrank");
+        if (game_cd == "") {
+            List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelRank();
+            mav.addObject("level", getLevelTable);
+        } else {
+            List<LevelRankTO> getOtherLevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
+            mav.addObject("otherlevel", getOtherLevelTable);
+        }
+
+        mav.addObject("navRank", navRank);
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");
@@ -93,17 +121,53 @@ public class RankController {
 
     @RequestMapping({ "/winraterank", "/winraterank/{game}" })
     public ModelAndView WinRateRank(@PathVariable(name = "game", required = false) String game) {
-        List<WinRankTO> getWinRateTable = sqlMapperInter.getWinrank();
-        ModelAndView mav = new ModelAndView("winraterank");
-        mav.addObject("win", getWinRateTable);
+        String navRank = "nav-winraterank";
+
         if (game == null) {
             game = "";
         }
+
+        String game_cd = "";
+
+        switch (game) {
+            case "lol":
+                game_cd = "30001";
+                break;
+            case "battleground":
+                game_cd = "30002";
+                break;
+            case "overwatch":
+                game_cd = "30003";
+                break;
+            case "valorant":
+                game_cd = "30004";
+                break;
+            case "fifa":
+                game_cd = "30005";
+                break;
+            default:
+                game_cd = "";
+                break;
+        }
+
+        ModelAndView mav = new ModelAndView("winraterank");
+        if (game_cd == "") {
+            List<WinRankTO> getWinRateTable = sqlMapperInter.getWinRateRank();
+            mav.addObject("win", getWinRateTable);
+        } else {
+            List<WinRankTO> getOtherWinRateTable = sqlMapperInter.getOtherWinRateRank(game_cd);
+            mav.addObject("otherwin", getOtherWinRateTable);
+        }
+
+        mav.addObject("navRank", navRank);
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");
@@ -114,17 +178,53 @@ public class RankController {
 
     @RequestMapping({ "/pointrank", "/pointrank/{game}" })
     public ModelAndView PointRank(@PathVariable(name = "game", required = false) String game) {
-        List<PointRankTO> getPointTable = sqlMapperInter.getPointrank();
-        ModelAndView mav = new ModelAndView("pointrank");
-        mav.addObject("point", getPointTable);
+        String navRank = "nav-pointrank";
+
         if (game == null) {
             game = "";
         }
+
+        String game_cd = "";
+
+        switch (game) {
+            case "lol":
+                game_cd = "30001";
+                break;
+            case "battleground":
+                game_cd = "30002";
+                break;
+            case "overwatch":
+                game_cd = "30003";
+                break;
+            case "valorant":
+                game_cd = "30004";
+                break;
+            case "fifa":
+                game_cd = "30005";
+                break;
+            default:
+                game_cd = "";
+                break;
+        }
+
+        ModelAndView mav = new ModelAndView("pointrank");
+        if (game_cd == "") {
+            List<PointRankTO> getPointTable = sqlMapperInter.getPointRank();
+            mav.addObject("point", getPointTable);
+        } else {
+            List<PointRankTO> getOtherPointTable = sqlMapperInter.getOtherPointRank(game_cd);
+            mav.addObject("otherpoint", getOtherPointTable);
+        }
+
+        mav.addObject("navRank", navRank);
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memId", member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");

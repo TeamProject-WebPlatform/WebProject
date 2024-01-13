@@ -971,10 +971,13 @@ a:hover {
     height: 24px;
     border: none;
     outline: none;
-    color: #646464;
     font-size: 24px;
     cursor: pointer;
     transition: all 0.25s linear;
+    color: #646464
+}
+.dark-theme .search__refresh button{
+    color: #ffffff;
 }
 
 .search__btn button:hover,
@@ -3770,14 +3773,14 @@ display: block;
     align-items: flex-start;
 }
 
-.wallet-value {
+/* .wallet-value {
     color: #F65100;
     font-size: 36px;
     font-style: normal;
     font-weight: 700;
     line-height: 1.33;
     padding-bottom: 5px;
-}
+} */
 
 .wallet-label {
     color: #4aa138;
@@ -5847,6 +5850,40 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
 .tabnav li a{ position:relative; display:block; background: #f8f8f8; color: #000; padding:0 30px; line-height:46px; text-decoration:none; font-size:12px;}
 .tabnav li a:hover,
 .tabnav li a.active{background:#fff; color:#7ea21e; }
+
+/* 프로필 수정 페이지 */
+.user-info__detail {
+    margin-top: 0px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-style: sans-serif;
+    font-weight: normal;
+    line-height: 2;
+}
+
+/* 프로필 자기소개 수정 */
+.uk-textarea {
+    height: 80px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+    background: #F5F5F5;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.36;
+    resize: none;
+}
+
+#label {
+    font-family: "Nunito";
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
 
 
 #current-point{

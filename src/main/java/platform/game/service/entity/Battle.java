@@ -44,6 +44,7 @@ public class Battle {
     private int btClientMemBetCnt;
     private Date btEndDt;
     private String btResult;
+    private String btState;
 
     @OneToOne(fetch = FetchType.LAZY,mappedBy="battle")
     private BattlePost btPost;

@@ -18,7 +18,7 @@ import platform.game.service.entity.compositeKey.MemberItemId;
 @Builder
 @IdClass(MemberItemId.class)
 public class MemberItem {
-    
+
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("memId")
@@ -31,9 +31,9 @@ public class MemberItem {
     @Column(columnDefinition = "CHAR(5) NOT NULL DEFAULT ''")
     private int itemCd;
 
-    @Column(columnDefinition = "CHAR(1) NOT NULL DEFAULT ''")
+    @Column(columnDefinition = "CHAR(1) NOT NULL DEFAULT 'N'")
     private String itemApplyYN;
-    
+
     @Column(columnDefinition = "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP")
     private String boughtAt;
 

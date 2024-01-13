@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Editprofile</title>
+    <meta content="Templines" name="author">
+    <meta content="TeamHost" name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/libs.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/main_custom.css" />
+    <script src="/js/editprofile.js"></script>
+</head>
+
+
+
+<body class="page-home dark-theme">
+
+    
+    <div class="page-wrapper">
+        <main class="page-main">
+        <div class="widjet__body">
+            <div class="user-info">
+                <div class="user-info__avatar"><img src="../img/profile.png" alt="profile"></div>
+                <div class="user-info__box">
+                    <div class="user-info__detail" th:text="${'아이디 : ' + member.memUserid}"></div>
+                    <div class="user-info__detail" th:text="${'닉네임 : ' + member.memNick}">d</div>
+                    <div class="user-info__detail" th:text="${'레&nbsp&nbsp&nbsp벨 : ' + member.memLvl}">d</div>
+                    <div class="user-info__detail" th:text="${'이메일 : ' + member.memEmail}">d</div>
+                    <div class="user-info__detail" th:text="${'현재 포인트 : ' + member.memCurPoint}">d</div>
+                    <div class="user-info__detail" th:text="${'누적 포인트 : ' + member.memTotalPoint}">d</div>
+                </div>
+            </div>
+            <textarea id="introduce" class="uk-textarea" name="details" th:text="${profile.profileIntro}"></textarea>
+            <br><br>
+            <button id="ChangeIntroduce" class="uk-button uk-button-secondary" type="button">자기 소개 변경</button>
+        </div>
+        <hr>
+        <h6 class="uk-text-lead">닉네임 변경</h6>
+        <p>닉네임은 4자 이상 10자 이하, 문자나 숫자로만 조합이 가능합니다.</p>
+        <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+            <div class="user-info">
+                <div id="label">새 닉네임 &emsp;&emsp;&emsp;&nbsp;</div>
+                <div class="user-info__box">
+                    <div class="search__input"><input type="text" id="modifyNick" name="search"></div>
+                </div>
+            </div>
+            <div>
+                <button id="DuplicateNick" class="uk-button uk-button-secondary" type="button">중복 확인</button>
+                <button id="ChangeNick" class="uk-button uk-button-secondary" type="button">닉네임 변경</button>
+            </div>
+        </div>
+        <hr>
+        <h6 class="uk-text-lead">비밀번호 변경</h6>
+        <p>비밀번호는 10자 이상 20자 이하, 문자+숫자의 조합으로 이루어져야 합니다.</p>
+        <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+            <div class="user-info">
+                <div id="label">새 비밀번호 &emsp;&emsp;&nbsp;</div>
+                <div class="user-info__box">
+                    <div class="search__input"><input type="password" id="modifypassword" name="search"></div>
+                </div>
+            </div>
+        </div>
+        <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+            <div class="user-info">
+                <div id="label">비밀번호 확인 &emsp;&nbsp;</div>
+                <div class="user-info__box">
+                    <div  class="search__input"><input type="password" id="checkpassword" name="search"></div>
+                </div>
+            </div>
+            <div>
+                <button id="ChangePassword" class="uk-button uk-button-secondary" type="button">비밀번호 변경</button>
+            </div>
+        </div>
+    </main>
+    </div>
+    <script src="/js/libs.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
