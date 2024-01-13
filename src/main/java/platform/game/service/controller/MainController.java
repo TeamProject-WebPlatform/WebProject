@@ -83,6 +83,8 @@ public class MainController {
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint",member.getMemCurPoint());
+                mav.addObject("memId",member.getMemId());
             }
         } else {
             System.out.println("멤버 없음");
@@ -98,10 +100,10 @@ public class MainController {
         return list;
     }
 
-    @GetMapping("/list")
-    public ModelAndView list() {
-        return new ModelAndView("list");
-    }
+    // @GetMapping("/list")
+    // public ModelAndView list() {
+    // return new ModelAndView("list");
+    // }
 
     @GetMapping("/show")
     public ModelAndView show() {
@@ -391,6 +393,7 @@ public class MainController {
             // 쌍따옴표로 넘어와서 쌍따옴표 없에는 문구(원인 찾으면 없에도 됨)
             System.out.println("delete_ok : " + boardCd);
             int RboardCd = Integer.parseInt(boardCd.replaceAll("\"", ""));
+            System.out.println("delete_ok1 : " + RboardCd);
             System.out.println("delete_ok1 : " + RboardCd);
             model.addAttribute("boardCd", RboardCd);
 

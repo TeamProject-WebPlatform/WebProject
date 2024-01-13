@@ -1,7 +1,12 @@
 package platform.game.service.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +39,12 @@ public class Member {
     private String memCertified;
     private String memCreatedAt;
     private String memDeletedAt;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    private List<MemberBetting> memBettingList = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    private List<PointHistory> memPointHistoryList = new ArrayList<>();
 
     public String getRole(String code) {
         switch (code) {

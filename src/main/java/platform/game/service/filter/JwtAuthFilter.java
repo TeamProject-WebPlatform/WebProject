@@ -43,21 +43,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("jwtTokenCookie")) {
                     // String cookieValue = cookie.getValue();
-                    token = cookie.getValue();
-                    userid = jwtService.extractUsername(token);
-                    pw = jwtService.extractPassword(token);
                     try {
+                        token = cookie.getValue();
+                        userid = jwtService.extractUsername(token);
+                        pw = jwtService.extractPassword(token);
                         cookie.setMaxAge(JwtService.JWT_EXPIRY_TIME); // 쿠키 시간 갱신
                     } catch (ExpiredJwtException expiredJwtException) {
                         // JWT가 만료된 경우 예외 처리
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().write("JWT is expired");
+                        // response.getWriter().write("JWT is expired");
                         isTokenExpired = true;
                         // authentication 객체 지우기.
                         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
                         if (auth != null) {
                             new SecurityContextLogoutHandler().logout(request, response, auth);
                         }
+                        response.sendRedirect(request.getContextPath() + "/logout");
+                        return;
                     }
 
                 }
@@ -76,5 +78,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-    
+
 }

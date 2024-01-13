@@ -27,7 +27,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const active = document.getElementById("nav-home");
+        const active = document.getElementById("[[${navBoard}]]");
         active.classList.add("uk-active");
     });
 </script>
@@ -85,7 +85,7 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <h3 class="uk-text-lead">자유게시판</h3>
+                        <h3 class="uk-text-lead" th:text='${boardCd_name}'></h3>
                     </div>
                 </div>
                 <div class="widjet --filters">
@@ -101,14 +101,21 @@
                                             <!--게시판-->
                                             <div class="board_write">
                                                 <div class="form-container">
-                                                    <div class="form-row">
+                                                    <div class="form-row uk-width-1-6">
                                                         <label for="subject" class="form-label">제목</label>
                                                         <input type="text" name="subject" value="" class="board_view_input">
                                                     </div>
-                                                    <div class="form-row">
+                                                    <br />
+                                                    <div class="form-row uk-width-1-6">
                                                         <label for="tags" class="form-label">태그</label>
-                                                        <input type="text" name="tags" value="" class="board_view_input">
+                                                        <select class="js-select" name="tags">
+                                                            <option value="All">All</option>
+                                                            <option value="LeagueofLegends">LeagueofLegends</option>
+                                                            <option value="BattleGround">BattleGround</option>
+                                                            <option value="Steam">Steam</option>
+                                                        </select>
                                                     </div>
+                                                    <br />
                                                     <div class="form-row">
                                                         <label for="content" class="form-label">내용</label>
                                                     </div>

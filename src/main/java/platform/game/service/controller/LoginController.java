@@ -85,7 +85,8 @@ public class LoginController {
         String subject = "GAMMOA 회원가입의 인증번호 입니다";
         String content = "<h1>인증 번호는 <br><span>" + number + "</span> 입니다.</h1>";
         Boolean success = mailAction.sendMail(toEmail, "new User", subject, content);
-        if(!success) number = -1;
+        if (!success)
+            number = -1;
         // 리턴 number 값을 반환
         return number;
     }

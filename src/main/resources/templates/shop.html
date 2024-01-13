@@ -1,374 +1,233 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <meta charset="UTF-8">
-        <meta name="author" content="우리팀">
-        <meta name="description" content="팀포트폴리오">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta charset="utf-8">
+        <title>GAMMOA</title>
+        <meta content="Templines" name="author">
+        <meta content="TeamHost" name="description">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://kit.fontawesome.com/021ba766ac.js" crossorigin="anonymous"></script>
-        <!-- 메인 자바스크립트 -->
-        <script src="./js/login_style.js"></script>
-        <!-- 메인 스타이 css -->
-        <link rel="stylesheet" href="../css/shop_style.css">
-        <title>상점</title>
+        <meta name="HandheldFriendly" content="true">
+        <meta name="format-detection" content="telephone=no">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+        <link rel="stylesheet" href="../css/libs.min.css">
+        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/shop_custom.css" />
+        
+        <script src="../js/libs.js"></script>
+        <script src="../js/main.js"></script>
+        <script src="../js/shop.js"></script>
+
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
-    <body>
-        <div id="web">
-            <section>
-                <div class="content">
-                    <div class="row shop">
-                        <div class="left_shop">
-                            <ul class="left_shop_list">
-                                <li id="all_list" class="list_action"><a href="#">전체</a>
-                                <li id="border_list"><a href="#">테두리</a>
-                                    <ul class="sub_border_list">
-                                        <li id="border_icon_list"><a href="#">아이콘 테두리</a></li>
-                                        <li id="border_profile_list"><a href="#">프로필 테두리</a></li>
-                                    </ul>
-                                </li>
-                                <li id="badge_list"><a href="#">뱃지</a>
-                                    <ul class="sub_border_list">
-                                        <li id="paly_badge_list"><a href="#">플레이 타임</a></li>
-                                        <li id="winning_badge_list"><a href="#">승률</a></li>
-                                    </ul>
-                                </li>
-                                <li id="bg_list"><a href="#">배경</a>
-                                    <ul class="sub_border_list">
-                                        <li id="horror_bg_list"><a href="#">호러</a></li>
-                                        <li id="city_bg_list"><a href="#">도시</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div id="center_all_shop center_action">
-                            <h3 class="category_name">전체 아이템</h3>
-                                <!-- <p>HOME &gt; <strong>게시판</strong></p> -->
-                            <div class="row itemlist">
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly>아이템 설명</textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly></textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly></textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly></textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly></textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="paginate_regular">
-                                <div align="absmiddle">
-                                    <span>&lt;&lt;</span>
-                                    &nbsp;
-                                    <span>&lt;</span>
-                                    &nbsp;&nbsp;
-                                    <span>[ 1 ]</span>
-                                    <span><a href="list">2</a></span>
-                                    <span><a href="list">3</a></span>
-                                    <span><a href="list">4</a></span>
-                                    <span><a href="list">5</a></span>
-                                    &nbsp;&nbsp;
-                                    <span>&gt;</span>
-                                    &nbsp;
-                                    <span>&gt;&gt;</span>
-                                </div>
-                            </div>
-                            <!--페이지넘버-->
-                        </div>
-                        <div id="center_icon_shop">
-                            <h3 class="category_name">아이콘 테두리</h3>
-                                <!-- <p>HOME &gt; <strong>게시판</strong></p> -->
-                            <div class="row itemlist">
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly>아이템 설명</textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
-                            </div>    
-                            <div class="paginate_regular">
-                                <div align="absmiddle">
-                                    <span>&lt;&lt;</span>
-                                    &nbsp;
-                                    <span>&lt;</span>
-                                    &nbsp;&nbsp;
-                                    <span>[ 1 ]</span>
-                                    <span><a href="list">2</a></span>
-                                    <span><a href="list">3</a></span>
-                                    <span><a href="list">4</a></span>
-                                    <span><a href="list">5</a></span>
-                                    &nbsp;&nbsp;
-                                    <span>&gt;</span>
-                                    &nbsp;
-                                    <span>&gt;&gt;</span>
-                                </div>
-                            </div>
-                            <!--페이지넘버-->
-                        </div>
-                        <div id="center_profile_shop">
-                            <h3 class="category_name">프로필 테두리</h3>
-                                <!-- <p>HOME &gt; <strong>게시판</strong></p> -->
-                            <div class="row itemlist">
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly>아이템 설명</textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const active = document.getElementById("[[${navshop}]]");
+            active.classList.add("uk-active");
+        });
+    </script>
 
-                            </div>
-                            <div class="paginate_regular">
-                                <div align="absmiddle">
-                                    <span>&lt;&lt;</span>
-                                    &nbsp;
-                                    <span>&lt;</span>
-                                    &nbsp;&nbsp;
-                                    <span>[ 1 ]</span>
-                                    <span><a href="list">2</a></span>
-                                    <span><a href="list">3</a></span>
-                                    <span><a href="list">4</a></span>
-                                    <span><a href="list">5</a></span>
-                                    &nbsp;&nbsp;
-                                    <span>&gt;</span>
-                                    &nbsp;
-                                    <span>&gt;&gt;</span>
+    <body class="page-store dark-theme">
+        <input id="toggle" type="checkbox">
+        
+    <!-- Loader-->
+    <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div>
+    <!-- Loader end-->
+
+    <div class="page-wrapper">
+        <!-- 헤더 Fragment -->
+        <header th:replace="~{fragments/header :: headerFragment}">헤더 Fragment</header>
+        <!--  -->
+        <div class="page-content">
+            <!-- 사이드바 Fragment -->
+            <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss = "sidebar is-show" id="sidebar">사이드바 Fragment</aside>
+            <!-- 메인 -->
+                <main class="page-main">
+                    <div class="flex-container">
+                        <div class="widjet-container">
+                            <div class="widjet --filters">
+                                <div class="widjet__head">
+                                    <h3 class="uk-text-lead">Item Shop</h3>
+                                </div>
+                                <div class="widjet__body">
+                                    <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-2@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                        <div class="uk-width-1-1">
+                                            <div class="search">
+                                                <!-- <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="ItemSearch"></div> -->
+                                                <!-- <div class="search__btn"><button type="button"><i class="ico_search"></i></button></div> -->
+                                                <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="ItemSearch"></div>
+                                                <div class="search__btn"><button type="button" th:onclick="changeCategori()"><i class="ico_search"></i></button></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <select class="js-select" id="categorySelect" th:onchange="changeCategori()">
+                                                <option value="all">카테고리: all</option>
+                                                <option value="801">카테고리 : 테두리</option>
+                                                <option value="802">카테고리 : 뱃지</option>
+                                                <option value="803">카테고리 : 프로필 배경</option>
+                                            </select>
+                                        </div>
+                                        <!-- <div class="uk-text-right"><a href="#!" th:text="'MyPint : ' + ${point}"></a></div> -->
+                                        <div class="uk-text-right"><a href="#!" th:text="${totalItemCount} + ' items'"></a></div>
+                                    </div>
                                 </div>
                             </div>
-                            <!--페이지넘버-->
-                        </div>
-                        <div id="center_badge_shop">
-                            <h3 class="category_name">뱃지 상점</h3>
-                                <!-- <p>HOME &gt; <strong>게시판</strong></p> -->
-                            <div class="row itemlist">
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
+                            <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-3@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                <div th:each="item : ${items}">
+                                    <div class="game-card card-visible" th:data-category="${item.itemKindCd}">
+                                        <div class="game-card__box">
+                                            <div class="game-card__media"><a href="#"><img th:src="@{'./img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" th:onclick="openPopup(this)"/></a></div>
+                                            <div class="game-card__info">
+                                                <a class="game-card__title" href="#" th:text="${item.itemNm}"></a>
+                                                <div class="game-card__genre" th:text="${item.itemInfo}"></div>
+                                                <div class="game-card__rating-and-price">
+                                                    <div class="game-card__rating"></div>
+                                                    <div class="game-card__price"><span th:text="${item.itemCost}"></span>&nbsp;<span>Point</span></div>
+                                                </div>
+                                                <div class="game-card__bottom">
+                                                    <input class="select_btn" type='submit' value='미리보기' th:onclick="showPreview('[[${item.itemNm}]]', '[[${item.itemKindCd}]]')">
+                                                    <div th:if="${memId eq null}">
+                                                        <input class="select_Get_btn" type='button' value='구매' onclick="return showLoginAlert()">
+                                                        <script th:inline="javascript">
+                                                            function showLoginAlert() {
+                                                                alert('로그인이 필요합니다.');
+                                                            }
+                                                        </script>
+                                                    </div>
+                                                    <div th:if="${memId ne null}">
+                                                        <!-- memId가 있는 경우, 구매 버튼을 표시 -->
+                                                        <form action=''>
+                                                            <input class="select_Get_btn" type='submit' value='구매' th:onclick="getItem('[[-${item.itemCost}]]','5001')">
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly>아이템 설명</textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="paginate_regular">
-                                <div align="absmiddle">
-                                    <span>&lt;&lt;</span>
-                                    &nbsp;
-                                    <span>&lt;</span>
-                                    &nbsp;&nbsp;
-                                    <span>[ 1 ]</span>
-                                    <span><a href="list">2</a></span>
-                                    <span><a href="list">3</a></span>
-                                    <span><a href="list">4</a></span>
-                                    <span><a href="list">5</a></span>
-                                    &nbsp;&nbsp;
-                                    <span>&gt;</span>
-                                    &nbsp;
-                                    <span>&gt;&gt;</span>
                                 </div>
                             </div>
-                            <!--페이지넘버-->
                         </div>
-                        <div id="center_time_shop">
-                            <h3 class="category_name">플레이시간 상점</h3>
-                                <!-- <p>HOME &gt; <strong>게시판</strong></p> -->
-                            <div class="row itemlist">
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
+                        <div class="shopPosition">
+                            <div class="widjet --filters shopfixed">
+                                <div class="widjet__head">
+                                    <h3 class="uk-text-lead">Thumbnail</h3>
+                                </div>
+                                <div class="widjet__body">
+                                    <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                        <!-- 배경 -->
+                                        <div class="uk-width-1-1">
+                                            <!-- 태두리 -->
+                                            <div class="profile-card">
+                                                <!-- <a href="/mypage/${memNickname}"> -->
+                                                <div class="profile-header">
+                                                    <div class="profile-image"><img src="./img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                                    <div class="profile-user_info">
+                                                        <p class="profile-user_level" th:text="'Lv : ' + ${level}"></p>
+                                                        <p class="profile-user_nick" th:text="${nickname}"></p>
+                                                        <img class="badge" src="./img/starbucks.png" alt="NO-SYMBOL">
+                                                    </div>
+                                                </div>
+                                                <!-- </a> -->
+                                                <div class="profile-dividing-line"></div>
+                                                <div class="profile-main">
+                                                    <div class="profile-introduction">
+                                                        <p>안녕하세요</p>
+                                                    </div>
+                                                    <div class="profile-dividing-line"></div>
+                                                    <div class="profile-badge-section">
+                                                    <span class="badge shopbadge"></span>
+                                                    <!-- <span class="badge">&#127775;</span>
+                                                    <span class="badge">&#127806;</span>
+                                                    <span class="badge">&#127851;</span>
+                                                    <span class="badge">&#127774;</span>
+                                                    <span class="badge">&#127775;</span>
+                                                    <span class="badge">&#127806;</span>
+                                                    <span class="badge">&#127851;</span>
+                                                    <span class="badge">&#127774;</span> -->
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="profile-dividing-line"></div> -->
+                                            </div>
+                                        </div>
+                                        <div class="setbtn">
+                                            <ul id="previewList"></ul>
+                                        </div>
+                                        <div class="uk-width-1-1">
+                                            <input class="reset_btn" type='submit' value='초기화' th:onclick="hidePreview()">
                                         </div>
                                     </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly>아이템 설명</textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
                                 </div>
-
-                            </div>
-                            <div class="paginate_regular">
-                                <div align="absmiddle">
-                                    <span>&lt;&lt;</span>
-                                    &nbsp;
-                                    <span>&lt;</span>
-                                    &nbsp;&nbsp;
-                                    <span>[ 1 ]</span>
-                                    <span><a href="list">2</a></span>
-                                    <span><a href="list">3</a></span>
-                                    <span><a href="list">4</a></span>
-                                    <span><a href="list">5</a></span>
-                                    &nbsp;&nbsp;
-                                    <span>&gt;</span>
-                                    &nbsp;
-                                    <span>&gt;&gt;</span>
-                                </div>
-                            </div>
-                            <!--페이지넘버-->
-                        </div>
-                        <div id="center_winning_shop">
-                            <h3 class="category_name">승률 뱃지</h3>
-                                <!-- <p>HOME &gt; <strong>게시판</strong></p> -->
-                            <div class="row itemlist">
-                                <div class="sub_item">
-                                    <div class="item">
-                                        <div class="icon_item">
-                                            <a href="#">
-                                                <!-- <img src="../img/모코머슥.png" alt="아이콘"> -->
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="explanation_item">
-                                        <p class="name_item">아이템 이름</p>
-                                        <textarea name="explanation" id="explanation" cols="30" rows="5" readonly>아이템 설명</textarea>
-                                        <p class="price_item">가격 : <span>3500원</span></p>
-                                    </div>
-                                    <div class="button_item">
-                                        <input class="select" type="button" value="구매">
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="paginate_regular">
-                                <div align="absmiddle">
-                                    <span>&lt;&lt;</span>
-                                    &nbsp;
-                                    <span>&lt;</span>
-                                    &nbsp;&nbsp;
-                                    <span>[ 1 ]</span>
-                                    <span><a href="list">2</a></span>
-                                    <span><a href="list">3</a></span>
-                                    <span><a href="list">4</a></span>
-                                    <span><a href="list">5</a></span>
-                                    &nbsp;&nbsp;
-                                    <span>&gt;</span>
-                                    &nbsp;
-                                    <span>&gt;&gt;</span>
-                                </div>
-                            </div>
-                            <!--페이지넘버-->
-                        </div>
-                        <div class="right_shop">
-                            <div class="advertisement">
                             </div>
                         </div>
                     </div>
+                    
+                </main>
+        </div>
+        <div class="page-modals">
+
+            <div class="popup" id="popup">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <img class="popup-content" id="popupImage">
+            </div>
+
+
+            <div class="uk-flex-top" id="modal-report" data-uk-modal>
+                <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default" type="button" data-uk-close></button>
+                    <h2 class="uk-modal-title">Report</h2>
+                    <form class="uk-form-stacked" action="#">
+                        <div class="uk-margin">
+                            <div class="uk-form-label">Subject</div>
+                            <div class="uk-form-controls"><select class="js-select">
+                                    <option value="">Choose Subject</option>
+                                    <option value="Subject 1">Subject 1</option>
+                                    <option value="Subject 2">Subject 2</option>
+                                    <option value="Subject 3">Subject 3</option>
+                                </select></div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-form-label">Details</div>
+                            <div class="uk-form-controls"><textarea class="uk-textarea" name="details" placeholder="Try to include all details..."></textarea></div>
+                            <div class="uk-form-controls uk-margin-small-top">
+                                <div data-uk-form-custom><input type="file"><button class="uk-button uk-button-default" type="button" tabindex="-1"><i class="ico_attach-circle"></i><span>Attach File</span></button></div>
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-grid uk-flex-right" data-uk-grid>
+                                <div><button class="uk-button uk-button-small uk-button-link">Cancel</button></div>
+                                <div><button class="uk-button uk-button-small uk-button-danger">Submit</button></div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </section>
-            <footer>
-                
-            </footer>
+            </div>
+            <div class="uk-flex-top" id="modal-help" data-uk-modal>
+                <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default" type="button" data-uk-close></button>
+                    <h2 class="uk-modal-title">Help</h2>
+                    <div class="search">
+                        <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search"></div>
+                        <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
+                    </div>
+                    <div class="uk-margin-small-left uk-margin-small-bottom uk-margin-medium-top">
+                        <h4>Popular Q&A</h4>
+                        <ul>
+                            <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Upload Your Developed Game</span></li>
+                            <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Go Live Stream</span></li>
+                            <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>Get in touch with the Creator Support Team</span></li>
+                        </ul>
+                        <ul>
+                            <li><a href="#!">browse all articles</a></li>
+                            <li><a href="#!">Send Feedback</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
+    
 </html>
+    

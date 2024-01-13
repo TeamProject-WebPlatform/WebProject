@@ -35,4 +35,6 @@ public class BattlePointTO {
     private String clientPointRewardRatio;
 
     private int btId;
+    private int alreadyBet=0; // 0은 ㄴㄴ, 1은 ㅇㅇ
+    private int flag=-1; // 투표했을시 flag
 }

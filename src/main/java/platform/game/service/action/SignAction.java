@@ -96,7 +96,7 @@ public class SignAction {
                         .memCertified(memCertified)
                         .memCreatedAt(new Date().toString())
                         .build();
-                System.out.println("signupAction > 멤버 객체 생성 성공 " + member.toString());
+                // System.out.println("signupAction > 멤버 객체 생성 성공 " + member.toString());
                 // memService bean에서 addUser로 만든 member를 DB에 추가(service 내에서 비번 암호화)
                 boolean flag = memService.addUser(member);
                 boolean addRank = memService.addUserRanking(member);

@@ -27,27 +27,30 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const active = document.getElementById("nav-home");
+        const active = document.getElementById("[[${navBoard}]]");
         active.classList.add("uk-active");
     });
 </script>
-<!-- 댓글 작성 확인 함수 부분-->
+
 <script type="text/javascript">
-    window.onload = function() {
-        document.getElementById('cbtn').onclick = function() {
+    // 답글 입력 폼의 표시/숨김을 토글
+    function toggleReplyForm(span) {
+        const commentId = span.getAttribute("data-comment-id");
+        const replyForm = document.querySelector(`.reply-form[data-comment-id="${commentId}"]`);
+        replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // 댓글 작성 확인 함수 부분
+        document.getElementById('cbtn').addEventListener('click', function () {
             document.getElementsByName("ccontent").value;
             document.getElementsByName("postId").value;
             document.cfrm.submit();
-        };
-    };
-</script>
-<!--댓글 삭제 확인-->
-<script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        // 모든 삭제 버튼에 대해 이벤트 핸들러 등록
+        });
+        // 댓글 삭제 확인
         const deleteButtons = document.getElementsByClassName("delete-comment");
         Array.from(deleteButtons).forEach(button => {
-            button.onclick = function () {
+            button.addEventListener('click', function () {
                 const commentId = button.getAttribute("data-comment-id");
                 console.log('클릭');
 
@@ -60,26 +63,31 @@
                 document.getElementsByName("rcontent").value;
                 // form을 submit
                 form.submit();
-            };
+            });
         });
     });
 </script>
-<!--대댓글 작성-->
-<script type="text/javascript">
-    function toggleReplyForm(span) {
-        // 답글 입력 폼의 표시/숨김을 토글
-        const commentId = span.getAttribute("data-comment-id");
-        const replyForm = document.querySelector(`.reply-form[data-comment-id="${commentId}"]`);
-        replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
-    }
+<script>
+    function submitReplyForm(parent_comment_id) {
+        var use = "rcontent"+parent_comment_id;
+        var rcontent = document.getElementById(use).value;
+        var boardCd = [[${ post.boardCd }]];
+        var postId = [[${ post.postId }]];
+        var cpage = [[${ cpage }]];
+        var parent_comment_id = parent_comment_id;
 
-    window.onload = function() {
-        document.getElementById('rbtn').onclick = function() {
-            document.getElementsByName("rcontent").value;
-            document.rfrm.submit();
-        };
-    };
+        console.log("rcontent : " + rcontent);
+        console.log("boardCd : " + boardCd);
+        console.log("postId : " + postId);
+        console.log("cpage : " + cpage);
+        console.log("parent_comment_id : " + parent_comment_id);
+
+        var replyHref = `reply_comment_write_ok?board_cd=${boardCd}&post_id=${postId}&cpage=${cpage}&rcontent=${rcontent}&parent_comment_id=${parent_comment_id}`;
+        console.log(replyHref);
+        window.location.href = replyHref;
+    }
 </script>
+
 <!--로그인 알람-->
 <script>
     function checkLoginAndNavigate() {
@@ -103,126 +111,155 @@
         <!--  -->
         <div class="page-content">
             <!-- 사이드바 Fragment -->
-            <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss = "sidebar is-show" id="sidebar">사이드바 Fragment</aside>
+            <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss="sidebar is-show" id="sidebar">사이드바
+                Fragment</aside>
             <!--  -->
 
             <!-- 메인 -->
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <h3 class="uk-text-lead">자유게시판</h3>
+                        <h3 class="uk-text-lead" th:text='${boardCd_name}'></h3>
                     </div>
                 </div>
                 <div class="widjet --filters">
                     <div class="widjet__body">
-                        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small"
+                            data-uk-grid>
                             <div class="uk-width-1-1">
                                 <!--게시판 코드 들어가는 장소-->
                                 <div class="widjet-game__title">
-                                        <div class="contents_sub">
-                                            <div class="board_view">
-                                                <!-- Post title-->
-                                                <h3 class="fw-bolder mb-1" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></h3>
-                                                <table>
-                                                    <tr>
-                                                        <th width="10%">글쓴이</th>
-                                                        <td width="10%" th:text="${post.member.memNick}"></td>
-                                                        <th width="10%">등록일</th>
-                                                        <td width="20%" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
-                                                        <th width="10%">조회</th>
-                                                        <td width="20%" th:text="${post.postHit}"></td>
-                                                    </tr>
-                                                </table>
-                                                <table class="board_view_table">
-                                                    <tr>
-                                                        <td colspan="4" valign="top" style="padding: 20px; line-height: 160%" th:utext="${post.postContent}"></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <form action="comment_delete_ok" method="post" name="dcfrm" id="dcfrm">
-                                                <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                                <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                                <input type="hidden" name="cpage" th:value="${cpage}" />
-                                                <div class="uk-grid uk-grid-small uk-child-width-1-2@m" data-uk-grid>
-                                                    <div><br /><strong>댓글</strong>
-                                                        <div class="user-item --active" th:each="comment  : ${comment}">
+                                    <div class="contents_sub">
+                                        <div class="board_view">
+                                            <!-- Post title-->
+                                            <h3 class="fw-bolder mb-1"
+                                                th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></h3>
+                                            <table>
+                                                <tr>
+                                                    <th width="10%">글쓴이</th>
+                                                    <td width="10%" th:text="${post.member.memNick}"></td>
+                                                    <th width="10%">등록일</th>
+                                                    <td width="20%"
+                                                        th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                                                    <th width="10%">조회</th>
+                                                    <td width="20%" th:text="${post.postHit}"></td>
+                                                </tr>
+                                            </table>
+                                            <table class="board_view_table">
+                                                <tr>
+                                                    <td colspan="4" valign="top"
+                                                        style="padding: 20px; line-height: 160%"
+                                                        th:utext="${post.postContent}"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <form action="comment_delete_ok" method="post" name="dcfrm" id="dcfrm">
+                                            <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
+                                            <input type="hidden" name="post_id" th:value="${post.postId}" />
+                                            <input type="hidden" name="cpage" th:value="${cpage}" />
+                                            <div class="uk-grid uk-grid-small uk-child-width-1-2@m" data-uk-grid>
+                                                <div><br /><strong>댓글</strong>
+                                                    <div class="user-item --active" th:each="commentNode : ${commentTree}">
+                                                        
+                                                            <!-- 댓글 내용 출력 -->
                                                             <div class="user-item__box">
-                                                                <strong><span th:text="${comment.member.memNick}"></span></strong> (<span th:text="${#dates.format(comment.updatedAt, 'yyyy-MM-dd hh:mm')}"></span>)
+                                                                <strong><span th:text="${commentNode.comment.member.memNick}"></span></strong>
+                                                                (<span th:text="${#dates.format(commentNode.comment.updatedAt, 'yyyy-MM-dd hh:mm')}"></span>)
                                                                 <a th:if="${writePost}">
-                                                                    <span class="delete-comment" th:attr="data-comment-id=${comment.commentId}" style="cursor: pointer; color: red;"> x </span>
+                                                                    <span class="delete-comment" th:attr="data-comment-id=${commentNode.comment.commentId}" style="cursor: pointer; color: red;"> x </span>
                                                                 </a><br />
-                                                                <div class="coment_re_txt" th:text="${comment.commentContent}"></div>
-
-
-                                                                <!--대댓글-->
-                                                                <span class="reply-text" th:attr="data-comment-id=${comment.commentId}" onclick="toggleReplyForm(this)">답글 쓰기</span>
-                                                                <div class="reply-form" th:attr="data-comment-id=${comment.commentId}" style="display: none;">
-                                                                    <form action="reply_comment_write_ok" method="post" name="rfrm" id="rfrm">
-                                                                        <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                                                        <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                                                        <input type="hidden" name="cpage" th:value="${cpage}" />
-                                                                        <input type="hidden" name="parent_comment_id" th:value="${comment.commentId}" />
-                                                                        <textarea name="rcontent" cols="" rows="" class="reply-textarea" placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
-                                                                        <input type="button" id="rbtn" value="답글 등록" class="reply-button" onclick="submitReplyForm(this)">
-                                                                    </form>
+                                                                <div class="coment_re_txt" th:text="${commentNode.comment.commentContent}"></div>
+                                                    
+                                                                <!-- 대댓글 쓰기 -->
+                                                                <a th:if="${loginCheck}">
+                                                                    <span class="reply-text" th:attr="data-comment-id=${commentNode.comment.commentId}" onclick="toggleReplyForm(this)">답글 쓰기</span>
+                                                                    <div class="reply-form" th:attr="data-comment-id=${commentNode.comment.commentId}" style="display: none;">
+                                                                        <form action="reply_comment_write_ok" method="post" name="rfrm" id="rfrm">
+                                                                            <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
+                                                                            <input type="hidden" name="post_id" th:value="${post.postId}" />
+                                                                            <input type="hidden" name="cpage" th:value="${cpage}" />
+                                                                            <input type="hidden" id="parent_comment_id" name="parent_comment_id" th:value="${commentNode.comment.commentId}" />
+                                                                            <textarea name="rcontent" th:id="'rcontent' + ${commentNode.comment.commentId}" cols="" rows="" class="reply-textarea" placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
+                                                                            <input type="button" id="rbtn" value="답글 등록" class="reply-button" th:onclick="'submitReplyForm(' + ${commentNode.comment.commentId} + ' )'" />
+                                                                        </form>
+                                                                    </div>
+                                                                </a>
+                                                                <!-- 대댓글 표시 -->
+                                                                <div th:each="reply : ${commentNode.replies}">
+                                                                    <div class="user-item__box">
+                                                                        <strong><span th:text="${reply.comment.member.memNick}"></span></strong>
+                                                                        (<span th:text="${#dates.format(reply.comment.updatedAt, 'yyyy-MM-dd hh:mm')}"></span>)
+                                                                        <a th:if="${writePost}">
+                                                                            <span class="delete-comment" th:attr="data-comment-id=${reply.comment.commentId}" style="cursor: pointer; color: red;"> x </span>
+                                                                        </a><br />
+                                                                        <div class="coment_re_txt" th:text="${reply.comment.commentContent}"></div>
+                                                                    </div>
                                                                 </div>
-                                                                
                                                             </div>
-                                                        </div>
                                                     </div>
                                                 </div>
-                                            </form>
-                                            <form action="comment_write_ok" method="post" name="cfrm">
-                                                <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                                <input type="hidden" name="cpage" th:value="${cpage}" />
-                                                <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                                <table>
-                                                    <tr>
-                                                        <td class="bg01" width="100%">
-                                                            <!-- 내용 입력<br/> -->
-                                                            <textarea name="ccontent" cols="" rows="" class="coment_input_text" placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
-                                                        </td>
-                                                        <td align="right" class="bg01 bg02">
-                                                            <a th:if="${loginCheck}">
-                                                                <!-- 로그인 상태인 경우의 댓글 작성 -->
-                                                                <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01"/>
-                                                            </a>
-                                                            <a th:unless="${loginCheck}" href="/login">
-                                                                <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
-                                                                <input type="button" value="댓글등록" class="btn_re btn_txt01" style="cursor: pointer;"/>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </form>                                            
-                                            <div class="btn_area">
-                                                <div class="align_left">
-                                                    <a th:href="@{list(board_cd=${post.boardCd}, cpage=${cpage})}"><input type="button" value="목록" class="btn_list btn_txt02"></a>
-                                                </div>
-                                                <div class="align_right">
-                                                    <a th:if="${writePost}" th:href="@{modify(post_id=${post.postId}, cpage=${cpage})}">
-                                                        <!-- 본인이 작성한 글이면 보임 -->
-                                                        <input type="button" value="수정" class="btn_list btn_txt02">
-                                                    </a>
-                                                    <a th:if="${writePost}" th:href="@{delete(post_id=${post.postId}, cpage=${cpage})}">
-                                                        <!-- 본인이 작성한 글이면 보임 -->
-                                                        <input type="button" value="삭제" class="btn_list btn_txt02">
-                                                    </a>
-                                                    <a th:if="${loginCheck}" th:href="@{write(board_cd=${post.boardCd})}">
-                                                        <!-- 로그인 상태인 경우의 링크 -->
-                                                        <input type="button" value="쓰기" class="btn_write btn_txt01">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <form action="comment_write_ok" method="post" name="cfrm">
+                                        <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
+                                        <input type="hidden" name="cpage" th:value="${cpage}" />
+                                        <input type="hidden" name="post_id" th:value="${post.postId}" />
+                                        <table>
+                                            <tr>
+                                                <td class="bg01" width="100%">
+                                                    <!-- 내용 입력<br/> -->
+                                                    <textarea name="ccontent" cols="" rows="" class="coment_input_text"
+                                                        placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
+                                                </td>
+                                                <td align="right" class="bg01 bg02">
+                                                    <a th:if="${loginCheck}">
+                                                        <!-- 로그인 상태인 경우의 댓글 작성 -->
+                                                        <input type="button" id="cbtn" value="댓글등록"
+                                                            class="btn_re btn_txt01" />
                                                     </a>
                                                     <a th:unless="${loginCheck}" href="/login">
-                                                        <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                                        <input type="button" value="쓰기" class="btn_write btn_txt01" onclick="checkLoginAndNavigate()">
+                                                        <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
+                                                        <input type="button" value="댓글등록" class="btn_re btn_txt01"
+                                                            style="cursor: pointer;" />
                                                     </a>
-                                            </div>	
-                                            <!--//게시판-->
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                    <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-3@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small btn_area" data-uk-grid>
+                                        <div class="align_left">
+                                            <a th:href="@{list(board_cd=${post.boardCd}, cpage=${cpage})}"><input
+                                                    type="button" value="목록" class="btn_list btn_txt02"></a>
                                         </div>
-                                    
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div class="width-1-5 align_right">
+                                            <a th:if="${writePost}"
+                                                th:href="@{modify(post_id=${post.postId}, cpage=${cpage})}">
+                                                <!-- 본인이 작성한 글이면 보임 -->
+                                                <input type="button" value="수정" class="btn_list btn_txt02">
+                                            </a>
+                                            <a th:if="${writePost}"
+                                                th:href="@{delete(post_id=${post.postId}, cpage=${cpage})}">
+                                                <!-- 본인이 작성한 글이면 보임 -->
+                                                <input type="button" value="삭제" class="btn_list btn_txt02">
+                                            </a>
+                                            <a th:if="${loginCheck}" th:href="@{write(board_cd=${post.boardCd})}">
+                                                <!-- 로그인 상태인 경우의 링크 -->
+                                                <input type="button" value="쓰기" class="btn_write btn_txt01">
+                                            </a>
+                                            <a th:unless="${loginCheck}" href="/login">
+                                                <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                                <input type="button" value="쓰기" class="btn_write btn_txt01"
+                                                    onclick="checkLoginAndNavigate()">
+                                            </a>
+                                        </div>
+                                        <!--//게시판-->
+                                    </div>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
