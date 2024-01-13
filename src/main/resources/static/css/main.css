@@ -948,8 +948,11 @@ a:hover {
 .search__btn {
     margin-left: 12px;
 }
-
-.search__btn button {
+.search__refresh{
+    margin-left: 0px;
+}
+.search__btn button,
+.search__refresh button{
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     -webkit-box-align: center;
@@ -977,7 +980,11 @@ a:hover {
 .search__btn button:hover,
 .search__btn button:focus,
 .search__btn button:active,
-.search__btn button.nice-select.open {
+.search__btn button.nice-select.open,
+.search__refresh button:hover,
+.search__refresh button:focus,
+.search__refresh button:active,
+.search__refresh button.nice-select.open {
     color: var(--main-color-now);
 }
 
@@ -2446,87 +2453,18 @@ a:hover {
 display: block;
 /* 또는 다른 크기를 변경하는 스타일 */
 }
+/* 메뉴 드랍다운 */
+/* .board-submenu,
+.rank-submenu {
+    display: none;
+} */
 
-/* 버튼 디자인 */
-.reset_btn {
-    width: 100%;
-	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
-	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
-	background-color: #222;
-    /* box-sizing: border-box; */
-	border: none;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:13px;
-	font-weight:bold;
-	padding:6px 12px;
-	text-decoration:none;
-}
-.reset_btn:hover {
-	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
-	background-color:#565c67;
-    color: var( --main-color-dark);
-}
-.reset_btn:active {
-	position:relative;
-	top:1px;
-}
+/*.board-submenu li,
+.rank-submenu li {
+    list-style-type: none;
+} */
 
 
-.select_btn {
-    /* width: 100%; */
-	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
-	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
-	background-color: #222;
-	border: none;
-	/* border:1px solid #343538; */
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:13px;
-	font-weight:bold;
-	padding:6px 12px;
-	text-decoration:none;
-    box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
-}
-.select_btn:hover {
-	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
-	background-color:#565c67;
-    color: var( --main-color-dark);
-}
-.select_btn:active {
-	position:relative;
-	top:1px;
-}
-
-.select_Get_btn {
-    /* width: 100%; */
-	-webkit-box-shadow: 2px 2px 7px 0px #00000024;
-	/* background:linear-gradient(to bottom, #637aad 5%, #5972a7 100%); */
-	background-color: #222;
-	border: none;
-	/* border:1px solid #343538; */
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:13px;
-	font-weight:bold;
-	padding:6px 12px;
-	text-decoration:none;
-}
-.select_Get_btn:hover {
-	/* background:linear-gradient(to bottom, #5972a7 5%, #637aad 100%); */
-	background-color:#565c67;
-    color: var( --main-color-dark);
-}
-.select_Get_btn:active {
-	position:relative;
-	top:1px;
-}
 
 /* -------------------------------------------------------------------------------------------------- */
 .widjet {
@@ -4518,7 +4456,7 @@ body.dark-theme .game-card__price,
 body.dark-theme .game-card__platform {
     color: #fff;
 }
-
+/* 다크모드 적용 */
 body.dark-theme .widjet__body {
     -webkit-box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03);
     background: #0C1826;
@@ -5918,4 +5856,38 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
 
 .page-header__logo_text{
     color : white;
+}
+
+
+/* 모달 */
+
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 500px;
+    overflow: auto;
+    background-color: rgba(0,0,0, 0.9);
+    padding-top: 60px;
+}
+
+.popup-content {
+    margin: auto;
+    display: block;
+    width: 270px;
+    height: auto;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
 }

@@ -2,8 +2,9 @@ package platform.game.service.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,9 +23,9 @@ import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BoardCpageTO;
+import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.CommentInfoRepository;
-import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -39,9 +40,6 @@ public class BoardController {
     @Autowired
     private CommentInfoRepository commentInfoRepository;
 
-    @Autowired
-    private MemberInfoRepository memberInfoRepository;
-
     // @RequestMapping("/shop")
     // public String shop(){
     // return "shop";
@@ -52,7 +50,6 @@ public class BoardController {
 
         String boardCd_name = "Notice";
         String navBoard = "nav-";
-
         switch (boardCd) {
             case "20001":
                 boardCd_name = "Notice";
@@ -137,6 +134,38 @@ public class BoardController {
             @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listView 호출");
 
+        String boardCd_name = "Notice";
+        String navBoard = "nav-";
+        switch (boardCd) {
+            case 20001:
+                boardCd_name = "Notice";
+                navBoard = navBoard + "notice";
+                break;
+            case 20002:
+                boardCd_name = "Update";
+                navBoard = navBoard + "update";
+                break;
+            case 20003:
+                boardCd_name = "Event";
+                navBoard = navBoard + "event";
+                break;
+            case 20004:
+                boardCd_name = "Free Board";
+                navBoard = navBoard + "free";
+                break;
+            case 20005:
+                boardCd_name = "Sharing information";
+                navBoard = navBoard + "information";
+                break;
+            case 20006:
+                boardCd_name = "Share the strategy";
+                navBoard = navBoard + "strategy";
+                break;
+
+            default:
+                break;
+        }
+
         Post post = new Post();
         post = postInfoRepository.findByPostId(postId);
 
@@ -170,6 +199,7 @@ public class BoardController {
 
         // 댓글 불러오기
         ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
+        ArrayList<CommentTO> commentTree = buildCommentTree(comment);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_view");
@@ -179,7 +209,9 @@ public class BoardController {
         modelAndView.addObject("writePost", writePost);
         modelAndView.addObject("cpage", cpage);
         modelAndView.addObject("board_cd", boardCd);
-        // System.out.println("post.getcontent : " + post.getPostContent());
+        modelAndView.addObject("commentTree", commentTree);
+        modelAndView.addObject("boardCd_name", boardCd_name);
+        modelAndView.addObject("navBoard", navBoard);
         return modelAndView;
     }
 
@@ -187,9 +219,43 @@ public class BoardController {
     public ModelAndView listWrite(@RequestParam(name = "board_cd") String boardCd) {
         System.out.println("Controller_listWrite 호출");
 
+        String boardCd_name = "Notice";
+        String navBoard = "nav-";
+        switch (boardCd) {
+            case "20001":
+                boardCd_name = "Notice";
+                navBoard = navBoard + "notice";
+                break;
+            case "20002":
+                boardCd_name = "Update";
+                navBoard = navBoard + "update";
+                break;
+            case "20003":
+                boardCd_name = "Event";
+                navBoard = navBoard + "event";
+                break;
+            case "20004":
+                boardCd_name = "Free Board";
+                navBoard = navBoard + "free";
+                break;
+            case "20005":
+                boardCd_name = "Sharing information";
+                navBoard = navBoard + "information";
+                break;
+            case "20006":
+                boardCd_name = "Share the strategy";
+                navBoard = navBoard + "strategy";
+                break;
+
+            default:
+                break;
+        }
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_write");
         modelAndView.addObject("board_cd", boardCd);
+        modelAndView.addObject("boardCd_name", boardCd_name);
+        modelAndView.addObject("navBoard", navBoard);
 
         return modelAndView;
     }
@@ -237,14 +303,50 @@ public class BoardController {
     public ModelAndView listModify(@RequestParam(name = "post_id") int postId,
             @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listModift 호출");
+
         Post post = new Post();
 
         post = postInfoRepository.findByPostId(postId);
+        
+
+        String boardCd_name = "Notice";
+        String navBoard = "nav-";
+        switch (post.getBoardCd()) {
+            case "20001":
+                boardCd_name = "Notice";
+                navBoard = navBoard + "notice";
+                break;
+            case "20002":
+                boardCd_name = "Update";
+                navBoard = navBoard + "update";
+                break;
+            case "20003":
+                boardCd_name = "Event";
+                navBoard = navBoard + "event";
+                break;
+            case "20004":
+                boardCd_name = "Free Board";
+                navBoard = navBoard + "free";
+                break;
+            case "20005":
+                boardCd_name = "Sharing information";
+                navBoard = navBoard + "information";
+                break;
+            case "20006":
+                boardCd_name = "Share the strategy";
+                navBoard = navBoard + "strategy";
+                break;
+
+            default:
+                break;
+        }
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_modify");
         modelAndView.addObject("post", post);
         modelAndView.addObject("cpage", cpage);
+        modelAndView.addObject("boardCd_name", boardCd_name);
+        modelAndView.addObject("navBoard", navBoard);
 
         return modelAndView;
     }
@@ -292,17 +394,53 @@ public class BoardController {
     }
 
     @GetMapping("/delete")
-    public ModelAndView listDelete(@RequestParam(name = "post_id") int postId, @RequestParam("cpage") int cpage) {
-
+    public ModelAndView listDelete(@RequestParam(name = "post_id") int postId,
+            @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listdelete 호출");
+
         Post post = new Post();
 
         post = postInfoRepository.findByPostId(postId);
+
+        
+        String boardCd_name = "Notice";
+        String navBoard = "nav-";
+        switch (post.getBoardCd()) {
+            case "20001":
+                boardCd_name = "Notice";
+                navBoard = navBoard + "notice";
+                break;
+            case "20002":
+                boardCd_name = "Update";
+                navBoard = navBoard + "update";
+                break;
+            case "20003":
+                boardCd_name = "Event";
+                navBoard = navBoard + "event";
+                break;
+            case "20004":
+                boardCd_name = "Free Board";
+                navBoard = navBoard + "free";
+                break;
+            case "20005":
+                boardCd_name = "Sharing information";
+                navBoard = navBoard + "information";
+                break;
+            case "20006":
+                boardCd_name = "Share the strategy";
+                navBoard = navBoard + "strategy";
+                break;
+
+            default:
+                break;
+        }
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_delete");
         modelAndView.addObject("post", post);
         modelAndView.addObject("cpage", cpage);
+        modelAndView.addObject("boardCd_name", boardCd_name);
+        modelAndView.addObject("navBoard", navBoard);
 
         return modelAndView;
     }
@@ -369,6 +507,7 @@ public class BoardController {
         System.out.println("Controller_listdeleteOk 호출");
 
         System.out.println("댓글 먼저 삭제");
+        commentInfoRepository.deleteByCommentGrp(commentId);
         commentInfoRepository.deleteByCommentId(commentId);
 
         Post post = new Post();
@@ -406,7 +545,6 @@ public class BoardController {
         comment.setUpdatedAt(date);
         comment.setMember(member);
         comment.setCommentGrp(commentId);
-        System.out.println("comment 확인 : " + comment);
 
         commentInfoRepository.save(comment);
         // 댓글 카운트 추가
@@ -417,25 +555,45 @@ public class BoardController {
         return "redirect:./view?board_cd=" + boardCd + "&post_id=" + postId + "&cpage=" + cpage;
     }
 
-    // @PostMapping("/comment_delete_ok")
-    // @Transactional
-    // public String deleteComment(@RequestParam("board_cd") int boardCd,
-    // @RequestParam("comment_id") int commentId,
-    // @RequestParam("post_id") int postId,
-    // @RequestParam("cpage") int cpage) {
+    /* 대댓글 작업하는 부분 */
+    // 댓글 목록을 가져오는 메소드
+    public ArrayList<CommentTO> getCommentTreeByPostId(int postId) {
+        ArrayList<Comment> comments = commentInfoRepository.findByPost_PostId(postId);
 
-    // System.out.println("Controller_listdeleteOk 호출");
+        // 댓글 목록을 계층 구조로 가공
+        ArrayList<CommentTO> commentTree = buildCommentTree(comments);
 
-    // System.out.println("댓글 먼저 삭제");
-    // commentInfoRepository.deleteByCommentId(commentId);
+        return commentTree;
+    }
 
-    // Post post = new Post();
-    // post = postInfoRepository.findByPostId(postId);
-    // // 댓글 카운트 수정
-    // post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
-    // postInfoRepository.save(post);
+    // 댓글 목록을 계층 구조로 가공하는 메소드
+    private ArrayList<CommentTO> buildCommentTree(ArrayList<Comment> comments) {
+        Map<Integer, CommentTO> commentNodeMap = new HashMap<>();
 
-    // return "redirect:/board/view?board_cd=" + boardCd + "&post_id=" + postId +
-    // "&cpage=" + cpage;
-    // }
+        // 댓글을 CommentNode로 변환하여 Map에 저장
+        for (Comment comment : comments) {
+            CommentTO commentTO = new CommentTO(comment);
+            commentNodeMap.put(comment.getCommentId(), commentTO);
+        }
+
+        // 부모-자식 관계를 설정하여 계층 구조 생성
+        for (Comment comment : comments) {
+            CommentTO commentNode = commentNodeMap.get(comment.getCommentId());
+
+            if (comment.getCommentGrp() != 0) {
+                CommentTO parentCommentNode = commentNodeMap.get(comment.getCommentGrp());
+                parentCommentNode.getReplies().add(commentNode);
+            }
+        }
+
+        // 최상위 댓글 노드를 찾아 반환
+        ArrayList<CommentTO> rootNodes = new ArrayList<>();
+        for (CommentTO commentNode : commentNodeMap.values()) {
+            if (commentNode.getComment().getCommentGrp() == 0) {
+                rootNodes.add(commentNode);
+            }
+        }
+
+        return rootNodes;
+    }
 }

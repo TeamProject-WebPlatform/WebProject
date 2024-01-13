@@ -27,7 +27,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const active = document.getElementById("nav-home");
+        const active = document.getElementById("[[${navBoard}]]");
         active.classList.add("uk-active");
     });
 </script>
@@ -85,7 +85,7 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <h3 class="uk-text-lead">자유게시판</h3>
+                        <h3 class="uk-text-lead" th:text='${boardCd_name}'></h3>
                     </div>
                 </div>
                 <div class="widjet --filters">
@@ -109,10 +109,10 @@
                                                     <div class="form-row uk-width-1-6">
                                                         <label for="tags" class="form-label">태그</label>
                                                         <select class="js-select" name="tags">
-                                                            <option value="All">전체</option>
-                                                            <option value="LeagueofLegends">리그오브레전드</option>
-                                                            <option value="BattleGround">배틀그라운드</option>
-                                                            <option value="Steam">스팀</option>
+                                                            <option value="All">All</option>
+                                                            <option value="LeagueofLegends">LeagueofLegends</option>
+                                                            <option value="BattleGround">BattleGround</option>
+                                                            <option value="Steam">Steam</option>
                                                         </select>
                                                     </div>
                                                     <br />
