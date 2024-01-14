@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../css/libs.min.css">
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/battle.css">
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
 
@@ -26,18 +27,17 @@
 </head>
 
 <script th:inline="javascript">
-    /*<![CDATA[*/
     function formatNumberTok(value) {
         var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
         return formattedValue;
     }
-    /*]]>*/
     document.addEventListener("DOMContentLoaded", function () {
         //console.log = function () {};
+        let logo_img_paths = [getContextPath()+"/img/logo_white.png", getContextPath()+"/img/logo_black.png"];
         const vs = document.querySelectorAll('.vs img');
         let isDark = getCookie('darkMode');
         vs.forEach(function(x){
-                if (isDark === 'true') {
+                if (isDark === 'Y') {
                     x.src = logo_img_paths[0];
                 }
                 else {
@@ -49,7 +49,7 @@
         document.getElementById("toggle").addEventListener("click", function () {
             isDark = getCookie('darkMode');
             vs.forEach(function(x){
-                if (isDark === 'true') {
+                if (isDark === 'Y') {
                     x.src = logo_img_paths[0];
                 }
                 else {
@@ -131,10 +131,12 @@
 
                         if (pointTO.flag == 0) {
                             button = buttons[0];
-                            button.style.backgroundColor = "blueviolet"
+                            button.style.backgroundColor = "blueviolet"  
+                            button.style.boxShadow = "rgba(138,43,226,0.5) 0px 0px 17px 3px";
                         } else if (pointTO.flag == 1) {
                             button = buttons[1];
                             button.style.backgroundColor = "blueviolet"
+                            button.style.boxShadow = "rgba(138,43,226,0.5) 0px 0px 17px 3px";
                         }
 
                     } catch (err) {
@@ -199,6 +201,15 @@
             return '#0FCFA5'; // 검은색
         }
     }
+    function search_battle(){
+        console.log(1);
+    }
+    function selectBattleGame(){
+        
+    }
+    function selectBattleState(){
+
+    }
 </script>
 
 <body class="page-favourites dark-theme">
@@ -222,6 +233,45 @@
             <!--  -->
 
             <main class="page-main">
+                <div class="widjet --filters">
+                    <div class="widjet__head">
+                        <h3 class="uk-text-lead">BATTLE</h3>
+                        <div>
+                            <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleGame(this.value)">
+                                <option value="">10개</option>
+                                <option value="Category 1">20개</option>
+                                <option value="Category 2">30개</option>
+                            </select>
+                            <div class="search__refresh"><button type="button" style="float: right;cursor: pointer;" onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div>
+
+                        </div>
+                    </div>
+                    
+                    <div class="widjet__body">
+                        <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-4@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div class="uk-width-1-6 height50px">
+                                <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleGame(this.value)">
+                                    <option value="">ALL(GAME)</option>
+                                    <option value="Category 1">League of Legends</option>
+                                    <option value="Category 2">BattleGround</option>
+                                    <option value="Category 3">Steam</option>
+                                </select>
+                            </div>
+                            <div class="uk-width-1-6 height50px">
+                                <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleState(this.value)">
+                                    <option value="">ALL(상태)</option>
+                                    <option value="Category 1">대기</option>
+                                    <option value="Category 2">진행</option>
+                                    <option value="Category 3">종료</option>
+                                </select>
+                            </div>
+                            <div class="search uk-width-2-3 height50px">
+                                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="s_txt_btn" value=""></div>
+                                    <div class="search__btn"><button type="button" onclick="search_battle()"><i class="ico_search"></i></button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l" id="battleCardSection">
                         <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}">
@@ -278,21 +328,26 @@
 
 
                                 <div class="battle-card-info" th:attr="btId = ${battle.btId}">
-                                    <div class="info-header">
-                                        <div class="info-game" th:text="${battle.gameCd}">게임종류</div>
-                                        <div class="info-state" th:text="${battle.state}">배틀상태</div>
-                                    </div>
-                                    <div class="info-title"><a href="/battle/${battle.postId}"
+                                    <div class="info-title"><a th:href="@{'/battle/view?id='+${battle.postId}}"
                                             th:text="${battle.title}"></a></div>
-                                    <div class="info-battle-point-section">
-                                        <i class="fa-solid fa-trophy"></i>
-                                        <div class="info-battle-point"
-                                            th:text="${#numbers.formatInteger(#numbers.formatInteger(battle.point,0),0,'COMMA')}">
-                                            100000</div>
-                                        <i class="fa-solid fa-trophy"></i>
+                                    <div class="info-sub">
+                                        <div class="info-game">
+                                            <div>BattleGround</div>
+                                            <!-- <div th:if="">여기에 이제 코드 별로</div> -->
+                                        </div>
+                                        <div class="info-battle-point-section">
+                                            <i class="fa-solid fa-trophy"></i>
+                                            <div class="info-battle-point"
+                                                th:text="${#numbers.formatInteger(#numbers.formatInteger(battle.point,0),0,'COMMA')}">
+                                                100000</div>
+                                            <i class="fa-solid fa-trophy"></i>
+                                        </div>
+                                        <div class="info-state">
+                                            <div th:if="${battle.state=='A'}" class="A">베팅 가능!</div>
+                                            <div th:if="${battle.state=='P'}" class="P">진행중</div>
+                                            <div th:if="${battle.state=='T'}" class="T">종료됨</div>
+                                        </div>
                                     </div>
-
-
                                     <div class="info-center">
                                         <div class="info-center-left">
                                             <div class="info-center-header">
@@ -321,7 +376,7 @@
                                                             <i class="fa-solid fa-gem ico_fontawesome"></i>
                                                         </div>
                                                         <div class="host-point-reward-ratio"
-                                                            th:text="${'1:'+battlePointTOList[iterStat.index].hostPointRewardRatio}">
+                                                            th:text="${'X '+battlePointTOList[iterStat.index].hostPointRewardRatio}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -363,7 +418,7 @@
                                                     </div>
                                                     <div class="info-point-ratio">
                                                         <div class="client-point-reward-ratio"
-                                                            th:text="${'1:'+battlePointTOList[iterStat.index].clientPointRewardRatio}">
+                                                            th:text="${battlePointTOList[iterStat.index].clientPointRewardRatio+' X'}">
                                                         </div>
                                                         <div class="icon_box">
                                                             <i class="fa-solid fa-gem ico_fontawesome"></i>
@@ -381,7 +436,7 @@
                                     <div class="betting-section">
                                         <div class="point-betting" th:id="'bettingId' + ${battle.btId}">
                                             <div th:if="${battlePointTOList[iterStat.index].flag==0}"
-                                                class="point-betting-button" style="background-color: blueviolet;">HOST
+                                                class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">HOST
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==0}"
                                                 class="point-betting-button" active="F"
@@ -415,7 +470,7 @@
                                                 </div>
                                             </div>
                                             <div th:if="${battlePointTOList[iterStat.index].flag==1}"
-                                                class="point-betting-button" style="background-color: blueviolet;">CLIENT
+                                                class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">CLIENT
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==1}"
                                                 class="point-betting-button" active="F"

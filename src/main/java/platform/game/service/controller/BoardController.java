@@ -487,7 +487,6 @@ public class BoardController {
         comment.setCreatedAt(date);
         comment.setUpdatedAt(date);
         comment.setMember(member);
-        System.out.println("comment 확인 : " + comment);
 
         commentInfoRepository.save(comment);
         // 댓글 카운트 추가

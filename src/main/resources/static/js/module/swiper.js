@@ -91,9 +91,9 @@ const createSwiperProfile = function (nickname, level) {
                 <div class="profile-header">
                     <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
                     <div class="profile-user_info">
-                        <p class="profile-user_level">Lv : ${memLevel}</p>
-                        <p class="profile-user_nick">${memNickname}</p>
-                        <img class="badge" src="../img/${memSymbolImageName}" alt="NO-SYMBOL">
+                        <div class="profile-user-level-icon"><i class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                        <div class="profile-user_level"><span>${memLevel}</span></div>
+                        <div class="profile-user_nick"><span>${memNickname}</span></div>
                     </div>
                 </div>
             </a>

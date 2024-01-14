@@ -5928,3 +5928,12 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
     font-weight: bold;
     cursor: pointer;
 }
+
+.dark-theme .widjet.--filters .nice-select{
+    
+    border: 2px solid white;
+}
+.widjet.--filters .nice-select{
+    
+    border: 2px solid black;
+}

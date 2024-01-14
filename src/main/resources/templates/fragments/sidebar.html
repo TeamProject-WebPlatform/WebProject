@@ -14,53 +14,52 @@
 
                 <!-- Account -->
                 <li class="uk-nav-header">Account</li>
-                <li id="nav-profile" class=""><a href="/profile"><i class="ico_profile"></i><span>Profile</span></a>
+                <li id="nav-profile" class=""><a th:href="@{/profile}"><i class="ico_profile"></i><span>Profile</span></a>
                 </li>
-                <li id="nav-wallet" class=""><a href="/wallet"><i
+                <li id="nav-wallet" class=""><a th:href="@{/wallet}"><i
                             class="fa-solid fa-wallet ico_fontawesome"></i></i><span>Point Wallet</span></a></li>
 
                 <!-- Main -->
                 <li class="uk-nav-header">Main</li>
-                <li id="nav-battle" class=""><a href="/battle"><i
+                <li id="nav-battle" class=""><a th:href="@{/battle}"><i
                             class="fa-solid fa-hand-fist ico_fontawesome"></i><span>Battle</span></a></li>
 
-                <!-- <li class=""><a href="11_market.html"><i class="ico_market"></i><span>Market</span></a></li> -->
-                <li id="nav-community-header" class=""><a href="/list?board_cd=20004"><i
+                <li id="nav-community-header" class=""><a th:href="@{/list?board_cd=20004}"><i
                             class="ico_community"></i><span>Community</span></a></li>
                 <ul id="nav-community-submenu" class="submenu none">
-                    <li id="nav-free" class=""><a href="/list?board_cd=20004"><i
+                    <li id="nav-free" class=""><a th:href="@{/list?board_cd=20004}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>Free</span></a></li>
-                    <li id="nav-information" class=""><a href="/list?board_cd=20005"><i
+                    <li id="nav-information" class=""><a th:href="@{/list?board_cd=20005}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>Information</span></a></li>
-                    <li id="nav-strategy" class=""><a href="/list?board_cd=20006"><i
+                    <li id="nav-strategy" class=""><a th:href="@{/list?board_cd=20006}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>Strategy</span></a></li>
                 </ul>
 
                 <!-- NOTICE -->
-                <li id="nav-notice-header" class=""><a href="/list?board_cd=20001"><i
+                <li id="nav-notice-header" class=""><a th:href="@{/list?board_cd=20001}"><i
                             class="fa-solid fa-clipboard ico_fontawesome"></i><span>Notice</span></a></li>
                 <ul class="submenu none">
-                    <li id="nav-notice" class=""><a href="/list?board_cd=20001"><i
+                    <li id="nav-notice" class=""><a th:href="@{/list?board_cd=20001}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>Notice</span></a></li>
-                    <li id="nav-update" class=""><a href="/list?board_cd=20002"><i
+                    <li id="nav-update" class=""><a th:href="@{/list?board_cd=20002}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>Update</span></a></li>
-                    <li id="nav-event" class=""><a href="/list?board_cd=20003"><i
+                    <li id="nav-event" class=""><a th:href="@{/list?board_cd=20003}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>Event</span></a></li>
                 </ul>
 
                 <!-- RANKING -->
-                <li id="nav-rank" class=""><a href="./levelrank"><i
+                <li id="nav-rank" class=""><a th:href="@{/levelrank}"><i
                             class="fa-solid fa-ranking-star ico_fontawesome"></i><span>Ranking</span></a></li>
                 <ul class="submenu none">
-                    <li id="nav-levelrank" class=""><a href="./levelrank"><i
+                    <li id="nav-levelrank" class=""><a th:href="@{/levelrank}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>Level Ranking</span></a></li>
-                    <li id="nav-pointrank" class=""><a href="./pointrank"><i
+                    <li id="nav-pointrank" class=""><a th:href="@{/pointrank}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>Point Ranking</span></a></li>
-                    <li id="nav-winraterank" class=""><a href="./winraterank"><i
+                    <li id="nav-winraterank" class=""><a th:href="@{/winraterank}"><i
                                 class="fa-solid fa-caret-right ico_fontawesome"></i><span>WinRate Ranking</span></a>
                     </li>
                 </ul>
-                <li id="nav-shop" class=""><a href="/shop"><i class="ico_store"></i><span>Shop</span></a></li>
+                <li id="nav-shop" class=""><a th:href="@{/shop}"><i class="ico_store"></i><span>Shop</span></a></li>
                 <!-- Support -->
                 <li class="uk-nav-header">Support</li>
                 <li class=""><a href="#modal-report" data-uk-toggle><i class="ico_report"></i><span>Report</span></a>

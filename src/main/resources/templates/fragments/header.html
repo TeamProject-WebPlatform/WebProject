@@ -10,14 +10,14 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-        <script src="./js/module/cookie.js"></script>
+        <script src="../js/module/cookie.js"></script>
         <script th:inline="javascript">
             // 다크 모드 설정 값
 
             let currentThemeIndex = 0;
             // 로고 색상 변경용
-            const logo_img_paths = ["./img/logo_white.png", "./img/logo_black.png"];
-            const logo_text = ["white", "black"];
+            let logo_img_paths;
+            let logo_text = ["white", "black"];
 
             // 메인 컬러 변경용
             const root = document.documentElement; // :root 
@@ -26,22 +26,18 @@
                 getComputedStyle(root).getPropertyValue('--main-color-dark'),
                 getComputedStyle(root).getPropertyValue('--main-color-light')
             ];
-            document.addEventListener("DOMContentLoaded", function () {
-
-            });
             if (getCookie('darkMode')) {
-                if (getCookie('darkMode') === 'true') {
-                    console.log('다크모드 ON');
+                if (getCookie('darkMode') === 'Y') {
                     document.getElementsByTagName("body")[0].classList.add('dark-theme');
                 } else {
-                    console.log('다크모드 OFF');
                     document.getElementsByTagName("body")[0].classList.remove('dark-theme');
                 }
             } else {
-                setCookie('darkMode', true, 7);
+                setCookie('darkMode', 'Y', 7);
             }
             document.addEventListener('DOMContentLoaded', function () {
-                if (getCookie('darkMode') === 'true') {
+                logo_img_paths = [getContextPath()+"/img/logo_white.png", getContextPath()+"/img/logo_black.png"];
+                if (getCookie('darkMode') === 'Y') {
                     document.getElementById('logo_img').src = logo_img_paths[0];
                     document.querySelector(".page-header__logo_text").style.color = logo_text[0];
                     // 메인 컬러 변경용
@@ -56,14 +52,12 @@
             })
             document.getElementById("toggle").addEventListener("click", function () {
                 document.getElementsByTagName('body')[0].classList.toggle("dark-theme");
-                if (getCookie('darkMode') === 'true') {
-                    setCookie('darkMode', false, 7);
-                    console.log(getCookie('darkMode'));
-                } else if (getCookie('darkMode') === 'false') {
-                    setCookie('darkMode', true, 7);
-                    console.log(getCookie('darkMode'));
+                if (getCookie('darkMode') === 'Y') {
+                    setCookie('darkMode', 'N', 7);
+                } else if (getCookie('darkMode') === 'N') {
+                    setCookie('darkMode', 'Y', 7);
                 }
-                if (getCookie('darkMode') === 'true') {
+                if (getCookie('darkMode') === 'Y') {
                     document.getElementById('logo_img').src = logo_img_paths[0];
                     document.querySelector(".page-header__logo_text").style.color = logo_text[0];
                     // 메인 컬러 변경용
@@ -124,13 +118,22 @@
                     flag: -1
                 }));
             }
+            function getContextPath() {
+                var path = window.location.pathname.split('/');
+                var contextPath ="";
+                for(let i =0;i<path.length-1;i++){
+                    contextPath += "/..";
+                }
+                // console.log("path : "+contextPath)
+                return contextPath;
+            }
         </script>
         <div class="page-header__inner">
             <!-- 헤더 사이드바(로고) -->
             <div class="page-header__sidebar">
                 <div class="page-header__menu-btn"><button class="menu-btn ico_menu is-active"></button></div>
                 <a href="/">
-                    <div class="page-header__logo"><img src="/img/logo_white.png" alt="logo" id="logo_img"><span
+                    <div class="page-header__logo"><img src="../img/logo_white.png" alt="logo" id="logo_img"><span
                             class="page-header__logo_text">G A M M O A</span></div>
                 </a>
             </div>
@@ -147,7 +150,7 @@
                 <div class="page-header__action">
                     <div onclick="sendPointChange(100,'50001')">100 포인트 추가</div>
                     <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
-                    <a th:if="${nickname}" class="action-btn wallet" href="/wallet"><i
+                    <a th:if="${nickname}" class="action-btn wallet" th:href="@{/wallet}"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
                     <div id="current-point"
                         th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}"></div>
@@ -155,12 +158,12 @@
                             class="animation-ripple-delay1"></span></a>
                     <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
                             class="ico_notification"></i><span class="animation-ripple-delay2"></span></a>
-                    <a th:if="${nickname}" th:href="@{logout}" class="action-btn"><i
+                    <a th:if="${nickname}" th:href="@{/logout}" class="action-btn"><i
                             class="fa-solid fa-right-from-bracket ico_logout"></i></a>
-                    <a th:unless="${nickname}" th:href="@{login}" class="action-btn"><i
+                    <a th:unless="${nickname}" th:href="@{/login}" class="action-btn"><i
                             class="fa-solid fa-right-to-bracket ico_fontawesome"></i></a>
 
-                    <a th:if="${nickname}" class="profile" href="08_wallet.html"><img src="/img/profile.png"
+                    <a th:if="${nickname}" class="profile" th:href="@{/profile}"><img src="/img/profile.png"
                             alt="profile"></a>
                 </div>
 

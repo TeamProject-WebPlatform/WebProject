@@ -11,7 +11,7 @@
     width: 100%;
     height: 600px;
     margin: 0 auto;
-    background-color: #a0a2a4;
+    background-color: rgba(244, 97, 25, 0.05);
     border-radius: 15px;
     /* border: 1px solid black; */
 }
@@ -66,23 +66,34 @@
     color: white;
     /* background-image: url("../img/acheivement-3.png"); */
 }
+.profile-card .profile-user_info .ico_fontawesome{   
+    font-size: 30px;
+}
 .profile-header{
     width: 100%;
     padding-top:20px;
-    /* background-image: url("../img/acheivement-2.png"); */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile-image{
-    margin-top: 20px;
-    width: 18vh;
-    height: 18vh;
-    margin: 0 auto;
+    /* margin-top: 20px 
+px
+; */
+    /* width: 18vh; */
+    /* height: 18vh; */
+    /* margin: 0 auto; */
+    width: 90%;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #0ff;
+    border: 1px solid #0ff;
+
 }
 
 .profile-user_info {
+    width: 90%;
     height:50px;
     margin: 0 auto;
     font-size: 20px;
@@ -90,8 +101,32 @@
     align-items: center; 
     justify-content: center;
 }
-.profile-user_info p{
+.profile-user_info div span{
     color:white;
+}
+.profile-user_info div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.profile-user_info .profile-user-level-icon{
+    width: 20%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+.profile-user_info .profile-user-level{
+    width: 20%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+.profile-user_info .profile-user_nick{
+    font-size:16px;
+    width: 60%;
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-end;
 }
 .profile-user_level {
     margin: 0 0 0px;
@@ -166,216 +201,13 @@
     background-color: #F0f0f0;
 }
 
-
-
-
-
-/* 배틀 카드 양옆 */
-.battle-profile-left{
-    display: flex;
-    align-items: center;
-    width: 40%;
-    justify-content: flex-end;
-}
-.battle-profile-right{
-    display: flex;
-    align-items: center;
-    width: 40%;
-    justify-content: flex-start;
-}
-.battle-profile-info {
-    width: 50%;
-    display: flex;
-    padding: 10px 20px;
-    flex-direction: column;
-    align-items: center;
-}
-.battle-profile-lvl {
-    margin-left : 5px;
-    margin-right : 5px;
-}
-.battle-profile-media {
-    height : 200px;
-    width : 200px;
-}
-.battle-profile-media img{
-    border-radius: 10px;
-
-    height: 100%;
-    
-}
-/* 배틀 카드 중간 */
-.battle-card-info{
-    width:30%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-}
-.battle-card-info .info-title{
-    width: 100%;
-    height : 30%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.battle-card-info .info-title a{
-    color : black;
-    font-size:20px;
-}
-.battle-profile-history {
-    
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-}
-.battle-profile-history div:nth-child(1){
-    display: flex;
+.none {
+    display: none;
 }
 
 
-body.dark-theme .battle-card-info .info-title a{
-    color : white;
-}
-.battle-card-info .info-center{
-    width: 100%;
-    height : 20%;
-    margin-top:6%;
-    margin-bottom:5%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
 
-.battle-card-info .info-center .vs{
-    width: 16%;
-    display: flex;
-    justify-content: center;
-}
 
-.info-center-left{
-    width: 41%;
-}
-.info-center-right{
-    width: 41%;
-}
-.info-center-header{
-    display: flex;
-    align-items: center;
-}
-.info-center-header .info-point-header-list{
-    width: 50%;
-}
-.info-center-left .info-point-header-list{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-.info-center-right .info-point-header-list{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-.info-point-header-list > div{
-    display: flex;
-    flex-direction: row;
-}
-.info-point-header-list .icon_box {
-    
-    width: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.info-center-header .info-point-percent{
-    width: 50%;
-    font-size:30px;
-    display: flex;
-    justify-content: center;
-}
-.info-point-bar-box {
-    margin-top : 5px;
-}
-.info-center-left .info-point-bar-box {
-    margin-left : 5px;
-    margin-right: 5px;
-}
-.info-center-right .info-point-bar-box {
-    margin-left : 5px;
-    margin-right: 5px;
-}
-.info-point-bar {
-    background-color: red;
-    height: 5px;
-    /* width: 30%; */
-    border-radius: 10px;
-    transition-property: width;
-    transition-duration: 0.3s;
-}
-.info-center-left .info-point-bar-box {
-    margin-top : 5px;
-    display: flex;
-    justify-content: flex-end;
-}
-.info-battle-point-section{
-    padding-bottom : 2px;
-    background-color: rgb(130, 127, 143);
-    border-radius: 25px;
-    height:10%;
-    width: 55%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.info-battle-point-section i{
-    margin-left : 5%;
-    margin-right : 5%;
-    color:#ffbf00;
-    font-weight: 800;
-    font-size:20px;
-}
-.info-battle-point{
-    color:rgb(255, 255, 255);
-    font-weight: 800;
-    height:100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.betting-section{
-    width:100%;
-    height:19%;
-}
-.point-betting{
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 100%;
-}
-.point-betting-input{
-    height:85%;
-    width:35%;
-}
-.point-betting-button{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color:white;
-    font-size:20px;
-    font-weight: 1000;
-    height:90%;
-    width: 20%;
-    background-color: rgb(130, 127, 143);
-    border-radius: 10px;
-}
-.point-betting-button:hover{
-    cursor: pointer;
-}
-.info-header{
-    height: 10%;
-    display: flex;
-}
 
 
 /* 버튼 디자인 */
@@ -410,4 +242,7 @@ body.dark-theme .battle-card-info .info-title a{
     color: white;
     /* height: 50px; */
     background-color: #181818;
+}
+.search__input .ico_fontawesome{
+    font-size:20px;
 }
