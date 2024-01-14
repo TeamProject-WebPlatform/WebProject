@@ -1,0 +1,14 @@
+/* .table-wrapper{
+    width: 100%;
+    border: 1px solid #444444;
+    border-collapse: collapse;
+} */
+.table-wrapper > table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.table-wrapper > table > tbody > tr{
+    width: 100%;
+    border: 1px solid #444444;
+    /* border-collapse: collapse; */
+}
