@@ -81,6 +81,7 @@
 }
 
 .profile-main{
+    width: 100%;
     font-size: 30px;
     display: flex;
     align-content: flex-end;
@@ -177,7 +178,7 @@ body.dark-theme .popup {
 /* 버튼 디자인 */
 
 .reset_btn { 
-    width: 95%;
+    width: 100%;
     /* -webkit-box-shadow: 2px 2px 7px 0px #00000024; */
     /* background-color: #D3D3D3;  */
     border: none; 

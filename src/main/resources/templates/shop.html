@@ -111,34 +111,36 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="shopPosition">
-                            <div class="widjet --filters shopfixed">
-                                <div class="widjet__head">
-                                    <h3 class="uk-text-lead">Thumbnail</h3>
-                                </div>
-                                <div class="widjet__body">
-                                    <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                        <!-- 배경 -->
-                                        <div class="uk-width-1-1">
-                                            <!-- 태두리 -->
-                                            <div class="profile-card">
-                                                <!-- <a href="/mypage/${memNickname}"> -->
-                                                <div class="profile-header">
-                                                    <div class="profile-image"><img src="./img/doyun_icon.png" alt="NO-IMAGE"></div>
-                                                    <div class="profile-user_info">
-                                                        <p class="profile-user_level" th:text="'Lv : ' + ${level}"></p>
-                                                        <p class="profile-user_nick" th:text="${nickname}"></p>
-                                                        <img class="badge" src="./img/starbucks.png" alt="NO-SYMBOL">
-                                                    </div>
+
+                        <div class="widjet --filters shopfixed uk-width-1-5">
+                            <div class="widjet__head">
+                                <h3 class="uk-text-lead">Thumbnail</h3>
+                            </div>
+                            <div class="widjet__body uk-width-1-1">
+                                <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@l uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                    <!-- 배경 -->
+                                    <div class="uk-width-1-1">
+                                        <!-- 태두리 -->
+                                        <div class="profile-card uk-width-1-1">
+                                            <!-- <a href="/mypage/${memNickname}"> -->
+                                            <div class="profile-header">
+                                                <div class="profile-image"><img src="./img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                                <div class="profile-user_info">
+                                                    <p class="profile-user_level" th:text="'Lv : ' + ${level}"></p>
+                                                    <p class="profile-user_nick" th:text="${nickname}"></p>
+                                                    <img class="badge" src="./img/starbucks.png" alt="NO-SYMBOL">
                                                 </div>
-                                                <!-- </a> -->
-                                                <div class="profile-dividing-line"></div>
-                                                <div class="profile-main">
-                                                    <div class="profile-introduction">
-                                                        <p>안녕하세요</p>
-                                                    </div>
-                                                    <div class="profile-dividing-line"></div>
-                                                    <div class="profile-badge-section">
+                                            </div>
+                                            <!-- </a> -->
+                                            <div class="profile-dividing-line width-1-1"></div>
+                                            <div class="profile-main">
+                                                <div class="profile-introduction">
+                                                    <p>안녕하세요</p>
+                                                </div>
+                                                <!-- <div class="profile-dividing-line"></div> -->
+                                            </div>
+                                            <div class="profile-dividing-line width-1-1"></div>
+                                                <div class="profile-badge-section">
                                                     <span class="badge shopbadge"></span>
                                                     <!-- <span class="badge">&#127775;</span>
                                                     <span class="badge">&#127806;</span>
@@ -148,10 +150,8 @@
                                                     <span class="badge">&#127806;</span>
                                                     <span class="badge">&#127851;</span>
                                                     <span class="badge">&#127774;</span> -->
-                                                    </div>
+                                                
                                                 </div>
-                                                <!-- <div class="profile-dividing-line"></div> -->
-                                            </div>
                                         </div>
                                         <div class="setbtn">
                                             <ul id="previewList"></ul>
@@ -163,7 +163,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                     
                 </main>
         </div>
