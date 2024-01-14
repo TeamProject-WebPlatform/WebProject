@@ -3,14 +3,21 @@ package platform.game.service.controller;
 // ShopController 클래스
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import platform.game.service.entity.Item;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberItem;
 import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.repository.ItemInfoRepository;
 import platform.game.service.repository.MemberItemInfoRepository;
@@ -41,9 +48,11 @@ public class ShopController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                ArrayList<MemberItem> memberItems = memberItemInfoRepository.findByItemCd(member.getMemId());
+                modelAndView.addObject("memberItems", memberItems);
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
-                modelAndView.addObject("point", member.getMemCurPoint());
+                modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
             }
         } else {
@@ -93,9 +102,23 @@ public class ShopController {
         return modelAndView;
     }
 
-    @GetMapping("/shop_purchase")
-    public int ItemPurchase() {
+    @PostMapping("/itempurchase")
+    public ResponseEntity<String> ItemPurchase(@RequestBody JsonNode item) {
+
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getMember();
+
         int flag = 0;
-        return flag;
+
+        int point = item.get("Point").asInt();
+        String itemCd = item.get("Category").asText();
+
+        
+        if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd)==1&&memberItemInfoRepository.UpdatePoint(point, member.getMemId())==1){
+            flag=1;
+        }
+        
+
+        return ResponseEntity.ok(String.valueOf(flag));
     }
 }

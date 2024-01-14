@@ -13,7 +13,7 @@ function addToPreviewList(itemName, category) {
 
     // 리스트 아이템에 해당 아이템을 제거하는 버튼 생성
     let deleteButton = document.createElement('button');
-    deleteButton.textContent = 'x';
+    //deleteButton.textContent = 'x';
 
     // 클릭 이벤트를 연결하여 해당 아이템을 제거하는 함수 호출
     deleteButton.addEventListener('click', function () {
@@ -53,22 +53,24 @@ function showPreview(itemName, category) {
         if (PreviewHeader.style.backgroundImage==""){
             PreviewHeader.style.backgroundImage = 'url(' + imagePath + ')';
         } else {
-            previewList.removeChild(previewList.lastChild);
+            removeBeforeItem(itemName);
             PreviewHeader.style.backgroundImage = 'url(' + imagePath + ')';
         }
     } else if (category === '802') {
         if (PreviewCard.style.backgroundImage==""){
             PreviewCard.style.backgroundImage = 'url(' + imagePath + ')';
         } else {
-            let secondItem = previewList.querySelector('li:nth-child(2)');
-            previewList.removeChild(secondItem);
+            // let secondItem = previewList.querySelector('li:nth-child(2)');
+            // previewList.removeChild(secondItem);
+            removeBeforeItem(itemName);
             PreviewCard.style.backgroundImage = 'url(' + imagePath + ')';
         }
     } else if (category === '803') {
         if (PreviewShopBadge.style.backgroundImage==""){
             PreviewShopBadge.style.backgroundImage = 'url(' + imagePath + ')';
         } else {
-            previewList.removeChild(previewList.lastChild);
+            // previewList.removeChild(previewList.lastChild);
+            removeBeforeItem(itemName);
             PreviewShopBadge.style.backgroundImage = 'url(' + imagePath + ')';
         }
     }
@@ -82,9 +84,9 @@ function showPreview(itemName, category) {
 
 function hidePreview() {
     // 프로필 미리보기를 숨김
-    document.querySelector('.profile-header').style.backgroundImage = 'none';
-    document.querySelector('.profile-card').style.backgroundImage = 'none';
-    document.querySelector('.shopbadge').style.backgroundImage = 'none';
+    document.querySelector('.profile-header').style.backgroundImage = "";
+    document.querySelector('.profile-card').style.backgroundImage = "";
+    document.querySelector('.shopbadge').style.backgroundImage = "";
     let previewList = document.getElementById('previewList');
     while(previewList.firstChild){
         previewList.removeChild(previewList.firstChild);
@@ -113,9 +115,33 @@ function closePopup() {
 }
 
 // 아이템 구매
-function getItem(point,pointKindCd) {
+async function getItem(point,category) {
     if (confirm("정말 구매 하시겠습니까??") == true){    //확인
-        sendPointChange(point, pointKindCd);
+        // sendPointChange(point, pointKindCd);
+        try {
+            const response = await fetch('/itempurchase', {
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({
+                    Point : point,
+                    Category : category
+                })
+            });
+            if(!response.ok) {
+                throw new Error("서버 응답이 실패했습니다");
+            }
+            const flag = await response.text();
+            if (flag=='1') {
+                alert("아이템을 구매하였습니다.");
+                location.reload();
+            } else {
+                alert("에러" + error.message);
+            }
+        } catch (error) {
+            console.error("Error: " + error);
+        }
     }else{   //취소
         return false;
     }
@@ -139,6 +165,13 @@ function changeCategori(){
     }
 }
 
-function purchase(){
-    location.href = "./shop_purchase?";
+
+// 미리보기 할 때 다른 아이템을 미리보기 시 이전 아이템을 리스트에서 없애는 함수
+function removeBeforeItem(item){
+    var list = document.getElementById('previewList');
+    var beforeitem = list.getElementsByTagName('li');
+    for (var i=0; i<beforeitem.length; i++){
+        list.removeChild(beforeitem[i]);
+        break;
+    }
 }

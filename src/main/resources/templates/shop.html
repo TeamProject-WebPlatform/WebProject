@@ -96,13 +96,14 @@
                                                         <script th:inline="javascript">
                                                             function showLoginAlert() {
                                                                 alert('로그인이 필요합니다.');
+                                                                location.href = './login';
                                                             }
                                                         </script>
                                                     </div>
                                                     <div th:if="${memId ne null}">
                                                         <!-- memId가 있는 경우, 구매 버튼을 표시 -->
                                                         <form action=''>
-                                                            <input class="select_Get_btn" type='submit' value='구매' th:onclick="getItem('[[-${item.itemCost}]]','5001')">
+                                                            <input class="select_Get_btn" type='submit' value='구매' th:onclick="getItem('[[${item.itemCost}]]','[[${item.itemCd}]]')">
                                                         </form>
                                                     </div>
                                                 </div>
