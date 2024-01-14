@@ -29,6 +29,8 @@
     document.addEventListener("DOMContentLoaded", function () {
         const active = document.getElementById("[[${navBoard}]]");
         active.classList.add("uk-active");
+        const submenu = active.parentNode;
+        submenu.classList.remove("none");
     });
 </script>
 <script type="text/javascript">
