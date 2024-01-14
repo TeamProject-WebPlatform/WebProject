@@ -1,6 +1,7 @@
 package platform.game.service.repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -34,4 +35,8 @@ public interface MemberItemInfoRepository extends JpaRepository<MemberItem, Memb
     @Transactional
     @Query(value = "update member set mem_cur_point = mem_cur_point-:point where mem_id=:mem_id", nativeQuery = true)
     Integer UpdatePoint(int point, long mem_id);
-}
+
+    @Query(value="select mi.mem_id, mi.item_cd from member_item mi join item i on mi.item_cd = i.item_cd and i.item_cd like '803%' join member m on mi.mem_id = m.mem_id and m.mem_id=:mem_id",nativeQuery = true)
+    List<String> getHaveBadges(long mem_id);
+
+}   

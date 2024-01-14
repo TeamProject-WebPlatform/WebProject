@@ -23,6 +23,7 @@ import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.MemberRanking;
 import platform.game.service.model.TO.FavoriteGameTO;
 import platform.game.service.repository.MemberFavoriteGameRepository;
+import platform.game.service.repository.MemberItemInfoRepository;
 import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.MemberRankingRepository;
 import platform.game.service.service.MemberInfoDetails;
@@ -45,6 +46,9 @@ public class ProfileController {
     private MemberRankingRepository rankingRepository;
 
     @Autowired
+    private MemberItemInfoRepository itemInfoRepository;
+
+    @Autowired
     private SecurityPassword securityPassword;
 
     @GetMapping("")
@@ -59,9 +63,11 @@ public class ProfileController {
             if (member != null) {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
+                List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
+                mav.addObject("memberItems", memberItems);
             }
         } else {
             System.out.println("멤버 없음");
