@@ -152,8 +152,10 @@
     overflow: auto;
     background-color: #F0f0f0;
     padding-top: 60px;
+    border: 1px solid #fff;
     /* outline: 1px solid red; */
 }
+
 body.dark-theme .popup {
     background-color: #0C1826;
 }
@@ -167,12 +169,16 @@ body.dark-theme .popup {
 
 .close {
     position: absolute;
-    top: 15px;
+    top: -5px;
     right: 15px;
-    color: #fff;
+    color: #0C1826;
     font-size: 30px;
     font-weight: bold;
     cursor: pointer;
+}
+
+body.dark-theme .close {
+    color: #fff;
 }
 
 /* 버튼 디자인 */
