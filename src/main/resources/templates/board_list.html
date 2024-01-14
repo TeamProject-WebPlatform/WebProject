@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="./css/libs.min.css">
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/main_custom.css" />
+    <link rel="stylesheet" href="./css/list_custom.css" />
     <script src="./js/module/swiper.js"></script>
     <script src="./js/libs.js"></script>
     <script src="./js/main.js"></script>
@@ -116,15 +116,15 @@
                 </div>
                 <div class="widjet --filters">
                     <div class="widjet__body">
-                        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                        <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
             
                                 <!--게시판 코드 들어가는 장소-->
                                 <!-- <div class="con_txt"> -->
-                                <div class="widjet-game__title">
+                                <div class="widjet_size widjet-game__title">
                                     <input type="hidden" name="board_cd" th:value="${boardCd}" />
                                     <div class="uk-width-1-1 uk-flex uk-flex-right">
-                                        <div class="uk-width-1-6">
-                                            <select class="js-select" id="list_size" onchange="onSelect()">
+                                        <div class="list_Count">
+                                            <select class="list_Count_list js-select" id="categorySelect" onchange="onSelect()">
                                                 <option value="10" th:selected="${recpage == 10}">10개씩</option>
                                                 <option value="20" th:selected="${recpage == 20}">20개씩</option>
                                                 <option value="30" th:selected="${recpage == 30}">30개씩</option>
@@ -166,10 +166,9 @@
                                     <!-- <div class="board">
                                     </div> -->
                                     <br>
-                                    <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-1@s uk-child-width-1-1@s uk-flex-middle uk-grid-small btn_area" data-uk-grid>
-                                        <div></div>
+                                    <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-3@s uk-child-width-1-1@s uk-flex-middle uk-flex-right uk-grid-small btn_area" data-uk-grid>
                                         <!--페이지넘버-->
-                                        <div class="paginate_regular" style="text-align: center;">
+                                        <div class="paginate_regular uk-flex-middle" style="text-align: center;">
                                             <div align="absmiddle">
                                                 <span th:if="${cpage.startBlock} == 1">
                                                     <a>&lt;&lt;</a>

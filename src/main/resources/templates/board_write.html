@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/libs.min.css">
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/list_custom.css" />
     <script src="../js/module/swiper.js"></script>
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
@@ -100,39 +100,38 @@
                                         <div class="contents_sub">	
                                             <!--게시판-->
                                             <div class="board_write">
-                                                <div class="form-container">
+                                                <div class="form-container uk-grid uk-child-width-1-2@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
                                                     <div class="form-row uk-width-1-6">
-                                                        <label for="subject" class="form-label">제목</label>
-                                                        <input type="text" name="subject" value="" class="board_view_input">
-                                                    </div>
-                                                    <br />
-                                                    <div class="form-row uk-width-1-6">
-                                                        <label for="tags" class="form-label">태그</label>
-                                                        <select class="js-select" name="tags">
+                                                        <!-- <label for="tags" class="form-label">태그</label> -->
+                                                        <select class="board_write_select js-select" name="tags">
                                                             <option value="All">All</option>
                                                             <option value="LeagueofLegends">LeagueofLegends</option>
                                                             <option value="BattleGround">BattleGround</option>
                                                             <option value="Steam">Steam</option>
                                                         </select>
                                                     </div>
-                                                    <br />
-                                                    <div class="form-row">
-                                                        <label for="content" class="form-label">내용</label>
-                                                    </div>
-                                                    <div class="form-input">
-                                                        <textarea name="content" class="board_editor_area"></textarea>
+                                                    <div class="uk-width-3-4">
+                                                        <!-- <label for="subject" class="form-label">제목</label> -->
+                                                        <input type="text" maxlength="30" name="subject" value="" class="board_view_input uk-width-expand" >
                                                     </div>
                                                 </div>
+                                                <br />
                                             </div>
-                                            
-                                            
-                                            <div class="btn_area">
-                                                <div class="align_left">
+                                            <!-- <div class="form-row">
+                                                <label for="content" class="form-label">내용</label>
+                                            </div> -->
+                                            <div class="form-input">
+                                                <textarea name="content" class="board_editor_area"></textarea>
+                                            </div>
+                                            <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small btn_area" data-uk-grid>
+                                                <div class="width-1-2 uk-flex uk-flex-between">
                                                     <a th:href="@{list(board_cd=${board_cd})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
-                                                    <input type="button" id="wbtn" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" />
+                                                    <div class="align_left">
+                                                        <input type="button" id="wbtn" value="쓰기" class="btn_write btn_txt01" style="cursor: pointer;" />
+                                                    </div>
+                                                <!--//게시판-->
                                                 </div>
                                             </div>
-                                            <!--//게시판-->
                                         </div>
                                     </form>
                                 </div>

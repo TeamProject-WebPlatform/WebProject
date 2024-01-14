@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/libs.min.css">
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/list_custom.css" />
     <script src="../js/module/swiper.js"></script>
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
@@ -124,15 +124,14 @@
                 </div>
                 <div class="widjet --filters">
                     <div class="widjet__body">
-                        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small"
-                            data-uk-grid>
+                        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
                             <div class="uk-width-1-1">
                                 <!--게시판 코드 들어가는 장소-->
                                 <div class="widjet-game__title">
                                     <div class="contents_sub">
                                         <div class="board_view">
                                             <!-- Post title-->
-                                            <h3 class="fw-bolder mb-1"
+                                            <h3 class="board_view_title fw-bolder mb-1"
                                                 th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></h3>
                                             <table>
                                                 <tr>

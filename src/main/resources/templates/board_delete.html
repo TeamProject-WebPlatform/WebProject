@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/libs.min.css">
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/list_custom.css" />
     <script src="../js/module/swiper.js"></script>
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
@@ -80,14 +80,14 @@
                                             <!--게시판-->
                                             <div class="board_write">
                                                 <table>
-                                                <tr>
-                                                    <th>제목</th>
-                                                    <td><input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input" readonly/></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>내용</th>
-                                                    <td><textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea></td>
-                                                </tr>
+                                                    <tr class="board_write_tr">
+                                                        <th>제목</th>
+                                                        <td><input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input" readonly/></td>
+                                                    </tr>
+                                                    <tr class="board_write_tr">
+                                                        <th>내용</th>
+                                                        <td><textarea name="content" class="board_editor_area" th:text="${post.postContent}" style="resize: none;"></textarea></td>
+                                                    </tr>
                                                 </table>
                                             </div>
                                             
