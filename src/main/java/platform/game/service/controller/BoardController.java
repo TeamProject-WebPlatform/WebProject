@@ -308,7 +308,6 @@ public class BoardController {
         Post post = new Post();
 
         post = postInfoRepository.findByPostId(postId);
-        
 
         String boardCd_name = "Notice";
         String navBoard = "nav-";
@@ -360,38 +359,41 @@ public class BoardController {
             @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listModify_ok 호출");
         Date date = new Date();
-
-        // Find the existing post by ID
-        Optional<Post> optionalPost = postInfoRepository.findById(postId);
-        Post post = optionalPost.get();
-        // Update the post with the new values
-        post.setPostTitle(title);
-        post.setPostTags(tags);
-        post.setPostContent(content);
-        post.setUpdatedAt(date);
-
-        System.out.println("modify_ok post : " + post);
-        post.getBoardCd();
-
-        // Save the updated post
-        int flag = 1;
         try {
-            postInfoRepository.save(post);
-            flag = 0;
+            // Find the existing post by ID
+            Optional<Post> optionalPost = postInfoRepository.findById(postId);
+            Post post = optionalPost.get();
+            // Update the post with the new values
+            post.setPostTitle(title);
+            post.setPostTags(tags);
+            post.setPostContent(content);
+            post.setUpdatedAt(date);
+            
+            post.getBoardCd();
+
+            // Save the updated post
+            int flag = 1;
+            try {
+                postInfoRepository.save(post);
+                flag = 0;
+            } catch (Exception e) {
+                System.out.println("수정 오류 : " + e.getMessage());
+                flag = 1;
+            }
+
+            System.out.println("flag : " + flag);
+
+            if (flag == 0) {
+                // 글쓰기 성공 시 처리
+                return "redirect:./view?board_cd=" + post.getBoardCd() + "&post_id=" + postId + "&cpage=" + cpage;
+            } else {
+                // 글쓰기 실패 시 처리
+                return "redirect:/error";
+            }
         } catch (Exception e) {
-            System.out.println("수정 오류 : " + e.getMessage());
-            flag = 1;
+            System.out.println(e.getMessage());
         }
-
-        System.out.println("flag : " + flag);
-
-        if (flag == 0) {
-            // 글쓰기 성공 시 처리
-            return "redirect:./view?board_cd=" + post.getBoardCd() + "&post_id=" + postId + "&cpage=" + cpage;
-        } else {
-            // 글쓰기 실패 시 처리
-            return "redirect:/error";
-        }
+        return null;
     }
 
     @GetMapping("/delete")
@@ -403,7 +405,6 @@ public class BoardController {
 
         post = postInfoRepository.findByPostId(postId);
 
-        
         String boardCd_name = "Notice";
         String navBoard = "nav-";
         switch (post.getBoardCd()) {
