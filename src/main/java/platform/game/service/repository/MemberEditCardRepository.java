@@ -19,12 +19,12 @@ public interface MemberEditCardRepository extends JpaRepository<MemberCard, Long
     @Query(value="select profile_image from member_card where mem_id=:mem_id", nativeQuery = true)
     String findByProfileImage(long mem_id);
 
-    @Query(value="select mi.item_cd, i.item_info from member_item mi join item i on mi.item_cd = i.item_cd and i.item_kind_cd like '801%' and mi.mem_id=:mem_id",nativeQuery = true)
+    @Query(value="select i.item_nm, i.item_info from item i join member_item mi on i.item_cd = mi.item_cd and i.item_kind_cd like '801%' and mi.mem_id=:mem_id",nativeQuery = true)
     List<Object[]> HaveHeaderList(long mem_id);
 
-    @Query(value="select mi.item_cd, i.item_info from member_item mi join item i on mi.item_cd = i.item_cd and i.item_kind_cd like '802%' and mi.mem_id=:mem_id",nativeQuery = true)
+    @Query(value="select i.item_nm, i.item_info from item i join member_item mi on i.item_cd = mi.item_cd and i.item_kind_cd like '802%' and mi.mem_id=:mem_id",nativeQuery = true)
     List<Object[]> HaveCardList(long mem_id);
 
-    @Query(value="select mi.item_cd, i.item_info from member_item mi join item i on mi.item_cd = i.item_cd and i.item_kind_cd like '803%' and mi.mem_id=:mem_id",nativeQuery = true)
+    @Query(value="select i.item_nm, i.item_info from item i join member_item mi on i.item_cd = mi.item_cd and i.item_kind_cd like '803%' and mi.mem_id=:mem_id",nativeQuery = true)
     List<Object[]> HaveBadgeList(long mem_id);
 }

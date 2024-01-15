@@ -4,21 +4,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const RepBadgeregister = document.getElementById("badgerep");
     const Badgeregister = document.getElementById("badge");
 
-    Headregister.addEventListener('click', HeaderPreview);
-    Cardregister.addEventListener('click', CardPreview);
-    RepBadgeregister.addEventListener('click', RepBadgePreview);
-    Badgeregister.addEventListener('click', BadgePreview);
+    const HeaderItem = document.getElementById('headeritem')
+    const CardItem = document.getElementById('carditem')
+    const RepBadgeItem = document.getElementById('repbadge')
+    const BadgeItem = document.getElementById('badges')
+
+    // Headregister.addEventListener('click', HeaderPreview);
+    // Cardregister.addEventListener('click', CardPreview); 
+    // RepBadgeregister.addEventListener('click', RepBadgePreview);
+    // Badgeregister.addEventListener('click', BadgePreview);
+
+    HeaderItem.addEventListener('change', HeaderPreview());
+    CardItem.addEventListener('change', CardPreview);
+    RepBadgeItem.addEventListener('change', RepBadgePreview);
+    BadgeItem.addEventListener('change', BadgePreview);
 });
 
-function addToPreviewList(itemName, category) {
+function addToPreviewList(category) {
     let PreviewHeader = document.querySelector('.profile-header');
     let PreviewCard = document.querySelector('.profile-card');
     let PreviewShopBadge = document.querySelector('.shopbadge');
 
     category = category.replace(/"/g, '');
-    // 미리보기 목록을 위한 리스트 아이템 생성
-    let listItem = document.createElement('li');
-    listItem.textContent = itemName;
+
 
     // 리스트 아이템에 해당 아이템을 제거하는 버튼 생성
     let deleteButton = document.createElement('button');
@@ -38,21 +46,28 @@ function addToPreviewList(itemName, category) {
 function HeaderPreview(){
     let PreviewHeader = document.querySelector('.profile-header');
     let HeaderItem = document.getElementById('headeritem').value;
-    console.log(HeaderItem);
+
+    let imagePath = '../img/shop_img/' + HeaderItem + '.png';
+    console.log(imagePath);
+    PreviewHeader.style.backgroundImage = 'url(' + imagePath + ')';
     
 }
 
 function CardPreview(){
     let PreviewCard = document.querySelector('.profile-card');
     let CardItem = document.getElementById('carditem').value;
-    console.log(CardItem);
+
+    let imagePath = '../img/shop_img/' + CardItem + '.png';
+    console.log(imagePath);
     
 }
 
 function RepBadgePreview(){
     let PreviewRepBadge = document.querySelector('.badge');
     let BadgeItem = document.getElementById('repbadge').value;
-    console.log(BadgeItem);
+
+    let imagePath = '../img/shop_img/' + BadgeItem + '.png';
+    console.log(imagePath);
     
 }
 

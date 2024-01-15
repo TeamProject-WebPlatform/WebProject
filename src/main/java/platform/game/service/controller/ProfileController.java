@@ -185,7 +185,6 @@ public class ProfileController {
         mav.addObject("header", HeaderList);
         mav.addObject("card", CardList);
         mav.addObject("badge", BadgeList);
-        System.out.println(memberCard);
 
         return mav;
     }
