@@ -103,7 +103,7 @@
                                                     <div th:if="${memId ne null}">
                                                         <!-- memId가 있는 경우, 구매 버튼을 표시 -->
                                                         <!-- <p th:if="${#sets.contains(have,item)}">ddddd</p> -->
-                                                        <!-- <input th:if="${!#sets.contains(have,item)}" class="select_Get_btn" type='button' value='구매' th:onclick="getItem('[[${item.itemCost}]]','[[${item.itemCd}]]')" > -->
+                                                        <input  class="select_Get_btn" type='button' value='구매' th:onclick="getItem('[[${item.itemCost}]]','[[${item.itemCd}]]')" >
                                                     </div>
                                                 </div>
                                             </div>

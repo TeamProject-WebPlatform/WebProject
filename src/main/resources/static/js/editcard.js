@@ -4,21 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const RepBadgeregister = document.getElementById("badgerep");
     const Badgeregister = document.getElementById("badge");
 
-    const HeaderItem = document.getElementById('headeritem')
-    const CardItem = document.getElementById('carditem')
-    const RepBadgeItem = document.getElementById('repbadge')
-    const BadgeItem = document.getElementById('badges')
-
-    // Headregister.addEventListener('click', HeaderPreview);
-    // Cardregister.addEventListener('click', CardPreview); 
-    // RepBadgeregister.addEventListener('click', RepBadgePreview);
-    // Badgeregister.addEventListener('click', BadgePreview);
-
-    HeaderItem.addEventListener('change', HeaderPreview());
-    CardItem.addEventListener('change', CardPreview);
-    RepBadgeItem.addEventListener('change', RepBadgePreview);
-    BadgeItem.addEventListener('change', BadgePreview);
+    Headregister.addEventListener('click', HeaderPreview);
+    Cardregister.addEventListener('click', CardPreview); 
+    RepBadgeregister.addEventListener('click', RepBadgePreview);
+    Badgeregister.addEventListener('click', BadgePreview);
 });
+
 
 function addToPreviewList(category) {
     let PreviewHeader = document.querySelector('.profile-header');
@@ -50,7 +41,8 @@ function HeaderPreview(){
     let imagePath = '../img/shop_img/' + HeaderItem + '.png';
     console.log(imagePath);
     PreviewHeader.style.backgroundImage = 'url(' + imagePath + ')';
-    
+
+   
 }
 
 function CardPreview(){
@@ -59,7 +51,7 @@ function CardPreview(){
 
     let imagePath = '../img/shop_img/' + CardItem + '.png';
     console.log(imagePath);
-    
+    PreviewCard.style.backgroundImage = 'url(' + imagePath + ')';
 }
 
 function RepBadgePreview(){
@@ -68,7 +60,7 @@ function RepBadgePreview(){
 
     let imagePath = '../img/shop_img/' + BadgeItem + '.png';
     console.log(imagePath);
-    
+    PreviewRepBadge.src = imagePath;
 }
 
 function BadgePreview(){
