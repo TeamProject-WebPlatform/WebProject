@@ -311,6 +311,7 @@ body.dark-theme .select_Get_btn { background-color: #222; color:#ffffff; }
 
 .game-card__info {
     padding: 6px;
+    background-color: #040615;
 }
 
 .game-card__title {
