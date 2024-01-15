@@ -19,9 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberCard;
 import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.MemberRanking;
 import platform.game.service.model.TO.FavoriteGameTO;
+import platform.game.service.repository.MemberEditCardRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberItemInfoRepository;
 import platform.game.service.repository.MemberProfileRepository;
@@ -49,6 +51,9 @@ public class ProfileController {
     private MemberItemInfoRepository itemInfoRepository;
 
     @Autowired
+    private MemberEditCardRepository editCardRepository;
+
+    @Autowired
     private SecurityPassword securityPassword;
 
     @GetMapping("")
@@ -64,11 +69,13 @@ public class ProfileController {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
                 List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
+                String profileImage = editCardRepository.findByProfileImage(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memberItems", memberItems);
+                mav.addObject("profileImage", profileImage);
             }
         } else {
             System.out.println("멤버 없음");
@@ -159,5 +166,20 @@ public class ProfileController {
         }
 
         return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    @GetMapping("/editmycard")
+    public ModelAndView EditMyCard(){
+        ModelAndView mav = new ModelAndView("editmycard");
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
+        MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
+        MemberCard memberCard = editCardRepository.findAllByMemId(member.getMemId());
+
+        mav.addObject("member", member);
+        mav.addObject("profile", memberProfile);
+        mav.addObject("card", memberCard);
+
+        return mav;
     }
 }
