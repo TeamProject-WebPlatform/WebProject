@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     const Headregister = document.getElementById("header");
-    const Cardregister = document.getElementById("card");
-    const RepBadgeregister = document.getElementById("badgerep");
-    const Badgeregister = document.getElementById("badge");
+    const Cardregister = document.getElementById("card").value;
+    const RepBadgeregister = document.getElementById("badgerep").value;
+    const Badgeregister = document.getElementById("badge").value;
 
-    Headregister.addEventListener('click', HeaderPreview);
+    Headregister.addEventListener('click', function(){
+        console.log("Headregiste");
+    });
     Cardregister.addEventListener('click', CardPreview); 
     RepBadgeregister.addEventListener('click', RepBadgePreview);
     Badgeregister.addEventListener('click', BadgePreview);
@@ -39,10 +41,7 @@ function HeaderPreview(){
     let HeaderItem = document.getElementById('headeritem').value;
 
     let imagePath = '../img/shop_img/' + HeaderItem + '.png';
-    console.log(imagePath);
     PreviewHeader.style.backgroundImage = 'url(' + imagePath + ')';
-
-   
 }
 
 function CardPreview(){
@@ -50,7 +49,6 @@ function CardPreview(){
     let CardItem = document.getElementById('carditem').value;
 
     let imagePath = '../img/shop_img/' + CardItem + '.png';
-    console.log(imagePath);
     PreviewCard.style.backgroundImage = 'url(' + imagePath + ')';
 }
 
@@ -59,7 +57,6 @@ function RepBadgePreview(){
     let BadgeItem = document.getElementById('repbadge').value;
 
     let imagePath = '../img/shop_img/' + BadgeItem + '.png';
-    console.log(imagePath);
     PreviewRepBadge.src = imagePath;
 }
 

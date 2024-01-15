@@ -190,8 +190,41 @@ public class ProfileController {
     }
 
     @PostMapping("/headerprofile")
-    public ResponseEntity<String> HeaderProfile(@RequestBody Map<String, String> header){
+    public ResponseEntity<String> HeaderProfile(@RequestBody String header){
         int flag=0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+
+        if(editCardRepository.UpdateProfileHeader(header,member.getMemId())==1){
+            flag = 1;
+        }
+
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    @PostMapping("/cardprofile")
+    public ResponseEntity<String> CardProfile(@RequestBody String card){
+        int flag=0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+
+        if(editCardRepository.UpdateProfileCard(card,member.getMemId())==1){
+            flag = 1;
+        }
+
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    @PostMapping("/repbadgeprofile")
+    public ResponseEntity<String> RedBadgeProfile(@RequestBody String badge){
+        int flag=0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+
+        if(editCardRepository.UpdateProfileRepBadge(badge,member.getMemId())==1){
+            flag = 1;
+        }
+
         return ResponseEntity.ok(String.valueOf(flag));
     }
 }
