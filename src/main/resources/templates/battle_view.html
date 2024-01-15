@@ -231,6 +231,145 @@
                                     법률이 정하는 바에 의하여 최저임금제를 시행하여야 한다. 1차에 한하여 중임할 수 있다. 대통령에 대한 탄핵소추는 국회재적의원 과반수의 발의와
                                     국회재적의원 3분의 2 이상의 찬성이 있어야 한다, 재판관은 대통령이 임명한다.
                                 </div>
+                                <div class="like-section">
+                                    <div>
+                                        <div class="like" th:onclick="">
+                                            <div class="no">23344</div>
+                                            <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="dislike" th:onclick="">
+                                            <div class="no">234</div>
+                                            <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="comment-section">
+                                    <div class="comment-section-header">
+                                        <div><span>댓글</span></div>
+                                        <div>
+                                            <div><span>등록순</span></div>
+                                            <div><span>|</span></div>
+                                            <div><span>최신순</span></div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="comment-section-main" th:each="commentNode : ${commentTree}">
+                                        <!-- 댓글 내용 출력 -->
+                                        <!-- 커멘트 헤더 -->
+                                        <div class="comment-header">
+                                            <div class="comment-user-info">
+                                                <span th:text="${commentNode.comment.member.memNick}">댓글닉네임</span>
+                                                <span
+                                                    th:text="${'('+#dates.format(commentNode.comment.updatedAt, 'yyyy-MM-dd hh:mm')+')'}">댓글 날짜</span>
+                                                <!-- 댓글 삭제 버튼 -->
+                                                <div th:if="${commentNode.comment.member.memNick==nickname}">
+                                                    <span class="delete-comment"
+                                                        th:attr="data-comment-id=${commentNode.comment.commentId}"
+                                                        style="cursor: pointer; color: red;"> 
+                                                        <i class="fa-solid fa-xmark ico_fontawesome"></i> 
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="like-section">
+                                                <div class="like" th:onclick="">
+                                                    <div class="no">23344</div>
+                                                    <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
+                                                </div>
+                                                <div class="dislike" th:onclick="">
+                                                    <div class="no">234</div>
+                                                    <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
+                                                </div>
+                                            </div>    
+                                        </div>
+                                        <!-- 커멘트 내용 -->
+                                        <div class="comment-main">
+                                            <div class="comment-text" th:text="${commentNode.comment.commentContent}"></div>
+                                        </div>
+                                        <div class="line"></div>
+                                        <div class="comment-footer">
+                                            <div class="reply-section">
+                                                <span class="reply-text" style="cursor: pointer;"
+                                                    th:attr="data-comment-id=${commentNode.comment.commentId}"
+                                                    onclick="toggleReplyForm(this)">답글</span>
+                                            </div>
+                                            <!-- 대댓글 쓰기 -->
+                                            <div class="reply-form" style="display: none;"
+                                                th:attr="data-comment-id=${commentNode.comment.commentId}">
+                                                <form action="reply_comment_write_ok" method="post" name="rfrm" id="rfrm">
+                                                    <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
+                                                    <input type="hidden" name="post_id" th:value="${post.postId}" />
+                                                    <input type="hidden" name="cpage" th:value="${cpage}" />
+                                                    <input type="hidden" id="parent_comment_id" name="parent_comment_id"
+                                                        th:value="${commentNode.comment.commentId}" />
+                                                    <div class="comment-input">
+                                                        <textarea th:id="'rcontent' + ${commentNode.comment.commentId}"
+                                                            name="ccontent" cols="" rows="" class="comment_input_text"
+                                                            placeholder="댓글 내용을 입력하세요"></textarea>
+                                                        <div class="button-section">
+                                                            <a th:if="${nickname}">
+                                                                <!-- 로그인 상태인 경우의 댓글 작성 -->
+                                                                <input id="rbtn" type="button" value="등록"
+                                                                    class="btn_re btn_txt01"
+                                                                    th:onclick="'submitReplyForm(' + ${commentNode.comment.commentId} + ' )'" />
+                                                            </a>
+                                                            <a th:unless="${nickname}" href="/login">
+                                                                <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
+                                                                <input type="button" value="등록" class="btn_re btn_txt01"
+                                                                    style="cursor: pointer;" />
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- 대댓글 표시 -->
+                                            <div th:each="reply : ${commentNode.replies}">
+                                                <div class="user-item__box">
+                                                    <strong><span th:text="${reply.comment.member.memNick}"></span></strong>
+                                                    (<span
+                                                        th:text="${#dates.format(reply.comment.updatedAt, 'yyyy-MM-dd hh:mm')}"></span>)
+                                                    <a th:if="${writePost}">
+                                                        <span class="delete-comment"
+                                                            th:attr="data-comment-id=${reply.comment.commentId}"
+                                                            style="cursor: pointer; color: red;"> <i class="fa-solid fa-xmark ico_fontawesome"></i> </span>
+                                                    </a><br />
+                                                    <div class="coment_re_txt" th:text="${reply.comment.commentContent}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <form action="comment_write_ok" method="post" name="cfrm">
+                                        <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
+                                        <input type="hidden" name="cpage" th:value="${cpage}" />
+                                        <input type="hidden" name="post_id" th:value="${post.postId}" />
+                                        <div class="comment-input-section">
+                                            <div class="header">
+                                                <div th:if="${nickname}" th:text="${nickname}"></div>
+                                                <div th:unless="${nickname}">USER</div>
+                                            </div>
+                                            <div class="main comment-input">
+                                                <textarea name="ccontent" cols="" rows="" class="comment_input_text"
+                                                    placeholder="댓글 내용을 입력하세요"></textarea>
+                                                <div class="button-section">
+                                                    <a th:if="${nickname}">
+                                                        <!-- 로그인 상태인 경우의 댓글 작성 -->
+                                                        <input type="button" id="cbtn" value="등록"
+                                                            class="btn_re btn_txt01" />
+                                                    </a>
+                                                    <a th:unless="${nickname}" href="/login">
+                                                        <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
+                                                        <input type="button" value="등록" class="btn_re btn_txt01"
+                                                            style="cursor: pointer;" />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                             <!-- 신청 리스트 -->
                             <div class="uk-width-1-5@xl requests-section">
@@ -264,112 +403,176 @@
                                                     </div>
                                                 </div>
                                             </li>
+                                            <li class="friend-requests-item">
+                                                <div class="friend-request-item-main">
+                                                    <div class="level_icon"><i
+                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                    <div class="level">
+                                                        <div>34</div>
+                                                    </div>
+                                                    <div class="friend-requests-item__name">
+                                                        <div>타락파워전사후예</div>
+                                                    </div>
+                                                </div>
+                                                <div class="friend-request-item-header">
+                                                    <div class="friend-requests-item__avatar"><img
+                                                            src="../img/user-list-5.png" alt="user">
+                                                    </div>
+                                                    <div class="friend-requests-item__action">
+                                                        <button class="fa-solid fa-check ico_fontawesome"
+                                                            type="button"></button>
+                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
+                                                            type="button"></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="friend-requests-item">
+                                                <div class="friend-request-item-main">
+                                                    <div class="level_icon"><i
+                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                    <div class="level">
+                                                        <div>34</div>
+                                                    </div>
+                                                    <div class="friend-requests-item__name">
+                                                        <div>타락파워전사후예</div>
+                                                    </div>
+                                                </div>
+                                                <div class="friend-request-item-header">
+                                                    <div class="friend-requests-item__avatar"><img
+                                                            src="../img/user-list-5.png" alt="user">
+                                                    </div>
+                                                    <div class="friend-requests-item__action">
+                                                        <button class="fa-solid fa-check ico_fontawesome"
+                                                            type="button"></button>
+                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
+                                                            type="button"></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="friend-requests-item">
+                                                <div class="friend-request-item-main">
+                                                    <div class="level_icon"><i
+                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                    <div class="level">
+                                                        <div>34</div>
+                                                    </div>
+                                                    <div class="friend-requests-item__name">
+                                                        <div>타락파워전사후예</div>
+                                                    </div>
+                                                </div>
+                                                <div class="friend-request-item-header">
+                                                    <div class="friend-requests-item__avatar"><img
+                                                            src="../img/user-list-5.png" alt="user">
+                                                    </div>
+                                                    <div class="friend-requests-item__action">
+                                                        <button class="fa-solid fa-check ico_fontawesome"
+                                                            type="button"></button>
+                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
+                                                            type="button"></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="friend-requests-item">
+                                                <div class="friend-request-item-main">
+                                                    <div class="level_icon"><i
+                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                    <div class="level">
+                                                        <div>34</div>
+                                                    </div>
+                                                    <div class="friend-requests-item__name">
+                                                        <div>타락파워전사후예</div>
+                                                    </div>
+                                                </div>
+                                                <div class="friend-request-item-header">
+                                                    <div class="friend-requests-item__avatar"><img
+                                                            src="../img/user-list-5.png" alt="user">
+                                                    </div>
+                                                    <div class="friend-requests-item__action">
+                                                        <button class="fa-solid fa-check ico_fontawesome"
+                                                            type="button"></button>
+                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
+                                                            type="button"></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="friend-requests-item">
+                                                <div class="friend-request-item-main">
+                                                    <div class="level_icon"><i
+                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                    <div class="level">
+                                                        <div>34</div>
+                                                    </div>
+                                                    <div class="friend-requests-item__name">
+                                                        <div>타락파워전사후예</div>
+                                                    </div>
+                                                </div>
+                                                <div class="friend-request-item-header">
+                                                    <div class="friend-requests-item__avatar"><img
+                                                            src="../img/user-list-5.png" alt="user">
+                                                    </div>
+                                                    <div class="friend-requests-item__action">
+                                                        <button class="fa-solid fa-check ico_fontawesome"
+                                                            type="button"></button>
+                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
+                                                            type="button"></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="friend-requests-item">
+                                                <div class="friend-request-item-main">
+                                                    <div class="level_icon"><i
+                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                    <div class="level">
+                                                        <div>34</div>
+                                                    </div>
+                                                    <div class="friend-requests-item__name">
+                                                        <div>타락파워전사후예</div>
+                                                    </div>
+                                                </div>
+                                                <div class="friend-request-item-header">
+                                                    <div class="friend-requests-item__avatar"><img
+                                                            src="../img/user-list-5.png" alt="user">
+                                                    </div>
+                                                    <div class="friend-requests-item__action">
+                                                        <button class="fa-solid fa-check ico_fontawesome"
+                                                            type="button"></button>
+                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
+                                                            type="button"></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
                                         </ul>
                                     </div>
                                 </div>
+                                <div class="request_btn">신&nbsp;청</div>
                             </div>
                         </div>
                     </div>
-                    <div class="content-comment">
-                        <div class="uk-grid" data-uk-grid>
-                            <div class="uk-width-1-5@xl"></div>
-                            <div class="uk-width-3-5@xl comment-section">
-                                <div class="comment-section-header">
-                                    <div><span>댓글</span></div>
-                                    <div><span>등록순</span></div>
-                                    <div><span>|</span></div>
-                                    <div><span>최신순</span></div>
-                                </div>
-
-                                <div class="comment-section-main" th:each="commentNode : ${commentTree}">
-                                    <!-- 댓글 내용 출력 -->
-                                    <!-- 커멘트 헤더 -->
-                                    <div class="comment-header">
-                                        <span th:text="${commentNode.comment.member.memNick}"></span>
-                                        <span th:text="${'('+#dates.format(commentNode.comment.updatedAt, 'yyyy-MM-dd hh:mm')+')'}"></span>
-                                        <a th:if="${commentNode.comment.member.memNick==nickname}">
-                                            <span class="delete-comment"
-                                                th:attr="data-comment-id=${commentNode.comment.commentId}"
-                                                style="cursor: pointer; color: red;"> x </span>
-                                        </a>
-                                    </div>
-                                    <!-- 커멘트 내용 -->
-                                    <div class="comment-main">
-                                        <div class="comment_text" th:text="${commentNode.comment.commentContent}"></div>
-                                    </div>
-                                    <div>
-                                        <!-- 대댓글 쓰기 -->
-                                        <a th:if="${loginCheck}">
-                                            <span class="reply-text"
-                                                th:attr="data-comment-id=${commentNode.comment.commentId}"
-                                                onclick="toggleReplyForm(this)">답글 쓰기</span>
-                                            <div class="reply-form"
-                                                th:attr="data-comment-id=${commentNode.comment.commentId}"
-                                                style="display: none;">
-                                                <form action="reply_comment_write_ok" method="post" name="rfrm"
-                                                    id="rfrm">
-                                                    <input type="hidden" name="board_cd"
-                                                        th:value="${post.boardCd}" />
-                                                    <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                                    <input type="hidden" name="cpage" th:value="${cpage}" />
-                                                    <input type="hidden" id="parent_comment_id"
-                                                        name="parent_comment_id"
-                                                        th:value="${commentNode.comment.commentId}" />
-                                                    <textarea name="rcontent"
-                                                        th:id="'rcontent' + ${commentNode.comment.commentId}"
-                                                        cols="" rows="" class="reply-textarea"
-                                                        placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
-                                                    <input type="button" id="rbtn" value="답글 등록"
-                                                        class="reply-button"
-                                                        th:onclick="'submitReplyForm(' + ${commentNode.comment.commentId} + ' )'" />
-                                                </form>
-                                            </div>
-                                        </a>
-                                        <!-- 대댓글 표시 -->
-                                        <div th:each="reply : ${commentNode.replies}">
-                                            <div class="user-item__box">
-                                                <strong><span
-                                                        th:text="${reply.comment.member.memNick}"></span></strong>
-                                                (<span
-                                                    th:text="${#dates.format(reply.comment.updatedAt, 'yyyy-MM-dd hh:mm')}"></span>)
-                                                <a th:if="${writePost}">
-                                                    <span class="delete-comment"
-                                                        th:attr="data-comment-id=${reply.comment.commentId}"
-                                                        style="cursor: pointer; color: red;"> x </span>
-                                                </a><br />
-                                                <div class="coment_re_txt"
-                                                    th:text="${reply.comment.commentContent}"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <form action="comment_write_ok" method="post" name="cfrm">
-                                    <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                    <input type="hidden" name="cpage" th:value="${cpage}" />
-                                    <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                    <table>
-                                        <tr>
-                                            <td class="bg01" width="100%">
-                                                <!-- 내용 입력<br/> -->
-                                                <textarea name="ccontent" cols="" rows="" class="coment_input_text"
-                                                    placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
-                                            </td>
-                                            <td align="right" class="bg01 bg02">
-                                                <a th:if="${loginCheck}">
-                                                    <!-- 로그인 상태인 경우의 댓글 작성 -->
-                                                    <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01" />
-                                                </a>
-                                                <a th:unless="${loginCheck}" href="/login">
-                                                    <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
-                                                    <input type="button" value="댓글등록" class="btn_re btn_txt01"
-                                                        style="cursor: pointer;" />
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </form>
+                    <div class="content-footer">
+                        <div class="button-section">
+                            <div th:if="${post.member.memNick==nickname}">
+                                <!-- 본인이 작성한 글이면 보임 -->
+                                <a th:href="@{modify(post_id=${post.postId}, cpage=${cpage})}">
+                                    <input type="button" value="수정" class="btn_re">
+                                </a>
+                                <a th:href="@{delete(post_id=${post.postId}, cpage=${cpage})}">
+                                    <input type="button" value="삭제" class="btn_re">
+                                </a>
                             </div>
+                            <div>
+                                <a th:href="@{list(board_cd=${post.boardCd}, cpage=${cpage})}"><input type="button"
+                                        value="목록" class="btn_re"></a>
+                                <a th:if="${nickname}" th:href="@{write(board_cd=${post.boardCd})}">
+                                    <!-- 로그인 상태인 경우의 링크 -->
+                                    <input type="button" value="쓰기" class="btn_re">
+                                </a>
+                                <a th:unless="${nickname}" href="/login">
+                                    <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                    <input type="button" value="쓰기" class="btn_re" onclick="checkLoginAndNavigate()">
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 </div>

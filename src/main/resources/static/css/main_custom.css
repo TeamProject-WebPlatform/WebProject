@@ -221,9 +221,9 @@ px
 
 .btn_write { width: 20%; -webkit-box-shadow: 2px 2px 7px 0px #00000024; background-color: #222; border: none; border-radius:28px;	display:inline-block; cursor:pointer; color:#ffffff; font-family:Arial; font-size:13px; font-weight:bold; padding:6px 12px; text-decoration:none; }
 .btn_list { width: 20%; -webkit-box-shadow: 2px 2px 7px 0px #00000024; background-color: #222; border: none; border-radius:28px;	display:inline-block; cursor:pointer; color:#ffffff; font-family:Arial; font-size:13px; font-weight:bold; padding:6px 12px; text-decoration:none; }
-.btn_comment { width: 20%; -webkit-box-shadow: 2px 2px 7px 0px #00000024; background-color: #222; border: none; border-radius:28px;	display:inline-block; cursor:pointer; color:#ffffff; font-family:Arial; font-size:13px; font-weight:bold; padding:6px 12px; text-decoration:none; }
-.btn_re {  -webkit-box-shadow: 2px 2px 7px 0px #00000024; background-color: #222; border: none; border-radius:28px;	display:inline-block; cursor:pointer; color:#ffffff; font-family:Arial; font-size:13px; font-weight:bold; padding:6px 12px; text-decoration:none; }
-
+.btn_comment { width: 20%; -webkit-box-shadow: 2px 2px 7px 0px #00000024; background-color: #222; border: none; border-radius:28px;	display:inline-block; cursor:pointer; color:#ffffff; font-family:Arial; font-size:20px; font-weight:bold; padding:6px 12px; text-decoration:none; }
+.btn_re {  -webkit-box-shadow: 2px 2px 7px 0px #00000024; background-color: #fff; border: none; border-radius:15px;	display:inline-block; cursor:pointer; color:#000; font-family:Arial; font-size:20px; font-weight:bold; padding:6px 12px; text-decoration:none; border:1px solid;}
+.dark-theme .btn_re{ background-color: #222; color:#fff};
 
 .btn_write:hover { background:linear-gradient(to bottom, #415989 5%, #2e466e 100%); background-color:#415989; color: var( --main-color-dark); }
 .btn_list:hover { background:linear-gradient(to bottom, #415989 5%, #2e466e 100%); background-color:#415989; color: var( --main-color-dark); }
