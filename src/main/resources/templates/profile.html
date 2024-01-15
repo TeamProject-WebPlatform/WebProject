@@ -130,10 +130,8 @@
                                 <h3 class="uk-text-lead">Badge</h3><a href="04_profile.html">View All</a>
                             </div>
                             <div class="widjet__body">
-                                <ul class="badges-list" th:each="item:${memberItems}">
-                                    <li><img src="../img/badge-1.png" alt="badge"></li>
-                                    <li><img src="../img/badge-2.png" alt="badge"></li>
-                                    <li><img src="../img/badge-3.png" alt="badge"></li>
+                                <ul class="badges-list" >
+                                    <li th:each="item:${memberItems}"><img th:src="@{'./img/shop_img/' + ${item} + '.png'}"></li>
                                 </ul>
                             </div>
                         </div>

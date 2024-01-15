@@ -67,6 +67,7 @@ public class ProfileController {
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
+                mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memberItems", memberItems);
             }
         } else {

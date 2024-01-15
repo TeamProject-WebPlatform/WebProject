@@ -36,7 +36,7 @@ public interface MemberItemInfoRepository extends JpaRepository<MemberItem, Memb
     @Query(value = "update member set mem_cur_point = mem_cur_point-:point where mem_id=:mem_id", nativeQuery = true)
     Integer UpdatePoint(int point, long mem_id);
 
-    @Query(value="select mi.mem_id, mi.item_cd from member_item mi join item i on mi.item_cd = i.item_cd and i.item_cd like '803%' join member m on mi.mem_id = m.mem_id and m.mem_id=:mem_id",nativeQuery = true)
+    @Query(value="select i.item_nm from item i join member_item mi on mi.item_cd = i.item_cd and i.item_cd like '803%' join member m on mi.mem_id = m.mem_id and m.mem_id=1009",nativeQuery = true)
     List<String> getHaveBadges(long mem_id);
 
 }   
