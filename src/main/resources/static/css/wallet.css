@@ -102,9 +102,12 @@
     padding: 0;
     background: none;
 }
+.dark-theme .widjet.--wallet-ph{
+    background-color: #181818;
+}
 .widjet.--wallet-ph{
     max-height: 1000px;
-    background-color: #181818;
+    background-color: #e0e0e0;
     padding: 10px;
 }
 .overflow-scroll{
@@ -265,11 +268,15 @@ body.dark-theme .wallet-ph-item {
     max-height: 507px;
 }
 .widjet.--wallet-betting{
+    background-color: #e0e0e0;
+    padding: 10px;
+    max-height: 547px;
+}
+.dark-theme .widjet.--wallet-betting{
     background-color: #181818;
     padding: 10px;
     max-height: 547px;
 }
-
 .wallet-betting-list {
     margin: 0;
     padding: 0;

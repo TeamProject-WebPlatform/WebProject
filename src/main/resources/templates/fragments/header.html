@@ -10,11 +10,14 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script src="../js/module/cookie.js"></script>
         <script th:inline="javascript">
+            // 다크 모드 설정 값
+
             let currentThemeIndex = 0;
             // 로고 색상 변경용
-            const logo_img_paths = ["./img/logo_white.png", "./img/logo_black.png"];
-            const logo_text = ["white", "black"];
+            let logo_img_paths;
+            let logo_text = ["white", "black"];
 
             // 메인 컬러 변경용
             const root = document.documentElement; // :root 
@@ -23,17 +26,49 @@
                 getComputedStyle(root).getPropertyValue('--main-color-dark'),
                 getComputedStyle(root).getPropertyValue('--main-color-light')
             ];
-
+            if (getCookie('darkMode')) {
+                if (getCookie('darkMode') === 'Y') {
+                    document.getElementsByTagName("body")[0].classList.add('dark-theme');
+                } else {
+                    document.getElementsByTagName("body")[0].classList.remove('dark-theme');
+                }
+            } else {
+                setCookie('darkMode', 'Y', 7);
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                logo_img_paths = [getContextPath()+"/img/logo_white.png", getContextPath()+"/img/logo_black.png"];
+                if (getCookie('darkMode') === 'Y') {
+                    document.getElementById('logo_img').src = logo_img_paths[0];
+                    document.querySelector(".page-header__logo_text").style.color = logo_text[0];
+                    // 메인 컬러 변경용
+                    root.style.setProperty('--main-color-now', main_color_values[0]);
+                }
+                else {
+                    document.getElementById('logo_img').src = logo_img_paths[1];
+                    document.querySelector(".page-header__logo_text").style.color = logo_text[1];
+                    // 메인 컬러 변경용
+                    root.style.setProperty('--main-color-now', main_color_values[1]);
+                }
+            })
             document.getElementById("toggle").addEventListener("click", function () {
                 document.getElementsByTagName('body')[0].classList.toggle("dark-theme");
-
-                currentThemeIndex = 1 - currentThemeIndex;  // 0과 1을 번갈아가며 토글
-                // 이미지 경로를 토글
-                document.getElementById('logo_img').src = logo_img_paths[currentThemeIndex];
-                document.querySelector(".page-header__logo_text").style.color = logo_text[currentThemeIndex];
-                // 메인 컬러 변경용
-                root.style.setProperty('--main-color-now', main_color_values[currentThemeIndex]);
-                console.log(root.style.getPropertyValue('--main-color-now'));
+                if (getCookie('darkMode') === 'Y') {
+                    setCookie('darkMode', 'N', 7);
+                } else if (getCookie('darkMode') === 'N') {
+                    setCookie('darkMode', 'Y', 7);
+                }
+                if (getCookie('darkMode') === 'Y') {
+                    document.getElementById('logo_img').src = logo_img_paths[0];
+                    document.querySelector(".page-header__logo_text").style.color = logo_text[0];
+                    // 메인 컬러 변경용
+                    root.style.setProperty('--main-color-now', main_color_values[0]);
+                }
+                else {
+                    document.getElementById('logo_img').src = logo_img_paths[1];
+                    document.querySelector(".page-header__logo_text").style.color = logo_text[1];
+                    // 메인 컬러 변경용
+                    root.style.setProperty('--main-color-now', main_color_values[1]);
+                }
             });
 
             // websocket ~~~~~~~~
@@ -42,7 +77,7 @@
             let memId = 0;
             document.addEventListener("DOMContentLoaded", function () {
                 memId = /*[[${memId}]]*/0;
-                if(memId!==0) pointConnect();
+                if (memId !== 0) pointConnect();
             });
             function pointConnect() {
                 var socket = new SockJS('/ws');
@@ -54,14 +89,14 @@
                         try {
                             let headerInfo = JSON.parse(response.body);
                             console.log(headerInfo);
-                            if(headerInfo.flag===2){
+                            if (headerInfo.flag === 2) {
                                 alert("포인트 부족");
                             }
-                            if(headerInfo.flag===1){
+                            if (headerInfo.flag === 1) {
                                 // 정상
                                 currentPoint = headerInfo.currentPoint;
                                 document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
-                            }else if(headerInfo.flag===0 || headerInfo.flag===-1){
+                            } else if (headerInfo.flag === 0 || headerInfo.flag === -1) {
                                 // 에러
                                 alert("에러");
                             }
@@ -74,14 +109,23 @@
                 });
             }
 
-            function sendPointChange(point,pointKindCd) {
-                memInfoStompClient.send(`/app/memPointChange`, {},JSON.stringify({
+            function sendPointChange(point, pointKindCd) {
+                memInfoStompClient.send(`/app/memPointChange`, {}, JSON.stringify({
                     memId: Number(memId),
-                    pointKindCd : pointKindCd,
+                    pointKindCd: pointKindCd,
                     currentPoint: Number(currentPoint),
                     pointChange: Number(point),
-                    flag : -1
+                    flag: -1
                 }));
+            }
+            function getContextPath() {
+                var path = window.location.pathname.split('/');
+                var contextPath ="";
+                for(let i =0;i<path.length-1;i++){
+                    contextPath += "/..";
+                }
+                // console.log("path : "+contextPath)
+                return contextPath;
             }
         </script>
         <div class="page-header__inner">
@@ -89,7 +133,7 @@
             <div class="page-header__sidebar">
                 <div class="page-header__menu-btn"><button class="menu-btn ico_menu is-active"></button></div>
                 <a href="/">
-                    <div class="page-header__logo"><img src="/img/logo_white.png" alt="logo" id="logo_img"><span
+                    <div class="page-header__logo"><img src="../img/logo_white.png" alt="logo" id="logo_img"><span
                             class="page-header__logo_text">G A M M O A</span></div>
                 </a>
             </div>
@@ -106,7 +150,7 @@
                 <div class="page-header__action">
                     <div onclick="sendPointChange(100,'50001')">100 포인트 추가</div>
                     <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
-                    <a th:if="${nickname}" class="action-btn wallet" href="/wallet"><i
+                    <a th:if="${nickname}" class="action-btn wallet" th:href="@{/wallet}"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
                     <div id="current-point"
                         th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}"></div>
@@ -114,12 +158,12 @@
                             class="animation-ripple-delay1"></span></a>
                     <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
                             class="ico_notification"></i><span class="animation-ripple-delay2"></span></a>
-                    <a th:if="${nickname}" th:href="@{logout}" class="action-btn"><i
+                    <a th:if="${nickname}" th:href="@{/logout}" class="action-btn"><i
                             class="fa-solid fa-right-from-bracket ico_logout"></i></a>
-                    <a th:unless="${nickname}" th:href="@{login}" class="action-btn"><i
+                    <a th:unless="${nickname}" th:href="@{/login}" class="action-btn"><i
                             class="fa-solid fa-right-to-bracket ico_fontawesome"></i></a>
 
-                    <a th:if="${nickname}" class="profile" href="08_wallet.html"><img src="/img/profile.png"
+                    <a th:if="${nickname}" class="profile" th:href="@{/profile}"><img src="/img/profile.png"
                             alt="profile"></a>
                 </div>
 

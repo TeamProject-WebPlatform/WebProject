@@ -46,6 +46,9 @@ public class Member {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<PointHistory> memPointHistoryList = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    private List<PointHistory> memPointHistoryList = new ArrayList<>();
+
     public String getRole(String code) {
         switch (code) {
             case "10001":
