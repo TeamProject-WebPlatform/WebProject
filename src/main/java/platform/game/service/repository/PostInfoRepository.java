@@ -18,8 +18,14 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer> {
         // 게시판에 맞는 리스트 찾기 찾기
         ArrayList<Post> findByBoardCdOrderByPostIdDesc(String boardCd);
 
+        // 날짜 기준 찾기
+        ArrayList<Post> findByBoardCdOrderByCreatedAtDesc(String boardCd);
+
         // 제목 검색
         ArrayList<Post> findByBoardCdAndPostTitleContainingOrderByPostIdDesc(String boardCd, String postTitle);
+
+        // 날짜별로 제목 검색
+        ArrayList<Post> findByBoardCdAndPostTitleContainingOrderByCreatedAtDesc(String boardCd, String postTitle);
 
         // 내용 검색
         ArrayList<Post> findByBoardCdAndPostContentContainingOrderByPostIdDesc(String boardCd, String postContent);

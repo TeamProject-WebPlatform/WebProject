@@ -37,4 +37,10 @@ public class Crawling {
 
     @Column(columnDefinition = "TEXT NOT NULL DEFAULT 'N'")
     private String InterfaceYn;
+
+    @Column(columnDefinition = "TEXT NOT NULL DEFAULT 'N'")
+    private String CrawlingBoardCd;
+
+    @Column(columnDefinition = "TEXT NOT NULL DEFAULT 'N'")
+    private String CrawlingPostTag;
 }

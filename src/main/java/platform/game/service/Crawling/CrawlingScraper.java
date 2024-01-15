@@ -16,10 +16,13 @@ import platform.game.service.repository.CrawlingRepository;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 @Transactional
@@ -68,14 +71,19 @@ public class CrawlingScraper {
 
                 crawling.setCrawlingId(crawling.getCrawlingId() + 1);
                 crawling.setCrawlingTitle(title);
-                crawling.setCrawlingDate(date);
+                crawling.setCrawlingDate(Date(date));
                 crawling.setCrawlingImageUrl(imageUrl);
                 crawling.setCrawlingBoardLing(BoardLink);
                 crawling.setCrawlingContent(DivTags.html());
+                crawling.setCrawlingBoardCd("20001");
+                crawling.setCrawlingPostTag("LeagueofLegends");
+                crawling.setInterfaceYn("N");
 
-                System.out.println("ceawling" + crawling);
+                // System.out.println("날짜 확인 : " + Date(date));
+                // System.out.println("ceawling" + crawling);
                 crawlingRepository.save(crawling);
                 System.out.println("i :" + i++);
+
             }
 
         } catch (IOException e) {
@@ -117,7 +125,7 @@ public class CrawlingScraper {
                 String BoardLink;
                 if (links.startsWith("https://")) {
                     BoardLink = links;
-                }else{
+                } else {
                     BoardLink = "https://www.leagueoflegends.com" + links;
                 }
 
@@ -126,18 +134,21 @@ public class CrawlingScraper {
                 url = BoardLink;
                 document = Jsoup.connect(url).get();
                 Elements DivTags = document.select("div.style__Wrapper-sc-1wsvmz4-0.bJOeIp");
-                if(DivTags.html()==""){
+                if (DivTags.html() == "") {
                     DivTags = document.select("div.style__Content-sc-17x3yhp-1.hAcEIj");
                 }
 
                 crawling.setCrawlingId(i + 1);
                 crawling.setCrawlingTitle(title);
-                crawling.setCrawlingDate(date);
+                crawling.setCrawlingDate(Date(date));
                 crawling.setCrawlingImageUrl(imageUrl);
                 crawling.setCrawlingBoardLing(BoardLink);
                 crawling.setCrawlingContent(DivTags.html());
+                crawling.setCrawlingBoardCd("20002");
+                crawling.setCrawlingPostTag("LeagueofLegends");
+                crawling.setInterfaceYn("N");
 
-                System.out.println("ceawling" + crawling);
+                // System.out.println("ceawling" + crawling);
                 crawlingRepository.save(crawling);
                 System.out.println("i :" + i++);
             }
@@ -162,8 +173,12 @@ public class CrawlingScraper {
             // <li> 태그를 선택합니다.
             Elements trTags = document.select("tbody tr");
 
+            int count = 0;
             // 각 <li> 태그의 정보를 출력합니다.
             for (Element trTag : trTags) {
+                if (count >= 5) {
+                    break;
+                }
                 // 제목을 선택합니다.
                 String title = trTag.select(".link_subject").text();
 
@@ -185,14 +200,19 @@ public class CrawlingScraper {
 
                 crawling.setCrawlingId(i + 1);
                 crawling.setCrawlingTitle(title);
-                crawling.setCrawlingDate(date);
+                crawling.setCrawlingDate(PubgDate(date));
                 crawling.setCrawlingImageUrl(imageUrl);
                 crawling.setCrawlingBoardLing(boardLink);
                 crawling.setCrawlingContent(DivTags.html());
+                crawling.setCrawlingBoardCd("20001");
+                crawling.setCrawlingPostTag("BattleGround");
+                crawling.setInterfaceYn("N");
 
-                System.out.println("ceawling" + crawling);
+                System.out.println(PubgDate(date));
+                // System.out.println("ceawling" + crawling);
                 crawlingRepository.save(crawling);
                 System.out.println("i :" + i++);
+                count++;
             }
 
         } catch (IOException e) {
@@ -206,7 +226,7 @@ public class CrawlingScraper {
     public ModelAndView BattleGroundsUpdateScraper() {
         System.out.println("배그 업데이트 크롤링 호출");
         Crawling crawling = new Crawling();
-        int i = 40;
+        int i = 20;
         try {
             // 웹 페이지를 JSoup을 사용하여 가져옵니다.
             String url = "https://bbs.pubg.game.daum.net/gaia/do/pubg/update/list?bbsId=PN002&objCate1=255";
@@ -215,8 +235,12 @@ public class CrawlingScraper {
             // <li> 태그를 선택합니다.
             Elements trTags = document.select("tbody tr");
 
+            int count = 0;
             // 각 <li> 태그의 정보를 출력합니다.
             for (Element trTag : trTags) {
+                if (count >= 6) {
+                    break;
+                }
                 // 제목을 선택합니다.
                 String title = trTag.select(".link_subject").text();
 
@@ -238,14 +262,18 @@ public class CrawlingScraper {
 
                 crawling.setCrawlingId(i + 1);
                 crawling.setCrawlingTitle(title);
-                crawling.setCrawlingDate(date);
+                crawling.setCrawlingDate(PubgDate(date));
                 crawling.setCrawlingImageUrl(imageUrl);
                 crawling.setCrawlingBoardLing(boardLink);
                 crawling.setCrawlingContent(DivTags.html());
+                crawling.setCrawlingBoardCd("20002");
+                crawling.setCrawlingPostTag("BattleGround");
+                crawling.setInterfaceYn("N");
 
-                System.out.println("ceawling" + crawling);
+                // System.out.println("ceawling" + crawling);
                 crawlingRepository.save(crawling);
                 System.out.println("i :" + i++);
+                count++;
             }
 
         } catch (IOException e) {
@@ -254,5 +282,54 @@ public class CrawlingScraper {
 
         return null;
     }
-    
+
+    public String Date(String date) {
+        String inputDateString = date;
+
+        // DateTimeFormatter 설정
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
+        // 문자열을 LocalDateTime으로 변환
+        LocalDateTime localDateTime = LocalDateTime.parse(inputDateString, inputFormatter);
+
+        // LocalDateTime을 다시 문자열로 변환
+        String outputDateString = localDateTime.format(outputFormatter);
+
+        return outputDateString;
+    }
+
+    public String PubgDate(String date) {
+        String inputString = date;
+
+        // 현재 날짜를 가져오기
+        LocalDateTime today = LocalDateTime.now();
+
+        // 패턴에 따라 입력된 문자열을 LocalDateTime으로 변환
+        LocalDateTime resultDateTime;
+        if (inputString.matches("\\d{2}.\\d{2}.\\d{2}")) {
+            // 예: 23.11.21 형식의 문자열인 경우
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yy.MM.dd");
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+            LocalDate localDate = LocalDate.parse(inputString, inputFormatter);
+            LocalDateTime localDateTime = localDate.atStartOfDay();
+            String outputDateString = localDateTime.format(outputFormatter);
+            System.out.println("입력된 문자열: " + inputString);
+            System.out.println("변환된 날짜 및 시간 문자열: " + outputDateString);
+
+            return outputDateString;
+        } else {
+            // 그 외의 경우
+            LocalTime inputTime = LocalTime.parse(inputString, DateTimeFormatter.ofPattern("HH:mm"));
+            resultDateTime = today.withHour(inputTime.getHour()).withMinute(inputTime.getMinute());
+            // 다시 다른 형식의 문자열로 변환
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+            String outputDateTimeString = resultDateTime.format(outputFormatter);
+            System.out.println("입력된 문자열: " + inputString);
+            System.out.println("변환된 날짜 및 시간 문자열: " + outputDateTimeString);
+
+            return outputDateTimeString;
+        }
+    }
+
 }

@@ -249,7 +249,6 @@ px
 .info-battle-point{
     color:rgb(255, 255, 255);
     font-weight: 800;
-    font-size:20px;
     height:100%;
     display: flex;
     align-items: center;
@@ -283,4 +282,8 @@ px
 }
 .point-betting-button:hover{
     cursor: pointer;
+}
+.info-header{
+    height: 10%;
+    display: flex;
 }

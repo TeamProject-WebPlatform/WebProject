@@ -43,7 +43,7 @@ public class BoardController {
 
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
-        ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
+        ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByCreatedAtDesc(boardCd);
 
         String boardCd_name = "Notice";
         String navBoard = "nav-";

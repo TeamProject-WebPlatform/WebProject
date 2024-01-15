@@ -85,7 +85,8 @@ public class ListController {
             // 태그 체크
             if ("All".equals(selectTag)) {
                 // 태그가 All인 경우 - 제목 검색
-                lists = postInfoRepository.findByBoardCdAndPostTitleContainingOrderByPostIdDesc(boardCd, searchValue);
+                lists = postInfoRepository.findByBoardCdAndPostTitleContainingOrderByCreatedAtDesc(boardCd,
+                        searchValue);
             } else {
                 // 태그가 선택된 경우 - 제목 + 태그 검색
                 lists = postInfoRepository.findByBoardCdAndPostTitleContainingAndPostTagsContainingOrderByPostIdDesc(

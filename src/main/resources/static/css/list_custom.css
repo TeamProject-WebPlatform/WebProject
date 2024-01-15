@@ -1,42 +1,4 @@
-/* .table-wrapper{
-    width: 100%;
-    border: 1px solid #444444;
-    border-collapse: collapse;
-} */
-
-textarea { height:120px; border:1px solid #cecece;}
-select{ height:26px; padding:2px; border:1px solid #cecece; /*font-size:12px; color:#444;*/ vertical-align:middle;}
-table { border-collapse:collapse; border-spacing:0;}
-body.dark-theme .board_view_title{
-    color: #fff;
-    border-bottom:1px solid #464646;
-}
-
-.table-wrapper > table{
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table-wrapper > table > tbody > tr > td{
-    border: 1px solid rgb(0, 177, 177);
-    /* border-right: 1px solid rgb(0, 177, 177);
-    border-top: 1px solid rgb(0, 177, 177); */
-    /* border-right: 1px solid;
-    border-left: 1px solid;
-    border-bottom: 1px solid; */
-    text-align: center;
-    border-collapse: collapse;
-}
-body.dark-theme .table-wrapper > table > tbody > tr > td{
-    /* border-bottom:1px solid #00f0f0; */
-    border: 1px solid rgb(0, 177, 177);
-    background-color:rgba(244, 97, 25, 0.05);
-}
-
-body.dark-theme .board_view_table > tbody > tr > td > h3{
-    color: #fff;
-}
-
+@charset "utf-8";
 
 /* 게시판 스타일 */
 /* input */
@@ -80,8 +42,6 @@ body.dark-theme .board_view_title{
 .board_editor_area { width:100%; height:200px; background-color: #F5F5F5; color: #464646; }
 body.dark-theme .board_editor_area { background-color: #040615; color: #fff; border: none;}
 
-
-/*현종 테스트중*/
 /* .board_view { border-top:1px solid #464646; } */
 .board_view .board_view_table { border-collapse:collapse; background-color: #F5F5F5; }
 body.dark-theme .board_view_table { background-color:#040615; }

@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/libs.min.css">
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/list_custom.css" />
     <script src="../js/module/swiper.js"></script>
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
@@ -37,6 +37,8 @@
     document.addEventListener("DOMContentLoaded", function () {
         const active = document.getElementById("[[${navBoard}]]");
         active.classList.add("uk-active");
+        const submenu = active.parentNode;
+        submenu.classList.remove("none");
     });
 </script>
 
@@ -112,7 +114,7 @@
                                                     <div class="form-row">
                                                         <label for="content" name="content" class="form-label">내용</label>
                                                     </div>
-                                                    <br />
+                                                    <br>
                                                     <div class="form-input">
                                                         <textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea>
                                                     </div>
