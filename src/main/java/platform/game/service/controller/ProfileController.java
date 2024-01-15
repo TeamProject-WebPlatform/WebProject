@@ -175,11 +175,24 @@ public class ProfileController {
                 .getMember();
         MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
         MemberCard memberCard = editCardRepository.findAllByMemId(member.getMemId());
+        List<Object[]> HeaderList = editCardRepository.HaveHeaderList(member.getMemId());
+        List<Object[]> CardList = editCardRepository.HaveCardList(member.getMemId());
+        List<Object[]> BadgeList = editCardRepository.HaveBadgeList(member.getMemId());
 
         mav.addObject("member", member);
         mav.addObject("profile", memberProfile);
-        mav.addObject("card", memberCard);
+        mav.addObject("memberCard", memberCard);
+        mav.addObject("header", HeaderList);
+        mav.addObject("card", CardList);
+        mav.addObject("badge", BadgeList);
+        System.out.println(memberCard);
 
         return mav;
+    }
+
+    @PostMapping("/headerprofile")
+    public ResponseEntity<String> HeaderProfile(@RequestBody Map<String, String> header){
+        int flag=0;
+        return ResponseEntity.ok(String.valueOf(flag));
     }
 }

@@ -23,6 +23,7 @@ import platform.game.service.repository.ItemInfoRepository;
 import platform.game.service.repository.MemberItemInfoRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 
@@ -48,12 +49,13 @@ public class ShopController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
-                ArrayList<MemberItem> memberItems = memberItemInfoRepository.findByItemCd(member.getMemId());
-                modelAndView.addObject("memberItems", memberItems);
+                List<String> memberHaveItems = memberItemInfoRepository.HaveItemCheck(member.getMemId());
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
+                modelAndView.addObject("haveitem", memberHaveItems);
+                System.out.println(memberHaveItems);
             }
         } else {
             System.out.println("멤버 없음");

@@ -22,9 +22,9 @@ public interface MemberItemInfoRepository extends JpaRepository<MemberItem, Memb
     ArrayList<MemberItem> findByMemIdAndItemCd(Member memId, int itemCd);
     // 아이템샵 아이템 코드 확인
     ArrayList<Item> findByItemCd(int itemCd);
-
-    // 보유한 아이템 확인
-    ArrayList<MemberItem> findByItemCd(long mem_id);
+    
+    @Query(value="select item_cd from member_item where mem_id=:mem_id", nativeQuery = true)
+    List<String> HaveItemCheck(long mem_id);
 
     @Modifying(clearAutomatically = true)
     @Transactional
