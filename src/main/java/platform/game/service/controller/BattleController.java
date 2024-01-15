@@ -21,6 +21,7 @@ import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
 import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.CommentInfoRepository;
+import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -36,38 +37,54 @@ public class BattleController {
     PostInfoRepository postInfoRepository;
     @Autowired
     CommentInfoRepository commentInfoRepository;
-
+    @Autowired
+    MemberInfoRepository memberInfoRepository;
 
 
     @RequestMapping("/view")
-    public ModelAndView listView(@RequestParam("id") int postId) {
+    public ModelAndView listView(@RequestParam("postId") int postId, @RequestParam("btId") int btId) {
         ModelAndView mav = new ModelAndView("battle_view");
-
+        long id = 0;
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint",member.getMemCurPoint());
-                mav.addObject("memId",member.getMemId());
+                id = member.getMemId();
+                mav.addObject("memId",id);
             }
         } 
         Post post = new Post();
         post = postInfoRepository.findByPostId(postId);
-        
+        Object[] battleTOs = battleCardAction.getBattleTO(id, postId, btId);
+
+        BattleTO bto = (BattleTO)battleTOs[0];
+        BattlePointTO pto = (BattlePointTO)battleTOs[1];
 
         ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
         ArrayList<CommentTO> commentTree = buildCommentTree(comment);
 
-
+        String[][] tmp = bto.getApplicants();
+        String[][] applicants = new String[tmp.length][5];
+        for(int i =0;i<tmp.length;i++){
+            String[] s = tmp[i];
+            Member member = memberInfoRepository.findById(Long.parseLong(s[0])).isPresent() ? memberInfoRepository.findById(Long.parseLong(s[0])).get() : null;
+            applicants[i][0] = s[0]; // memId
+            applicants[i][1] = s[1]; // 보류 상태
+            applicants[i][2] = s[2]; // 신청 시간
+            applicants[i][3] = member.getMemNick(); // 닉네임
+            applicants[i][4] = String.valueOf(member.getMemLvl()); // 레벨
+        }
+        System.out.println(post.getBoardCd());
+        mav.addObject("bto",bto);
+        mav.addObject("pto",pto);
         mav.addObject("post", post);
+        mav.addObject("applicants", applicants);
         mav.addObject("comment", comment);
-        mav.addObject("loginCheck", "true");
-        mav.addObject("writePost", "true");
-        mav.addObject("cpage", 1);
         mav.addObject("board_cd", "00000");
         mav.addObject("commentTree", commentTree);
-        mav.addObject("boardCd_name", "boadrCd_name");
+        mav.addObject("boardCd_name", "Battle");
         mav.addObject("navBoard", "nav-battle");
         return mav;
     }
@@ -82,8 +99,8 @@ public class BattleController {
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint",member.getMemCurPoint());
-                mav.addObject("memId",member.getMemId());
                 id = member.getMemId();
+                mav.addObject("memId",id);
             }
         } else {
         }

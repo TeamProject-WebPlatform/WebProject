@@ -36,7 +36,7 @@ public class Ranking {
     @JoinColumn(name = "memId", referencedColumnName = "memId")
     private Member member;
 
-    @Column(name = "rank_update")
+    @Column(name = "rank_update")                        
     private String rankUpdate;
     @Id
     @Column(name = "game_cd")

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../css/libs.min.css">
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/battle.css" />
     <link rel="stylesheet" href="../css/battle_view.css" />
 
     <script src="../js/libs.js"></script>
@@ -34,8 +35,48 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        let logo_img_paths = [getContextPath()+"/img/logo_white.png", getContextPath()+"/img/logo_black.png"];
+        const vs = document.querySelectorAll('.vs img');
+        let isDark = getCookie('darkMode');
+        vs.forEach(function(x){
+                if (isDark === 'Y') {
+                    x.src = logo_img_paths[0];
+                }
+                else {
+                    x.src = logo_img_paths[1];
+                }
+            })
+        document.getElementById("toggle").addEventListener("click", function () {
+            isDark = getCookie('darkMode');
+            vs.forEach(function(x){
+                if (isDark === 'Y') {
+                    x.src = logo_img_paths[0];
+                }
+                else {
+                    x.src = logo_img_paths[1];
+                }
+            })
+        });
         const active = document.getElementById("nav-battle");
         active.classList.add("uk-active");
+        const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
+        const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
+
+        const pointLefts = document.querySelectorAll(".info-center-left .info-point-percent");
+        const pointRights = document.querySelectorAll(".info-center-right .info-point-percent");
+
+        for (let i = 0; i < pointBarLefts.length; i++) {
+            let pointBarLeft = pointBarLefts.item(i);
+            pointBarLeft.style.width = pointLefts[i].innerHTML;
+            pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+            pointLefts[i].style.color = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
+
+            let pointBarRight = pointBarRights.item(i);
+            pointBarRight.style.width = pointRights[i].innerHTML;
+            pointBarRight.style.backgroundColor = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+            pointRights[i].style.color = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
+        }
+
         // 댓글 작성 확인 함수 부분
         document.getElementById('cbtn').addEventListener('click', function () {
             document.getElementsByName("ccontent").value;
@@ -63,6 +104,23 @@
     });
 </script>
 <script>
+    function formatNumberTok(value) {
+        var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
+        return formattedValue;
+    }
+    function getColorRatio(bettingRatio) {
+        if (bettingRatio >= 90) {
+            return '#FF0000'; // 빨간색
+        } else if (bettingRatio >= 70) {
+            return '#FFA500'; // 주황색
+        } else if (bettingRatio >= 50) {
+            return '#00FF00'; // 연두색
+        } else if (bettingRatio >= 30) {
+            return '#00F0FF'; // 민트색
+        } else {
+            return '#0FCFA5'; // 검은색
+        }
+    }
     function submitReplyForm(parent_comment_id) {
         var use = "rcontent" + parent_comment_id;
         var rcontent = document.getElementById(use).value;
@@ -114,7 +172,7 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <h3 class="uk-text-lead">BATTLE</h3>
+                        <a th:href="@{/battle}"><h3 class="uk-text-lead">BATTLE</h3></a>
                     </div>
                 </div>
                 <div class="content">
@@ -132,8 +190,8 @@
                                             <div class="profile-user_info">
                                                 <div class="profile-user-level-icon"><i
                                                         class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                <div class="profile-user_level"><span>99</span></div>
-                                                <div class="profile-user_nick"><span>타락파워전사선조</span></div>
+                                                <div class="profile-user_level"><span th:text="${post.member.memLvl}">99</span></div>
+                                                <div class="profile-user_nick"><span th:text="${post.member.memNick}">타락파워전사선조</span></div>
                                             </div>
                                         </div>
                                     </a>
@@ -174,7 +232,7 @@
                                         <div class="writer"><span th:text="${post.member.memNick}">글쓴이</span></div>
                                         <div>
                                             <div class="date"><span
-                                                    th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}">등록일</span>
+                                                    th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}">등록일</span>
                                             </div>
                                             <div class="hit"><span th:text="${'추천 : '+post.postLikeCnt}">추천수</span>
                                             </div>
@@ -186,68 +244,243 @@
                                 <div class="battle-info">
                                     <div>
                                         <div>
-                                            <td>게임 : </td>
-                                            <td>BattleGround</td>
+                                            <div class="battle-info-key">게임 : </div>
+                                            <div class="battle-info-value" th:text="${bto.gameCd}">BattleGround</div>
                                         </div>
                                         <div>
-                                            <td>포인트 : </td>
-                                            <td>100,000</td>
+                                            <div class="battle-info-key">포인트 : </div>
+                                            <div class="battle-info-value" th:text="${#numbers.formatInteger(#numbers.formatInteger(bto.point,0),0,'COMMA')}">100,000</div>
                                         </div>
                                         <div>
-                                            <td>신청 기한 : </td>
-                                            <td>14:00 2024.01.14</td>
+                                            <div class="battle-info-key">신청 기한 : </div>
+                                            <div class="battle-info-value" th:text="${bto.deadlineDt}">14:00 2024.01.14</div>
                                         </div>
                                         <div>
-                                            <td>시작 시간 : </td>
-                                            <td>15:00 2024.01.14</td>
+                                            <div class="battle-info-key">시작 시간 : </div>
+                                            <div class="battle-info-value" th:text="${bto.startDt}">15:00 2024.01.14</div>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="post-text">
-                                    이 경우 공무원 자신의 책임은 면제되지 아니한다, 대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과 법률을 집행하기 위하여 필요한 사항에
-                                    관하여 대통령령을 발할 수 있다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에
-                                    관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다, 국가원로자문회의의 조직·직무범위 기타 필요한 사항은
-                                    법률로 정한다.
-                                    각급 선거관리위원회는 선거인명부의 작성등 선거사무와 국민투표사무에 관하여 관계 행정기관에 필요한 지시를 할 수 있다, 그 재의를 요구할 수 있다.
-                                    선거운동은 각급 선거관리위원회의 관리하에 법률이 정하는 범위안에서 하되. 다만.
-                                    국회는 상호원조 또는 안전보장에 관한 조약. 농업생산성의 제고와 농지의 합리적인 이용을 위하거나 불가피한 사정으로 발생하는 농지의 임대차와 위탁경영은
-                                    법률이 정하는 바에 의하여 인정된다. 국교는 인정되지 아니하며, 대통령은 제4항과 제5항의 규정에 의하여 확정된 법률을 지체없이 공포하여야 한다.
-                                    언론·출판·집회·결사의 자유. 행정각부의 설치·조직과 직무범위는 법률로 정한다. 국가의 세입·세출의 결산. 법률이 정하는 바에 의하여 연임할 수 있다.
-                                    제5항에 의하여 법률이 확정된 후 또는 제4항에 의한 확정법률이 정부에 이송된 후 5일 이내에 대통령이 공포하지 아니할 때에는 국회의장이 이를
-                                    공포한다. 법원은 최고법원인 대법원과 각급법원으로 조직된다. 모든 국민은 법률이 정하는 바에 의하여 납세의 의무를 진다. 국가는 균형있는 국민경제의
-                                    성장 및 안정과 적정한 소득의 분배를 유지하고.
-                                    주거에 대한 압수나 수색을 할 때에는 검사의 신청에 의하여 법관이 발부한 영장을 제시하여야 한다, 국정의 중요한 사항에 관한 대통령의 자문에 응하기
-                                    위하여 국가원로로 구성되는 국가원로자문회의를 둘 수 있다. 이 헌법시행 당시의 법령과 조약은 이 헌법에 위배되지 아니하는 한 그 효력을 지속한다,
-                                    대통령은 전시·사변 또는 이에 준하는 국가비상사태에 있어서 병력으로써 군사상의 필요에 응하거나 공공의 안녕질서를 유지할 필요가 있을 때에는 법률이
-                                    정하는 바에 의하여 계엄을 선포할 수 있다.
-                                    국가는 전통문화의 계승·발전과 민족문화의 창달에 노력하여야 한다, 국회의원은 그 지위를 남용하여 국가·공공단체 또는 기업체와의 계약이나 그 처분에
-                                    의하여 재산상의 권리·이익 또는 직위를 취득하거나 타인을 위하여 그 취득을 알선할 수 없다. 사영기업을 국유 또는 공유로 이전하거나 그 경영을 통제
-                                    또는 관리할 수 없다, 제1항의 지시를 받은 당해 행정기관은 이에 응하여야 한다.
-                                    국회는 회계연도 개시 30일전까지 이를 의결하여야 한다, 국회는 국무총리 또는 국무위원의 해임을 대통령에게 건의할 수 있다, 그 임기는 4년으로 하며.
-                                    국민경제의 발전을 위한 중요정책의 수립에 관하여 대통령의 자문에 응하기 위하여 국민경제자문회의를 둘 수 있다.
-                                    체포·구속·압수 또는 수색을 할 때에는 적법한 절차에 따라 검사의 신청에 의하여 법관이 발부한 영장을 제시하여야 한다. 국회의원이 회기전에 체포 또는
-                                    구금된 때에는 현행범인이 아닌 한 국회의 요구가 있으면 회기중 석방된다. 국가는 지역간의 균형있는 발전을 위하여 지역경제를 육성할 의무를 진다, 다만.
-                                    법률이 정하는 바에 의하여 최저임금제를 시행하여야 한다. 1차에 한하여 중임할 수 있다. 대통령에 대한 탄핵소추는 국회재적의원 과반수의 발의와
-                                    국회재적의원 3분의 2 이상의 찬성이 있어야 한다, 재판관은 대통령이 임명한다.
+                                <div class="post-text" th:text="${post.postContent}">
+                                    게시글 내용
+                                </div>
+                                <!-- 베팅 정보 -->
+                                <div class="betting-section">
+                                    <div class="battle-card --horizontal hot-battle">
+                                        <div class="battle-card__box">
+                                            <div class="battle-card-info" th:attr="btId = ${bto.btId}">
+                                                <div class="info-sub">
+                                                    <div class="info-state">
+                                                        <div th:if="${bto.state=='A'}" class="A">베팅 가능!</div>
+                                                        <div th:if="${bto.state=='P'}" class="P">진행중</div>
+                                                        <div th:if="${bto.state=='T'}" class="T">종료됨</div>
+                                                    </div>
+                                                </div>
+                                                <div class="info-center">
+                                                    <div class="info-center-left">
+                                                        <div class="info-center-header">
+                                                            <div class="info-point-header-list">
+                                                                <div class="info-point-amount">
+                                                                    <div class="icon_box">
+                                                                        <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                    </div>
+                                                                    <div class="host-total-point" th:utext="'<script>' +
+                                                                        'var value = ' + ${pto.hostTotalPoint} + ';' +
+                                                                        'var formattedValue = formatNumberTok(value);' +
+                                                                        'document.write(formattedValue);' +
+                                                                        '</script>'">
+                                                                        72.3</div>
+                                                                </div>
+                                                                <div class="info-point-pno">
+                                                                    <div class="icon_box">
+                                                                        <i class="fa-solid fa-user ico_fontawesome"></i>
+                                                                    </div>
+                                                                    <div class="host-total-mem-no"
+                                                                        th:text="${pto.hostTotalMemNo}">
+                                                                        0</div>
+                                                                </div>
+                                                                <div class="info-point-ratio">
+                                                                    <div class="icon_box">
+                                                                        <i class="fa-solid fa-gem ico_fontawesome"></i>
+                                                                    </div>
+                                                                    <div class="host-point-reward-ratio"
+                                                                        th:text="${'X '+pto.hostPointRewardRatio}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="info-point-percent host-point-ratio"
+                                                                th:text="${pto.hostPointRatio+'%'}">
+                                                                75%</div>
+                                                        </div>
+                                                        <div class="info-point-bar-box">
+                                                            <div class="info-point-bar"></div>
+                                                        </div>
+                                                    </div>
+            
+                                                    <div class="vs"><img src="../img/logo_white.png"></div>
+            
+                                                    <div class="info-center-right">
+                                                        <div class="info-center-header">
+                                                            <div class="info-point-percent client-point-ratio"
+                                                                th:text="${pto.clientPointRatio+'%'}">
+                                                                25%</div>
+                                                            <div class="info-point-header-list">
+                                                                <div class="info-point-amount">
+                                                                    <div class="client-total-point" th:utext="'<script>' +
+                                                                        'var value = ' + ${pto.clientTotalPoint} + ';' +
+                                                                        'var formattedValue = formatNumberTok(value);' +
+                                                                        'document.write(formattedValue);' +
+                                                                        '</script>'">
+                                                                        72.3</div>
+                                                                    <div class="icon_box">
+                                                                        <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="info-point-pno">
+                                                                    <div class="client-total-mem-no"
+                                                                        th:text="${pto.clientTotalMemNo}">
+                                                                        0</div>
+                                                                    <div class="icon_box">
+                                                                        <i class="fa-solid fa-user ico_fontawesome"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="info-point-ratio">
+                                                                    <div class="client-point-reward-ratio"
+                                                                        th:text="${pto.clientPointRewardRatio+' X'}">
+                                                                    </div>
+                                                                    <div class="icon_box">
+                                                                        <i class="fa-solid fa-gem ico_fontawesome"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="info-point-bar-box">
+                                                            <div class="info-point-bar"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+            
+            
+                                                <div class="betting-section">
+                                                    <div class="point-betting" th:id="'bettingId' + ${bto.btId}">
+                                                        <div th:if="${pto.flag==0}"
+                                                            class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">HOST
+                                                        </div>
+                                                        <div th:unless="${pto.flag==0}"
+                                                            class="point-betting-button" active="F"
+                                                            th:onclick="'betPoint(' + ${bto.btId} + ', 0)'">HOST</div>
+
+                                                        <div class="search">
+                                                            <div class="search__input">
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <battleStateCheck th:if="${bto.state=='A'}">
+                                                                    <logincheck th:if="${nickname}">
+                                                                        <input
+                                                                            th:unless="${pto.alreadyBet==1}"
+                                                                            class="point-betting-input" type="search" name="search"
+                                                                            placeholder="BETTING HERE">
+                                                                        <input
+                                                                            th:if="${pto.alreadyBet==1}"
+                                                                            class="point-betting-input" type="search" name="search"
+                                                                            placeholder="YOU ALREADY BET" readonly>
+                                                                    </logincheck>
+                                                                    <input th:unless="${nickname}" class="point-betting-input"
+                                                                        type="search" name="search" placeholder="LOGIN FIRST"
+                                                                        readonly>
+                                                                </battleStateCheck>
+                                                                <battleStateCheck th:if="${bto.state=='P'}">
+                                                                    <input class="point-betting-input" type="search" name="search"
+                                                                        placeholder="PROCEEDING" readonly>
+                                                                </battleStateCheck>
+                                                                <battleStateCheck th:if="${bto.state=='T'}">
+                                                                    <input class="point-betting-input" type="search" name="search"
+                                                                        placeholder="TERMINATED" readonly>
+                                                                </battleStateCheck>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:if="${pto.flag==1}"
+                                                            class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">CLIENT
+                                                        </div>
+                                                        <div th:unless="${pto.flag==1}"
+                                                            class="point-betting-button" active="F"
+                                                            th:onclick="'betPoint(' + ${bto.btId} + ', 1)'">CLIENT</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+            
+            
+                                            <div class="battle-profile-right">
+                                                
+                                                <div class="battle-profile-info">
+                                                    <div class="battle-profile-nickname">
+                                                        <div class="battle-profile-lvl" th:text="'Lv ' + ${bto.clientLvl}">Lv30
+                                                        </div>
+                                                        <div th:text="${bto.clientNick}"></div>
+                                                    </div>
+                                                    <div class="battle-profile-history">
+                                                        <div>
+                                                            <div class="battle-profile-win" th:text="${bto.clientWin}+' 승'">77 승
+                                                            </div>
+                                                            <div>&nbsp;/&nbsp;</div>
+                                                            <div class="battle-profile-lose" th:text="${bto.clientLose}+' 패'">25
+                                                                패</div>
+                                                        </div>
+                                                        <div
+                                                            th:with="total = ${(bto.clientWin + bto.clientLose)}, rate=${(bto.clientWin * 100.0 / total)}">
+                                                            <div th:if="${total > 0}" class="battle-profile-win-rate"
+                                                                th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
+                                                            <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="profile-main">
+                                                        <div class="profile-dividing-line"></div>
+                                                        <div class="profile-badge-section">
+                                                            <div class="badge-line">
+                                                                <span class="badge">&#127774;</span>
+                                                                <span class="badge">&#127775;</span>
+                                                                <span class="badge">&#127806;</span>
+                                                            </div>
+                                                            <div class="badge-line">
+                                                                <span class="badge">&#127851;</span>
+                                                                <span class="badge">&#127774;</span>
+                                                                <span class="badge">&#127775;</span>
+                                                            </div>
+                                                            <div class="badge-line">
+                                                                <span class="badge">&#127806;</span>
+                                                                <span class="badge">&#127851;</span>
+                                                                <span class="badge">&#127774;</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+            
+            
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="like-section">
                                     <div>
                                         <div class="like" th:onclick="">
-                                            <div class="no">23344</div>
+                                            <div class="no" th:text="${post.postLikeCnt}">23344</div>
                                             <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
                                         </div>
                                     </div>
                                     <div>
                                         <div class="dislike" th:onclick="">
-                                            <div class="no">234</div>
+                                            <div class="no" th:text="${post.postDislikeCnt}">234</div>
                                             <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
                                         </div>
                                     </div>
                                 </div> 
                                 <div class="comment-section">
                                     <div class="comment-section-header">
-                                        <div><span>댓글</span></div>
+                                        <div>
+                                            <span>댓글</span>
+                                            <span th:text="'['+${post.postCommentCnt}+']'"></span>
+                                        </div>
                                         <div>
                                             <div><span>등록순</span></div>
                                             <div><span>|</span></div>
@@ -275,11 +508,11 @@
                                             
                                             <div class="like-section">
                                                 <div class="like" th:onclick="">
-                                                    <div class="no">23344</div>
+                                                    <div class="no" th:text="${commentNode.comment.commentLikeCnt}">23344</div>
                                                     <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
                                                 </div>
                                                 <div class="dislike" th:onclick="">
-                                                    <div class="no">234</div>
+                                                    <div class="no" th:text="${commentNode.comment.commentDislikeCnt}">234</div>
                                                     <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
                                                 </div>
                                             </div>    
@@ -325,7 +558,7 @@
                                                 </form>
                                             </div>
                                             <!-- 대댓글 표시 -->
-                                            <div th:each="reply : ${commentNode.replies}">
+                                            <!-- <div th:each="reply : ${commentNode.replies}">
                                                 <div class="user-item__box">
                                                     <strong><span th:text="${reply.comment.member.memNick}"></span></strong>
                                                     (<span
@@ -338,13 +571,13 @@
                                                     <div class="coment_re_txt" th:text="${reply.comment.commentContent}">
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
     
-                                    <form action="comment_write_ok" method="post" name="cfrm">
+                                    <form th:action="@{/comment_write_ok}" method="post" name="cfrm">
                                         <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                        <input type="hidden" name="cpage" th:value="${cpage}" />
+                                        <input type="hidden" name="cpage" th:value="${0}" />
                                         <input type="hidden" name="post_id" th:value="${post.postId}" />
                                         <div class="comment-input-section">
                                             <div class="header">
@@ -380,15 +613,15 @@
                                     </div>
                                     <div class="widjet__body">
                                         <ul class="friend-requests-list">
-                                            <li class="friend-requests-item">
+                                            <li class="friend-requests-item" th:each="applicant : ${applicants}">
                                                 <div class="friend-request-item-main">
                                                     <div class="level_icon"><i
                                                             class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
                                                     <div class="level">
-                                                        <div>34</div>
+                                                        <div th:text="${applicant[4]}">34</div>
                                                     </div>
                                                     <div class="friend-requests-item__name">
-                                                        <div>타락파워전사후예</div>
+                                                        <div th:text="${applicant[3]}">타락파워전사후예</div>
                                                     </div>
                                                 </div>
                                                 <div class="friend-request-item-header">
@@ -403,145 +636,6 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li class="friend-requests-item">
-                                                <div class="friend-request-item-main">
-                                                    <div class="level_icon"><i
-                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                    <div class="level">
-                                                        <div>34</div>
-                                                    </div>
-                                                    <div class="friend-requests-item__name">
-                                                        <div>타락파워전사후예</div>
-                                                    </div>
-                                                </div>
-                                                <div class="friend-request-item-header">
-                                                    <div class="friend-requests-item__avatar"><img
-                                                            src="../img/user-list-5.png" alt="user">
-                                                    </div>
-                                                    <div class="friend-requests-item__action">
-                                                        <button class="fa-solid fa-check ico_fontawesome"
-                                                            type="button"></button>
-                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
-                                                            type="button"></button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="friend-requests-item">
-                                                <div class="friend-request-item-main">
-                                                    <div class="level_icon"><i
-                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                    <div class="level">
-                                                        <div>34</div>
-                                                    </div>
-                                                    <div class="friend-requests-item__name">
-                                                        <div>타락파워전사후예</div>
-                                                    </div>
-                                                </div>
-                                                <div class="friend-request-item-header">
-                                                    <div class="friend-requests-item__avatar"><img
-                                                            src="../img/user-list-5.png" alt="user">
-                                                    </div>
-                                                    <div class="friend-requests-item__action">
-                                                        <button class="fa-solid fa-check ico_fontawesome"
-                                                            type="button"></button>
-                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
-                                                            type="button"></button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="friend-requests-item">
-                                                <div class="friend-request-item-main">
-                                                    <div class="level_icon"><i
-                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                    <div class="level">
-                                                        <div>34</div>
-                                                    </div>
-                                                    <div class="friend-requests-item__name">
-                                                        <div>타락파워전사후예</div>
-                                                    </div>
-                                                </div>
-                                                <div class="friend-request-item-header">
-                                                    <div class="friend-requests-item__avatar"><img
-                                                            src="../img/user-list-5.png" alt="user">
-                                                    </div>
-                                                    <div class="friend-requests-item__action">
-                                                        <button class="fa-solid fa-check ico_fontawesome"
-                                                            type="button"></button>
-                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
-                                                            type="button"></button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="friend-requests-item">
-                                                <div class="friend-request-item-main">
-                                                    <div class="level_icon"><i
-                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                    <div class="level">
-                                                        <div>34</div>
-                                                    </div>
-                                                    <div class="friend-requests-item__name">
-                                                        <div>타락파워전사후예</div>
-                                                    </div>
-                                                </div>
-                                                <div class="friend-request-item-header">
-                                                    <div class="friend-requests-item__avatar"><img
-                                                            src="../img/user-list-5.png" alt="user">
-                                                    </div>
-                                                    <div class="friend-requests-item__action">
-                                                        <button class="fa-solid fa-check ico_fontawesome"
-                                                            type="button"></button>
-                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
-                                                            type="button"></button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="friend-requests-item">
-                                                <div class="friend-request-item-main">
-                                                    <div class="level_icon"><i
-                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                    <div class="level">
-                                                        <div>34</div>
-                                                    </div>
-                                                    <div class="friend-requests-item__name">
-                                                        <div>타락파워전사후예</div>
-                                                    </div>
-                                                </div>
-                                                <div class="friend-request-item-header">
-                                                    <div class="friend-requests-item__avatar"><img
-                                                            src="../img/user-list-5.png" alt="user">
-                                                    </div>
-                                                    <div class="friend-requests-item__action">
-                                                        <button class="fa-solid fa-check ico_fontawesome"
-                                                            type="button"></button>
-                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
-                                                            type="button"></button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="friend-requests-item">
-                                                <div class="friend-request-item-main">
-                                                    <div class="level_icon"><i
-                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                    <div class="level">
-                                                        <div>34</div>
-                                                    </div>
-                                                    <div class="friend-requests-item__name">
-                                                        <div>타락파워전사후예</div>
-                                                    </div>
-                                                </div>
-                                                <div class="friend-request-item-header">
-                                                    <div class="friend-requests-item__avatar"><img
-                                                            src="../img/user-list-5.png" alt="user">
-                                                    </div>
-                                                    <div class="friend-requests-item__action">
-                                                        <button class="fa-solid fa-check ico_fontawesome"
-                                                            type="button"></button>
-                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
-                                                            type="button"></button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            
                                         </ul>
                                     </div>
                                 </div>

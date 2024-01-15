@@ -235,7 +235,7 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <h3 class="uk-text-lead">BATTLE</h3>
+                        <a th:href="@{/battle}"><h3 class="uk-text-lead">BATTLE</h3></a>
                         <div>
                             <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleGame(this.value)">
                                 <option value="">10개</option>
@@ -328,7 +328,7 @@
 
 
                                 <div class="battle-card-info" th:attr="btId = ${battle.btId}">
-                                    <div class="info-title"><a th:href="@{'/battle/view?id='+${battle.postId}}"
+                                    <div class="info-title"><a th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
                                             th:text="${battle.title}"></a></div>
                                     <div class="info-sub">
                                         <div class="info-game">

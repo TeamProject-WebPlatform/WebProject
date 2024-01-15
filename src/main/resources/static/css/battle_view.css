@@ -529,3 +529,70 @@ body.dark-theme .friend-requests-item__action button.reject:hover {
     align-items: center;
     justify-content: center;
 }
+
+
+.post-section .betting-section{
+    height: auto;
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+}
+.dark-theme .betting-section{
+    background-color: #222222;
+}
+.battle-card{
+    width: 90%;
+}
+.battle-profile-right{
+    width: 40%;
+}
+.battle-card-info{
+    width: 60%;
+}
+.info-sub{
+    height: 30%;
+    display: flex;
+    justify-content: center;
+}
+.info-state{
+    width: 60%;
+}
+.info-state > div{
+    
+    width: 90%;
+    height: 50%;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.info-center{
+    height: 40%;
+}
+.info-point-header-list{
+    font-size: 14px;
+}
+.battle-card__box .point-betting{
+    width: 100%;
+}
+.battle-profile-info{
+    width: auto;
+}
+.battle-info > div{
+    width: 500px;
+}
+.battle-info > div > div{
+    display: flex;
+    
+}
+.battle-info-key{
+    width: 40%;
+    margin-left : 10%;
+    margin-top: 7px;
+    margin-bottom : 7px;
+}
+.battle-info-value{
+    margin-top: 7px;
+    margin-bottom : 7px;
+
+}
