@@ -34,4 +34,7 @@ public class Crawling {
 
     @Column(columnDefinition = "TEXT NOT NULL DEFAULT ''")
     private String CrawlingContent;
+
+    @Column(columnDefinition = "TEXT NOT NULL DEFAULT 'N'")
+    private String InterfaceYn;
 }
