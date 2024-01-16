@@ -1,5 +1,6 @@
 package platform.game.service.model.TO;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,13 +69,14 @@ public class BattleTO {
     int postId; // 해당 배틀게시글 id
     String state;
 
-    String deadlineDt;
-    String startDt;
+    Date deadlineDt;
+    Date startDt;
 
     String applicantsString;// 신청자들 memId,보류상태,신청시간/memId,보류상태
     String[][] applicants;
     public String[][] splitApplicants(String str){
         String[] s = str.split("/");
+        if(s.length==0) return null;
         String[][] res = new String[s.length][3];
         
         for(int i = 0;i<s.length;i++){

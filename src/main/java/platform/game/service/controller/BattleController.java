@@ -1,16 +1,20 @@
 package platform.game.service.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import platform.game.service.action.BattleCardAction;
@@ -20,6 +24,7 @@ import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
 import platform.game.service.model.TO.CommentTO;
+import platform.game.service.repository.BattleCustomRepositoryImpl;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
@@ -39,55 +44,10 @@ public class BattleController {
     CommentInfoRepository commentInfoRepository;
     @Autowired
     MemberInfoRepository memberInfoRepository;
-
-
-    @RequestMapping("/view")
-    public ModelAndView listView(@RequestParam("postId") int postId, @RequestParam("btId") int btId) {
-        ModelAndView mav = new ModelAndView("battle_view");
-        long id = 0;
-        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                    .getMember();
-            if (member != null) {
-                mav.addObject("nickname", member.getMemNick());
-                mav.addObject("currentPoint",member.getMemCurPoint());
-                id = member.getMemId();
-                mav.addObject("memId",id);
-            }
-        } 
-        Post post = new Post();
-        post = postInfoRepository.findByPostId(postId);
-        Object[] battleTOs = battleCardAction.getBattleTO(id, postId, btId);
-
-        BattleTO bto = (BattleTO)battleTOs[0];
-        BattlePointTO pto = (BattlePointTO)battleTOs[1];
-
-        ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
-        ArrayList<CommentTO> commentTree = buildCommentTree(comment);
-
-        String[][] tmp = bto.getApplicants();
-        String[][] applicants = new String[tmp.length][5];
-        for(int i =0;i<tmp.length;i++){
-            String[] s = tmp[i];
-            Member member = memberInfoRepository.findById(Long.parseLong(s[0])).isPresent() ? memberInfoRepository.findById(Long.parseLong(s[0])).get() : null;
-            applicants[i][0] = s[0]; // memId
-            applicants[i][1] = s[1]; // 보류 상태
-            applicants[i][2] = s[2]; // 신청 시간
-            applicants[i][3] = member.getMemNick(); // 닉네임
-            applicants[i][4] = String.valueOf(member.getMemLvl()); // 레벨
-        }
-        System.out.println(post.getBoardCd());
-        mav.addObject("bto",bto);
-        mav.addObject("pto",pto);
-        mav.addObject("post", post);
-        mav.addObject("applicants", applicants);
-        mav.addObject("comment", comment);
-        mav.addObject("board_cd", "00000");
-        mav.addObject("commentTree", commentTree);
-        mav.addObject("boardCd_name", "Battle");
-        mav.addObject("navBoard", "nav-battle");
-        return mav;
-    }
+    @Autowired
+    BattleCustomRepositoryImpl battleCustomRepositoryImpl;
+    
+    
 
     @RequestMapping("")
     public ModelAndView battle(){
@@ -113,6 +73,104 @@ public class BattleController {
 
         return mav;
     }
+
+    @RequestMapping("/view")
+    public ModelAndView listView(@RequestParam("postId") int postId, @RequestParam("btId") int btId) {
+        ModelAndView mav = new ModelAndView("battle_view");
+        long id = 0;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint",member.getMemCurPoint());
+                id = member.getMemId();
+                mav.addObject("memId",id);
+            }
+        } 
+        Post post = new Post();
+        post = postInfoRepository.findByPostId(postId);
+        Object[] battleTOs = battleCardAction.getBattleTO(id, postId, btId);
+
+        BattleTO bto = (BattleTO)battleTOs[0];
+        BattlePointTO pto = (BattlePointTO)battleTOs[1];
+
+        ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
+        ArrayList<CommentTO> commentTree = buildCommentTree(comment);
+
+        String[][] tmp = bto.getApplicants()!=null ? bto.getApplicants() : null;
+        if(tmp==null){
+            mav.addObject("applicants", "");
+        }else{
+            String[][] applicants = new String[tmp.length][5];
+            for(int i =0;i<tmp.length;i++){
+                String[] s = tmp[i];
+                Member member = memberInfoRepository.findById(Long.parseLong(s[0])).isPresent() ? memberInfoRepository.findById(Long.parseLong(s[0])).get() : null;
+                applicants[i][0] = s[0]; // memId
+                applicants[i][1] = s[1]; // 보류 상태
+                applicants[i][2] = s[2]; // 신청 시간
+                applicants[i][3] = member != null ? member.getMemNick() : null; // 닉네임
+                applicants[i][4] = member != null ? String.valueOf(member.getMemLvl()) : null; // 레벨
+            }
+            mav.addObject("applicants", applicants);
+        }
+        
+        mav.addObject("bto",bto);
+        mav.addObject("pto",pto);
+        mav.addObject("post", post);
+        mav.addObject("comment", comment);
+        mav.addObject("commentTree", commentTree);
+        return mav;
+    }
+    @RequestMapping("/comment")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public String writeComment(@RequestParam("postId") int postId,@RequestParam("btId") int btId,
+            @RequestParam("content") String content) {
+        Member member = null;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+        }else return "redirect:./battle/view?postId=" + postId + "&btId=" + btId;
+
+        battleCustomRepositoryImpl.insertComment(postId, content, member);
+
+        return "redirect:./view?postId=" + postId + "&btId=" + btId;
+    }
+    @RequestMapping("/recomment")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public String writeReplyComment(@RequestParam("postId") int postId,@RequestParam("btId") int btId,
+            @RequestParam("parent_comment_id") int commentId,
+            @RequestParam("content") String content) {
+        Member member = null;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+        }
+        battleCustomRepositoryImpl.insertComment(postId, content,commentId, member);
+
+
+        // 댓글이 등록된 후에 해당 게시물로 이동
+        return "redirect:./view?postId=" + postId + "&btId=" + btId;
+    }
+    @PostMapping("/delcomment")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String deleteComment(@RequestParam("commentId") int commentId){
+        int flag = battleCustomRepositoryImpl.deleteComment(commentId);
+        return String.valueOf(flag);
+    }
+    @PostMapping("/reqeust")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String reqeustBattle(@RequestParam("memId") long memId,
+                            @RequestParam("btId") int btId,
+                            @RequestParam("postId") int postId){
+        int flag = battleCustomRepositoryImpl.reqeustBattle(memId,btId,postId);      
+        return String.valueOf(flag);
+    }
+
+
+
 
 
     private ArrayList<CommentTO> buildCommentTree(ArrayList<Comment> comments) {
@@ -144,4 +202,6 @@ public class BattleController {
 
         return rootNodes;
     }
+
+
 }

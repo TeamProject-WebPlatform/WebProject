@@ -19,6 +19,7 @@
 
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
+    <script src="../js/battle.js"></script>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -26,127 +27,110 @@
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
 
 </head>
-<script type="text/javascript">
+<script th:inline="javascript">
     // 답글 입력 폼의 표시/숨김을 토글
     function toggleReplyForm(span) {
         const commentId = span.getAttribute("data-comment-id");
         const replyForm = document.querySelector(`.reply-form[data-comment-id="${commentId}"]`);
         replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
     }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        let logo_img_paths = [getContextPath()+"/img/logo_white.png", getContextPath()+"/img/logo_black.png"];
-        const vs = document.querySelectorAll('.vs img');
-        let isDark = getCookie('darkMode');
-        vs.forEach(function(x){
-                if (isDark === 'Y') {
-                    x.src = logo_img_paths[0];
-                }
-                else {
-                    x.src = logo_img_paths[1];
-                }
-            })
-        document.getElementById("toggle").addEventListener("click", function () {
-            isDark = getCookie('darkMode');
-            vs.forEach(function(x){
-                if (isDark === 'Y') {
-                    x.src = logo_img_paths[0];
-                }
-                else {
-                    x.src = logo_img_paths[1];
-                }
-            })
-        });
-        const active = document.getElementById("nav-battle");
-        active.classList.add("uk-active");
-        const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
-        const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
-
-        const pointLefts = document.querySelectorAll(".info-center-left .info-point-percent");
-        const pointRights = document.querySelectorAll(".info-center-right .info-point-percent");
-
-        for (let i = 0; i < pointBarLefts.length; i++) {
-            let pointBarLeft = pointBarLefts.item(i);
-            pointBarLeft.style.width = pointLefts[i].innerHTML;
-            pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
-            pointLefts[i].style.color = getColorRatio(Number(pointLefts[i].innerHTML.replace("%", "")));
-
-            let pointBarRight = pointBarRights.item(i);
-            pointBarRight.style.width = pointRights[i].innerHTML;
-            pointBarRight.style.backgroundColor = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
-            pointRights[i].style.color = getColorRatio(Number(pointRights[i].innerHTML.replace("%", "")));
-        }
-
-        // 댓글 작성 확인 함수 부분
-        document.getElementById('cbtn').addEventListener('click', function () {
-            document.getElementsByName("ccontent").value;
-            document.getElementsByName("postId").value;
-            document.cfrm.submit();
-        });
-        // 댓글 삭제 확인
-        const deleteButtons = document.getElementsByClassName("delete-comment");
-        Array.from(deleteButtons).forEach(button => {
-            button.addEventListener('click', function () {
-                const commentId = button.getAttribute("data-comment-id");
-                console.log('클릭');
-
-                const form = document.getElementById('dcfrm');
-                const commentIdInput = document.createElement('input');
-                commentIdInput.type = 'hidden';
-                commentIdInput.name = 'comment_id';
-                commentIdInput.value = commentId;
-                form.appendChild(commentIdInput);
-                document.getElementsByName("rcontent").value;
-                // form을 submit
-                form.submit();
+    async function deleteComment(commentId){
+        try {
+            const response = await fetch(`/battle/delcomment?commentId=${commentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                })
             });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            switch (flag) {
+                case 0:
+                case -1:
+                    alert('댓글 삭제 에러');
+                    break;
+                case 1:
+                    const comment = document.getElementById(commentId);
+                    const commentText = comment.querySelector(".comment-text");
+                    commentText.innerHTML = "삭제된 댓글 입니다.";
+                    commentText.style.opacity=0.5;
+                    break;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+    async function thumbsup(type,id,like){
+        try {
+            const response = await fetch(`/battle/like?type=${type}&id=${id}&like=${like}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                })
+            });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            switch (flag) {
+                // flag로 현재의 추천 비추를 int[2]로 받아와서 업데이트, flag==-1이면 에러.
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("request_btn").addEventListener("click", function () {
+            // 신청 기능
+            let memId = /*[[${memId}]]*/0;
+            let btId = /*[[${bto.btId}]]*/0;
+            let postId = /*[[${post.postId}]]*/0;
+            if (!memId) {
+                window.location.href = "/login";
+            }
+            requestBattle(memId, btId, postId);
         });
     });
-</script>
-<script>
-    function formatNumberTok(value) {
-        var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
-        return formattedValue;
-    }
-    function getColorRatio(bettingRatio) {
-        if (bettingRatio >= 90) {
-            return '#FF0000'; // 빨간색
-        } else if (bettingRatio >= 70) {
-            return '#FFA500'; // 주황색
-        } else if (bettingRatio >= 50) {
-            return '#00FF00'; // 연두색
-        } else if (bettingRatio >= 30) {
-            return '#00F0FF'; // 민트색
-        } else {
-            return '#0FCFA5'; // 검은색
+    async function requestBattle(memId, btId, postId) {
+        try {
+            const response = await fetch(`/battle/reqeust?memId=${memId}&btId=${btId}&postId=${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                })
+            });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            switch (flag) {
+                case 0:
+                    break;
+                case -1:
+                    alert("마감 기한이 종료되었습니다.");
+                    break;
+                case -2:
+                    alert("이미 신청한 배틀입니다.");
+                    break;
+                case 1:
+                    alert("신청 되었습니다.");
+                    location.reload(true);
+                    break;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
         }
     }
-    function submitReplyForm(parent_comment_id) {
-        var use = "rcontent" + parent_comment_id;
-        var rcontent = document.getElementById(use).value;
-        var boardCd = /*[[${ post.boardCd }]]*/'00000';
-        var postId = /*[[${ post.postId }]]*/27;
-        var cpage = /*[[${ cpage }]]*/1;
-        var parent_comment_id = parent_comment_id;
-
-        console.log("rcontent : " + rcontent);
-        console.log("boardCd : " + boardCd);
-        console.log("postId : " + postId);
-        console.log("cpage : " + cpage);
-        console.log("parent_comment_id : " + parent_comment_id);
-
-        var replyHref = `reply_comment_write_ok?board_cd=${boardCd}&post_id=${postId}&cpage=${cpage}&rcontent=${rcontent}&parent_comment_id=${parent_comment_id}`;
-        console.log(replyHref);
-        window.location.href = replyHref;
-    }
 </script>
 
-<!--로그인 알람-->
-<script>
-    function checkLoginAndNavigate() {
-        alert('로그인이 필요합니다.');
-    }
-</script>
 
 <body class="page-home dark-theme">
 
@@ -172,7 +156,9 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <a th:href="@{/battle}"><h3 class="uk-text-lead">BATTLE</h3></a>
+                        <a th:href="@{/battle}">
+                            <h3 class="uk-text-lead">BATTLE</h3>
+                        </a>
                     </div>
                 </div>
                 <div class="content">
@@ -190,8 +176,10 @@
                                             <div class="profile-user_info">
                                                 <div class="profile-user-level-icon"><i
                                                         class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                <div class="profile-user_level"><span th:text="${post.member.memLvl}">99</span></div>
-                                                <div class="profile-user_nick"><span th:text="${post.member.memNick}">타락파워전사선조</span></div>
+                                                <div class="profile-user_level"><span
+                                                        th:text="${post.member.memLvl}">99</span></div>
+                                                <div class="profile-user_nick"><span
+                                                        th:text="${post.member.memNick}">타락파워전사선조</span></div>
                                             </div>
                                         </div>
                                     </a>
@@ -249,15 +237,19 @@
                                         </div>
                                         <div>
                                             <div class="battle-info-key">포인트 : </div>
-                                            <div class="battle-info-value" th:text="${#numbers.formatInteger(#numbers.formatInteger(bto.point,0),0,'COMMA')}">100,000</div>
+                                            <div class="battle-info-value"
+                                                th:text="${#numbers.formatInteger(#numbers.formatInteger(bto.point,0),0,'COMMA')}">
+                                                100,000</div>
                                         </div>
                                         <div>
                                             <div class="battle-info-key">신청 기한 : </div>
-                                            <div class="battle-info-value" th:text="${bto.deadlineDt}">14:00 2024.01.14</div>
+                                            <div class="battle-info-value" th:text="${bto.deadlineDt}">14:00 2024.01.14
+                                            </div>
                                         </div>
                                         <div>
                                             <div class="battle-info-key">시작 시간 : </div>
-                                            <div class="battle-info-value" th:text="${bto.startDt}">15:00 2024.01.14</div>
+                                            <div class="battle-info-value" th:text="${bto.startDt}">15:00 2024.01.14
+                                            </div>
                                         </div>
                                     </div>
 
@@ -283,7 +275,8 @@
                                                             <div class="info-point-header-list">
                                                                 <div class="info-point-amount">
                                                                     <div class="icon_box">
-                                                                        <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                        <i
+                                                                            class="fa-solid fa-coins ico_fontawesome"></i>
                                                                     </div>
                                                                     <div class="host-total-point" th:utext="'<script>' +
                                                                         'var value = ' + ${pto.hostTotalPoint} + ';' +
@@ -317,9 +310,9 @@
                                                             <div class="info-point-bar"></div>
                                                         </div>
                                                     </div>
-            
+
                                                     <div class="vs"><img src="../img/logo_white.png"></div>
-            
+
                                                     <div class="info-center-right">
                                                         <div class="info-center-header">
                                                             <div class="info-point-percent client-point-ratio"
@@ -334,7 +327,8 @@
                                                                         '</script>'">
                                                                         72.3</div>
                                                                     <div class="icon_box">
-                                                                        <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                        <i
+                                                                            class="fa-solid fa-coins ico_fontawesome"></i>
                                                                     </div>
                                                                 </div>
                                                                 <div class="info-point-pno">
@@ -360,78 +354,85 @@
                                                         </div>
                                                     </div>
                                                 </div>
-            
-            
+
+
                                                 <div class="betting-section">
                                                     <div class="point-betting" th:id="'bettingId' + ${bto.btId}">
-                                                        <div th:if="${pto.flag==0}"
-                                                            class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">HOST
+                                                        <div th:if="${pto.flag==0}" class="point-betting-button"
+                                                            style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">
+                                                            HOST
                                                         </div>
-                                                        <div th:unless="${pto.flag==0}"
-                                                            class="point-betting-button" active="F"
-                                                            th:onclick="'betPoint(' + ${bto.btId} + ', 0)'">HOST</div>
+                                                        <div th:unless="${pto.flag==0}" class="point-betting-button"
+                                                            active="F" th:onclick="'betPoint(' + ${bto.btId} + ', 0)'">
+                                                            HOST</div>
 
                                                         <div class="search">
                                                             <div class="search__input">
                                                                 <i class="fa-solid fa-coins ico_fontawesome"></i>
                                                                 <battleStateCheck th:if="${bto.state=='A'}">
                                                                     <logincheck th:if="${nickname}">
-                                                                        <input
-                                                                            th:unless="${pto.alreadyBet==1}"
-                                                                            class="point-betting-input" type="search" name="search"
-                                                                            placeholder="BETTING HERE">
-                                                                        <input
-                                                                            th:if="${pto.alreadyBet==1}"
-                                                                            class="point-betting-input" type="search" name="search"
-                                                                            placeholder="YOU ALREADY BET" readonly>
+                                                                        <input th:unless="${pto.alreadyBet==1}"
+                                                                            class="point-betting-input" type="search"
+                                                                            name="search" placeholder="BETTING HERE">
+                                                                        <input th:if="${pto.alreadyBet==1}"
+                                                                            class="point-betting-input" type="search"
+                                                                            name="search" placeholder="YOU ALREADY BET"
+                                                                            readonly>
                                                                     </logincheck>
-                                                                    <input th:unless="${nickname}" class="point-betting-input"
-                                                                        type="search" name="search" placeholder="LOGIN FIRST"
+                                                                    <input th:unless="${nickname}"
+                                                                        class="point-betting-input" type="search"
+                                                                        name="search" placeholder="LOGIN FIRST"
                                                                         readonly>
                                                                 </battleStateCheck>
                                                                 <battleStateCheck th:if="${bto.state=='P'}">
-                                                                    <input class="point-betting-input" type="search" name="search"
-                                                                        placeholder="PROCEEDING" readonly>
+                                                                    <input class="point-betting-input" type="search"
+                                                                        name="search" placeholder="PROCEEDING" readonly>
                                                                 </battleStateCheck>
                                                                 <battleStateCheck th:if="${bto.state=='T'}">
-                                                                    <input class="point-betting-input" type="search" name="search"
-                                                                        placeholder="TERMINATED" readonly>
+                                                                    <input class="point-betting-input" type="search"
+                                                                        name="search" placeholder="TERMINATED" readonly>
                                                                 </battleStateCheck>
                                                             </div>
                                                         </div>
 
-                                                        <div th:if="${pto.flag==1}"
-                                                            class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">CLIENT
+                                                        <div th:if="${pto.flag==1}" class="point-betting-button"
+                                                            style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">
+                                                            CLIENT
                                                         </div>
-                                                        <div th:unless="${pto.flag==1}"
-                                                            class="point-betting-button" active="F"
-                                                            th:onclick="'betPoint(' + ${bto.btId} + ', 1)'">CLIENT</div>
+                                                        <div th:unless="${pto.flag==1}" class="point-betting-button"
+                                                            active="F" th:onclick="'betPoint(' + ${bto.btId} + ', 1)'">
+                                                            CLIENT</div>
                                                     </div>
                                                 </div>
                                             </div>
-            
-            
+
+
                                             <div class="battle-profile-right">
-                                                
+
                                                 <div class="battle-profile-info">
                                                     <div class="battle-profile-nickname">
-                                                        <div class="battle-profile-lvl" th:text="'Lv ' + ${bto.clientLvl}">Lv30
+                                                        <div class="battle-profile-lvl"
+                                                            th:text="'Lv ' + ${bto.clientLvl}">Lv30
                                                         </div>
                                                         <div th:text="${bto.clientNick}"></div>
                                                     </div>
                                                     <div class="battle-profile-history">
                                                         <div>
-                                                            <div class="battle-profile-win" th:text="${bto.clientWin}+' 승'">77 승
+                                                            <div class="battle-profile-win"
+                                                                th:text="${bto.clientWin}+' 승'">77 승
                                                             </div>
                                                             <div>&nbsp;/&nbsp;</div>
-                                                            <div class="battle-profile-lose" th:text="${bto.clientLose}+' 패'">25
+                                                            <div class="battle-profile-lose"
+                                                                th:text="${bto.clientLose}+' 패'">25
                                                                 패</div>
                                                         </div>
                                                         <div
                                                             th:with="total = ${(bto.clientWin + bto.clientLose)}, rate=${(bto.clientWin * 100.0 / total)}">
                                                             <div th:if="${total > 0}" class="battle-profile-win-rate"
-                                                                th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
-                                                            <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
+                                                                th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">
+                                                                75.4%</div>
+                                                            <div th:if="${total == 0}" class="battle-profile-win-rate">
+                                                                0%</div>
                                                         </div>
                                                     </div>
                                                     <div class="profile-main">
@@ -455,8 +456,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-            
-            
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -474,7 +475,7 @@
                                             <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="comment-section">
                                     <div class="comment-section-header">
                                         <div>
@@ -487,39 +488,44 @@
                                             <div><span>최신순</span></div>
                                         </div>
                                     </div>
-    
-                                    <div class="comment-section-main" th:each="commentNode : ${commentTree}">
+
+                                    <div class="comment-section-main" th:each="commentNode : ${commentTree}" th:id="${commentNode.comment.commentId}">
                                         <!-- 댓글 내용 출력 -->
                                         <!-- 커멘트 헤더 -->
                                         <div class="comment-header">
                                             <div class="comment-user-info">
                                                 <span th:text="${commentNode.comment.member.memNick}">댓글닉네임</span>
                                                 <span
-                                                    th:text="${'('+#dates.format(commentNode.comment.updatedAt, 'yyyy-MM-dd hh:mm')+')'}">댓글 날짜</span>
+                                                    th:text="${'('+#dates.format(commentNode.comment.createdAt, 'yyyy-MM-dd hh:mm')+')'}">댓글
+                                                    날짜</span>
                                                 <!-- 댓글 삭제 버튼 -->
                                                 <div th:if="${commentNode.comment.member.memNick==nickname}">
                                                     <span class="delete-comment"
                                                         th:attr="data-comment-id=${commentNode.comment.commentId}"
-                                                        style="cursor: pointer; color: red;"> 
-                                                        <i class="fa-solid fa-xmark ico_fontawesome"></i> 
+                                                        style="cursor: pointer; color: red;"
+                                                        th:onclick="deleteComment(this.getAttribute('data-comment-id'))">
+                                                        <i class="fa-solid fa-xmark ico_fontawesome"></i>
                                                     </span>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="like-section">
-                                                <div class="like" th:onclick="">
-                                                    <div class="no" th:text="${commentNode.comment.commentLikeCnt}">23344</div>
+                                                <div class="like" th:onclick="thumbsup(commentNode.comment.commentId,1)">
+                                                    <div class="no" th:text="${commentNode.comment.commentLikeCnt}">
+                                                        23344</div>
                                                     <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
                                                 </div>
-                                                <div class="dislike" th:onclick="">
-                                                    <div class="no" th:text="${commentNode.comment.commentDislikeCnt}">234</div>
+                                                <div class="dislike" th:onclick="thumbsup(commentNode.comment.commentId,-1)">
+                                                    <div class="no" th:text="${commentNode.comment.commentDislikeCnt}">
+                                                        234</div>
                                                     <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
                                                 </div>
-                                            </div>    
+                                            </div>
                                         </div>
                                         <!-- 커멘트 내용 -->
                                         <div class="comment-main">
-                                            <div class="comment-text" th:text="${commentNode.comment.commentContent}"></div>
+                                            <div th:if="${commentNode.comment.deletedAt}" class="comment-text" th:text="${commentNode.comment.commentContent}" style="opacity:0.5;"></div>
+                                            <div th:unless="${commentNode.comment.deletedAt}" class="comment-text" th:text="${commentNode.comment.commentContent}"></div>
                                         </div>
                                         <div class="line"></div>
                                         <div class="comment-footer">
@@ -531,73 +537,85 @@
                                             <!-- 대댓글 쓰기 -->
                                             <div class="reply-form" style="display: none;"
                                                 th:attr="data-comment-id=${commentNode.comment.commentId}">
-                                                <form action="reply_comment_write_ok" method="post" name="rfrm" id="rfrm">
-                                                    <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                                    <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                                    <input type="hidden" name="cpage" th:value="${cpage}" />
-                                                    <input type="hidden" id="parent_comment_id" name="parent_comment_id"
+                                                <form th:action="@{/battle/recomment}" method="post" name="rfrm">
+                                                    <input type="hidden" name="postId" th:value="${post.postId}" />
+                                                    <input type="hidden" name="btId" th:value="${bto.btId}" />
+                                                    <input type="hidden" name="parent_comment_id"
                                                         th:value="${commentNode.comment.commentId}" />
                                                     <div class="comment-input">
                                                         <textarea th:id="'rcontent' + ${commentNode.comment.commentId}"
-                                                            name="ccontent" cols="" rows="" class="comment_input_text"
+                                                            name="content" class="comment_input_text"
                                                             placeholder="댓글 내용을 입력하세요"></textarea>
                                                         <div class="button-section">
-                                                            <a th:if="${nickname}">
-                                                                <!-- 로그인 상태인 경우의 댓글 작성 -->
-                                                                <input id="rbtn" type="button" value="등록"
-                                                                    class="btn_re btn_txt01"
-                                                                    th:onclick="'submitReplyForm(' + ${commentNode.comment.commentId} + ' )'" />
-                                                            </a>
-                                                            <a th:unless="${nickname}" href="/login">
-                                                                <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
-                                                                <input type="button" value="등록" class="btn_re btn_txt01"
-                                                                    style="cursor: pointer;" />
-                                                            </a>
+                                                            <input type="submit" value="등록" class="btn_re btn_txt01" />
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
+
                                             <!-- 대댓글 표시 -->
-                                            <!-- <div th:each="reply : ${commentNode.replies}">
-                                                <div class="user-item__box">
-                                                    <strong><span th:text="${reply.comment.member.memNick}"></span></strong>
-                                                    (<span
-                                                        th:text="${#dates.format(reply.comment.updatedAt, 'yyyy-MM-dd hh:mm')}"></span>)
-                                                    <a th:if="${writePost}">
-                                                        <span class="delete-comment"
-                                                            th:attr="data-comment-id=${reply.comment.commentId}"
-                                                            style="cursor: pointer; color: red;"> <i class="fa-solid fa-xmark ico_fontawesome"></i> </span>
-                                                    </a><br />
-                                                    <div class="coment_re_txt" th:text="${reply.comment.commentContent}">
+                                            <div th:each="reply : ${commentNode.replies}" class="reply" th:id="${reply.comment.commentId}">
+                                                <i class="fa-solid fa-reply fa-rotate-180 ico_fontawesome"></i>
+                                                <div>
+                                                    <div class="line"></div>
+                                                    <div class="comment-header">
+                                                        <div class="comment-user-info">
+                                                            <span th:text="${reply.comment.member.memNick}">댓글닉네임</span>
+                                                            <span
+                                                                th:text="${#dates.format(reply.comment.createdAt, 'yyyy-MM-dd hh:mm')}">댓글
+                                                                날짜</span>
+                                                            <!-- 댓글 삭제 버튼 -->
+                                                            <div th:if="${reply.comment.member.memNick==nickname}">
+                                                                <span class="delete-comment"
+                                                                    th:attr="data-comment-id=${reply.comment.commentId}"
+                                                                    style="cursor: pointer; color: red;"
+                                                                    th:onclick="deleteComment(this.getAttribute('data-comment-id'))">
+                                                                    <i class="fa-solid fa-xmark ico_fontawesome"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="like-section">
+                                                            <div class="like" th:onclick="thumbsup(commentNode.comment.commentId,1)">
+                                                                <div class="no"
+                                                                    th:text="${commentNode.comment.commentLikeCnt}">
+                                                                    23344</div>
+                                                                <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
+                                                            </div>
+                                                            <div class="dislike" th:onclick="thumbsup(commentNode.comment.commentId,-1)">
+                                                                <div class="no"
+                                                                    th:text="${commentNode.comment.commentDislikeCnt}">
+                                                                    234</div>
+                                                                <i
+                                                                    class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    <!-- 커멘트 내용 -->
+                                                    <div class="comment-main" >
+                                                        <div th:if="${reply.comment.deletedAt}" class="comment-text" th:text="${reply.comment.commentContent}" style="opacity:0.5;"></div>
+                                                        <div th:unless="${reply.comment.deletedAt}" class="comment-text" th:text="${reply.comment.commentContent}"></div>
+                                                    </div>
+
                                                 </div>
-                                            </div> -->
+                                            </div>
                                         </div>
                                     </div>
-    
-                                    <form th:action="@{/comment_write_ok}" method="post" name="cfrm">
-                                        <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                        <input type="hidden" name="cpage" th:value="${0}" />
-                                        <input type="hidden" name="post_id" th:value="${post.postId}" />
+
+                                    <form th:action="@{/battle/comment}" method="post" name="cfrm">
+                                        <input type="hidden" name="btId" th:value="${bto.btId}" />
+                                        <input type="hidden" name="postId" th:value="${post.postId}" />
                                         <div class="comment-input-section">
                                             <div class="header">
                                                 <div th:if="${nickname}" th:text="${nickname}"></div>
                                                 <div th:unless="${nickname}">USER</div>
                                             </div>
                                             <div class="main comment-input">
-                                                <textarea name="ccontent" cols="" rows="" class="comment_input_text"
+                                                <textarea name="content" class="comment_input_text"
                                                     placeholder="댓글 내용을 입력하세요"></textarea>
                                                 <div class="button-section">
-                                                    <a th:if="${nickname}">
-                                                        <!-- 로그인 상태인 경우의 댓글 작성 -->
-                                                        <input type="button" id="cbtn" value="등록"
-                                                            class="btn_re btn_txt01" />
-                                                    </a>
-                                                    <a th:unless="${nickname}" href="/login">
-                                                        <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
-                                                        <input type="button" value="등록" class="btn_re btn_txt01"
-                                                            style="cursor: pointer;" />
-                                                    </a>
+                                                    <input type="submit" id="cbtn" value="등록"
+                                                        class="btn_re btn_txt01" />
                                                 </div>
                                             </div>
                                         </div>
@@ -639,7 +657,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="request_btn">신&nbsp;청</div>
+                                <div class="request_btn" id="request_btn">신&nbsp;청</div>
                             </div>
                         </div>
                     </div>
@@ -663,7 +681,7 @@
                                 </a>
                                 <a th:unless="${nickname}" href="/login">
                                     <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                    <input type="button" value="쓰기" class="btn_re" onclick="checkLoginAndNavigate()">
+                                    <input type="button" value="쓰기" class="btn_re">
                                 </a>
                             </div>
 

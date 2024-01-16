@@ -6,6 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,11 +29,7 @@ public class Ranking {
     @Column(name = "rank_code")
     private String rankCode;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rank_code", referencedColumnName = "rank_code")
-    private MemberRanking memberRanking;
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memId", referencedColumnName = "memId")
     private Member member;
 

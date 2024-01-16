@@ -460,9 +460,9 @@ body.dark-theme .friend-requests-item__action button.reject:hover {
     color:white;
     background-color: #222222;
 }
-.content-comment .button-section{
+.comment-section .button-section{
     height : 100%;
-    width: 20%;
+    width: 15%;
 }
 .btn_re{
     height: 100%;
@@ -595,4 +595,18 @@ body.dark-theme .friend-requests-item__action button.reject:hover {
     margin-top: 7px;
     margin-bottom : 7px;
 
+}
+
+.reply{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+.reply > .ico_fontawesome{
+    margin-top :30px;
+    margin-right:2.5%;
+    width: 5%;
+}
+.reply > div{
+    width: 100%;
 }
