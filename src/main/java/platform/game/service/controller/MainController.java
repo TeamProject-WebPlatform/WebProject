@@ -3,6 +3,7 @@ package platform.game.service.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +25,7 @@ import jakarta.transaction.Transactional;
 import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.Post;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
@@ -32,6 +35,8 @@ import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommentInfoRepository;
+import platform.game.service.repository.MemberFavoriteGameRepository;
+import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -45,6 +50,12 @@ public class MainController {
 
     @Autowired
     RankDAO rankDAO;
+
+    @Autowired
+    MemberFavoriteGameRepository memberFavoriteGameRepository;
+
+    @Autowired
+    MemberProfileRepository memberProfileRepository;
 
     private List<RollingRankTO> rollingRankList;
 
@@ -96,7 +107,42 @@ public class MainController {
     @PostMapping("/roll") // 메인화면 Rolling RandomList
     @ResponseBody
     public List<RollingRankTO> roll() {
-        List<RollingRankTO> list = rollingRankList;
+        List<RollingRankTO> list = new ArrayList<RollingRankTO>();
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                if (!memberFavoriteGameRepository.existsByMemId(member.getMemId())) {
+                    list = rollingRankList;
+                } else {
+                    List<RollingRankTO> first = sqlMapperInter.getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 1));
+                    List<RollingRankTO> second = sqlMapperInter.getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 2));
+                    List<RollingRankTO> third = sqlMapperInter.getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 3));
+                    List<RollingRankTO> other = sqlMapperInter.getOtherRol("0");
+                    for(int i=0; i<first.size(); i++) list.add(first.get(i));
+                    for(int i=0; i<second.size(); i++) list.add(second.get(i));
+                    for(int i=0; i<third.size(); i++) list.add(third.get(i));
+                    for(int i=0; i<other.size(); i++) list.add(third.get(i));
+                }
+            } 
+            else {
+                list = rollingRankList;
+            }
+        } else {
+            list = rollingRankList;
+        }
+        return list;
+    }
+
+    @PostMapping("/userprofile")
+    @ResponseBody
+    public List<MemberProfile> userProfile(@RequestBody List<RollingRankTO> memId) {
+        List<MemberProfile> list = new ArrayList<MemberProfile>();
+        for(int i=0;i<16;i++){
+            long mem_id = memId.get(i).getMem_id();
+            MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(mem_id);
+            list.add(memberProfile);
+        }
         return list;
     }
 

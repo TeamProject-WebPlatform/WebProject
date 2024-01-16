@@ -23,6 +23,28 @@ const SwiperData = async function () {
     }
     return datalist;
 }
+
+const UserProfileData = async function (memId) {
+    let datalist = [];
+    try {
+        const response = await fetch("/userprofile", {
+            method: "POST",
+            headers : {
+                'Content-Type': 'application/json'
+            },
+            body:memId
+        });
+        const data = await response.json();
+        for (let i = 0; i < data.length; i++) {
+            datalist.push(data[i]);
+        }
+    } catch (error) {
+        console.log("에러", error);
+        throw error;  // 에러를 다시 던져서 호출하는 쪽에서 처리할 수 있도록 함
+    }
+    return datalist;
+}
+
 const setSwiper = function () {
     const profileSlider = new Swiper('.js-recommend .swiper', {
         slidesPerView: profileSlidesPerView,
@@ -53,6 +75,7 @@ const setSwiper = function () {
 {/* <div class="recommend-slide row user"> */ }
 const setSwiperWrapper = async function () {
     let datalist = await SwiperData();
+    let userprofile = await UserProfileData(JSON.stringify(datalist));
     let slideNum = datalist.length
     let html = "";
     for (let i = 0; i < slideNum; i++) {
@@ -79,12 +102,14 @@ const setSwiperWrapper = async function () {
     // Swiper 초기화 및 업데이트
     setSwiper(profileSlidesPerView);
 }
-const createSwiperProfile = function (nickname, level) {
+const createSwiperProfile = function (level, nickname, introduce, header, card, repbadge) {
     let memNickname = nickname;
     let memImageName = "doyun_icon.png";
     let memLevel = level;
-    let memSymbolImageName = "starbucks.png";
-    let memIntroduction = "안녕하세요";
+    let memHeader = header;
+    let memCard = card;
+    let memSymbolImageName = repbadge + ".png";
+    let memIntroduction = introduce;
     let membProfileHTML = `
         <div class="profile-card">
             <a href="/mypage/${memNickname}">
