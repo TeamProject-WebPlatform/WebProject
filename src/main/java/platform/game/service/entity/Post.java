@@ -1,6 +1,10 @@
 package platform.game.service.entity;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -14,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import platform.game.service.service.MemberInfoDetails;
 
 @Entity
 @Data
@@ -42,27 +47,38 @@ public class Post {
     private String postTags;
     private String boardCd;
 
+    
+    // 변경: 특정 사용자가 작성한 글의 개수 조회 (인스턴스 메서드로 변경)
 
-
-    // 추가: 특정 사용자가 작성한 글의 개수 조회
-    public static int getPostCountByMember(Member member, ArrayList<Post> posts) {
+    public Member getMember() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof MemberInfoDetails) {
+            return ((MemberInfoDetails) authentication.getPrincipal()).getMember();
+        }
+        return null; // 혹은 예외 처리 등을 추가할 수 있습니다.
+    }
+    
+    public int getPostCountByMember(List<Post> posts) {
         int count = 0;
-        for (Post post : posts) {
-            if (post.getMember().equals(member)) {
+        for (Post p : posts) {
+            if (p.getMember() != null && p.getMember().getMemId() == this.member.getMemId()) {
                 count++;
             }
         }
+        System.out.println("사용자 " + this.member.getMemId() + "의 글 개수: " + count);
+        System.out.println("현재 게시글 작성자: " + this.member.getMemId());
+        System.out.println("현재 글의 boardCd: " + this.boardCd);
         return count;
     }
 
-    // 추가: 특정 사용자가 작성한 글 목록 조회
-    public static ArrayList<Post> getPostsByMember(Member member, ArrayList<Post> posts) {
-        ArrayList<Post> userPosts = new ArrayList<>();
-        for (Post post : posts) {
-            if (post.getMember().equals(member)) {
-                userPosts.add(post);
-            }
-        }
-        return userPosts;
+    // 변경: 첫 번째 글 작성 여부 확인 (인스턴스 메서드로 변경)
+    public boolean isFirstPost(List<Post> posts) {
+        return getPostCountByMember(posts) == 1;
+    }
+
+    // 변경: 5개 단위로 작성 여부 확인 (인스턴스 메서드로 변경)
+    public boolean isMultipleOfFivePosts(List<Post> posts) {
+        int postCount = getPostCountByMember(posts);
+        return postCount > 0 && (postCount % 5 == 0);
     }
 }

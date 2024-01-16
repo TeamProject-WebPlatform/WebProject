@@ -56,6 +56,8 @@
     }
 </script>
 
+
+
 <body class="page-home dark-theme">
 
     <input id="toggle" type="checkbox">
@@ -221,6 +223,12 @@
                         </div>
                     </div>
                 </div>
+                <script th:if="${message}">
+                    alert("[[${message}]]");
+                    // 추가적인 동작 수행
+                    // 예: 페이지 리로딩
+                    location.reload();
+                </script>
             </main>
         </div>
     </div>
@@ -285,6 +293,7 @@
             </div>
         </div>
     </div> -->
+    <!-- 글써질떄마다 메세지 -->
 </body>
 
 </html>

@@ -1,12 +1,14 @@
 package platform.game.service.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.SigninHistory;
 import platform.game.service.repository.SigninHistoryRepository;
-
-import java.util.List;
 
 @Service
 public class SigninHistoryService {
@@ -14,11 +16,22 @@ public class SigninHistoryService {
     @Autowired
     private SigninHistoryRepository signinHistoryRepository;
 
+    @Transactional
     public boolean isFirstLogin(Member member) {
-        // 특정 사용자의 로그인 기록을 시간 내림차순으로 조회
-        List<SigninHistory> signinHistories = signinHistoryRepository.findByMemberOrderByCreatedAtDesc(member);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        SigninHistory latestSignin = signinHistoryRepository.findTopByMemberOrderByCreatedAtDesc(member);
 
-        // 로그인 기록이 없으면 첫 로그인
-        return signinHistories.isEmpty();
+        if (latestSignin == null || latestSignin.getCreatedAt().isAfter(currentDateTime)) {
+            // 추가: 특정 사용자의 모든 로그인 기록 삭제
+            deleteByMember(member);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Transactional
+    public void deleteByMember(Member member) {
+        signinHistoryRepository.deleteByMember(member);
     }
 }
