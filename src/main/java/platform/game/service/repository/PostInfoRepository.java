@@ -28,32 +28,35 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer> {
         ArrayList<Post> findByBoardCdAndPostTitleContainingOrderByCreatedAtDesc(String boardCd, String postTitle);
 
         // 내용 검색
-        ArrayList<Post> findByBoardCdAndPostContentContainingOrderByPostIdDesc(String boardCd, String postContent);
+        ArrayList<Post> findByBoardCdAndPostContentContainingOrderByCreatedAtDesc(String boardCd, String postContent);
 
         // 태그 검색
-        ArrayList<Post> findByBoardCdAndPostTagsContainingOrderByPostIdDesc(String boardCd, String postTags);
+        ArrayList<Post> findByBoardCdAndPostTagsContainingOrderByCreatedAtDesc(String boardCd, String postTags);
 
         // 글쓴이 검색
-        ArrayList<Post> findByBoardCdAndMember_MemIdOrderByPostIdDesc(String boardCd, int memId);
+        ArrayList<Post> findByBoardCdAndMember_MemIdOrderByCreatedAtDesc(String boardCd, long memId);
 
         // 제목 + 태그 검색
-        ArrayList<Post> findByBoardCdAndPostTitleContainingAndPostTagsContainingOrderByPostIdDesc(String boardCd,
+        ArrayList<Post> findByBoardCdAndPostTitleContainingAndPostTagsContainingOrderByCreatedAtDesc(String boardCd,
                         String postTitle,
                         String postTags);
 
         // 내용 + 태그 검색
-        ArrayList<Post> findByBoardCdAndPostContentContainingAndPostTagsContainingOrderByPostIdDesc(String boardCd,
+        ArrayList<Post> findByBoardCdAndPostContentContainingAndPostTagsContainingOrderByCreatedAtDesc(String boardCd,
                         String postContent,
                         String postTags);
 
         // 글쓴이 + 태그 검색
-        ArrayList<Post> findByBoardCdAndMember_MemIdAndPostTagsContainingOrderByPostIdDesc(String boardCd, int memId,
+        ArrayList<Post> findByBoardCdAndMember_MemIdAndPostTagsContainingOrderByCreatedAtDesc(String boardCd,
+                        long memId,
                         String postTags);
 
         // 조건 모두 검색
-        ArrayList<Post> findByBoardCdAndPostTitleAndPostContentAndPostTagsOrderByPostIdDesc(String boardCd,
+        ArrayList<Post> findByBoardCdAndPostTitleAndPostContentAndPostTagsOrderByCreatedAtDesc(String boardCd,
                         String postTitle, String postContent, String postTags);
 
         // 게시물 삭제하기
-        Post deleteByPostId(int postId);
+        void deleteByPostId(int postId);
+
+        long count();
 }

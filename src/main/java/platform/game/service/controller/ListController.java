@@ -1,6 +1,7 @@
 package platform.game.service.controller;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -90,33 +91,47 @@ public class ListController {
                         searchValue);
             } else {
                 // 태그가 선택된 경우 - 제목 + 태그 검색
-                lists = postInfoRepository.findByBoardCdAndPostTitleContainingAndPostTagsContainingOrderByPostIdDesc(
+                lists = postInfoRepository.findByBoardCdAndPostTitleContainingAndPostTagsContainingOrderByCreatedAtDesc(
                         boardCd, searchValue, selectTag);
             }
         } else if ("content".equals(selectedOption)) { // 내용
             // 태그 체크
             if ("All".equals(selectTag)) {
                 // 태그가 ALL인 경우 - 내용 검색
-                lists = postInfoRepository.findByBoardCdAndPostContentContainingOrderByPostIdDesc(boardCd, searchValue);
+                lists = postInfoRepository.findByBoardCdAndPostContentContainingOrderByCreatedAtDesc(boardCd,
+                        searchValue);
             } else {
                 // 태그가 선택된 경우 - 내용 + 태그 검색
-                lists = postInfoRepository.findByBoardCdAndPostContentContainingAndPostTagsContainingOrderByPostIdDesc(
-                        boardCd, searchValue, selectTag);
+                lists = postInfoRepository
+                        .findByBoardCdAndPostContentContainingAndPostTagsContainingOrderByCreatedAtDesc(
+                                boardCd, searchValue, selectTag);
             }
         } else if ("writer".equals(selectedOption)) { // 글쓴이
             // 사용자의 memId를 기반으로 memNick 가져오기
-            Member member = memberInfoRepository.findByMemNick(searchValue); // MemId를 사용하여 Member 엔티티 찾기
-            int memId = (int) member.getMemId(); // 찾은 Member 엔티티에서 memNick 가져오기
-
-            // 태그 체크
-            if ("All".equals(selectTag)) {
-                // 태그가 All인 경우 - 글쓴이 검색
-                lists = postInfoRepository.findByBoardCdAndMember_MemIdOrderByPostIdDesc(boardCd,
-                        memId);
+            Optional<Member> member;
+            long memId;
+            if (searchValue == "") {
+                lists = postInfoRepository.findByBoardCdAndPostTitleContainingOrderByCreatedAtDesc(boardCd,
+                        searchValue);
             } else {
-                // 태그가 선택된 경우 - 글쓴이 + 태그 검색
-                lists = postInfoRepository.findByBoardCdAndMember_MemIdAndPostTagsContainingOrderByPostIdDesc(boardCd,
-                        memId, selectTag);
+                member = memberInfoRepository.findByMemNick(searchValue); // MemId를 사용하여 Member 엔티티 찾기
+                if (member.isPresent()) {
+                    memId = member.get().getMemId();
+                    // 태그 체크
+                    if ("All".equals(selectTag)) {
+                        // 태그가 All인 경우 - 글쓴이 검색
+                        lists = postInfoRepository.findByBoardCdAndMember_MemIdOrderByCreatedAtDesc(boardCd,
+                                memId);
+                    } else {
+                        // 태그가 선택된 경우 - 글쓴이 + 태그 검색
+                        lists = postInfoRepository
+                                .findByBoardCdAndMember_MemIdAndPostTagsContainingOrderByCreatedAtDesc(
+                                        boardCd, memId, selectTag);
+                    }
+                    // 검색해서 글쓴이가 안나올경우
+                } else {
+                    lists = postInfoRepository.findByBoardCdOrderByCreatedAtDesc(boardCd);
+                }
             }
         }
 

@@ -48,12 +48,12 @@
 
         //alert('확인');
 
-        location.href = "./board/list_MixList?board_cd=" + [[${boardCd}]] +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
+        location.href = "list_MixList?board_cd=" + [[${boardCd}]] +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
     }
 </script>
 <script>
     function reSelect(){
-        location.href = "./board/list?board_cd=" + [[${boardCd}]];
+        location.href = "list?board_cd=" + [[${boardCd}]];
     }
 </script>
 
@@ -114,7 +114,6 @@
                 <div class="widjet --filters">
                     <div class="widjet__body">
                         <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-
                                 <!--게시판 코드 들어가는 장소-->
                                 <!-- <div class="con_txt"> -->
                                 <div class="widjet_size widjet-game__title">
@@ -153,7 +152,7 @@
                                                 <!--닉네임-->
                                                 <td style="text-align: center;" th:text="${post.member.memNick}"></td>
                                                 <!--글쓴 날짜-->
-                                                <td style="text-align: center;" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                                                <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
                                                 <!--조회수-->
                                                 <td style="text-align: center;" th:text="${post.postHit}"></td>
                                             </tr>
@@ -216,7 +215,6 @@
                                         </div>
                                     </div>    <!--//게시판-->
                                 </div>
-                            
                         </div>
                     </div>
                 </div>

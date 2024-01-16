@@ -29,4 +29,10 @@ public interface MemberFavoriteGameRepository extends JpaRepository<MemberFavori
     @Query(value = "update member_favorite_game set game_cd=:game_cd where mem_id=:mem_id and mem_fav_game_id=:rank", nativeQuery = true)
     void GameModify(String game_cd, long mem_id, int rank);
 
+    @Query(value = "SELECT game_cd, COUNT(*) as count " +
+            "FROM member_favorite_game " +
+            "GROUP BY game_cd " +
+            "ORDER BY count DESC", nativeQuery = true)
+    List<String> findMostCommonGameCd();
+
 }
