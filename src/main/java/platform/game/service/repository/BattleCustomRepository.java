@@ -9,4 +9,5 @@ public interface BattleCustomRepository{
     public int insertComment(int postId,String content, int parentCommentId, Member member);
     public int deleteComment(int commentId);
     public int reqeustBattle(long memId, int btId, int postId);
+    public Object[] like(long memId, String type, int postId,int commentId, int like);
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -25,6 +26,8 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository{
     private PostInfoRepository postInfoRepository;
     @Autowired
     private BattleRepository battleRepository;
+    @Autowired
+    private LikeRepository likeRepository;
     @Autowired
     private CommentInfoRepository commentInfoRepository;
 
@@ -120,6 +123,74 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository{
         if (flag != 1)
             throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
         
+        return flag;
+    }
+
+    @Transactional
+    @Override
+    public Object[] like(long memId, String type, int postId,int commentId, int like) {
+        Object[] flag = new Object[]{0,0};
+
+        Query query = entityManager.createNativeQuery(
+                "INSERT INTO `like` " +
+                        "(mem_id, post_id, comment_id, like_yn, created_at) " +
+                        "VALUES(:memId, :postId, :commentId, :likeYN, :now)");
+        query.setParameter("memId", memId);
+        query.setParameter("postId", postId);
+        query.setParameter("commentId", commentId);
+        query.setParameter("likeYN", like==1?"Y":"N");
+        query.setParameter("now", new Date());
+
+        if (query.executeUpdate() != 1)
+            throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
+
+        
+        int dislike = 1;
+        if(like==1) {
+            like=1; dislike=0;
+        }else if(like==-1) {
+            like=0; dislike =1;
+        }
+
+        // like, dislike 수 구하기
+        if(type.equals("P")){
+            // 추천수 갱신
+            query = entityManager.createNativeQuery(
+                "UPDATE post SET post_like_cnt = post_like_cnt + :like, post_dislike_cnt = post_dislike_cnt + :dislike WHERE post_id = :postId"
+            );            
+            query.setParameter("postId", postId);
+            query.setParameter("like", like);
+            query.setParameter("dislike", dislike);
+            if (query.executeUpdate() != 1)
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
+
+            // 추천수 받아오기
+            query = entityManager.createNativeQuery(
+                "SELECT post_like_cnt, post_dislike_cnt FROM post WHERE post_id = :postId"
+            );
+            query.setParameter("postId", postId);
+
+            flag = (Object[])query.getSingleResult();
+        }else if(type.equals("C")){
+            // 추천수 갱신
+            query = entityManager.createNativeQuery(
+                "UPDATE comment SET comment_like_cnt = comment_like_cnt + :like, comment_dislike_cnt = comment_dislike_cnt + :dislike WHERE comment_id = :commentId"
+            );
+            query.setParameter("commentId", commentId);
+            query.setParameter("like", like);
+            query.setParameter("dislike", dislike);
+            if (query.executeUpdate() != 1)
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
+
+            // 추천수 받아오기
+            query = entityManager.createNativeQuery(
+                "SELECT comment_like_cnt, comment_dislike_cnt FROM comment WHERE comment_id = :commentId"
+            );
+            query.setParameter("commentId", commentId);
+
+            flag = (Object[])query.getSingleResult();
+        }
+
         return flag;
     }
 }

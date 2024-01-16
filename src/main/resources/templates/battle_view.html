@@ -64,9 +64,22 @@
             console.error('DB 호출 중 오류가 발생했습니다.', error);
         }
     }
-    async function thumbsup(type,id,like){
+    async function thumbsup(type,postId,commentId,like){
+        const nickname = /*[[${nickname}]]*/'';
+        if(!nickname) {
+            location.href="/login";
+            return;
+        }
+        if(commentId!==1){
+            const comment = document.getElementById(commentId);
+            let isDeleted = comment.querySelector(".comment-main > div").getAttribute("isDeleted");
+            if(isDeleted){
+                alert('삭제된 댓글 입니다.');
+                return;
+            }
+        }
         try {
-            const response = await fetch(`/battle/like?type=${type}&id=${id}&like=${like}`, {
+            const response = await fetch(`/battle/like?type=${type}&postId=${postId}&commentId=${commentId}&like=${like}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,8 +91,22 @@
                 throw new Error('서버 응답이 실패했습니다.');
             }
             const flag = await response.json();
-            switch (flag) {
-                // flag로 현재의 추천 비추를 int[2]로 받아와서 업데이트, flag==-1이면 에러.
+            const likeCnt = flag[0]; // 첫 번째 요소
+            const dislikeCnt = flag[1]; // 두 번째 요소
+            if(likeCnt==-1){
+                alert('이미 추천 하셨습니다.');
+            }else if(likeCnt==-2){
+                alert('알수 없는 에러');
+            }else{
+                if(type==='P'){
+                    document.querySelector(".post-section .like-section .like .no").innerHTML = likeCnt;
+                    document.querySelector(".post-section .like-section .dislike .no").innerHTML = dislikeCnt;
+                }else if(type==='C'){
+                    const comment = document.getElementById(commentId);
+                    console.log(comment);
+                    comment.querySelector(".comment-header > .like-section > .like > .no").innerHTML = likeCnt;
+                    comment.querySelector(".comment-header > .like-section > .dislike > .no").innerHTML = dislikeCnt;
+                }
             }
         } catch (error) {
             console.error('DB 호출 중 오류가 발생했습니다.', error);
@@ -127,6 +154,19 @@
             }
         } catch (error) {
             console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+    function sortCmt(type){
+        if(type===1){
+            // 등록순 asc
+            const div = document.querySelector(".comment-section .sort-class");
+            if(div.classList.contains("desc")) div.classList.remove("desc");
+            div.classList.add("asc");
+        }else if(type===2){
+            // 최신순 desc
+            const div = document.querySelector(".comment-section .sort-class");
+            if(div.classList.contains("asc")) div.classList.remove("asc");
+            div.classList.add("desc");
         }
     }
 </script>
@@ -464,13 +504,13 @@
                                 </div>
                                 <div class="like-section">
                                     <div>
-                                        <div class="like" th:onclick="">
+                                        <div class="like" th:onclick="'thumbsup(\'P\', ' + ${post.postId} + ', 1, 1)'">
                                             <div class="no" th:text="${post.postLikeCnt}">23344</div>
                                             <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="dislike" th:onclick="">
+                                        <div class="dislike" th:onclick="'thumbsup(\'P\', ' + ${post.postId} + ', 1, -1)'">
                                             <div class="no" th:text="${post.postDislikeCnt}">234</div>
                                             <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
                                         </div>
@@ -483,125 +523,126 @@
                                             <span th:text="'['+${post.postCommentCnt}+']'"></span>
                                         </div>
                                         <div>
-                                            <div><span>등록순</span></div>
+                                            <div><span onclick="sortCmt(1)">등록순</span></div>
                                             <div><span>|</span></div>
-                                            <div><span>최신순</span></div>
+                                            <div><span onclick="sortCmt(2)">최신순</span></div>
                                         </div>
                                     </div>
-
-                                    <div class="comment-section-main" th:each="commentNode : ${commentTree}" th:id="${commentNode.comment.commentId}">
-                                        <!-- 댓글 내용 출력 -->
-                                        <!-- 커멘트 헤더 -->
-                                        <div class="comment-header">
-                                            <div class="comment-user-info">
-                                                <span th:text="${commentNode.comment.member.memNick}">댓글닉네임</span>
-                                                <span
-                                                    th:text="${'('+#dates.format(commentNode.comment.createdAt, 'yyyy-MM-dd hh:mm')+')'}">댓글
-                                                    날짜</span>
-                                                <!-- 댓글 삭제 버튼 -->
-                                                <div th:if="${commentNode.comment.member.memNick==nickname}">
-                                                    <span class="delete-comment"
+                                    <div class="sort-class asc">
+                                        <div class="comment-section-main" th:each="commentNode : ${commentTree}" th:id="${commentNode.comment.commentId}">
+                                            <!-- 댓글 내용 출력 -->
+                                            <!-- 커멘트 헤더 -->
+                                            <div class="comment-header">
+                                                <div class="comment-user-info">
+                                                    <span th:text="${commentNode.comment.member.memNick}">댓글닉네임</span>
+                                                    <span
+                                                        th:text="${'('+#dates.format(commentNode.comment.createdAt, 'yyyy-MM-dd hh:mm')+')'}">댓글
+                                                        날짜</span>
+                                                    <!-- 댓글 삭제 버튼 -->
+                                                    <div th:if="${commentNode.comment.member.memNick==nickname}">
+                                                        <span class="delete-comment"
+                                                            th:attr="data-comment-id=${commentNode.comment.commentId}"
+                                                            style="cursor: pointer; color: red;"
+                                                            th:onclick="deleteComment(this.getAttribute('data-comment-id'))">
+                                                            <i class="fa-solid fa-xmark ico_fontawesome"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="like-section">
+                                                    <div class="like" th:onclick="'thumbsup(\'C\', ' + ${post.postId} + ',' + ${commentNode.comment.commentId} + ', 1)'">
+                                                        <div class="no" th:text="${commentNode.comment.commentLikeCnt}">
+                                                            23344</div>
+                                                        <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
+                                                    </div>
+                                                    <div class="dislike" th:onclick="'thumbsup(\'C\', ' + ${post.postId} + ',' + ${commentNode.comment.commentId} + ', -1)'">
+                                                        <div class="no" th:text="${commentNode.comment.commentDislikeCnt}">
+                                                            234</div>
+                                                        <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- 커멘트 내용 -->
+                                            <div class="comment-main"> 
+                                                <div th:if="${commentNode.comment.deletedAt}" class="comment-text" th:text="${commentNode.comment.commentContent}" style="opacity:0.5;" th:attr="isDeleted=true"></div>
+                                                <div th:unless="${commentNode.comment.deletedAt}" class="comment-text" th:text="${commentNode.comment.commentContent}" th:attr="isDeleted=false"></div>
+                                            </div>
+                                            <div class="line"></div>
+                                            <div class="comment-footer">
+                                                <div class="reply-section">
+                                                    <span class="reply-text" style="cursor: pointer;"
                                                         th:attr="data-comment-id=${commentNode.comment.commentId}"
-                                                        style="cursor: pointer; color: red;"
-                                                        th:onclick="deleteComment(this.getAttribute('data-comment-id'))">
-                                                        <i class="fa-solid fa-xmark ico_fontawesome"></i>
-                                                    </span>
+                                                        onclick="toggleReplyForm(this)">답글</span>
                                                 </div>
-                                            </div>
-
-                                            <div class="like-section">
-                                                <div class="like" th:onclick="thumbsup(commentNode.comment.commentId,1)">
-                                                    <div class="no" th:text="${commentNode.comment.commentLikeCnt}">
-                                                        23344</div>
-                                                    <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
-                                                </div>
-                                                <div class="dislike" th:onclick="thumbsup(commentNode.comment.commentId,-1)">
-                                                    <div class="no" th:text="${commentNode.comment.commentDislikeCnt}">
-                                                        234</div>
-                                                    <i class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- 커멘트 내용 -->
-                                        <div class="comment-main">
-                                            <div th:if="${commentNode.comment.deletedAt}" class="comment-text" th:text="${commentNode.comment.commentContent}" style="opacity:0.5;"></div>
-                                            <div th:unless="${commentNode.comment.deletedAt}" class="comment-text" th:text="${commentNode.comment.commentContent}"></div>
-                                        </div>
-                                        <div class="line"></div>
-                                        <div class="comment-footer">
-                                            <div class="reply-section">
-                                                <span class="reply-text" style="cursor: pointer;"
-                                                    th:attr="data-comment-id=${commentNode.comment.commentId}"
-                                                    onclick="toggleReplyForm(this)">답글</span>
-                                            </div>
-                                            <!-- 대댓글 쓰기 -->
-                                            <div class="reply-form" style="display: none;"
-                                                th:attr="data-comment-id=${commentNode.comment.commentId}">
-                                                <form th:action="@{/battle/recomment}" method="post" name="rfrm">
-                                                    <input type="hidden" name="postId" th:value="${post.postId}" />
-                                                    <input type="hidden" name="btId" th:value="${bto.btId}" />
-                                                    <input type="hidden" name="parent_comment_id"
-                                                        th:value="${commentNode.comment.commentId}" />
-                                                    <div class="comment-input">
-                                                        <textarea th:id="'rcontent' + ${commentNode.comment.commentId}"
-                                                            name="content" class="comment_input_text"
-                                                            placeholder="댓글 내용을 입력하세요"></textarea>
-                                                        <div class="button-section">
-                                                            <input type="submit" value="등록" class="btn_re btn_txt01" />
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-
-                                            <!-- 대댓글 표시 -->
-                                            <div th:each="reply : ${commentNode.replies}" class="reply" th:id="${reply.comment.commentId}">
-                                                <i class="fa-solid fa-reply fa-rotate-180 ico_fontawesome"></i>
-                                                <div>
-                                                    <div class="line"></div>
-                                                    <div class="comment-header">
-                                                        <div class="comment-user-info">
-                                                            <span th:text="${reply.comment.member.memNick}">댓글닉네임</span>
-                                                            <span
-                                                                th:text="${#dates.format(reply.comment.createdAt, 'yyyy-MM-dd hh:mm')}">댓글
-                                                                날짜</span>
-                                                            <!-- 댓글 삭제 버튼 -->
-                                                            <div th:if="${reply.comment.member.memNick==nickname}">
-                                                                <span class="delete-comment"
-                                                                    th:attr="data-comment-id=${reply.comment.commentId}"
-                                                                    style="cursor: pointer; color: red;"
-                                                                    th:onclick="deleteComment(this.getAttribute('data-comment-id'))">
-                                                                    <i class="fa-solid fa-xmark ico_fontawesome"></i>
-                                                                </span>
+                                                <!-- 대댓글 쓰기 -->
+                                                <div class="reply-form" style="display: none;"
+                                                    th:attr="data-comment-id=${commentNode.comment.commentId}">
+                                                    <form th:action="@{/battle/recomment}" method="post" name="rfrm">
+                                                        <input type="hidden" name="postId" th:value="${post.postId}" />
+                                                        <input type="hidden" name="btId" th:value="${bto.btId}" />
+                                                        <input type="hidden" name="parent_comment_id"
+                                                            th:value="${commentNode.comment.commentId}" />
+                                                        <div class="comment-input">
+                                                            <textarea th:id="'rcontent' + ${commentNode.comment.commentId}"
+                                                                name="content" class="comment_input_text"
+                                                                placeholder="댓글 내용을 입력하세요"></textarea>
+                                                            <div class="button-section">
+                                                                <input type="submit" value="등록" class="btn_re btn_txt01" />
                                                             </div>
                                                         </div>
-
-                                                        <div class="like-section">
-                                                            <div class="like" th:onclick="thumbsup(commentNode.comment.commentId,1)">
-                                                                <div class="no"
-                                                                    th:text="${commentNode.comment.commentLikeCnt}">
-                                                                    23344</div>
-                                                                <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
+                                                    </form>
+                                                </div>
+    
+                                                <!-- 대댓글 표시 -->
+                                                <div th:each="reply : ${commentNode.replies}" class="reply" th:id="${reply.comment.commentId}">
+                                                    <i class="fa-solid fa-reply fa-rotate-180 ico_fontawesome"></i>
+                                                    <div>
+                                                        <div class="line"></div>
+                                                        <div class="comment-header">
+                                                            <div class="comment-user-info">
+                                                                <span th:text="${reply.comment.member.memNick}">댓글닉네임</span>
+                                                                <span
+                                                                    th:text="${#dates.format(reply.comment.createdAt, 'yyyy-MM-dd hh:mm')}">댓글
+                                                                    날짜</span>
+                                                                <!-- 댓글 삭제 버튼 -->
+                                                                <div th:if="${reply.comment.member.memNick==nickname}">
+                                                                    <span class="delete-comment"
+                                                                        th:attr="data-comment-id=${reply.comment.commentId}"
+                                                                        style="cursor: pointer; color: red;"
+                                                                        th:onclick="deleteComment(this.getAttribute('data-comment-id'))">
+                                                                        <i class="fa-solid fa-xmark ico_fontawesome"></i>
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                            <div class="dislike" th:onclick="thumbsup(commentNode.comment.commentId,-1)">
-                                                                <div class="no"
-                                                                    th:text="${commentNode.comment.commentDislikeCnt}">
-                                                                    234</div>
-                                                                <i
-                                                                    class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
+    
+                                                            <div class="like-section">
+                                                                <div class="like" th:onclick="'thumbsup(\'C\', ' + ${post.postId} + ',' + ${reply.comment.commentId} + ', 1)'">
+                                                                    <div class="no"
+                                                                        th:text="${reply.comment.commentLikeCnt}">
+                                                                        23344</div>
+                                                                    <i class="fa-solid fa-thumbs-up ico_fontawesome"></i>
+                                                                </div>
+                                                                <div class="dislike" th:onclick="'thumbsup(\'C\', ' + ${post.postId} + ',' + ${reply.comment.commentId} + ', -1)'">
+                                                                    <div class="no"
+                                                                        th:text="${reply.comment.commentDislikeCnt}">
+                                                                        234</div>
+                                                                    <i
+                                                                        class="dislike fa-solid fa-thumbs-down ico_fontawesome"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                        <!-- 커멘트 내용 -->
+                                                        <div class="comment-main" >
+                                                            <div th:if="${reply.comment.deletedAt}" class="comment-text" th:text="${reply.comment.commentContent}" style="opacity:0.5;" th:attr="isDeleted=true"></div>
+                                                            <div th:unless="${reply.comment.deletedAt}" class="comment-text" th:text="${reply.comment.commentContent}" th:attr="isDeleted=false"></div>
+                                                        </div>
+    
                                                     </div>
-                                                    <!-- 커멘트 내용 -->
-                                                    <div class="comment-main" >
-                                                        <div th:if="${reply.comment.deletedAt}" class="comment-text" th:text="${reply.comment.commentContent}" style="opacity:0.5;"></div>
-                                                        <div th:unless="${reply.comment.deletedAt}" class="comment-text" th:text="${reply.comment.commentContent}"></div>
-                                                    </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
+                                    
                                     <form th:action="@{/battle/comment}" method="post" name="cfrm">
                                         <input type="hidden" name="btId" th:value="${bto.btId}" />
                                         <input type="hidden" name="postId" th:value="${post.postId}" />

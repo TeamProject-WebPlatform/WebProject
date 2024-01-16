@@ -1,6 +1,7 @@
 package platform.game.service.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -95,9 +97,11 @@ public class BattleController {
         BattleTO bto = (BattleTO)battleTOs[0];
         BattlePointTO pto = (BattlePointTO)battleTOs[1];
 
-        ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
-        ArrayList<CommentTO> commentTree = buildCommentTree(comment);
+        ArrayList<Comment> comments = commentInfoRepository.findByPost_PostId(postId);
+        ArrayList<CommentTO> commentTree = buildCommentTree(comments);
 
+        commentTree.sort(Comparator.comparing(commentTO -> commentTO.getComment().getCreatedAt().getTime())); // 최신이 아래로 내려감.
+        
         String[][] tmp = bto.getApplicants()!=null ? bto.getApplicants() : null;
         if(tmp==null){
             mav.addObject("applicants", "");
@@ -118,7 +122,6 @@ public class BattleController {
         mav.addObject("bto",bto);
         mav.addObject("pto",pto);
         mav.addObject("post", post);
-        mav.addObject("comment", comment);
         mav.addObject("commentTree", commentTree);
         return mav;
     }
@@ -169,7 +172,32 @@ public class BattleController {
         return String.valueOf(flag);
     }
 
-
+    @PostMapping("/like")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public Object[] like(@RequestParam("type") String type, @RequestParam("postId") int postId, @RequestParam("commentId") int commentId, @RequestParam("like") int like){
+        Object[] flag = new Object[]{0,0};
+        long memId = 0;
+        Member member = null;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if(member!=null){
+                memId = member.getMemId();
+            }
+        }
+        
+        try{
+            flag = battleCustomRepositoryImpl.like(memId,type,postId,commentId,like);
+        }catch(DataIntegrityViolationException e){
+            // 이미 한 투표
+            flag = new Object[]{-1,-1};
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            flag = new Object[]{-2,-2};
+        }
+        return flag;
+    }
 
 
 
