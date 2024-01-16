@@ -34,6 +34,7 @@ import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
+import platform.game.service.service.SigninHistoryService;
 
 // Spring Security의 /login 페이지 안되게
 @Controller
@@ -42,6 +43,9 @@ public class MainController {
 
     @Autowired
     SqlMapperInter sqlMapperInter;
+    
+    @Autowired
+    SigninHistoryService signinHistoryService;
 
     @Autowired
     RankDAO rankDAO;
@@ -77,20 +81,22 @@ public class MainController {
 
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
+        
         ModelAndView mav = new ModelAndView("index");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                    .getMember();
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+            boolean isFirstLogin = signinHistoryService.isFirstLogin(member);
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint",member.getMemCurPoint());
                 mav.addObject("memId",member.getMemId());
+                mav.addObject("isFirstLogin", isFirstLogin);
+                System.out.println("isFirstLogin: " + isFirstLogin);
             }
         } else {
             System.out.println("멤버 없음");
         }
         return mav;
-
     }
 
     @PostMapping("/roll") // 메인화면 Rolling RandomList

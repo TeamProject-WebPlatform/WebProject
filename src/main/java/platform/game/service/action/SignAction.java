@@ -126,6 +126,22 @@ public class SignAction {
             authRequest.setMemPw(userSignup.getMemPw());
 
             cookie = generateToken(authRequest);
+            
+            if (signinHistoryService.isFirstLogin(member)) {
+                System.out.println("첫 로그인입니다.");
+                 // 포인트 증가 로직
+                int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
+
+                if (updatedPoints < 0) {
+                    // 포인트 증가 실패
+                    System.out.println("포인트 증가 실패");
+                    return 1;
+                }
+                System.out.println("포인트 증가 성공");
+            } else {
+                System.out.println("이미 로그인한 사용자입니다.");
+            }
+
             return cookie;
         } else {
             return null;

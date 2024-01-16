@@ -1,24 +1,24 @@
 package platform.game.service.entity;
 
-import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
+
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
+
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,17 +32,20 @@ import platform.game.service.entity.compositeKey.SigninHistoryId;
 @Builder
 @IdClass(SigninHistoryId.class)
 public class SigninHistory {
+
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("memId")
     private Member member;
-    
+
     @Id
-    private Integer signinHistory;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "signin_history_sequence")
+    @SequenceGenerator(name = "signin_history_sequence", sequenceName = "signin_history_sequence", allocationSize = 1)
+    private Integer signinHistoryId;
+    
 
     @Column(length = 15) // IPv4 주소는 최대 15자리까지입니다.
     private String memIp;
     // 날짜 저장
     private LocalDateTime createdAt;
-    
-}
+}   

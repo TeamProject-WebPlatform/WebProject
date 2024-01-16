@@ -13,7 +13,7 @@ public class PointHistoryId implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "memId", referencedColumnName = "memId")
-    private Member memId;
+    private Member member;
 
     @Column(name = "pointHistoryId")
     private int pointHistoryId;

@@ -15,7 +15,7 @@ import platform.game.service.entity.compositeKey.SigninHistoryId;
 public interface SigninHistoryRepository extends JpaRepository<SigninHistory, SigninHistoryId>{
 
     // 특정 사용자의 로그인 기록을 조회하는 메서드
-    ArrayList<SigninHistory> findByMemberOrderByCreatedAtDesc(Member memId);
+    ArrayList<SigninHistory> findByMemberOrderByCreatedAtDesc(Member member);
 
     //특정 IP 주소로 로그인한 기록을 조회하는 메서드
     ArrayList<SigninHistory> findByMemIp(String memIp);

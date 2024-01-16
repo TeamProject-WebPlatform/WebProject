@@ -35,7 +35,7 @@ public class PointHistory {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("memId")
-    private Member memId;
+    private Member member;
     
     @Id
     private Integer pointHistoryId;
@@ -46,6 +46,7 @@ public class PointHistory {
     private Integer pointCnt;
     private Integer curPoint;
     private Integer totalPoint;
+    
     private String createdAt;
     
 }
