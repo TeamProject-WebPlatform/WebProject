@@ -190,12 +190,14 @@ public class ProfileController {
     }
 
     @PostMapping("/headerprofile")
-    public ResponseEntity<String> HeaderProfile(@RequestBody String header){
+    public ResponseEntity<String> HeaderProfile(@RequestBody Map<String,String> header){
         int flag=0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                         .getMember();
 
-        if(editCardRepository.UpdateProfileHeader(header,member.getMemId())==1){
+        String NewHeader = header.get("Header");
+        System.out.println(NewHeader);
+        if(editCardRepository.UpdateProfileHeader(NewHeader,member.getMemId())==1){
             flag = 1;
         }
 
@@ -203,12 +205,13 @@ public class ProfileController {
     }
 
     @PostMapping("/cardprofile")
-    public ResponseEntity<String> CardProfile(@RequestBody String card){
+    public ResponseEntity<String> CardProfile(@RequestBody Map<String,String> card){
         int flag=0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                         .getMember();
 
-        if(editCardRepository.UpdateProfileCard(card,member.getMemId())==1){
+        String NewCard = card.get("Card");
+        if(editCardRepository.UpdateProfileCard(NewCard,member.getMemId())==1){
             flag = 1;
         }
 
@@ -216,12 +219,13 @@ public class ProfileController {
     }
 
     @PostMapping("/repbadgeprofile")
-    public ResponseEntity<String> RedBadgeProfile(@RequestBody String badge){
+    public ResponseEntity<String> RedBadgeProfile(@RequestBody Map<String,String> badge){
         int flag=0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                         .getMember();
 
-        if(editCardRepository.UpdateProfileRepBadge(badge,member.getMemId())==1){
+        String NewRepBadge = badge.get("RepBadge");
+        if(editCardRepository.UpdateProfileRepBadge(NewRepBadge,member.getMemId())==1){
             flag = 1;
         }
 

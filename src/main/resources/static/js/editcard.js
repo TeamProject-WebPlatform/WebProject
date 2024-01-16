@@ -1,14 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     const Headregister = document.getElementById("header");
-    const Cardregister = document.getElementById("card").value;
-    const RepBadgeregister = document.getElementById("badgerep").value;
-    const Badgeregister = document.getElementById("badge").value;
+    const Cardregister = document.getElementById("card");
+    const RepBadgeregister = document.getElementById("badgerep");
+    const Badgeregister = document.getElementById("badge");
 
-    Headregister.addEventListener('click', function(){
-        console.log("Headregiste");
-    });
-    Cardregister.addEventListener('click', CardPreview); 
-    RepBadgeregister.addEventListener('click', RepBadgePreview);
+    Headregister.addEventListener('click', RegisterHeader);
+    Cardregister.addEventListener('click', RegisterCard); 
+    RepBadgeregister.addEventListener('click', RegisterRepBadge);
     Badgeregister.addEventListener('click', BadgePreview);
 });
 
@@ -65,4 +63,87 @@ function BadgePreview(){
     let BadgeItem = document.getElementById('badges').value;
     console.log(BadgeItem);
     
+}
+
+const RegisterHeader = async function() {
+    let HeaderItem = document.getElementById('headeritem').value;
+
+    try {
+        const response = await fetch('/profile/headerprofile', {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                Header:HeaderItem
+            }),
+        });
+        if(!response.ok) {
+            throw new Error("서버 응답이 실패했습니다");
+        }
+        const flag = await response.text();
+        if(flag=='1') {
+            alert("프로필 사진 배경이 수정되었습니다.");
+            location.reload();
+        } else {
+            alert("에러" + error.message);
+        }
+    } catch (error) {
+        console.error("Error: " + error);
+    }
+}
+async function RegisterCard() {
+    let CardItem = document.getElementById('carditem').value;
+
+    try {
+        const response = await fetch('/profile/cardprofile', {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                Card:CardItem
+            }),
+        });
+        if(!response.ok) {
+            throw new Error("서버 응답이 실패했습니다");
+        }
+        const flag = await response.text();
+        if(flag=='1') {
+            alert("프로필 카드가 수정되었습니다.");
+            location.reload();
+        } else {
+            alert("에러" + error.message);
+        }
+    } catch (error) {
+        console.error("Error: " + error);
+    }
+}
+
+async function RegisterRepBadge() {
+    let BadgeItem = document.getElementById('repbadge').value;
+
+    try {
+        const response = await fetch('/profile/repbadgeprofile', {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                RepBadge:BadgeItem
+            }),
+        });
+        if(!response.ok) {
+            throw new Error("서버 응답이 실패했습니다");
+        }
+        const flag = await response.text();
+        if(flag=='1') {
+            alert("대표 뱃지가 수정되었습니다.");
+            location.reload();
+        } else {
+            alert("에러" + error.message);
+        }
+    } catch (error) {
+        console.error("Error: " + error);
+    }
 }

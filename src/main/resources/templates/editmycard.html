@@ -28,15 +28,35 @@
 
     <div class="page-wrapper">
         <main class="page-main">
-            <div class="widjet__body" style="display: inline-block; width:100%;">
-                <div class="profile-card" style="margin:auto; display: inline-block;">
-                        <div class="profile-header">
+            <div class="widjet__body" style="display: inline-block; width:100%;" th:switch="${memberCard.profileCard}">
+                <div th:case="'x'"class="profile-card" style="margin:auto; display: inline-block;">
+                    <div class="profile-header" th:if="${!memberCard.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberCard.profileHeader} + '.png);'">
+                        <i class="fa-solid fa-camera"></i>
+                        <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
+                        <div class="profile-user_info">
+                            <p class="profile-user_level" th:text="${'LV : ' + member.memLvl}"></p>
+                            <p class="profile-user_nick" th:text="${member.memNick}"></p>
+                            <img class="badge" th:src="@{'../img/shop_img/' + ${memberCard.profileBadges1} + '.png'}" alt="NO-SYMBOL">
+                        </div>
+                    </div>
+                <div class="profile-dividing-line"></div>
+                <div class="profile-main">
+                    <div class="profile-introduction" th:text="${profile.profileIntro}">
+                    </div>
+                    <div class="profile-dividing-line"></div>
+                    <div class="profile-badge-section">
+                        <span class="badge shopbadge"></span>
+                    </div>
+                </div>
+                </div>
+                <div th:case="*"class="profile-card" style="margin:auto; display: inline-block;" th:style="'margin:auto; display: inline-block; background-image: url(../img/shop_img/' + ${memberCard.profileCard} + '.png);'" >
+                    <div class="profile-header" th:if="${!memberCard.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberCard.profileHeader} + '.png);'">
                             <i class="fa-solid fa-camera"></i>
                             <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
                             <div class="profile-user_info">
                                 <p class="profile-user_level" th:text="${'LV : ' + member.memLvl}"></p>
                                 <p class="profile-user_nick" th:text="${member.memNick}"></p>
-                                <img class="badge" alt="NO-SYMBOL">
+                                <img class="badge" th:src="@{'../img/shop_img/' + ${memberCard.profileBadges1} + '.png'}" alt="NO-SYMBOL">
                             </div>
                         </div>
                     <div class="profile-dividing-line"></div>
@@ -53,13 +73,13 @@
                 <h2 id="equipitem">장착 중인 아이템</h2>
                 <div class="user-info__box" >
                     <div class="user-info__card" th:text="${'프로필 사진 테두리 : ' + memberCard.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'프로필 카드 테두리 : ' + memberCard.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'대표 뱃지 : ' + memberCard.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 1 : ' + memberCard.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 2 : ' + memberCard.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 3 : ' + memberCard.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 4 : ' + memberCard.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 5 : ' + memberCard.profileHeader}"></div>
+                    <div class="user-info__card" th:text="${'프로필 카드 테두리 : ' + memberCard.profileCard}"></div>
+                    <div class="user-info__card" th:text="${'대표 뱃지 : ' + memberCard.ProfileBadges1}"></div>
+                    <div class="user-info__card" th:text="${'뱃지 1 : ' + memberCard.ProfileBadges1}"></div>
+                    <div class="user-info__card" th:text="${'뱃지 2 : ' + memberCard.ProfileBadges2}"></div>
+                    <div class="user-info__card" th:text="${'뱃지 3 : ' + memberCard.ProfileBadges3}"></div>
+                    <div class="user-info__card" th:text="${'뱃지 4 : ' + memberCard.ProfileBadges4}"></div>
+                    <div class="user-info__card" th:text="${'뱃지 5 : ' + memberCard.ProfileBadges5}"></div>
                 </div>
             </div>
         </div>
@@ -67,7 +87,7 @@
         <div class="widjet__body" style="display: inline-block; width:100%;">
             <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
                 <div><select id="headeritem" class="js-select" onchange="HeaderPreview()">
-                        <option value="">프로필 사진 테두리 선택</option>
+                        <option value="x">프로필 사진 테두리 선택</option>
                         <option th:each="result:${header}" th:value="${result[0]}" th:text="${result[1]}"></option>
                     </select></div>
                     <button id="header" class="uk-button uk-button-secondary" type="button">저장</button>
@@ -78,7 +98,7 @@
         <div class="widjet__body" style="display: inline-block; width:100%;">
             <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
                 <div><select id="carditem" class="js-select" onchange="CardPreview()">
-                        <option value="">프로필 카드 테두리 선택</option>
+                        <option value="x">프로필 카드 테두리 선택</option>
                         <option th:each="result:${card}" th:value="${result[0]}" th:text="${result[1]}"></option>
                     </select></div>
                     <button id="card" class="uk-button uk-button-secondary" type="button">저장</button>
@@ -100,7 +120,7 @@
         <div class="widjet__body" style="display: inline-block; width:100%;">
             <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
                 <div><select id="badges" class="js-select">
-                        <option value="">뱃지 선택</option>
+                        <option value="x">뱃지 선택</option>
                         <option></option>
                     </select></div>
                     <button id="badge" class="uk-button uk-button-secondary" type="button">저장</button>
@@ -113,3 +133,4 @@
 </body>
 
 </html>
+badge.get("RepBadge");
