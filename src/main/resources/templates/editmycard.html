@@ -29,7 +29,7 @@
     <div class="page-wrapper">
         <main class="page-main">
             <div class="widjet__body" style="display: inline-block; width:100%;" th:switch="${memberProfile.profileCard}">
-                <div th:case="'x'"class="profile-card" style="margin:auto; display: inline-block;">
+                <div th:case="x"class="profile-card" style="margin:auto; display: inline-block;">
                     <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
                         <i class="fa-solid fa-camera"></i>
                         <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
@@ -132,4 +132,3 @@
 </body>
 
 </html>
-badge.get("RepBadge");

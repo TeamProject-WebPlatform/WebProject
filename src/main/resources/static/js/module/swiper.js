@@ -75,14 +75,15 @@ const setSwiper = function () {
 {/* <div class="recommend-slide row user"> */ }
 const setSwiperWrapper = async function () {
     let datalist = await SwiperData();
-    let userprofile = await UserProfileData(JSON.stringify(datalist));
+    let profiledata = JSON.stringify(datalist);
+    let userprofile = await UserProfileData(profiledata);
     let slideNum = datalist.length
     let html = "";
     for (let i = 0; i < slideNum; i++) {
         html += `
             <div class="swiper-slide">`;
 
-        html += createSwiperProfile(datalist[i].mem_nick, datalist[i].mem_lvl);
+        html += createSwiperProfile(datalist[i].mem_lvl, datalist[i].mem_nick, userprofile[i].profileIntro, userprofile[i].profileHeader, userprofile[i].profileCard, userprofile[i].ProfileRepBadge);
 
         html += `   
             </div>`;
@@ -106,19 +107,35 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
     let memNickname = nickname;
     let memImageName = "doyun_icon.png";
     let memLevel = level;
-    let memHeader = header;
-    let memCard = card;
+    let memHeader = header + ".png";
+    let memHeaderStyle = "";
+    let memCard = card + ".png";
+    let memCardStyle = "";
     let memSymbolImageName = repbadge + ".png";
+    let memRepBadgeStyle = "";
     let memIntroduction = introduce;
+
+    if (header != null) {
+        memHeaderStyle = `style="background-image:url(../img/shop_img/${memHeader});"`;
+    }
+
+    if (card != null) {
+        memCardStyle = `style="background-image:url(../img/shop_img/${memCard});"`;
+    }
+
+    if (repbadge != null) {
+        memRepBadgeStyle = `src="../img/shop_img/${memSymbolImageName}";`
+    } 
+
     let membProfileHTML = `
-        <div class="profile-card">
+        <div class="profile-card" ${memCardStyle}>
             <a href="/mypage/${memNickname}">
-                <div class="profile-header">
+                <div class="profile-header" ${memHeaderStyle}>
                     <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
                     <div class="profile-user_info">
                         <p class="profile-user_level">Lv : ${memLevel}</p>
                         <p class="profile-user_nick">${memNickname}</p>
-                        <img class="badge" src="../img/${memSymbolImageName}" alt="NO-SYMBOL">
+                        ${memRepBadgeStyle}
                     </div>
                 </div>
             </a>

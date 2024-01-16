@@ -122,7 +122,7 @@ public class MainController {
                     for(int i=0; i<first.size(); i++) list.add(first.get(i));
                     for(int i=0; i<second.size(); i++) list.add(second.get(i));
                     for(int i=0; i<third.size(); i++) list.add(third.get(i));
-                    for(int i=0; i<other.size(); i++) list.add(third.get(i));
+                    for(int i=0; i<other.size(); i++) list.add(other.get(i));
                 }
             } 
             else {
@@ -143,6 +143,7 @@ public class MainController {
             MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(mem_id);
             list.add(memberProfile);
         }
+
         return list;
     }
 

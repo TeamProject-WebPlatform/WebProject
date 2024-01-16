@@ -111,7 +111,7 @@ public interface SqlMapperInter {
         public List<WinRankTO> getOtherWinRateRank(String game_cd);
 
         // 비로그인 대상 swiper
-        @Select("select distinct m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
+        @Select("select distinct m.mem_id, m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
         public List<RollingRankTO> getRol();
 
         // 로그인 대상 선호 게임 swiper

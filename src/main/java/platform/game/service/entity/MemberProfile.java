@@ -23,7 +23,7 @@ public class MemberProfile {
     @Column(name = "memId")
     private long memId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn(name = "memId", referencedColumnName = "memId")
     private Member member;
