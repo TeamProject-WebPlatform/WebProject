@@ -32,7 +32,7 @@ import platform.game.service.service.MemberInfoDetails;
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.service.repository",
         "platform.game.service.model" })
-// @RequestMapping("/board")
+@RequestMapping("/board")
 public class BoardController {
 
     @Autowired
