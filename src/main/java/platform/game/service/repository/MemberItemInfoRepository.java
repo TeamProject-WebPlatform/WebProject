@@ -24,7 +24,7 @@ public interface MemberItemInfoRepository extends JpaRepository<MemberItem, Memb
     ArrayList<Item> findByItemCd(int itemCd);
     
     @Query(value="select item_cd from member_item where mem_id=:mem_id", nativeQuery = true)
-    List<String> HaveItemCheck(long mem_id);
+    List<Integer> HaveItemCheck(long mem_id);
 
     @Modifying(clearAutomatically = true)
     @Transactional

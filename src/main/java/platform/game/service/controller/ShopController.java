@@ -49,13 +49,12 @@ public class ShopController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
-                List<String> memberHaveItems = memberItemInfoRepository.HaveItemCheck(member.getMemId());
+                List<Integer> memberHaveItems = memberItemInfoRepository.HaveItemCheck(member.getMemId());
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
                 modelAndView.addObject("haveitem", memberHaveItems);
-                System.out.println(memberHaveItems);
             }
         } else {
             System.out.println("멤버 없음");

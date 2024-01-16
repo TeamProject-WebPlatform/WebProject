@@ -13,7 +13,7 @@ function addToPreviewList(itemName, category) {
 
     // 리스트 아이템에 해당 아이템을 제거하는 버튼 생성
     let deleteButton = document.createElement('button');
-    //deleteButton.textContent = 'x';
+    deleteButton.textContent = 'x';
 
     // 클릭 이벤트를 연결하여 해당 아이템을 제거하는 함수 호출
     deleteButton.addEventListener('click', function () {
