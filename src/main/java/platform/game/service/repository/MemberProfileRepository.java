@@ -1,10 +1,13 @@
 package platform.game.service.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import jakarta.transaction.Transactional;
 import platform.game.service.entity.MemberProfile;
 
 @Repository
@@ -12,7 +15,7 @@ public interface MemberProfileRepository extends JpaRepository<MemberProfile, Lo
 
     MemberProfile findProfileIntroByMemId(Long memId);
 
-    @Query(value = "insert into member_profile values (:mem_id,default)", nativeQuery = true)
+    @Query(value = "insert into member_profile values (:mem_id,default,default,default,default,default,default,default,default,default)", nativeQuery = true)
     Integer setAddUserProfile(long mem_id);
 
     @Modifying(clearAutomatically = true)
@@ -26,4 +29,31 @@ public interface MemberProfileRepository extends JpaRepository<MemberProfile, Lo
     @Modifying
     @Query(value = "update member set mem_nick=:mem_nick where mem_id=:mem_id", nativeQuery = true)
     Integer UpdateNick(String mem_nick, long mem_id);
+
+    @Query(value="select profile_image from member_profile where mem_id=:mem_id", nativeQuery = true)
+    String findByProfileImage(long mem_id);
+
+    @Query(value="select i.item_nm, i.item_info from item i join member_item mi on i.item_cd = mi.item_cd and i.item_kind_cd like '801%' and mi.mem_id=:mem_id",nativeQuery = true)
+    List<Object[]> HaveHeaderList(long mem_id);
+
+    @Query(value="select i.item_nm, i.item_info from item i join member_item mi on i.item_cd = mi.item_cd and i.item_kind_cd like '802%' and mi.mem_id=:mem_id",nativeQuery = true)
+    List<Object[]> HaveCardList(long mem_id);
+
+    @Query(value="select i.item_nm, i.item_info from item i join member_item mi on i.item_cd = mi.item_cd and i.item_kind_cd like '803%' and mi.mem_id=:mem_id",nativeQuery = true)
+    List<Object[]> HaveBadgeList(long mem_id);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "update member_profile set profile_header=:header where mem_id=:mem_id",nativeQuery = true)
+    Integer UpdateProfileHeader(String header, long mem_id);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "update member_profile set profile_card=:card where mem_id=:mem_id",nativeQuery = true)
+    Integer UpdateProfileCard(String card, long mem_id);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "update member_profile set profile_rep_badge=:badge where mem_id=:mem_id",nativeQuery = true)
+    Integer UpdateProfileRepBadge(String badge, long mem_id);
 }

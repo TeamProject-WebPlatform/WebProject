@@ -19,11 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Member;
-import platform.game.service.entity.MemberCard;
 import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.MemberRanking;
 import platform.game.service.model.TO.FavoriteGameTO;
-import platform.game.service.repository.MemberEditCardRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberItemInfoRepository;
 import platform.game.service.repository.MemberProfileRepository;
@@ -51,9 +49,6 @@ public class ProfileController {
     private MemberItemInfoRepository itemInfoRepository;
 
     @Autowired
-    private MemberEditCardRepository editCardRepository;
-
-    @Autowired
     private SecurityPassword securityPassword;
 
     @GetMapping("")
@@ -69,7 +64,7 @@ public class ProfileController {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
                 List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
-                String profileImage = editCardRepository.findByProfileImage(member.getMemId());
+                String profileImage = profileRepository.findByProfileImage(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
@@ -174,14 +169,12 @@ public class ProfileController {
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
         MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
-        MemberCard memberCard = editCardRepository.findAllByMemId(member.getMemId());
-        List<Object[]> HeaderList = editCardRepository.HaveHeaderList(member.getMemId());
-        List<Object[]> CardList = editCardRepository.HaveCardList(member.getMemId());
-        List<Object[]> BadgeList = editCardRepository.HaveBadgeList(member.getMemId());
+        List<Object[]> HeaderList = profileRepository.HaveHeaderList(member.getMemId());
+        List<Object[]> CardList = profileRepository.HaveCardList(member.getMemId());
+        List<Object[]> BadgeList = profileRepository.HaveBadgeList(member.getMemId());
 
         mav.addObject("member", member);
-        mav.addObject("profile", memberProfile);
-        mav.addObject("memberCard", memberCard);
+        mav.addObject("memberProfile", memberProfile);
         mav.addObject("header", HeaderList);
         mav.addObject("card", CardList);
         mav.addObject("badge", BadgeList);
@@ -197,7 +190,7 @@ public class ProfileController {
 
         String NewHeader = header.get("Header");
         System.out.println(NewHeader);
-        if(editCardRepository.UpdateProfileHeader(NewHeader,member.getMemId())==1){
+        if(profileRepository.UpdateProfileHeader(NewHeader,member.getMemId())==1){
             flag = 1;
         }
 
@@ -211,7 +204,7 @@ public class ProfileController {
                         .getMember();
 
         String NewCard = card.get("Card");
-        if(editCardRepository.UpdateProfileCard(NewCard,member.getMemId())==1){
+        if(profileRepository.UpdateProfileCard(NewCard,member.getMemId())==1){
             flag = 1;
         }
 
@@ -225,7 +218,7 @@ public class ProfileController {
                         .getMember();
 
         String NewRepBadge = badge.get("RepBadge");
-        if(editCardRepository.UpdateProfileRepBadge(NewRepBadge,member.getMemId())==1){
+        if(profileRepository.UpdateProfileRepBadge(NewRepBadge,member.getMemId())==1){
             flag = 1;
         }
 
