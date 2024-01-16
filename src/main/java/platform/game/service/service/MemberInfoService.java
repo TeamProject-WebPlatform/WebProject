@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import platform.game.service.entity.Member;
+import platform.game.service.repository.MemberEditCardRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.MemberProfileRepository;
@@ -28,6 +29,9 @@ public class MemberInfoService implements UserDetailsService {
 
     @Autowired
     MemberFavoriteGameRepository favoriteGameRepository;
+
+    @Autowired
+    MemberEditCardRepository cardRepository;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -81,6 +85,16 @@ public class MemberInfoService implements UserDetailsService {
             favoriteGameRepository.setAddUserFavGame(1, member.getMemId());
             favoriteGameRepository.setAddUserFavGame(2, member.getMemId());
             favoriteGameRepository.setAddUserFavGame(3, member.getMemId());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addUserCard(Member member) {
+        try {
+            cardRepository.SetMemberCard(member.getMemId());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
