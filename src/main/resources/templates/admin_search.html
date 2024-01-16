@@ -28,13 +28,20 @@
             var memInfo_type = document.getElementById("memInfo_type").value;
             var memInfo_value = document.getElementById("memInfo_value").value;
     
-            console.log("memInfo_type:", memInfo_type);
-            console.log("memInfo_value:", memInfo_value);
+            // console.log("memInfo_type:", memInfo_type);
+            // console.log("memInfo_value:", memInfo_value);
     
             location.href = "./list_search?memInfo_type=" + memInfo_type +"&memInfo_value=" + memInfo_value;
         }
         function reSelect(){
             location.href = "./list";
+        }
+        function memRoleCd(){
+            var memRoleCd = document.getElementById("mem_role_cd").value;
+            var memId = [[${member.memId}]];
+            // console.log(memRoleCd);
+            // console.log(memId);
+            location.href = "./modify_role_cd?memRoleCd=" + memRoleCd + "&memId=" + memId;
         }
     </script>
 
@@ -84,6 +91,38 @@
                                     <div class="search__refresh"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right ico_fontawesome"></i></button></div>
                                 <!-- </div> -->
                             </div>
+                        </div>
+                        &nbsp;
+                        <div>
+                            사용자 정보
+                        </div>
+                        &nbsp;
+                        <div class="search__input">
+                            <div class="uk-width-1-4"><span th:text="${'회원 닉네임: ' + member.memNick}"></span></div>
+                            <div class="uk-width-1-4" th:text="${'회원번호: ' + member.memId}"></div>
+                            <div class="uk-width-1-4" th:text="${'회원 아이디: ' + member.memUserid}"></div>
+                            <div class="uk-width-1-4" th:text="${'회원 권한: ' + member.memRoleCd}"></div>
+                        </div>
+                        &nbsp;
+                        <div class="">
+                            <div th:text="${'회원 권한 수정'}"></div>
+                        </div>
+                        &nbsp;
+                        <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-4@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div class="search uk-width-1-5" >
+                                <div class="search__input uk-width-1-4" th:text="${'기존 권한: ' + member.memRoleCd}"></div>
+                                &nbsp;
+                                &nbsp;
+                            </div>
+                            <div class="uk-width-1-5">
+                                <select class="js-select" id="mem_role_cd">
+                                    <option value="" disabled selected hidden>권한 수정</option>
+                                    <option value="10001">관리자</option>
+                                    <option value="10002">운영자</option>
+                                    <option value="10003">일반회원</option>
+                                </select>
+                            </div>
+                            <div class="search__btn"><button type="button" onclick="memRoleCd()"><i class="fa-solid fa-check ico_fontawesome"></i></button></div>
                         </div>
                     </div>
                 </div>

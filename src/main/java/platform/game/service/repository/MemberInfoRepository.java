@@ -41,4 +41,6 @@ public interface MemberInfoRepository extends JpaRepository<Member, Long> {
     Long countBy();
 
     Optional<Member> findByMemId(long memId);
+
+    Member findByMemIdOrderByMemIdDesc(long memId);
 }

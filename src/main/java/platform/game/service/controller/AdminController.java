@@ -43,7 +43,6 @@ public class AdminController {
         long postCount = postInfoRepository.count();
         // 게시판 종류별 게시판 글 수
         long noticePostCount = postInfoRepository.count();
-
         // 현재 회원가입이 되어있는 사용자 인원수 가져오기
         long userNum = memberInfoRepository.count();
 
@@ -58,6 +57,7 @@ public class AdminController {
             mostFavoriteGame[i][0] = parts[0]; // game_cd
             mostFavoriteGame[i][1] = parts[1]; // count
 
+            // 케이스 수정필요
             switch (mostFavoriteGame[i][0]) {
                 case "30001":
                     mostFavoriteGame[i][0] = "LeagueofLegends";
@@ -68,25 +68,33 @@ public class AdminController {
                 case "30003":
                     mostFavoriteGame[i][0] = "Steam";
                     break;
+                case "30004":
+                    mostFavoriteGame[i][0] = "LeagueofLegends";
+                    break;
+                case "30005":
+                    mostFavoriteGame[i][0] = "BattleGround";
+                    break;
                 default:
-                    mostFavoriteGame[i][0] = "All";
+                    mostFavoriteGame[i][0] = "Steam";
                     break;
             }
         }
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                System.out.print("배열: " + mostFavoriteGame[i][j] + " ");
-            }
-            System.out.println();
-        }
+        // for (int i = 0; i < rows; i++) {
+        //     for (int j = 0; j < cols; j++) {
+        //         System.out.print("배열: " + mostFavoriteGame[i][j] + " ");
+        //     }
+        //     System.out.println();
+        // }
 
-        System.out.println("총 회원수: " + userNum);
-        System.out.println("총 게시판 글 수: " + postCount);
+        // System.out.println("총 회원수: " + userNum);
+        // System.out.println("총 게시판 글 수: " + postCount);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin");
         modelAndView.addObject("userNum", userNum);
+        modelAndView.addObject("mostFavoriteGame", mostFavoriteGame);
+        modelAndView.addObject("noticePostCount", noticePostCount);
 
         return modelAndView;
     }
@@ -95,7 +103,49 @@ public class AdminController {
     @GetMapping("/list_search")
     public ModelAndView findMember(@RequestParam String memInfo_type,
             @RequestParam String memInfo_value) {
+        
+        // 현재 작성되어 있는 게시판 글 수(각각의 게시판 글 갯수 보여주기)
+        long postCount = postInfoRepository.count();
+        // 게시판 종류별 게시판 글 수
+        long noticePostCount = postInfoRepository.count();
+        // 현재 회원가입이 되어있는 사용자 인원수 가져오기
+        long userNum = memberInfoRepository.count();
 
+        // 가장 많은 사람이 선호하는 게임 분류하기
+        List<String> favoriteGame = memberFavoriteGameRepository.findMostCommonGameCd();
+        int rows = favoriteGame.size();
+        int cols = 2;
+        String[][] mostFavoriteGame = new String[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            String entry = favoriteGame.get(i);
+            String[] parts = entry.split(",");
+            mostFavoriteGame[i][0] = parts[0]; // game_cd
+            mostFavoriteGame[i][1] = parts[1]; // count
+
+            // 케이스 수정필요
+            switch (mostFavoriteGame[i][0]) {
+                case "30001":
+                    mostFavoriteGame[i][0] = "LeagueofLegends";
+                    break;
+                case "30002":
+                    mostFavoriteGame[i][0] = "BattleGround";
+                    break;
+                case "30003":
+                    mostFavoriteGame[i][0] = "Steam";
+                    break;
+                case "30004":
+                    mostFavoriteGame[i][0] = "LeagueofLegends";
+                    break;
+                case "30005":
+                    mostFavoriteGame[i][0] = "BattleGround";
+                    break;
+                default:
+                    mostFavoriteGame[i][0] = "Steam";
+                    break;
+            }
+        }
+
+//여기서부터 검색 시작
         Optional<Member> member = Optional.empty();
 
         // 사용자 검색
@@ -121,25 +171,28 @@ public class AdminController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin");
+        modelAndView.setViewName("admin_search");
         modelAndView.addObject("member", member.get());
-        // System.out.println(member.get().getMemRoleCd());
+        modelAndView.addObject("userNum", userNum);
+        modelAndView.addObject("mostFavoriteGame", mostFavoriteGame);
+        modelAndView.addObject("noticePostCount", noticePostCount);
 
         return modelAndView;
     }
 
     // 회원 권한 관리
     @GetMapping("modify_role_cd")
-    public ModelAndView modifyMemRoleCd(@RequestParam long memId,
+    public String modifyMemRoleCd(@RequestParam long memId,
             @RequestParam String memRoleCd) {
         System.out.println("사용자 권한 수정 호출");
 
-        Optional<Member> member = memberInfoRepository.findByMemId(memId);
-        member.get().setMemRoleCd(memRoleCd);
+        Member member = memberInfoRepository.findByMemIdOrderByMemIdDesc(memId);
+        member.setMemRoleCd(memRoleCd);
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin");
-        return modelAndView;
+        memberInfoRepository.save(member);
+        
+        System.out.println("저장완료");
+        
+        return "redirect:../admin/list";
     }
-
 }
