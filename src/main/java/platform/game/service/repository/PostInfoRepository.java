@@ -2,7 +2,9 @@ package platform.game.service.repository;
 
 import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Param;
 
 import platform.game.service.entity.Post;
 
@@ -50,4 +52,8 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer> {
 
         // 게시물 삭제하기
         Post deleteByPostId(int postId);
+
+         // 특정 사용자가 작성한 글 목록 조회
+        @Query(value = "SELECT * FROM post WHERE mem_id = :memberId", nativeQuery = true)
+        ArrayList<Post> getPostsByMember(@Param("memberId") int memberId);
 }
