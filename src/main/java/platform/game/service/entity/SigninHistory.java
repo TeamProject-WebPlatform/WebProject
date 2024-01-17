@@ -1,10 +1,6 @@
 package platform.game.service.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 import jakarta.persistence.Entity;
@@ -17,8 +13,6 @@ import jakarta.persistence.IdClass;
 
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,7 +42,6 @@ public class SigninHistory {
     // 날짜 저장
     private LocalDateTime createdAt;
 
-    
     @Override
     public String toString() {
         return "SigninHistory{" +
