@@ -3,12 +3,14 @@ package platform.game.service.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -292,6 +294,7 @@ public class BoardController {
         return modelAndView;
     }
 
+
     @Transactional
     @RequestMapping("/write_ok")
     public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request, Model model) {
@@ -324,13 +327,13 @@ public class BoardController {
             postInfoRepository.save(post);
 
             // 변경: 첫 번째 글 작성 시에는 특정 포인트를 주기
-            if (post.isFirstPost(posts)) {
+            if (isFirstPost(posts)) {
                 int firstPostPoint = 100; // 첫 번째 글 작성 시 부여할 포인트
                 updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50103", firstPostPoint);
                 flag = 0;
                 message = "첫 번째 글을 작성해주셔서 감사합니다! 보너스 포인트 100";
                 System.out.println("첫 번째 글 작성 포인트 지급");
-            } else if (post.isMultipleOfFivePosts(posts)) {
+            } else if (isMultipleOfFivePosts(posts)) {
                 // 변경: 5개 단위로 작성할 때마다 다른 포인트를 주기
                 int additionalPostPoint = 50; // 5개 단위로 작성 시 추가로 부여할 포인트
                 updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50104", additionalPostPoint);
@@ -674,4 +677,41 @@ public class BoardController {
 
         return rootNodes;
     }
+
+    // 변경: 특정 사용자가 작성한 글의 개수 조회 (인스턴스 메서드로 변경)
+
+    public Member getMember() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof MemberInfoDetails) {
+            return ((MemberInfoDetails) authentication.getPrincipal()).getMember();
+        }
+        return null; // 혹은 예외 처리 등을 추가할 수 있습니다.
+    }
+    
+    public int getPostCountByMember(List<Post> posts) {
+        int count = 0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getMember();
+        for (Post p : posts) {
+            if (p.getMember() != null && p.getMember().getMemId() == member.getMemId()) {
+                count++;
+            }
+        }
+        System.out.println("사용자 " + member.getMemId() + "의 글 개수: " + count);
+        System.out.println("현재 게시글 작성자: " + member.getMemId());
+        // System.out.println("현재 글의 boardCd: " + boardCd);
+        return count;
+    }
+
+    // 변경: 첫 번째 글 작성 여부 확인 (인스턴스 메서드로 변경)
+    public boolean isFirstPost(List<Post> posts) {
+        return getPostCountByMember(posts) == 1;
+    }
+
+    // 변경: 5개 단위로 작성 여부 확인 (인스턴스 메서드로 변경)
+    public boolean isMultipleOfFivePosts(List<Post> posts) {
+        int postCount = getPostCountByMember(posts);
+        return postCount > 0 && (postCount % 5 == 0);
+    }
+
 }
