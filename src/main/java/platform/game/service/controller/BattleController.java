@@ -1,12 +1,16 @@
 package platform.game.service.controller;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,9 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import jakarta.servlet.http.HttpServletRequest;
 import platform.game.service.action.BattleCardAction;
+import platform.game.service.entity.Battle;
+import platform.game.service.entity.BattlePost;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
@@ -29,6 +36,7 @@ import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
 import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.BattleCustomRepositoryImpl;
+import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
@@ -48,6 +56,8 @@ public class BattleController {
     CommentInfoRepository commentInfoRepository;
     @Autowired
     MemberInfoRepository memberInfoRepository;
+    @Autowired
+    BattleRepository battleRepository;
     @Autowired
     BattleCustomRepositoryImpl battleCustomRepositoryImpl;
     
@@ -128,7 +138,8 @@ public class BattleController {
         return mav;
     }
     @RequestMapping("/write")
-    public ModelAndView writePage() {
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ModelAndView writePage(@RequestParam("postId") int postId,@RequestParam("btId") int btId) {
         ModelAndView mav = new ModelAndView("battle_write");
         long id = 0;
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -142,10 +153,44 @@ public class BattleController {
                 mav.addObject("level",member.getMemLvl());
             }
         }
+        if(postId!=-1 && btId!=-1){
+            // modify
+            Post post = postInfoRepository.findById(postId).get();
+            Battle battle = battleRepository.findById(btId).get();
+            BattlePost battlePost = battle.getBtPost();
+            if(battle.getClientMember()!=null || post.getMember().getMemId()!=id){
+                // 클라이언트가 있으므로 수정 불가
+                return new ModelAndView(new RedirectView("/view?postId="+postId+"&btId"+btId));
+            }
+            LocalDateTime ddDate = battlePost.getBtPostDeadLine().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime stDate = battlePost.getBtStartDt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+            mav.addObject("isModify",true);
+            mav.addObject("postId",postId);
+            mav.addObject("btId",btId);
+            mav.addObject("title",post.getPostTitle());
+            mav.addObject("content",post.getPostContent());
+            mav.addObject("point",battlePost.getBtPostPoint());
+            mav.addObject("game",battlePost.getGameCd());
+            // ddDate의 연, 월, 일, 시간, 분
+            mav.addObject("ddYear", ddDate.getYear());
+            mav.addObject("ddMonth", ddDate.getMonthValue());
+            mav.addObject("ddDay", ddDate.getDayOfMonth());
+            mav.addObject("ddHour", ddDate.getHour());
+            mav.addObject("ddMinute", ddDate.getMinute());
+
+            // stDate의 연, 월, 일, 시간, 분
+            mav.addObject("stYear", stDate.getYear());
+            mav.addObject("stMonth", stDate.getMonthValue());
+            mav.addObject("stDay", stDate.getDayOfMonth());
+            mav.addObject("stHour", stDate.getHour());
+            mav.addObject("stMinute", stDate.getMinute());
+        }
         return mav;
     }
     @PostMapping("/write_ok")
     public String writePost(HttpServletRequest request) {
+        String isModify = request.getParameter("isModify");
         long memId = Long.parseLong(request.getParameter("memId"));
         String title = request.getParameter("title");
         String game = request.getParameter("game");
@@ -176,11 +221,20 @@ public class BattleController {
             e.printStackTrace();
             // 아마 에러가 안뜰 것으로 예상해서 롤백 구현x
         }
-        
-        int[] data = battleCustomRepositoryImpl.writePost(memId,title,game,point,content,ddDate,stDate);
-        
+        int[] data = new int[2];
+
+        if(isModify.equals("true")){
+            int postId = Integer.parseInt(request.getParameter("postId"));
+            int btId = Integer.parseInt(request.getParameter("btId"));
+            data = battleCustomRepositoryImpl.modifyPost(postId,btId,memId,title,game,point,content,ddDate,stDate);
+        }else{
+            data = battleCustomRepositoryImpl.writePost(memId,title,game,point,content,ddDate,stDate);
+        }
         int postId = data[0];
         int btId = data[1];
+        if(isModify.equals("true")){
+
+        }
         return "redirect:/battle/view?postId="+postId+"&btId="+btId;
     }
     @RequestMapping("/comment")

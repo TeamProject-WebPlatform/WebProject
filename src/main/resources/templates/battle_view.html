@@ -205,6 +205,8 @@
                 <div class="content">
                     <div class="content-header">
                         헤더 뭐넣을지 아직
+                        <div th:if="${bto.client}"th:text="${456}"></div>
+                        <div th:unless="${bto.client}"th:text="${123}"></div>
                     </div>
                     <div class="content-main">
                         <div class="uk-grid" data-uk-grid>
@@ -357,33 +359,37 @@
 
                                                     <div class="info-center-right">
                                                         <div class="info-center-header">
-                                                            <div class="info-point-percent client-point-ratio"
+                                                            <div th:if=${bto.client} class="info-point-percent client-point-ratio"
                                                                 th:text="${pto.clientPointRatio+'%'}">
                                                                 25%</div>
+                                                            <div th:unless=${bto.client} class="info-point-percent client-point-ratio">0%</div>    
                                                             <div class="info-point-header-list">
                                                                 <div class="info-point-amount">
-                                                                    <div class="client-total-point" th:utext="'<script>' +
+                                                                    <div th:if=${bto.client} class="client-total-point" th:utext="'<script>' +
                                                                         'var value = ' + ${pto.clientTotalPoint} + ';' +
                                                                         'var formattedValue = formatNumberTok(value);' +
                                                                         'document.write(formattedValue);' +
                                                                         '</script>'">
                                                                         72.3</div>
+                                                                    <div th:unless=${bto.client} class="client-total-point">0</div>    
                                                                     <div class="icon_box">
-                                                                        <i
-                                                                            class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                        <i class="fa-solid fa-coins ico_fontawesome"></i>
                                                                     </div>
                                                                 </div>
                                                                 <div class="info-point-pno">
-                                                                    <div class="client-total-mem-no"
+                                                                    <div th:if=${bto.client} class="client-total-mem-no"
                                                                         th:text="${pto.clientTotalMemNo}">
+                                                                        0</div>
+                                                                    <div th:unless=${bto.client} class="client-total-mem-no">
                                                                         0</div>
                                                                     <div class="icon_box">
                                                                         <i class="fa-solid fa-user ico_fontawesome"></i>
                                                                     </div>
                                                                 </div>
                                                                 <div class="info-point-ratio">
-                                                                    <div class="client-point-reward-ratio"
-                                                                        th:text="${pto.clientPointRewardRatio+' X'}">
+                                                                    <div th:if=${bto.client} class="client-point-reward-ratio"
+                                                                        th:text="${pto.clientPointRewardRatio+' X'}"></div>
+                                                                    <div th:unless=${bto.client} class="client-point-reward-ratio">0 X
                                                                     </div>
                                                                     <div class="icon_box">
                                                                         <i class="fa-solid fa-gem ico_fontawesome"></i>
@@ -434,6 +440,10 @@
                                                                     <input class="point-betting-input" type="search"
                                                                         name="search" placeholder="TERMINATED" readonly>
                                                                 </battleStateCheck>
+                                                                <battleStateCheck th:if="${bto.state=='N'}">
+                                                                    <input class="point-betting-input" type="search" name="search"
+                                                                        placeholder="MATCHING" readonly>
+                                                                </battleStateCheck>
                                                             </div>
                                                         </div>
 
@@ -453,28 +463,37 @@
 
                                                 <div class="battle-profile-info">
                                                     <div class="battle-profile-nickname">
-                                                        <div class="battle-profile-lvl"
+                                                        <div th:if=${bto.client} class="battle-profile-lvl"
                                                             th:text="'Lv ' + ${bto.clientLvl}">Lv30
                                                         </div>
-                                                        <div th:text="${bto.clientNick}"></div>
+                                                        <div th:unless=${bto.client} class="battle-profile-lvl"></div>
+                                                        <div th:if=${bto.client} th:text="${bto.clientNick}"></div>
+                                                        <div th:unless=${bto.client} th:text="${bto.clientNick}"></div>
                                                     </div>
                                                     <div class="battle-profile-history">
                                                         <div>
-                                                            <div class="battle-profile-win"
+                                                            <div th:if=${bto.client} class="battle-profile-win"
                                                                 th:text="${bto.clientWin}+' 승'">77 승
                                                             </div>
-                                                            <div>&nbsp;/&nbsp;</div>
-                                                            <div class="battle-profile-lose"
+                                                            <div th:unless=${bto.client} class="battle-profile-win">
+                                                            </div>
+                                                            <div th:if=${bto.client} >&nbsp;/&nbsp;</div>
+                                                            <div th:unless=${bto.client} >&nbsp;&nbsp;</div>
+                                                            <div th:if=${bto.client} class="battle-profile-lose"
                                                                 th:text="${bto.clientLose}+' 패'">25
                                                                 패</div>
+                                                                <div th:unless=${bto.client} class="battle-profile-lose"></div>
                                                         </div>
-                                                        <div
+                                                        <div th:if=${bto.client}
                                                             th:with="total = ${(bto.clientWin + bto.clientLose)}, rate=${(bto.clientWin * 100.0 / total)}">
                                                             <div th:if="${total > 0}" class="battle-profile-win-rate"
                                                                 th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">
                                                                 75.4%</div>
                                                             <div th:if="${total == 0}" class="battle-profile-win-rate">
                                                                 0%</div>
+                                                        </div>
+                                                        <div th:unless=${bto.client}>
+                                                            <div class="battle-profile-win-rate"></div>
                                                         </div>
                                                     </div>
                                                     <div class="profile-main">
@@ -525,9 +544,9 @@
                                             <span th:text="'['+${post.postCommentCnt}+']'"></span>
                                         </div>
                                         <div>
-                                            <div><span onclick="sortCmt(1)">등록순</span></div>
+                                            <div><span onclick="sortCmt(1)" style="cursor: pointer;">등록순</span></div>
                                             <div><span>|</span></div>
-                                            <div><span onclick="sortCmt(2)">최신순</span></div>
+                                            <div><span onclick="sortCmt(2)" style="cursor: pointer;">최신순</span></div>
                                         </div>
                                     </div>
                                     <div class="sort-class asc">
@@ -674,7 +693,7 @@
                                     </div>
                                     <div class="widjet__body">
                                         <ul class="friend-requests-list">
-                                            <li class="friend-requests-item" th:each="applicant : ${applicants}">
+                                            <li th:unless="${applicants==''}" class="friend-requests-item" th:each="applicant : ${applicants}">
                                                 <div class="friend-request-item-main">
                                                     <div class="level_icon"><i
                                                             class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
@@ -708,7 +727,7 @@
                         <div class="button-section">
                             <div th:if="${post.member.memNick==nickname}">
                                 <!-- 본인이 작성한 글이면 보임 -->
-                                <a th:href="@{modify(post_id=${post.postId}, cpage=${cpage})}">
+                                <a th:href="@{'/battle/write?postId='+${post.postId}+'&btId='+${bto.btId}}">
                                     <input type="button" value="수정" class="btn_re">
                                 </a>
                                 <a th:href="@{delete(post_id=${post.postId}, cpage=${cpage})}">
@@ -718,7 +737,7 @@
                             <div>
                                 <a th:href="@{/battle}"><input type="button"
                                         value="목록" class="btn_re"></a>
-                                <a th:if="${nickname}" th:href="@{/battle/write}">
+                                <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
                                     <!-- 로그인 상태인 경우의 링크 -->
                                     <input type="button" value="쓰기" class="btn_re">
                                 </a>

@@ -250,4 +250,51 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository{
 
         return data;
     }
+    @Transactional
+    @Override
+    public int[] modifyPost(int postId, int btId, long memId,String title, String game, String point,String content,Date ddDate, Date stDate){
+        // post에 추가
+        // battle에 추가 
+        // battle_post에 추가
+        // 날짜 2개, point, game_cd,post_id(post에 추가하고 확인),bt_id(battle에 추가하고 확인)
+        int[] data = new int[2];
+        Date now = new Date();
+        Query query = null;
+        
+        // POST INSERT
+        query = entityManager.createNativeQuery(
+                "UPDATE post " +
+                        "SET post_content=:content, post_title=:title, updated_at=:now, mem_id=:memId " +
+                        "WHERE post_id=:postId");
+        query.setParameter("content", content);
+        query.setParameter("title",title);
+        query.setParameter("now",new Date());
+        query.setParameter("memId", memId);
+        query.setParameter("postId", postId);
+        if (query.executeUpdate() != 1)
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");  
+        
+        query.setParameter("memId", memId);
+        if (query.executeUpdate() != 1)
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백"); 
+        // bp 업데이트
+       
+        // BATTLE_POST INSERT
+        query = entityManager.createNativeQuery(
+                "UPDATE battle_post " +
+                        "SET bt_post_dead_line=:ddDate, bt_post_point=:point, game_cd=:gameCd, bt_start_dt=:stDate " +
+                        "WHERE post_id=:postId");
+        query.setParameter("ddDate", ddDate);
+        query.setParameter("point", point);
+        query.setParameter("gameCd", game);
+        query.setParameter("postId", postId);
+        query.setParameter("stDate", stDate);
+        if (query.executeUpdate() != 1)
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백"); 
+
+        
+        data[0] = postId;
+        data[1] = btId;
+        return data;
+    }
 }

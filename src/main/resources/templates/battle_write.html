@@ -27,19 +27,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
 
 </head>
-<script>
+<script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
+        let isModify = /*[[${isModify}]]*/'';
+        let ddyear = /*[[${ddYear}]]*/'';
+        let styear = /*[[${stYear}]]*/'';
+        
+        let ddmonth = /*[[${ddMonth}]]*/'';
+        let stmonth = /*[[${stMonth}]]*/'';
+        
+        let ddday = /*[[${ddDay}]]*/'';
+        let stday = /*[[${stDay}]]*/'';
+        
+        let ddhour = /*[[${ddHour}]]*/'';
+        let sthour = /*[[${stHour}]]*/'';
+        
+        let ddminute = /*[[${ddMinute}]]*/'';
+        let stminute = /*[[${stMinute}]]*/'';
         // 연도 선택을 위한 옵션 동적 생성
         let yearSelects = document.querySelectorAll('.year');
         yearSelects.forEach(function (yearSelect) {
-            for (let year = new Date().getFullYear(); year <= new Date().getFullYear() + 5; year++) {
+            for (let year = new Date().getFullYear(); year <= new Date().getFullYear() + 1; year++) {
                 let option = document.createElement('option');
                 option.value = year;
                 option.text = year + "년";
                 yearSelect.add(option);
+                
+                if(isModify && yearSelect.name==='ddyear' && year===ddyear) option.selected=true;
+                if(isModify && yearSelect.name==='styear' && year===styear) option.selected=true;
             }
         })
-
         // 월 선택을 위한 옵션 동적 생성
         let monthSelects = document.querySelectorAll('.month');
         monthSelects.forEach(function (monthSelect) {
@@ -48,6 +65,9 @@
                 option.value = month;
                 option.text = month + "월";
                 monthSelect.add(option);
+                
+                if(isModify && monthSelect.name==='ddmonth' && month===ddmonth) option.selected=true;
+                if(isModify && monthSelect.name==='stmonth' && month===stmonth) option.selected=true;
             }
         })
 
@@ -59,6 +79,9 @@
                 option.value = day;
                 option.text = day + "일";
                 daySelect.add(option);
+
+                if(isModify && daySelect.name==='ddday' && day===ddday) option.selected=true;
+                if(isModify && daySelect.name==='stday' && day===stday) option.selected=true;
             }
         })
 
@@ -70,6 +93,8 @@
                 option.value = hour;
                 option.text = hour + "시";
                 hourSelect.add(option);
+                if(isModify && hourSelect.name==='ddhour' && hour===ddhour) option.selected=true;
+                if(isModify && hourSelect.name==='sthour' && hour===sthour) option.selected=true;
             }
         })
         // 분 선택을 위한 옵션 동적 생성
@@ -80,6 +105,11 @@
                 option.value = minute;
                 option.text = minute + "분";
                 minuteSelect.add(option);
+                if(isModify && minuteSelect.name==='ddminute' && minute===ddminute) {
+                    option.selected=true;
+                
+                }
+                if(isModify && minuteSelect.name==='stminute' && minute===stminute) option.selected=true;
             }
         })
 
@@ -101,7 +131,6 @@
             let stSelectedDay = daySelects[1].value;
             let stSelectedHour = hourSelects[1].value;
             let stSelectedMinute = minuteSelects[1].value;
-            
             document.forms["pfrm"].submit();
         });
     })
@@ -182,12 +211,16 @@
                                 </div>
                             </div>
                             <form th:action="@{/battle/write_ok}" method="post" name="pfrm">
+                                <input type="hidden" name="isModify" th:value="${isModify}">
+                                <input th:if="${isModify==true}" type="hidden" name="postId" th:value="${postId}">
+                                <input th:if="${isModify==true}" type="hidden" name="btId" th:value="${btId}">
                                 <input type="hidden" name="memId" th:value="${memId}">
                                 <div class="uk-width-3-5@xl post-section">
                                     <div class="post-info">
                                         <!-- Post title-->
                                         <div class="post-title">
-                                            <textarea name="title" class="battle-textarea" placeholder="타이틀을 작성"></textarea>
+                                            <textarea th:unless="${isModify==true}" name="title" class="battle-textarea" placeholder="타이틀을 작성"></textarea>
+                                            <textarea th:if="${isModify==true}" name="title" class="battle-textarea" th:text="${title}"></textarea>
                                         </div>
                                         <div class="line"></div>
                                         <div class="post-sub">
@@ -203,12 +236,16 @@
                                         <div>
                                             <div>
                                                 <div class="battle-info-key">게임 : </div>
-                                                <div class="battle-info-value"><textarea name="game" id="game" class="battle-textarea"></textarea>
+                                                <div class="battle-info-value">
+                                                    <textarea th:unless="${isModify==true}" name="game" id="game" class="battle-textarea"></textarea>
+                                                    <textarea th:if="${isModify==true}" name="game" id="game" class="battle-textarea" th:text="${game}"></textarea>
                                                 </div>
                                             </div>
                                             <div>
                                                 <div class="battle-info-key">포인트 : </div>
-                                                <div class="battle-info-value"><textarea name="point" id="point" class="battle-textarea"></textarea>
+                                                <div class="battle-info-value">
+                                                    <textarea th:unless="${isModify==true}" name="point" id="point" class="battle-textarea"></textarea>
+                                                    <textarea th:if="${isModify==true}" name="point" id="point" class="battle-textarea" th:text="${point}"></textarea>
                                                 </div>
                                             </div>
                                             <div>
@@ -256,8 +293,10 @@
                                         </div>
 
                                     </div>
-                                    <div class="post-text"><textarea name="content" id="content" class="battle-textarea"
-                                            placeholder="게시글 내용 작성"></textarea></div>
+                                    <div class="post-text">
+                                        <textarea th:unless="${isModify==true}" name="content" id="content" class="battle-textarea" placeholder="게시글 내용 작성"></textarea>
+                                        <textarea th:if="${isModify==true}" name="content" id="content" class="battle-textarea" th:text="${content}"></textarea>
+                                    </div>
                                 </div>
                             </form>
                             <div class="uk-width-1-5@xl requests-section">

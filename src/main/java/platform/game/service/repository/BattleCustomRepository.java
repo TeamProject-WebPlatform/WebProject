@@ -13,4 +13,5 @@ public interface BattleCustomRepository{
     public int reqeustBattle(long memId, int btId, int postId);
     public Object[] like(long memId, String type, int postId,int commentId, int like);
     public int[] writePost(long memId,String title, String game, String point,String content,Date ddDate, Date stDate);
+    public int[] modifyPost(int postId, int btId, long memId,String title, String game, String point,String content,Date ddDate, Date stDate);
 }

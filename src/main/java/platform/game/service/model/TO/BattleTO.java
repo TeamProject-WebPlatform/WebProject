@@ -22,11 +22,13 @@ public class BattleTO {
         hostLose = host.getMemGameLoseCnt();
         hostLvl= host.getMemLvl();
         hostImgName = "doyun_icon.png";
-        clientNick = client.getMemNick();
-        clientWin = client.getMemGameWinCnt();
-        clientLose = client.getMemGameLoseCnt();
-        clientLvl= client.getMemLvl();
-        clientImgName = "doyun_icon.png";
+        if(client!=null){
+            clientNick = client.getMemNick();
+            clientWin = client.getMemGameWinCnt();
+            clientLose = client.getMemGameLoseCnt();
+            clientLvl= client.getMemLvl();
+            clientImgName = "doyun_icon.png";
+        }
         
         this.btId = battle.getBtId();
         this.point = battlePost.getBtPostPoint();
@@ -75,6 +77,10 @@ public class BattleTO {
     String applicantsString;// 신청자들 memId,보류상태,신청시간/memId,보류상태
     String[][] applicants;
     public String[][] splitApplicants(String str){
+        System.out.println(str);
+        if(str==null || str.equals("")){
+            return null;
+        }
         String[] s = str.split("/");
         if(s.length==0) return null;
         String[][] res = new String[s.length][3];

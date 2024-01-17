@@ -182,6 +182,7 @@
                                             <div th:if="${battle.state=='A'}" class="A">베팅 가능!</div>
                                             <div th:if="${battle.state=='P'}" class="P">진행중</div>
                                             <div th:if="${battle.state=='T'}" class="T">종료됨</div>
+                                            <div th:if="${battle.state=='N'}" class="N">매칭 중</div>
                                         </div>
                                     </div>
                                     <div class="info-center">
@@ -303,6 +304,10 @@
                                                         <input class="point-betting-input" type="search" name="search"
                                                             placeholder="TERMINATED" readonly>
                                                     </battleStateCheck>
+                                                    <battleStateCheck th:if="${battle.state=='N'}">
+                                                        <input class="point-betting-input" type="search" name="search"
+                                                            placeholder="MATCHING" readonly>
+                                                    </battleStateCheck>
                                                 </div>
                                             </div>
                                             <div th:if="${battlePointTOList[iterStat.index].flag==1}"
@@ -318,29 +323,40 @@
 
                                 <div class="battle-profile-right">
                                     <div class="battle-profile-media">
-                                        <a href="10_game-profile.html">
+                                        <a th:if="${battle.client}" href="10_game-profile.html">
                                             <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" />
+                                        </a>
+                                        <a th:unless="${battle.client}">
+                                            <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />
                                         </a>
                                     </div>
                                     <div class="battle-profile-info">
                                         <div class="battle-profile-nickname">
-                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30
-                                            </div>
+                                            <div th:if="${battle.client}" class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30</div>
+                                            <div th:unless="${battle.client}" class="battle-profile-lvl"></div>
+                                            
                                             <div th:text="${battle.clientNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>
-                                                <div class="battle-profile-win" th:text="${battle.clientWin}+' 승'">77 승
+                                                <div th:if="${battle.client}" class="battle-profile-win" th:text="${battle.clientWin}+' 승'">77 승
                                                 </div>
-                                                <div>&nbsp;/&nbsp;</div>
-                                                <div class="battle-profile-lose" th:text="${battle.clientLose}+' 패'">25
+                                                <div th:if="${battle.client}" >&nbsp;/&nbsp;</div>
+                                                <div th:if="${battle.client}" class="battle-profile-lose" th:text="${battle.clientLose}+' 패'">25
                                                     패</div>
+                                                <div th:unless="${battle.client}" class="battle-profile-win"></div>
+                                                <div th:unless="${battle.client}" >&nbsp;&nbsp;</div>
+                                                <div th:unless="${battle.client}" class="battle-profile-lose"></div>    
+                                                
                                             </div>
-                                            <div
+                                            <div th:if="${battle.client}"
                                                 th:with="total = ${(battle.clientWin + battle.clientLose)}, rate=${(battle.clientWin * 100.0 / total)}">
                                                 <div th:if="${total > 0}" class="battle-profile-win-rate"
                                                     th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
                                                 <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
+                                            </div>
+                                            <div th:unless="${battle.client}">
+                                                <div class="battle-profile-win-rate"></div>
                                             </div>
                                         </div>
                                         <div class="profile-main">
@@ -376,8 +392,9 @@
     </div>
 
     <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
+    
 
-
+    <!-- <a href="https://kr.freepik.com/free-vector/letter-x-dry-brush-stroke-typography-vector_36226783.htm#query=x&position=0&from_view=keyword&track=sph&uuid=297639a8-be16-41f2-a58f-22984bdd6a87">작가 rawpixel.com</a> 출처 Freepik -->
 </body>
 
 </html>
