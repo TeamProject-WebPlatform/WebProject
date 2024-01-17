@@ -48,7 +48,7 @@ public class SigninHistory {
     // 날짜 저장
     private LocalDateTime createdAt;
 
-
+    
     @Override
     public String toString() {
         return "SigninHistory{" +

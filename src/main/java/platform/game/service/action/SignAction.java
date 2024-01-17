@@ -68,7 +68,6 @@ public class SignAction {
     @Autowired
     @Qualifier("updatePointHistoryImpl")
     private UpdatePointHistory updatePointHistory;
-    
 
     public Cookie signUp(UserSignTO userSignup, int login) {
         // jwt 토큰 저장할 Cookie

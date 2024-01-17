@@ -19,6 +19,7 @@ public class SigninHistoryService {
     @Transactional
     public boolean isFirstLogin(Member member) {
         LocalDateTime currentDateTime = LocalDateTime.now();
+        
         SigninHistory latestSignin = signinHistoryRepository.findTopByMemberOrderByCreatedAtDesc(member);
 
         if (latestSignin == null || latestSignin.getCreatedAt().isAfter(currentDateTime)) {
