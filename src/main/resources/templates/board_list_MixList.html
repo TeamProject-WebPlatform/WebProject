@@ -33,15 +33,10 @@
         submenu.classList.remove("none");
     });
 </script>
-<script>
-    function checkLoginAndNavigate() {
-        alert('로그인이 필요합니다.');
-    }
-</script>
 <!--모든 기능 다 합친 스크립트-->
 <script>
     function onSelect() {
-        var selectedSize = document.getElementById("list_size").value;
+        var selectedSize = document.getElementById("categorySelect").value;
         var selectedOption = document.getElementById("s_btn").value;
         var searchValue = document.getElementById("s_txt_btn").value;
         var selectTag = document.getElementById("list_tag").value;
@@ -53,12 +48,12 @@
 
         //alert('확인');
 
-        location.href = "./list_MixList?board_cd=" + [[${boardCd}]] +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
+        location.href = "list_MixList?board_cd=" + /*[[${boardCd}]]*/20004 +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
     }
 </script>
 <script>
     function reSelect(){
-        location.href = "./list?board_cd=" + [[${boardCd}]];
+        location.href = "list?board_cd=" + /*[[${boardCd}]]*/20004;
     }
 </script>
 
@@ -110,32 +105,15 @@
                                     &nbsp;
                                     &nbsp;
                                     <!-- &nbsp; -->
-                                    <!-- <div class="search__refresh"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div> -->
+                                    <div class="search__refresh"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div>
                                 <!-- </div> -->
                             </div>
-                            <!-- <div class="uk-width-1-6"><select class="js-select" id="list_tag" onchange="onSelect()">
-                                <option value="All" th:selected="${list_tag == 'All'}">All</option>
-                                <option value="LeagueofLegends" th:selected="${list_tag == 'LeagueofLegends'}">LeagueofLegends</option>
-                                <option value="BattleGround" th:selected="${list_tag == 'BattleGround'}">BattleGround</option>
-                                <option value="Steam" th:selected="${list_tag == 'Steam'}">Steam</option>
-                            </select></div> -->
-                            <div class="uk-width-1-6"><select class="js-select" id="list_size" onchange="onSelect()" >
-                                <option value="10" th:selected="${recpage == 10}">10개씩</option>
-                                <option value="20" th:selected="${recpage == 20}">20개씩</option>
-                                <option value="30" th:selected="${recpage == 30}">30개씩</option>
-                            </select></div>
-                            <div class="uk-width-1-6"></div>
-                            <div class="uk-width-1-6"></div>
-                            <div class="uk-width-1-6"></div>
-                            <div class="uk-width-1-6"></div>
-                            <div class="search__refresh uk-width-1-6"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right ico_fontawesome"></i></button></div>
                         </div>
                     </div>
                 </div>
                 <div class="widjet --filters">
                     <div class="widjet__body">
                         <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-
                                 <!--게시판 코드 들어가는 장소-->
                                 <!-- <div class="con_txt"> -->
                                 <div class="widjet_size widjet-game__title">
@@ -160,21 +138,21 @@
                                                 <th width="10%" >조회</th>
                                             </tr>
                                             <tr class="board_center_tr" th:each="post, rowStat : ${lists}">
-                                                <td th:text="${#lists.size(lists) - rowStat.index}" style="text-align: center;"></td>
+                                                <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
                                                 <td class="left">
                                                     <!--게시물 클릭시 이동하도록 하는 구문-->
                                                     <a class="board_ccenter_tr_a" th:href="@{view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
                                                     <!--게시물 댓글 갯수-->
                                                     <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                     <!--새로운 글 작성시 보여지는 new 표시-->
-                                                    <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
+                                                    <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
                                                         <img src="../img/icon_new.gif" alt="NEW">
                                                     </span>
                                                 </td>
                                                 <!--닉네임-->
                                                 <td style="text-align: center;" th:text="${post.member.memNick}"></td>
                                                 <!--글쓴 날짜-->
-                                                <td style="text-align: center;" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                                                <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
                                                 <!--조회수-->
                                                 <td style="text-align: center;" th:text="${post.postHit}"></td>
                                             </tr>
@@ -231,16 +209,13 @@
                                         <!--//페이지넘버-->
                                         <div class="align_right" style="text-align: right;" >
                                             <!-- 로그인 상태인 경우의 링크 -->
-                                            <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
+                                            <a th:href="@{write(board_cd=${boardCd})}">
                                                 <input type="button" value="쓰기" class="btn_write btn_txt01">
                                             </a>
-                                            <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                            <a th:unless="${loginCheck}" href="/login">
-                                                <input type="button" value="쓰기" class="btn_write btn_txt01" onclick="checkLoginAndNavigate()">
-                                            </a>
                                         </div>
-                                    </div>    <!--//게시판-->
+                                        <!--//게시판-->
                                 </div>
+                            </div>
                             
                         </div>
                     </div>

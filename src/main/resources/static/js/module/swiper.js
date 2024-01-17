@@ -23,6 +23,28 @@ const SwiperData = async function () {
     }
     return datalist;
 }
+
+const UserProfileData = async function (memId) {
+    let datalist = [];
+    try {
+        const response = await fetch("/userprofile", {
+            method: "POST",
+            headers : {
+                'Content-Type': 'application/json'
+            },
+            body:memId
+        });
+        const data = await response.json();
+        for (let i = 0; i < data.length; i++) {
+            datalist.push(data[i]);
+        }
+    } catch (error) {
+        console.log("에러", error);
+        throw error;  // 에러를 다시 던져서 호출하는 쪽에서 처리할 수 있도록 함
+    }
+    return datalist;
+}
+
 const setSwiper = function () {
     const profileSlider = new Swiper('.js-recommend .swiper', {
         slidesPerView: profileSlidesPerView,
@@ -53,13 +75,15 @@ const setSwiper = function () {
 {/* <div class="recommend-slide row user"> */ }
 const setSwiperWrapper = async function () {
     let datalist = await SwiperData();
+    let profiledata = JSON.stringify(datalist);
+    let userprofile = await UserProfileData(profiledata);
     let slideNum = datalist.length
     let html = "";
     for (let i = 0; i < slideNum; i++) {
         html += `
             <div class="swiper-slide">`;
 
-        html += createSwiperProfile(datalist[i].mem_nick, datalist[i].mem_lvl);
+        html += createSwiperProfile(datalist[i].mem_lvl, datalist[i].mem_nick, userprofile[i].profileIntro, userprofile[i].profileHeader, userprofile[i].profileCard, userprofile[i].ProfileRepBadge);
 
         html += `   
             </div>`;
@@ -79,21 +103,39 @@ const setSwiperWrapper = async function () {
     // Swiper 초기화 및 업데이트
     setSwiper(profileSlidesPerView);
 }
-const createSwiperProfile = function (nickname, level) {
+const createSwiperProfile = function (level, nickname, introduce, header, card, repbadge) {
     let memNickname = nickname;
     let memImageName = "doyun_icon.png";
     let memLevel = level;
-    let memSymbolImageName = "starbucks.png";
-    let memIntroduction = "안녕하세요";
+    let memHeader = header + ".png";
+    let memHeaderStyle = "";
+    let memCard = card + ".png";
+    let memCardStyle = "";
+    let memSymbolImageName = repbadge + ".png";
+    let memRepBadgeStyle = "";
+    let memIntroduction = introduce;
+
+    if (header != null) {
+        memHeaderStyle = `style="background-image:url(../img/shop_img/${memHeader});"`;
+    }
+
+    if (card != null) {
+        memCardStyle = `style="background-image:url(../img/shop_img/${memCard});"`;
+    }
+
+    if (repbadge != null) {
+        memRepBadgeStyle = `src="../img/shop_img/${memSymbolImageName}";`
+    } 
+
     let membProfileHTML = `
-        <div class="profile-card">
+        <div class="profile-card" ${memCardStyle}>
             <a href="/mypage/${memNickname}">
-                <div class="profile-header">
+                <div class="profile-header" ${memHeaderStyle}>
                     <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
                     <div class="profile-user_info">
-                        <p class="profile-user_level">Lv : ${memLevel}</p>
-                        <p class="profile-user_nick">${memNickname}</p>
-                        <img class="badge" src="../img/${memSymbolImageName}" alt="NO-SYMBOL">
+                        <div class="profile-user_level"><span>LV : ${memLevel}</span></div>
+                        <div class="profile-user_nick"><span>${memNickname}</span></div>
+                        ${memRepBadgeStyle}
                     </div>
                 </div>
             </a>

@@ -24,6 +24,7 @@ import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.MemberRanking;
 import platform.game.service.model.TO.FavoriteGameTO;
 import platform.game.service.repository.MemberFavoriteGameRepository;
+import platform.game.service.repository.MemberItemInfoRepository;
 import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.MemberRankingRepository;
 import platform.game.service.service.MemberInfoDetails;
@@ -46,6 +47,9 @@ public class ProfileController {
     private MemberRankingRepository rankingRepository;
 
     @Autowired
+    private MemberItemInfoRepository itemInfoRepository;
+
+    @Autowired
     private SecurityPassword securityPassword;
 
     @GetMapping("")
@@ -60,9 +64,14 @@ public class ProfileController {
             if (member != null) {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
+                List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
+                String profileImage = profileRepository.findByProfileImage(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memberItems", memberItems);
+                mav.addObject("profileImage", profileImage);
             }
         } else {
             System.out.println("멤버 없음");
@@ -149,6 +158,68 @@ public class ProfileController {
         String NewNickname = nickname.get("Nickname");
 
         if (profileRepository.UpdateNick(NewNickname, member.getMemId()) == 1) {
+            flag = 1;
+        }
+
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    @GetMapping("/editmycard")
+    public ModelAndView EditMyCard(){
+        ModelAndView mav = new ModelAndView("editmycard");
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
+        MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
+        List<Object[]> HeaderList = profileRepository.HaveHeaderList(member.getMemId());
+        List<Object[]> CardList = profileRepository.HaveCardList(member.getMemId());
+        List<Object[]> BadgeList = profileRepository.HaveBadgeList(member.getMemId());
+
+        mav.addObject("member", member);
+        mav.addObject("memberProfile", memberProfile);
+        mav.addObject("header", HeaderList);
+        mav.addObject("card", CardList);
+        mav.addObject("badge", BadgeList);
+
+        return mav;
+    }
+
+    @PostMapping("/headerprofile")
+    public ResponseEntity<String> HeaderProfile(@RequestBody Map<String,String> header){
+        int flag=0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+
+        String NewHeader = header.get("Header");
+        System.out.println(NewHeader);
+        if(profileRepository.UpdateProfileHeader(NewHeader,member.getMemId())==1){
+            flag = 1;
+        }
+
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    @PostMapping("/cardprofile")
+    public ResponseEntity<String> CardProfile(@RequestBody Map<String,String> card){
+        int flag=0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+
+        String NewCard = card.get("Card");
+        if(profileRepository.UpdateProfileCard(NewCard,member.getMemId())==1){
+            flag = 1;
+        }
+
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    @PostMapping("/repbadgeprofile")
+    public ResponseEntity<String> RedBadgeProfile(@RequestBody Map<String,String> badge){
+        int flag=0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+
+        String NewRepBadge = badge.get("RepBadge");
+        if(profileRepository.UpdateProfileRepBadge(NewRepBadge,member.getMemId())==1){
             flag = 1;
         }
 

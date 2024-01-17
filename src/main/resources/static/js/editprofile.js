@@ -38,6 +38,7 @@ const UpdateIntroduce = async function (){
         const flag = await response.text();
         if(flag=='1') {
             alert("소개글 수정 완료.");
+            location.reload();
         } else {
             alert("에러" + error.message);
         }
@@ -102,6 +103,7 @@ const ChangeNickname = async function (){
         const flag = await response.text();
         if(flag=='1') {
             alert("닉네임이 변경 되었습니다.");
+            location.reload();
         } else {
             alert("에러" + error.message);
         }
@@ -155,6 +157,7 @@ const ChangePw = async function (){
             const flag = await response.text();
             if(flag=='1') {
                 alert("비밀번호가 변경 되었습니다.");
+                location.reload();
             } else {
                 alert("에러" + error.message);
             }
