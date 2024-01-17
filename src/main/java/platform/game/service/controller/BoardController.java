@@ -84,7 +84,6 @@ public class BoardController {
             }
             
             ModelAndView modelAndView = new ModelAndView();
-            String loginCheck = "true";
             
             if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
                 System.out.println("멤버 있음 ");
@@ -95,10 +94,8 @@ public class BoardController {
                     modelAndView.addObject("currentPoint", member.getMemCurPoint());
                     modelAndView.addObject("memId",member.getMemId());
                 }
-                loginCheck = "true";
         } else {
             System.out.println("멤버 없음");
-            loginCheck = "false";
         }
 
         // cpage 작업
