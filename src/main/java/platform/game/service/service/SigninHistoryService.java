@@ -22,7 +22,7 @@ public class SigninHistoryService {
         SigninHistory latestSignin = signinHistoryRepository.findTopByMemberOrderByCreatedAtDesc(member);
 
         if (latestSignin == null || latestSignin.getCreatedAt().isAfter(currentDateTime)) {
-            // 추가: 특정 사용자의 모든 로그인 기록 삭제
+            // 첫 로그인 시 모든 로그인 기록 삭제
             deleteByMember(member);
             return true;
         }

@@ -39,9 +39,8 @@ public class SigninHistory {
     private Member member;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "signin_history_sequence")
-    @SequenceGenerator(name = "signin_history_sequence", sequenceName = "signin_history_sequence", allocationSize = 1)
-    private Integer signinHistoryId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long signinHistoryId;
     
 
     @Column(length = 15) // IPv4 주소는 최대 15자리까지입니다.

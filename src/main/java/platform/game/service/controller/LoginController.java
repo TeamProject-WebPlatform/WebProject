@@ -160,27 +160,36 @@ public class LoginController {
 
     // 로그인 요청(웹사이트 - default)
     @PostMapping("/generateToken")
-    public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
-        Cookie cookie = signAction.generateToken(authRequest);
-        if (cookie != null) {
-            // 성공
-            response.addCookie(cookie);
+public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response, HttpServletRequest request) {
+    Cookie cookie = signAction.generateToken(authRequest);
+    if (cookie != null) {
+        // 성공
+        response.addCookie(cookie);
 
-             // 사용자의 IP 주소 가져오기
-            String memIp = IpUtils.getIpAddress(request);
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+        // 사용자의 IP 주소 가져오기
+        String memIp = IpUtils.getIpAddress(request);
+        
+        // Principal을 Object로 받음
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        // MemberInfoDetails 객체로부터 Member 정보 추출
+        if (principal instanceof MemberInfoDetails) {
+            MemberInfoDetails userDetails = (MemberInfoDetails) principal;
+            Member member = userDetails.getMember();
+
             // SigninHistory 저장
             SigninHistory signinHistory = SigninHistory.builder()
-                    /* 현재 로그인한 사용자의 Member 객체 */
                     .member(member)
                     .memIp(memIp)
                     .createdAt(LocalDateTime.now())
                     .build();
+
             // Save the SigninHistory
             signinHistoryRepository.save(signinHistory);
-           // 첫 로그인 여부 업데이트 및 포인트 증가
+
+            // 첫 로그인 여부 업데이트 및 포인트 증가
             if (signinHistoryService.isFirstLogin(member)) {
-                System.out.println("첫 로그인입니다.");
+                System.out.println("오늘 첫 로그인입니다.");
                 // 포인트 증가 로직
                 int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
                 if (updatedPoints < 0) {
@@ -188,19 +197,24 @@ public class LoginController {
                     System.out.println("포인트 증가 실패");
                     return 1; // 실패 시 처리 (원하는 값 또는 의미 있는 값을 반환)
                 }
-            
-            System.out.println("포인트 증가 성공");
-        } else {
-            System.out.println("이미 로그인한 사용자입니다.");
-        }
+
+                System.out.println("포인트 증가 성공");
+            } else {
+                System.out.println("이미 로그인한 사용자입니다.");
+            }
 
             System.out.println("로그인 성공");
             return 0;
         } else {
-            System.out.println("로그인 실패");
+            // 사용자 정보가 MemberInfoDetails가 아닌 경우에 대한 처리
+            System.out.println("올바르지 않은 사용자 정보입니다.");
             return 1;
         }
+    } else {
+        System.out.println("로그인 실패");
+        return 1;
     }
+}
 
     // 아래 부터는 스팀, 카카오 로그인 관련--------------------------------------------
     @GetMapping("/steam/callback")

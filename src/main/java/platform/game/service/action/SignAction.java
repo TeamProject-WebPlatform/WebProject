@@ -116,6 +116,7 @@ public class SignAction {
                 // 성공하면 common code의 값 update
                 if (flag && addRank && addProfile && addFavGame) {
                     comCdRepo.updateRemark1ByCd(idCode, String.valueOf(lastid));
+                    userSignup.setMemId(id);    
                 } else {
                     System.out.println("롤백 1");
                     successFlag.set(false);
@@ -134,20 +135,13 @@ public class SignAction {
             AuthRequest authRequest = new AuthRequest();
             authRequest.setMemUserid(userSignup.getMemUserid());
             authRequest.setMemPw(userSignup.getMemPw());
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+            // Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
 
             cookie = generateToken(authRequest);
             
-            // 여기서 회원가입시 포인트 증가 로직
+            // 여기서 회원가입시 포인트 증가 로직  
+            updatePointHistory.insertPointHistoryByMemId(userSignup.getMemId(), "50101", 10);
 
-            int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
-            if (updatedPoints < 0) {
-                // 포인트 증가 실패
-                System.out.println("포인트 증가 실패");
-                return null;
-            }    
-            System.out.println("포인트 증가 성공");
-            
             return cookie;
         } else {
             return null;
