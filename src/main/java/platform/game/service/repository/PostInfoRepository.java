@@ -15,7 +15,7 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer> {
         // 게시물 전체 가져오기
         // 게시판 별 게시물 가져오기 추가하기
         ArrayList<Post> findAll();
-
+        
         // 게시물 찾기
         Post findByPostId(int postId);
 

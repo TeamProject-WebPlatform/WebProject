@@ -564,6 +564,23 @@ public class BoardController {
         comment.setMember(member);
 
         commentInfoRepository.save(comment);
+
+        // 댓글 작성 후 포인트 지급
+        List<Comment> userComments = commentInfoRepository.findByMember_MemId(member.getMemId());
+        if (isFirstComment(userComments)) {
+            int commentPoint = 50; // 첫 댓글 작성 시 부여할 포인트
+            updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50105", commentPoint);
+            System.out.println("첫 댓글 작성 포인트 지급");
+            int point = 1;
+            return "redirect:./point_ok?board_cd=" + boardCd + "&point=" + point;
+        } else if (isMultipleOfFiveComments(userComments)) {
+            int commentPoint = 25; // 5개 단위 댓글 작성 시 부여할 포인트
+            updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50106", commentPoint);
+            System.out.println("5개의 배수로 댓글 작성 포인트 지급");
+            int point = 1;
+            return "redirect:./point_ok?board_cd=" + boardCd + "&point=" + point;
+        }
+
         // 댓글 카운트 추가
         post.setPostCommentCnt(commentInfoRepository.countByPost_PostId(postId));
         postInfoRepository.save(post);
@@ -683,7 +700,7 @@ public class BoardController {
         }
         return null; // 혹은 예외 처리 등을 추가할 수 있습니다.
     }
-    
+ 
     public int getPostCountByMember(List<Post> posts) {
         int count = 0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -695,7 +712,7 @@ public class BoardController {
         }
         System.out.println("사용자 " + member.getMemId() + "의 글 개수: " + count);
         System.out.println("현재 게시글 작성자: " + member.getMemId());
-        // System.out.println("현재 글의 boardCd: " + boardCd);
+        // System.out.println("현재 글의 boardCd: " + member.boardCd());
         return count;
     }
 
@@ -708,6 +725,28 @@ public class BoardController {
     public boolean isMultipleOfFivePosts(List<Post> posts) {
         int postCount = getPostCountByMember(posts);
         return postCount > 0 && (postCount % 5 == 0);
+    }
+
+
+    // 뎃글
+    public int getCommentCountByMember(List<Comment> comments) {
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getMember();
+        if (member == null) {
+            return 0;
+        }
+        return (int) comments.stream()
+                .filter(comment -> comment.getMember() != null && comment.getMember().getMemId() == member.getMemId())
+                .count();
+    }
+
+    public boolean isFirstComment(List<Comment> comments) {
+        return getCommentCountByMember(comments) == 1;
+    }
+
+    public boolean isMultipleOfFiveComments(List<Comment> comments) {
+        int commentCount = getCommentCountByMember(comments);
+        return commentCount > 0 && (commentCount % 5 == 0);
     }
 
     // 포인트 지급 관련 메세지 전송
