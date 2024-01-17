@@ -3,6 +3,7 @@ package platform.game.service.repository;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -14,6 +15,7 @@ import platform.game.service.entity.Member;
 import platform.game.service.service.LevelService;
 
 @Repository
+@Qualifier("updatePointHistoryImpl")
 public class UpdatePointHistoryImpl implements UpdatePointHistory {
 
     @PersistenceContext

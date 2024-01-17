@@ -37,6 +37,10 @@
     });
 </script>
 
+<script th:if="${isFirstLogin}">
+    alert('오늘 첫 로그인입니다. 환영합니다! 10포인트 증정');
+</script>
+
 <body class="page-home dark-theme">
 
     <input id="toggle" type="checkbox">

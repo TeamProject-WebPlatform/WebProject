@@ -841,7 +841,8 @@ a {
     -webkit-transition: all 0.25s linear;
     -o-transition: all 0.25s linear;
     color: var(--main-color-now);
-    font-size: 16px;
+    /* 폰트크기 */
+    /* font-size: 16px; */
     font-style: normal;
     font-weight: 700;
     line-height: 1.31;
@@ -874,7 +875,7 @@ a:hover {
     align-items: center;
     width: 100%;
     max-width: 550px;
-    height: 45px;
+    height: 40px;
     padding: 0 20px;
     border-radius: 5px;
     background: #F5F5F5;

@@ -92,35 +92,49 @@ public interface SqlMapperInter {
         @Insert("insert into ranking(rank,rank_code,mem_id,rank_update,game_cd) select rank() over (order by round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) desc, m.mem_id desc) as rank,'WinRate', m.mem_id, now(), #{game_cd} from member m join member_favorite_game f on m.mem_id=f.mem_id where f.game_cd = #{game_cd} order by round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) desc,m.mem_id desc limit 50;")
         int setOtherWinRateRank(String game_cd);
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0")
+        // 구분 없이 레벨 랭킹
+        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<LevelRankTO> getLevelRank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.rank_code='WinRate' and m.mem_id=r.mem_id and r.game_cd=0")
+        // 구분 없이 포인트 랭킹
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.rank_code='WinRate' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<WinRankTO> getWinRateRank();
 
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0")
+        // 구분 없이 승률 랭킹
+        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<PointRankTO> getPointRank();
 
+        // 게임 종류 별 레벨 랭킹
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='level' order by m.mem_lvl desc;")
         public List<LevelRankTO> getOtherLevelRank(String game_cd);
 
+        // 게임 종류 별 포인트 랭킹
         @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='point' order by m.mem_total_point desc;")
         public List<PointRankTO> getOtherPointRank(String game_cd);
 
+        // 게임 종류 별 승률 랭킹
         @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='winrate' order by winrate desc;")
         public List<WinRankTO> getOtherWinRateRank(String game_cd);
 
-        @Select("select distinct m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
+        // 비로그인 대상 swiper
+        @Select("select distinct m.mem_id, m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id where r.rank<16 order by rand() limit 16")
         public List<RollingRankTO> getRol();
 
+        // 로그인 대상 선호 게임 swiper
+        @Select("select distinct m.mem_id, m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id where r.rank<16 and r.game_cd=#{game_cd} order by rand() limit 4")
+        public List<RollingRankTO> getOtherRol(String game_cd);
+
+        // 회원 가입 시 멤버 레벨 랭킹 셋팅
         @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select 'Level', mem_id, RANK() OVER(order by mem_lvl desc, mem_created_at desc) as mem_rank from member")
-        public int setMemberLevelRanking(String rank_code);
+        public int setMemberLevelRanking();
 
+        // 회원 가입 시 멤버 포인트 랭킹 셋팅
         @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select 'Point', mem_id, RANK() OVER(order by mem_total_point desc, mem_created_at desc) as mem_rank from member")
-        public int setMemberPointRanking(String rank_code);
+        public int setMemberPointRanking();
 
+        // 회원 가입 시 멤버 승률 랭킹 셋팅
         @Insert("insert into member_ranking(rank_code, mem_id, mem_rank) select 'WinRate', mem_id, RANK() OVER (order by round((mem_game_win_cnt/mem_total_game_cnt)*100,2) desc, mem_created_at desc) as mem_rank from member where mem_total_game_cnt>0")
-        public int setMemberWinRateRanking(String rank_code);
+        public int setMemberWinRateRanking();
 
         @Insert("INSERT INTO member_game_match_record values(#{game_cd},#{mem_id}, default, default, default")
         public int setMatchRecord(String game_cd, long mem_id);
