@@ -67,7 +67,7 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="user-info">
-                                    <div class="user-info__avatar"><img src="../img/profile.png" alt="profile" onclick="EditMyCard()"></div>
+                                    <div class="user-info__avatar"><img src="../img/profile.png" alt="profile" onclick="EditMyCard()" style="cursor: pointer;"></div>
                                     <div class="user-info__box">
                                         <div class="user-info__title" th:text="${'LV : ' + member.memLvl + ' &nbsp ' + member.memNick}"></div>
                                         <div class="user-info__text" th:text="${memberProfile.profileIntro}"></div>

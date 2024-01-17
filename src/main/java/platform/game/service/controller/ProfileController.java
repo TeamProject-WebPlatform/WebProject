@@ -1,5 +1,6 @@
 package platform.game.service.controller;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -181,6 +184,23 @@ public class ProfileController {
 
         return mav;
     }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> ProfileImage(@RequestPart("image") MultipartFile image){
+        int flag=0;
+        String upload = "src/main/resources/static/profileimage";
+
+        try {
+            if(!new File(upload).exists()){
+                new File(upload).mkdir();
+            }
+            flag = 1;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } 
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
 
     @PostMapping("/headerprofile")
     public ResponseEntity<String> HeaderProfile(@RequestBody Map<String,String> header){

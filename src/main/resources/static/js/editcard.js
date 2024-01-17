@@ -3,11 +3,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const Cardregister = document.getElementById("card");
     const RepBadgeregister = document.getElementById("badgerep");
     const Badgeregister = document.getElementById("badge");
+    const ProfileImageChange = document.querySelector('.profile');
+
 
     Headregister.addEventListener('click', RegisterHeader);
     Cardregister.addEventListener('click', RegisterCard); 
     RepBadgeregister.addEventListener('click', RegisterRepBadge);
     Badgeregister.addEventListener('click', BadgePreview);
+    ProfileImageChange.addEventListener('click', () => document.querySelector('.upload').click());
+    document.querySelector('.upload').addEventListener('change', ProfileImage);
 });
 
 
@@ -139,6 +143,32 @@ async function RegisterRepBadge() {
         const flag = await response.text();
         if(flag=='1') {
             alert("대표 뱃지가 수정되었습니다.");
+            location.reload();
+        } else {
+            alert("에러" + error.message);
+        }
+    } catch (error) {
+        console.error("Error: " + error);
+    }
+}
+
+async function ProfileImage(e) {
+    const file = e.currentTarget.files[0];
+    var formdata = new FormData();
+
+    formdata.append('image', file);
+
+    try {
+        const response = await fetch('/profile/upload', {
+            method:'POST',
+            body:formdata
+        });
+        if(!response.ok) {
+            throw new Error("서버 응답이 실패했습니다");
+        }
+        const flag = response.text();
+        if(flag=='1') {
+            alert("프로필 사진이 변경되었습니다.");
             location.reload();
         } else {
             alert("에러" + error.message);
