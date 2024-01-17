@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import platform.game.service.entity.Item;
 import platform.game.service.entity.Member;
-import platform.game.service.entity.MemberItem;
 import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.repository.ItemInfoRepository;
 import platform.game.service.repository.MemberItemInfoRepository;

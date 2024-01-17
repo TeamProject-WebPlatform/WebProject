@@ -88,6 +88,7 @@
                                             <option value="30003">오버워치</option>
                                             <option value="30004">발로란트</option>
                                             <option value="30005">피파 온라인</option>
+                                            <option value="30006">스팀</option>
                                         </select></div>
                                     <div><select id="second-game" class="js-select">
                                         <option value="">2순위 선호 게임 </option>
@@ -96,6 +97,7 @@
                                         <option value="30003">오버워치</option>
                                         <option value="30004">발로란트</option>
                                         <option value="30005">피파 온라인</option>
+                                        <option value="30006">스팀</option>
                                         </select></div>
                                     <div><select id="third-game" class="js-select">
                                             <option value="">3순위 선호 게임</option>
@@ -104,9 +106,10 @@
                                             <option value="30003">오버워치</option>
                                             <option value="30004">발로란트</option>
                                             <option value="30005">피파 온라인</option>
+                                            <option value="30006">스팀</option>
                                         </select></div>
-                                        <div>
-                                            <button id="game-submit" class="uk-button uk-button-secondary" type="button">등록</button>
+                                        <div style="text-align: right;">
+                                            <button id="game-submit" class="uk-button uk-button-secondary">등록</button>
                                         </div>
                                 </div>
                             </div>
@@ -120,7 +123,8 @@
                                     <div th:each="to:${memberRanking}">
                                         <div class="user-info__title" th:text="${to.rankCode+' : '+to.rank+'위'}"></div>
                                     </div>
-                                    <div>
+                                    <div style="display: flex;
+                                    justify-content: flex-end;">
                                         <button id="game-submit" class="uk-button uk-button-secondary" type="button">세부 랭킹 보러 가기</button>
                                     </div>
                                 </div>
