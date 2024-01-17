@@ -10,7 +10,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
+
 import org.springframework.security.core.Authentication;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -318,10 +322,11 @@ public class BoardController {
                 updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50103", firstPostPoint);
                 flag = 0;
                 System.out.println("첫 번째 글 작성 포인트 지급");
+                int point = 1;
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
             } else if (isMultipleOfFivePosts(posts)) {
-                // 변경: 5개 단위로 작성할 때마다 다른 포인트를 주기
-                int additionalPostPoint = 50; // 5개 단위로 작성 시 추가로 부여할 포인트
-                updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50104", additionalPostPoint);
+                int additionalPostPoint = 50;
+                updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50104", additionalPostPoint);
                 flag = 0;
 
                 System.out.println("5개의 글 작성 포인트 지급");
@@ -703,6 +708,19 @@ public class BoardController {
     public boolean isMultipleOfFivePosts(List<Post> posts) {
         int postCount = getPostCountByMember(posts);
         return postCount > 0 && (postCount % 5 == 0);
+    }
+
+    // 포인트 지급 관련 메세지 전송
+    @GetMapping("/point_ok")
+    public ModelAndView PointOk(@RequestParam("board_cd") int boardCd, @RequestParam("point") int point){
+        System.out.println("point_ok 호출");
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("point_ok");
+        modelAndView.addObject("boardCd", boardCd);
+        modelAndView.addObject("point", point);
+    
+        return modelAndView;
     }
 
 }

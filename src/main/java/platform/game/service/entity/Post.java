@@ -26,9 +26,15 @@ import platform.game.service.service.MemberInfoDetails;
 @NoArgsConstructor
 @Builder
 public class Post {
+
     @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memId", referencedColumnName = "memId")
+    private Member member;
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int postId;
+
     private String boardCd;
     private String postTitle;
     private String postContent;
@@ -39,6 +45,9 @@ public class Post {
     private int postReportCnt;
     private String postTags;
 
-    
+
+    private Date createdAt;
+    private Date updatedAt;
+    private Date deletedAt;
 
 }
