@@ -73,7 +73,8 @@
         if(commentId!==1){
             const comment = document.getElementById(commentId);
             let isDeleted = comment.querySelector(".comment-main > div").getAttribute("isDeleted");
-            if(isDeleted){
+            console.log(isDeleted);
+            if(isDeleted==='true'){
                 alert('삭제된 댓글 입니다.');
                 return;
             }
@@ -304,6 +305,7 @@
                                             <div class="battle-card-info" th:attr="btId = ${bto.btId}">
                                                 <div class="info-sub">
                                                     <div class="info-state">
+                                                        <div th:if="${bto.state=='N'}" class="N">매칭 중</div>
                                                         <div th:if="${bto.state=='A'}" class="A">베팅 가능!</div>
                                                         <div th:if="${bto.state=='P'}" class="P">진행중</div>
                                                         <div th:if="${bto.state=='T'}" class="T">종료됨</div>
@@ -714,9 +716,9 @@
                                 </a>
                             </div>
                             <div>
-                                <a th:href="@{list(board_cd=${post.boardCd}, cpage=${cpage})}"><input type="button"
+                                <a th:href="@{/battle}"><input type="button"
                                         value="목록" class="btn_re"></a>
-                                <a th:if="${nickname}" th:href="@{write(board_cd=${post.boardCd})}">
+                                <a th:if="${nickname}" th:href="@{/battle/write}">
                                     <!-- 로그인 상태인 경우의 링크 -->
                                     <input type="button" value="쓰기" class="btn_re">
                                 </a>

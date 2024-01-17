@@ -5,7 +5,9 @@ import platform.game.service.entity.Battle;
 
 @Data
 public class BattlePointTO {
-    public BattlePointTO(Battle battle){
+    public BattlePointTO(long memId, Battle battle){
+        this.memId = memId;
+
         this.hostTotalPoint = battle.getBtHostMemBetPoint();
         this.clientTotalPoint = battle.getBtClientMemBetPoint();
         this.hostTotalMemNo = battle.getBtHostMemBetCnt();
@@ -21,6 +23,8 @@ public class BattlePointTO {
         clientPointRewardRatio = clientTotalPoint != 0 ? String.format("%.2f",(totalPoint*1.0f/clientTotalPoint)) :"0";
         this.btId = battle.getBtId();
     }
+    private long memId;
+
     private long hostTotalPoint = 0;            
     private long clientTotalPoint = 0;
     private long totalPoint;

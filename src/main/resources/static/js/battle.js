@@ -46,10 +46,10 @@ document.addEventListener("DOMContentLoaded", function () {
     battleCardConnect();
 });
 function battleCardConnect() {
+    let memId = /*[[memId]]*/0;
     var socket = new SockJS('/ws');
     battleCardStompClient = Stomp.over(socket);
     // 보유 포인트 구독
-
     // 배틀 전광판 구독
     const cards = document.querySelectorAll(".battle-card-info");
     battleCardStompClient.connect({}, function (frame) {
@@ -84,22 +84,23 @@ function battleCardConnect() {
                     pointBarRight.style.width = pointRight.innerHTML;
                     pointBarRight.style.backgroundColor = getColorRatio(Number(pointRight.innerHTML.replace("%", "")));
 
+                    if(pointInfo.memId===memId){    
+                        let pointInputs = pointInfo.querySelector(".point-betting-input");
+                        pointInputs.placeholder = "YOU ALREADY BET";
+                        pointInputs.readOnly = true;
+                        let buttons = pointInfo.querySelectorAll(".point-betting-button");   
 
-                    let pointInputs = pointInfo.querySelector(".point-betting-input");
-                    pointInputs.placeholder = "YOU ALREADY BET";
-                    pointInputs.readOnly = true;
-                    let buttons = pointInfo.querySelectorAll(".point-betting-button");
-
-                    let button = null;
-
-                    if (pointTO.flag == 0) {
-                        button = buttons[0];
-                        button.style.backgroundColor = "blueviolet"
-                        button.style.boxShadow = "rgba(138,43,226,0.5) 0px 0px 17px 3px";
-                    } else if (pointTO.flag == 1) {
-                        button = buttons[1];
-                        button.style.backgroundColor = "blueviolet"
-                        button.style.boxShadow = "rgba(138,43,226,0.5) 0px 0px 17px 3px";
+                        let button = null;
+    
+                        if (pointTO.flag == 0) {
+                            button = buttons[0];
+                            button.style.backgroundColor = "blueviolet"
+                            button.style.boxShadow = "rgba(138,43,226,0.5) 0px 0px 17px 3px";
+                        } else if (pointTO.flag == 1) {
+                            button = buttons[1];
+                            button.style.backgroundColor = "blueviolet"
+                            button.style.boxShadow = "rgba(138,43,226,0.5) 0px 0px 17px 3px";
+                        }
                     }
 
                 } catch (err) {

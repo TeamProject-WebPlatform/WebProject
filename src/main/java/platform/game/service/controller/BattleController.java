@@ -1,5 +1,6 @@
 package platform.game.service.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpServletRequest;
 import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
@@ -125,6 +127,62 @@ public class BattleController {
         mav.addObject("commentTree", commentTree);
         return mav;
     }
+    @RequestMapping("/write")
+    public ModelAndView writePage() {
+        ModelAndView mav = new ModelAndView("battle_write");
+        long id = 0;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                mav.addObject("nickname", member.getMemNick());
+                mav.addObject("currentPoint",member.getMemCurPoint());
+                id = member.getMemId();
+                mav.addObject("memId",id);
+                mav.addObject("level",member.getMemLvl());
+            }
+        }
+        return mav;
+    }
+    @PostMapping("/write_ok")
+    public String writePost(HttpServletRequest request) {
+        long memId = Long.parseLong(request.getParameter("memId"));
+        String title = request.getParameter("title");
+        String game = request.getParameter("game");
+        String point = request.getParameter("point");
+        String content = request.getParameter("content");
+        
+        String ddyear = request.getParameter("ddyear");
+        String ddmonth = request.getParameter("ddmonth");
+        String ddday = request.getParameter("ddday");
+        String ddhour = request.getParameter("ddhour");
+        String ddminute = request.getParameter("ddminute");
+        String ddDateString = ddyear + "-" + ddmonth + "-" + ddday + " " + ddhour + ":" + ddminute;
+        
+        String styear = request.getParameter("styear");
+        String stmonth = request.getParameter("stmonth");
+        String stday = request.getParameter("stday");
+        String sthour = request.getParameter("sthour");
+        String stminute = request.getParameter("stminute");
+        String stDateString = styear + "-" + stmonth + "-" + stday + " " + sthour + ":" + stminute;
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date ddDate = null;
+        Date stDate = null;
+        try {
+            ddDate = dateFormat.parse(ddDateString);
+            stDate = dateFormat.parse(stDateString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 아마 에러가 안뜰 것으로 예상해서 롤백 구현x
+        }
+        
+        int[] data = battleCustomRepositoryImpl.writePost(memId,title,game,point,content,ddDate,stDate);
+        
+        int postId = data[0];
+        int btId = data[1];
+        return "redirect:/battle/view?postId="+postId+"&btId="+btId;
+    }
     @RequestMapping("/comment")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public String writeComment(@RequestParam("postId") int postId,@RequestParam("btId") int btId,
@@ -169,6 +227,7 @@ public class BattleController {
                             @RequestParam("btId") int btId,
                             @RequestParam("postId") int postId){
         int flag = battleCustomRepositoryImpl.reqeustBattle(memId,btId,postId);      
+
         return String.valueOf(flag);
     }
 

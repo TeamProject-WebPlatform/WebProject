@@ -1,5 +1,6 @@
 package platform.game.service.repository;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Optional;
 
@@ -192,5 +193,61 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository{
         }
 
         return flag;
+    }
+    @Transactional
+    @Override
+    public int[] writePost(long memId,String title, String game, String point,String content,Date ddDate, Date stDate){
+        // post에 추가
+        // battle에 추가 
+        // battle_post에 추가
+        // 날짜 2개, point, game_cd,post_id(post에 추가하고 확인),bt_id(battle에 추가하고 확인)
+        int[] data = new int[2];
+        Date now = new Date();
+        Query query = null;
+
+        // POST INSERT
+        query = entityManager.createNativeQuery(
+                "INSERT INTO post " +
+                        "(post_id, board_cd, created_at, deleted_at, post_content, post_hit, post_tags, post_title, updated_at, mem_id, post_comment_cnt, post_dislike_cnt, post_like_cnt, post_report_cnt) " +
+                        "VALUES(0, :board_cd, :created_at, NULL, :post_content, 0, NULL, :post_title, NULL, :memId, 0, 0, 0, 0)");
+        query.setParameter("board_cd", "20101");
+        query.setParameter("created_at",now);
+        query.setParameter("post_content",content);
+        query.setParameter("post_title", title);
+        query.setParameter("memId", memId);
+        if (query.executeUpdate() != 1)
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");  
+
+        long postId = (Long) entityManager.createNativeQuery("SELECT LAST_INSERT_ID() FROM post").getSingleResult();
+        data[0] = (int)postId;
+
+        // BATTLE INSERT
+        query = entityManager.createNativeQuery(
+                "INSERT INTO battle " +
+                        "(bt_id, bt_client_mem_bet_point, bt_end_dt, bt_host_mem_bet_point, bt_result, bt_client_mem_id, bt_host_mem_id, bt_client_mem_bet_cnt, bt_host_mem_bet_cnt, bt_state) " +
+                        "VALUES(0, 0, NULL, 0, NULL, NULL, :memId, 0, 0, 'N')");
+        query.setParameter("memId", memId);
+        if (query.executeUpdate() != 1)
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백"); 
+        
+        long btId = (Long) entityManager.createNativeQuery("SELECT LAST_INSERT_ID() FROM battle").getSingleResult();
+        data[1] = (int)btId;
+
+        // BATTLE_POST INSERT
+        query = entityManager.createNativeQuery(
+                "INSERT INTO battle_post " +
+                        "(bt_post_applicants, bt_post_dead_line, bt_post_point, game_cd, post_id, bt_id, bt_start_dt) " +
+                        "VALUES('', :ddDate , :point, :gameCd, :postId, :btId , :stDate)");
+        query.setParameter("ddDate", ddDate);
+        query.setParameter("point", point);
+        query.setParameter("gameCd", game);
+        query.setParameter("postId", postId);
+        query.setParameter("btId", btId);
+        query.setParameter("stDate", stDate);
+        if (query.executeUpdate() != 1)
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백"); 
+
+
+        return data;
     }
 }
