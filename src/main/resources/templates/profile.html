@@ -27,6 +27,10 @@
         const EditProfile = function(){
             window.open("/profile/editprofile","editprofile","width=700, height=700");
         }
+
+        const EditMyCard = function(){
+            window.open("/profile/editmycard","editmycard","width=700px, height=700px");
+        }
     </script>
 
 </head>
@@ -63,7 +67,7 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="user-info">
-                                    <div class="user-info__avatar"><img src="../img/profile.png" alt="profile"></div>
+                                    <div class="user-info__avatar"><img src="../img/profile.png" alt="profile" onclick="EditMyCard()"></div>
                                     <div class="user-info__box">
                                         <div class="user-info__title" th:text="${'LV : ' + member.memLvl + ' &nbsp ' + member.memNick}"></div>
                                         <div class="user-info__text" th:text="${memberProfile.profileIntro}"></div>
@@ -130,10 +134,8 @@
                                 <h3 class="uk-text-lead">Badge</h3><a href="04_profile.html">View All</a>
                             </div>
                             <div class="widjet__body">
-                                <ul class="badges-list">
-                                    <li><img src="../img/badge-1.png" alt="badge"></li>
-                                    <li><img src="../img/badge-2.png" alt="badge"></li>
-                                    <li><img src="../img/badge-3.png" alt="badge"></li>
+                                <ul class="badges-list" >
+                                    <li id="badge" th:each="item:${memberItems}"><img th:src="@{'./img/shop_img/' + ${item} + '.png'}"></li>
                                 </ul>
                             </div>
                         </div>

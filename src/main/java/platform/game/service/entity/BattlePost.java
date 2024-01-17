@@ -35,6 +35,7 @@ public class BattlePost {
     private Battle battle;
 
     private String btPostApplicants;
+    private Date btStartDt;
     private String gameCd;
     private Date btPostDeadLine;
     private int btPostPoint;

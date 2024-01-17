@@ -35,7 +35,7 @@ import platform.game.service.service.MemberInfoDetails;
 @Controller
 @ComponentScan(basePackages = { "platform.game.action", "platform.game.service.repository",
         "platform.game.service.model" })
-// @RequestMapping("/board")
+@RequestMapping("/board")
 public class BoardController {
 
     @Autowired
@@ -48,13 +48,9 @@ public class BoardController {
     @Qualifier("updatePointHistoryImpl")
     private UpdatePointHistory updatePointHistory;
 
-    // @RequestMapping("/shop")
-    // public String shop(){
-    // return "shop";
-    // }
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
-        ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
+        ArrayList<Post> lists = postInfoRepository.findByBoardCdOrderByCreatedAtDesc(boardCd);
 
         String boardCd_name = "Notice";
         String navBoard = "nav-";
@@ -72,15 +68,15 @@ public class BoardController {
                 navBoard = navBoard + "event";
                 break;
             case "20004":
-                boardCd_name = "Free Board";
+                boardCd_name = "free";
                 navBoard = navBoard + "free";
                 break;
             case "20005":
-                boardCd_name = "Sharing information";
+                boardCd_name = "information";
                 navBoard = navBoard + "information";
                 break;
             case "20006":
-                boardCd_name = "Share the strategy";
+                boardCd_name = "strategy";
                 navBoard = navBoard + "strategy";
                 break;
                 
@@ -89,7 +85,6 @@ public class BoardController {
             }
             
             ModelAndView modelAndView = new ModelAndView();
-            String loginCheck = "true";
             
             if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
                 System.out.println("멤버 있음 ");
@@ -100,10 +95,8 @@ public class BoardController {
                     modelAndView.addObject("currentPoint", member.getMemCurPoint());
                     modelAndView.addObject("memId",member.getMemId());
                 }
-                loginCheck = "true";
         } else {
             System.out.println("멤버 없음");
-            loginCheck = "false";
         }
 
         // cpage 작업
@@ -134,7 +127,6 @@ public class BoardController {
 
         modelAndView.setViewName("board_list");
         modelAndView.addObject("lists", lists);
-        modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("boardCd", boardCd);
         modelAndView.addObject("cpage", cpageTO);
         modelAndView.addObject("boardCd_name", boardCd_name);
@@ -165,15 +157,15 @@ public class BoardController {
                 navBoard = navBoard + "event";
                 break;
             case 20004:
-                boardCd_name = "Free Board";
+                boardCd_name = "free";
                 navBoard = navBoard + "free";
                 break;
             case 20005:
-                boardCd_name = "Sharing information";
+                boardCd_name = "information";
                 navBoard = navBoard + "information";
                 break;
             case 20006:
-                boardCd_name = "Share the strategy";
+                boardCd_name = "strategy";
                 navBoard = navBoard + "strategy";
                 break;
 
@@ -185,7 +177,6 @@ public class BoardController {
         post = postInfoRepository.findByPostId(postId);
 
         Member member = null;
-        String loginCheck = "true";
         long id = 1; // 멤버 비교를 위한 변수
         long pid = post.getMember().getMemId(); // 멤버 비교를 위한 게시물 변수
         String writePost = "false"; // 결과 보내주는 변수
@@ -204,10 +195,7 @@ public class BoardController {
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId",member.getMemId());
             }
-            loginCheck = "true";
             id = member.getMemId();
-        } else {
-            loginCheck = "false";
         }
 
         if (id == pid) {
@@ -226,7 +214,6 @@ public class BoardController {
         modelAndView.setViewName("board_view");
         modelAndView.addObject("post", post);
         modelAndView.addObject("comment", comment);
-        modelAndView.addObject("loginCheck", loginCheck);
         modelAndView.addObject("writePost", writePost);
         modelAndView.addObject("cpage", cpage);
         modelAndView.addObject("board_cd", boardCd);
@@ -241,6 +228,7 @@ public class BoardController {
 
 
     @RequestMapping("/write")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView listWrite(@RequestParam(name = "board_cd") String boardCd) {
         System.out.println("Controller_listWrite 호출");
 
@@ -260,15 +248,15 @@ public class BoardController {
                 navBoard = navBoard + "event";
                 break;
             case "20004":
-                boardCd_name = "Free Board";
+                boardCd_name = "free";
                 navBoard = navBoard + "free";
                 break;
             case "20005":
-                boardCd_name = "Sharing information";
+                boardCd_name = "information";
                 navBoard = navBoard + "information";
                 break;
             case "20006":
-                boardCd_name = "Share the strategy";
+                boardCd_name = "strategy";
                 navBoard = navBoard + "strategy";
                 break;
 
@@ -301,7 +289,6 @@ public class BoardController {
         System.out.println("Controller_listWriteOk 호출");
 
         int flag = 1;
-        String message = ""; // 메시지 변수 추가
 
         try {
             // 게시글 목록을 가져오는 로직
@@ -325,27 +312,27 @@ public class BoardController {
             post.setPostCommentCnt(0);
 
             postInfoRepository.save(post);
-
             // 변경: 첫 번째 글 작성 시에는 특정 포인트를 주기
             if (isFirstPost(posts)) {
                 int firstPostPoint = 100; // 첫 번째 글 작성 시 부여할 포인트
                 updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50103", firstPostPoint);
                 flag = 0;
-                message = "첫 번째 글을 작성해주셔서 감사합니다! 보너스 포인트 100";
                 System.out.println("첫 번째 글 작성 포인트 지급");
             } else if (isMultipleOfFivePosts(posts)) {
                 // 변경: 5개 단위로 작성할 때마다 다른 포인트를 주기
                 int additionalPostPoint = 50; // 5개 단위로 작성 시 추가로 부여할 포인트
                 updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50104", additionalPostPoint);
                 flag = 0;
-                message = "축하합니다! 5개의 글을 작성하셨습니다. 보너스 포인트가 지급되었습니다! 50포인트";
+
                 System.out.println("5개의 글 작성 포인트 지급");
+                int point = 2;
+
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
+
             } else {
                 flag = 0;
                 System.out.println("포인트 지급 없음");
             }
-            // 메시지를 Model에 추가
-            model.addAttribute("message", message);
             
         } catch (Exception e) {
             System.out.println("WriteOk(Post post) 오류 : " + e.getMessage());
@@ -363,6 +350,7 @@ public class BoardController {
     }
 
     @GetMapping("/modify")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView listModify(@RequestParam(name = "post_id") int postId,
             @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listModift 호출");
@@ -387,15 +375,15 @@ public class BoardController {
                 navBoard = navBoard + "event";
                 break;
             case "20004":
-                boardCd_name = "Free Board";
+                boardCd_name = "free";
                 navBoard = navBoard + "free";
                 break;
             case "20005":
-                boardCd_name = "Sharing information";
+                boardCd_name = "information";
                 navBoard = navBoard + "information";
                 break;
             case "20006":
-                boardCd_name = "Share the strategy";
+                boardCd_name = "strategy";
                 navBoard = navBoard + "strategy";
                 break;
 
@@ -468,6 +456,7 @@ public class BoardController {
     }
 
     @GetMapping("/delete")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView listDelete(@RequestParam(name = "post_id") int postId,
             @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listdelete 호출");
@@ -492,15 +481,15 @@ public class BoardController {
                 navBoard = navBoard + "event";
                 break;
             case "20004":
-                boardCd_name = "Free Board";
+                boardCd_name = "free";
                 navBoard = navBoard + "free";
                 break;
             case "20005":
-                boardCd_name = "Sharing information";
+                boardCd_name = "information";
                 navBoard = navBoard + "information";
                 break;
             case "20006":
-                boardCd_name = "Share the strategy";
+                boardCd_name = "strategy";
                 navBoard = navBoard + "strategy";
                 break;
 
@@ -544,6 +533,7 @@ public class BoardController {
     }
 
     @RequestMapping("/comment_write_ok")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public String writeComment(@RequestParam("board_cd") int boardCd,
             @RequestParam("post_id") int postId,
             @RequestParam("ccontent") String content,
@@ -567,7 +557,6 @@ public class BoardController {
         comment.setCreatedAt(date);
         comment.setUpdatedAt(date);
         comment.setMember(member);
-        System.out.println("comment 확인 : " + comment);
 
         commentInfoRepository.save(comment);
         // 댓글 카운트 추가
@@ -579,6 +568,7 @@ public class BoardController {
     }
 
     @PostMapping("/comment_delete_ok")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @Transactional
     public String deleteComment(@RequestParam("board_cd") int boardCd,
             @RequestParam("comment_id") int commentId,
@@ -601,6 +591,7 @@ public class BoardController {
     }
 
     @RequestMapping("/reply_comment_write_ok")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public String writeReplyComment(@RequestParam("board_cd") int boardCd,
             @RequestParam("post_id") int postId,
             @RequestParam("parent_comment_id") int commentId,

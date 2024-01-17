@@ -401,8 +401,6 @@ const signup = async function () {
 const signin = async function(){
     let username = document.getElementById('usernameLogin').value;
     let password = document.getElementById('passwordLogin').value;
-    console.log(username);
-    console.log(password);
     try {
         const response = await fetch(`/login/generateToken`,{
             method:'POST',
@@ -424,7 +422,7 @@ const signin = async function(){
                 // check_recaptcha();
                 break;
             case 0:
-                window.location.href = "./";
+                history.go(-1);
                 break;
             default:
                 break;

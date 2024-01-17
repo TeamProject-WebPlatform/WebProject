@@ -102,18 +102,17 @@
                                             <!--게시판-->
                                             <div class="board_write">
                                                 <div class="form-container">
-                                                    <div class="uk-grid uk-child-width-1-2@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                                        <div class="form-row uk-width-1-5">
-                                                            <!-- <label for="tags" class="form-label">태그</label> -->
-                                                            <select class="board_write_select js-select" name="tags">
-                                                                <option name="tags" th:value="${post.postTags}" th:text="${post.postTags}" ></option>
-                                                            </select>
-                                                        </div>
-                                                        <!-- <label for="tags" class="form-label">태그</label>
-                                                        <input type="text" name="tags" th:value="${post.postTags}" class="board_view_input" readonly/> -->
-                                                        <div class="form-row uk-width-3-4">
-                                                            <input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input uk-width-expand">
-                                                        </div>
+                                                    <div class="form-row uk-width-1-6">
+                                                        <label for="subject" class="form-label">제목</label>
+                                                        <input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input">
+                                                    </div>
+                                                    <br />
+                                                    <div class="form-row uk-width-1-6">
+                                                        <label for="tags" class="form-label">태그</label>
+                                                        <input type="text" name="tags" th:value="${post.postTags}" class="board_view_input" readonly/>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <label for="content" name="content" class="form-label">내용</label>
                                                     </div>
                                                     <br>
                                                     <div class="form-input">

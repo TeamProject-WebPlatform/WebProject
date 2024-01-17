@@ -8,6 +8,7 @@
     /* align-items: flex-start; */
 }
 
+
 .user{
     width: 100%;
     justify-content:space-around;
@@ -27,7 +28,7 @@
     background-color: #222;
     color: white;
     /* background-image: url("../img/acheivement-3.png"); */
-    background-size: 270px 500px;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
 }
 .profile-header{
@@ -36,7 +37,9 @@
     background-size: 230px 230px;
     background-repeat: no-repeat;
     background-position: 20px 0;
-    
+
+    background-position: center;
+    background-size:cover;
     /* background-position: left; */
     /* background-image: url("../img/acheivement-2.png"); */
 }
@@ -113,7 +116,7 @@
     padding-top: 5px;
 }
 .profile-badge-section .badge{
-    height: 40px;
+    height: 50px;
     width: 50px;
     /* size: 40px; */
     font-size: 30px;

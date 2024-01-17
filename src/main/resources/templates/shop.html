@@ -60,8 +60,8 @@
                                             <select class="js-select" id="categorySelect" th:onchange="changeCategori()">
                                                 <option value="all">카테고리: all</option>
                                                 <option value="801">카테고리 : 테두리</option>
-                                                <option value="802">카테고리 : 뱃지</option>
-                                                <option value="803">카테고리 : 프로필 배경</option>
+                                                <option value="802">카테고리 : 프로필 배경</option>
+                                                <option value="803">카테고리 : 뱃지</option>
                                             </select>
                                         </div>
                                         <div class="uk-width-2-3 uk-width-expand">
@@ -95,15 +95,16 @@
                                                         <script th:inline="javascript">
                                                             function showLoginAlert() {
                                                                 alert('로그인이 필요합니다.');
+                                                                location.href = './login';
                                                             }
                                                         </script>
                                                     </div>
                                                     <div th:if="${memId ne null}">
                                                         <!-- memId가 있는 경우, 구매 버튼을 표시 -->
-                                                        <form action=''>
-                                                            <input class="select_Get_btn" type='submit' value='구매' th:onclick="getItem('[[-${item.itemCost}]]','5001')">
-                                                        </form>
+                                                        <input th:if="${haveitem != null and not #lists.contains(haveitem, item.itemCd)}" class="select_Get_btn" type='button' value='구매' th:onclick="getItem('[[${item.itemCost}]]','[[${item.itemCd}]]')" >
+                                                        <input th:if="${haveitem != null and #lists.contains(haveitem, item.itemCd)}" type='button' value='보유 중' disabled >
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -153,6 +154,7 @@
                                                 
                                                 </div>
                                         </div>
+                                        <br>
                                         <div class="setbtn">
                                             <ul id="previewList"></ul>
                                         </div>
@@ -167,13 +169,7 @@
                 </main>
         </div>
         <div class="page-modals">
-            <div class="popup" id="popup">
-                <span class="close" onclick="closePopup()">&times;</span>
-                <img class="popup-content" id="popupImage">
-            </div>
-
-
-            <!-- <div class="uk-flex-top" id="modal-report" data-uk-modal>
+            <div class="uk-flex-top" id="modal-report" data-uk-modal>
                 <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default" type="button" data-uk-close></button>
                     <h2 class="uk-modal-title">Report</h2>
                     <form class="uk-form-stacked" action="#">

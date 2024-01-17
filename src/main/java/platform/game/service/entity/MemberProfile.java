@@ -23,11 +23,35 @@ public class MemberProfile {
     @Column(name = "memId")
     private long memId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn(name = "memId", referencedColumnName = "memId")
     private Member member;
 
     @Column(name = "profile_intro")
     private String profileIntro;
+
+    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
+    private String profileImage;
+
+    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
+    private String profileHeader;
+
+    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
+    private String profileCard;
+
+    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
+    private String ProfileRepBadge;
+    
+    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
+    private String ProfileBadges2;
+
+    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
+    private String ProfileBadges3;
+
+    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
+    private String ProfileBadges4;
+
+    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
+    private String ProfileBadges5;
 }

@@ -15,6 +15,5 @@ public class SigninHistoryId implements Serializable {
     @JoinColumn(name = "memId", referencedColumnName = "memId")
     private Member member;
 
-    @Column(name = "signinHistoryId")
-    private int signinHistoryId;
+    private long signinHistoryId;
 }

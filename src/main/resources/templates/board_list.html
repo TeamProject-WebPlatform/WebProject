@@ -10,13 +10,13 @@
     <meta name="HandheldFriendly" content="true">
     <meta name="format-detection" content="telephone=no">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="./css/libs.min.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/list_custom.css" />
-    <script src="./js/module/swiper.js"></script>
-    <script src="./js/libs.js"></script>
-    <script src="./js/main.js"></script>
+    <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/libs.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/list_custom.css" />
+    <script src="../js/module/swiper.js"></script>
+    <script src="../js/libs.js"></script>
+    <script src="../js/main.js"></script>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -24,7 +24,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
 
 </head>
-
+<script th:if="${message}">
+    alert("[[${message}]]");
+    // 추가적인 동작 수행
+    // 예: 페이지 리로딩
+    // location.reload();
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const active = document.getElementById("[[${navBoard}]]");
@@ -32,12 +37,11 @@
         const submenu = active.parentNode;
         submenu.classList.remove("none");
     });
-    
-    function checkLoginAndNavigate() {
-        alert('로그인이 필요합니다.');
-    }
+</script>
+<!--모든 기능 다 합친 스크립트-->
+<script>
     function onSelect() {
-        var selectedSize = document.getElementById("list_size").value;
+        var selectedSize = document.getElementById("categorySelect").value;
         var selectedOption = document.getElementById("s_btn").value;
         var searchValue = document.getElementById("s_txt_btn").value;
         var selectTag = document.getElementById("list_tag").value;
@@ -140,21 +144,21 @@
                                                 <th width="10%" >조회</th>
                                             </tr>
                                             <tr class="board_center_tr" th:each="post, rowStat : ${lists}">
-                                                <td th:text="${#lists.size(lists) - rowStat.index}" style="text-align: center;"></td>
+                                                <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
                                                 <td class="left">
                                                     <!--게시물 클릭시 이동하도록 하는 구문-->
                                                     <a class="board_ccenter_tr_a" th:href="@{view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
                                                     <!--게시물 댓글 갯수-->
                                                     <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                     <!--새로운 글 작성시 보여지는 new 표시-->
-                                                    <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
+                                                    <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
                                                         <img src="../img/icon_new.gif" alt="NEW">
                                                     </span>
                                                 </td>
                                                 <!--닉네임-->
                                                 <td style="text-align: center;" th:text="${post.member.memNick}"></td>
                                                 <!--글쓴 날짜-->
-                                                <td style="text-align: center;" th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}"></td>
+                                                <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
                                                 <!--조회수-->
                                                 <td style="text-align: center;" th:text="${post.postHit}"></td>
                                             </tr>
@@ -210,12 +214,8 @@
                                         <!--//페이지넘버-->
                                         <div class="align_right" style="text-align: right;" >
                                             <!-- 로그인 상태인 경우의 링크 -->
-                                            <a th:if="${loginCheck}" th:href="@{write(board_cd=${boardCd})}">
+                                            <a th:href="@{write(board_cd=${boardCd})}">
                                                 <input type="button" value="쓰기" class="btn_write btn_txt01">
-                                            </a>
-                                            <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                            <a th:unless="${loginCheck}" href="/login">
-                                                <input type="button" value="쓰기" class="btn_write btn_txt01" onclick="checkLoginAndNavigate()">
                                             </a>
                                         </div>
                                     </div>    <!--//게시판-->
@@ -223,12 +223,7 @@
                         </div>
                     </div>
                 </div>
-                <script th:if="${message}">
-                    alert("[[${message}]]");
-                    // 추가적인 동작 수행
-                    // 예: 페이지 리로딩
-                    location.reload();
-                </script>
+                
             </main>
         </div>
     </div>
@@ -293,7 +288,6 @@
             </div>
         </div>
     </div> -->
-    <!-- 글써질떄마다 메세지 -->
 </body>
 
 </html>
