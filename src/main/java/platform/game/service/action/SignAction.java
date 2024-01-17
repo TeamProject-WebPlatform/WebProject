@@ -6,11 +6,13 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.LinkedMultiValueMap;
@@ -28,6 +30,8 @@ import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.repository.UpdatePointHistory;
+import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.service.MemberInfoService;
 import platform.game.service.service.jwt.JwtService;
 import platform.game.service.service.jwt.SecurityPassword;
@@ -59,6 +63,12 @@ public class SignAction {
     private AuthenticationManager authenticationManager;
 
     private final int JWT_EXPIRY_TIME = JwtService.JWT_EXPIRY_TIME; // JWT 토큰 만료 시간
+
+    // 토큰 발행후 로그인시 포인트 적립
+    @Autowired
+    @Qualifier("updatePointHistoryImpl")
+    private UpdatePointHistory updatePointHistory;
+    
 
     public Cookie signUp(UserSignTO userSignup, int login) {
         // jwt 토큰 저장할 Cookie
@@ -124,8 +134,20 @@ public class SignAction {
             AuthRequest authRequest = new AuthRequest();
             authRequest.setMemUserid(userSignup.getMemUserid());
             authRequest.setMemPw(userSignup.getMemPw());
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
 
             cookie = generateToken(authRequest);
+            
+            // 여기서 회원가입시 포인트 증가 로직
+
+            int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
+            if (updatedPoints < 0) {
+                // 포인트 증가 실패
+                System.out.println("포인트 증가 실패");
+                return null;
+            }    
+            System.out.println("포인트 증가 성공");
+            
             return cookie;
         } else {
             return null;

@@ -31,6 +31,7 @@ public class BattleTO {
         this.title = post.getPostTitle();
         this.postId = post.getPostId();
         this.gameCd = battlePost.getGameCd();
+        this.state = battle.getBtState();
     }
 
     private Member host; // 배틀 주최자
@@ -55,4 +56,5 @@ public class BattleTO {
     int point; // 배틀 포인트
     String gameCd;
     int postId; // 해당 배틀게시글 id
+    String state;
 }

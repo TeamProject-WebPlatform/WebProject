@@ -10,7 +10,10 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script src="./js/module/cookie.js"></script>
         <script th:inline="javascript">
+            // 다크 모드 설정 값
+
             let currentThemeIndex = 0;
             // 로고 색상 변경용
             const logo_img_paths = ["./img/logo_white.png", "./img/logo_black.png"];
@@ -23,17 +26,55 @@
                 getComputedStyle(root).getPropertyValue('--main-color-dark'),
                 getComputedStyle(root).getPropertyValue('--main-color-light')
             ];
+            document.addEventListener("DOMContentLoaded", function () {
 
+            });
+            if (getCookie('darkMode')) {
+                if (getCookie('darkMode') === 'true') {
+                    console.log('다크모드 ON');
+                    document.getElementsByTagName("body")[0].classList.add('dark-theme');
+                } else {
+                    console.log('다크모드 OFF');
+                    document.getElementsByTagName("body")[0].classList.remove('dark-theme');
+                }
+            } else {
+                setCookie('darkMode', true, 7);
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                if (getCookie('darkMode') === 'true') {
+                    document.getElementById('logo_img').src = logo_img_paths[0];
+                    document.querySelector(".page-header__logo_text").style.color = logo_text[0];
+                    // 메인 컬러 변경용
+                    root.style.setProperty('--main-color-now', main_color_values[0]);
+                }
+                else {
+                    document.getElementById('logo_img').src = logo_img_paths[1];
+                    document.querySelector(".page-header__logo_text").style.color = logo_text[1];
+                    // 메인 컬러 변경용
+                    root.style.setProperty('--main-color-now', main_color_values[1]);
+                }
+            })
             document.getElementById("toggle").addEventListener("click", function () {
                 document.getElementsByTagName('body')[0].classList.toggle("dark-theme");
-
-                currentThemeIndex = 1 - currentThemeIndex;  // 0과 1을 번갈아가며 토글
-                // 이미지 경로를 토글
-                document.getElementById('logo_img').src = logo_img_paths[currentThemeIndex];
-                document.querySelector(".page-header__logo_text").style.color = logo_text[currentThemeIndex];
-                // 메인 컬러 변경용
-                root.style.setProperty('--main-color-now', main_color_values[currentThemeIndex]);
-                console.log(root.style.getPropertyValue('--main-color-now'));
+                if (getCookie('darkMode') === 'true') {
+                    setCookie('darkMode', false, 7);
+                    console.log(getCookie('darkMode'));
+                } else if (getCookie('darkMode') === 'false') {
+                    setCookie('darkMode', true, 7);
+                    console.log(getCookie('darkMode'));
+                }
+                if (getCookie('darkMode') === 'true') {
+                    document.getElementById('logo_img').src = logo_img_paths[0];
+                    document.querySelector(".page-header__logo_text").style.color = logo_text[0];
+                    // 메인 컬러 변경용
+                    root.style.setProperty('--main-color-now', main_color_values[0]);
+                }
+                else {
+                    document.getElementById('logo_img').src = logo_img_paths[1];
+                    document.querySelector(".page-header__logo_text").style.color = logo_text[1];
+                    // 메인 컬러 변경용
+                    root.style.setProperty('--main-color-now', main_color_values[1]);
+                }
             });
 
             // websocket ~~~~~~~~
@@ -42,9 +83,8 @@
             let memId = 0;
             document.addEventListener("DOMContentLoaded", function () {
                 memId = /*[[${memId}]]*/0;
-                if(memId!==0) pointConnect();
+                if (memId !== 0) pointConnect();
             });
-            
             function pointConnect() {
                 var socket = new SockJS('/ws');
 
@@ -55,17 +95,21 @@
                         try {
                             let headerInfo = JSON.parse(response.body);
                             console.log(headerInfo);
-                            if(headerInfo.flag===2){
+                            if (headerInfo.flag === 2) {
                                 alert("포인트 부족");
                             }
-                            if(headerInfo.flag===1){
+                            if (headerInfo.flag === 1) {
                                 // 정상
                                 currentPoint = headerInfo.currentPoint;
                                 document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
+
+                                
                             }else if(headerInfo.flag===0 || headerInfo.flag===-1){
                                 // 에러
                                 alert("에러");
                             }
+
+
                         } catch (err) {
                             console.log("에러 : " + err);
                         }
@@ -73,13 +117,13 @@
                 });
             }
 
-            function sendPointChange(point,pointKindCd) {
-                memInfoStompClient.send(`/app/memPointChange`, {},JSON.stringify({
+            function sendPointChange(point, pointKindCd) {
+                memInfoStompClient.send(`/app/memPointChange`, {}, JSON.stringify({
                     memId: Number(memId),
-                    pointKindCd : pointKindCd,
+                    pointKindCd: pointKindCd,
                     currentPoint: Number(currentPoint),
                     pointChange: Number(point),
-                    flag : -1
+                    flag: -1
                 }));
             }
         </script>

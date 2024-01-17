@@ -7,5 +7,5 @@ import platform.game.service.entity.PointHistory;
 import platform.game.service.entity.compositeKey.PointHistoryId;
 
 @Repository
-public interface PointHistoryRepositry extends JpaRepository<PointHistory, PointHistoryId>,UpdatePointHistory{
+public interface PointHistoryRepository extends JpaRepository<PointHistory, PointHistoryId>,UpdatePointHistory{
 }

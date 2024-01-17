@@ -27,25 +27,37 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    let memId = /*[[${memId}]]*/'';
-    let currentPoint =/*[[${currentPoint}]]*/0;
-    function formatNumber(value) {
+    function formatNumberTok(value) {
         var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
         return formattedValue;
     }
     /*]]>*/
-</script>
-<script>
     document.addEventListener("DOMContentLoaded", function () {
         //console.log = function () {};
-
+        const vs = document.querySelectorAll('.vs img');
+        let isDark = getCookie('darkMode');
+        vs.forEach(function(x){
+                if (isDark === 'true') {
+                    x.src = logo_img_paths[0];
+                }
+                else {
+                    x.src = logo_img_paths[1];
+                }
+            })
         const active = document.getElementById("nav-battle");
         active.classList.add("uk-active");
         document.getElementById("toggle").addEventListener("click", function () {
-
-            document.querySelectorAll('.vs > img').forEach(function (x) {
-                x.src = logo_img_paths[currentThemeIndex];
+            isDark = getCookie('darkMode');
+            vs.forEach(function(x){
+                if (isDark === 'true') {
+                    x.src = logo_img_paths[0];
+                }
+                else {
+                    x.src = logo_img_paths[1];
+                }
             })
+            
+
         });
         const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
         const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
@@ -72,22 +84,22 @@
     let battleCardStompClient = null;
     function battleCardConnect() {
         var socket = new SockJS('/ws');
-        let battleCardStompClient = null;
         battleCardStompClient = Stomp.over(socket);
         // 보유 포인트 구독
-        
+
         // 배틀 전광판 구독
         const cards = document.querySelectorAll(".battle-card-info");
         battleCardStompClient.connect({}, function (frame) {
-            console.log(frame);
             cards.forEach(function (card) {
                 let btId = card.getAttribute("btId");
                 battleCardStompClient.subscribe(`/topic/pointbetting/` + btId, function (response) {
                     try {
                         let pointTO = JSON.parse(response.body);
                         let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
-
-                        pointInfo.querySelector(".host-total-point").innerHTML = formatNumber(pointTO.hostTotalPoint);
+                        if(pointTO.flag===-1){
+                            return;
+                        }
+                        pointInfo.querySelector(".host-total-point").innerHTML = formatNumberTok(pointTO.hostTotalPoint);
                         pointInfo.querySelector(".host-total-mem-no").innerHTML = pointTO.hostTotalMemNo;
                         pointInfo.querySelector(".host-point-reward-ratio").innerHTML = "1:" + pointTO.hostPointRewardRatio;
                         let hostPointRatio = pointInfo.querySelector(".host-point-ratio");
@@ -98,7 +110,7 @@
                         pointBarLeft.style.width = pointLeft.innerHTML;
                         pointBarLeft.style.backgroundColor = getColorRatio(Number(pointLeft.innerHTML.replace("%", "")));
 
-                        pointInfo.querySelector(".client-total-point").innerHTML = formatNumber(pointTO.clientTotalPoint);
+                        pointInfo.querySelector(".client-total-point").innerHTML = formatNumberTok(pointTO.clientTotalPoint);
                         pointInfo.querySelector(".client-total-mem-no").innerHTML = pointTO.clientTotalMemNo;
                         pointInfo.querySelector(".client-point-reward-ratio").innerHTML = "1:" + pointTO.clientPointRewardRatio;
                         let clientPointRatio = pointInfo.querySelector(".client-point-ratio");
@@ -124,7 +136,6 @@
                             button = buttons[1];
                             button.style.backgroundColor = "blueviolet"
                         }
-                        
 
                     } catch (err) {
                         console.log("에러 : " + err);
@@ -162,6 +173,7 @@
 
             pointInputs.value = "";
 
+            sendPointChange(-point, '50003');
             battleCardStompClient.send(`/app/pointbetting`, {}, JSON.stringify({
                 point: point,
                 btId: btId,
@@ -169,10 +181,11 @@
                 memId: memId
             }));
             button.setAttribute("active", "F");
-            button.innerHTML = flag === 0 ? "LEFT" : "RIGHT";
+            button.innerHTML = flag === 0 ? "HOST" : "CLIENT";
             button.style.color = "white";
         }
     }
+
     function getColorRatio(bettingRatio) {
         if (bettingRatio >= 90) {
             return '#FF0000'; // 빨간색
@@ -265,6 +278,10 @@
 
 
                                 <div class="battle-card-info" th:attr="btId = ${battle.btId}">
+                                    <div class="info-header">
+                                        <div class="info-game" th:text="${battle.gameCd}">게임종류</div>
+                                        <div class="info-state" th:text="${battle.state}">배틀상태</div>
+                                    </div>
                                     <div class="info-title"><a href="/battle/${battle.postId}"
                                             th:text="${battle.title}"></a></div>
                                     <div class="info-battle-point-section">
@@ -286,7 +303,7 @@
                                                         </div>
                                                         <div class="host-total-point" th:utext="'<script>' +
                                                             'var value = ' + ${battlePointTOList[iterStat.index].hostTotalPoint} + ';' +
-                                                            'var formattedValue = formatNumber(value);' +
+                                                            'var formattedValue = formatNumberTok(value);' +
                                                             'document.write(formattedValue);' +
                                                             '</script>'">
                                                             72.3</div>
@@ -328,7 +345,7 @@
                                                     <div class="info-point-amount">
                                                         <div class="client-total-point" th:utext="'<script>' +
                                                             'var value = ' + ${battlePointTOList[iterStat.index].clientTotalPoint} + ';' +
-                                                            'var formattedValue = formatNumber(value);' +
+                                                            'var formattedValue = formatNumberTok(value);' +
                                                             'document.write(formattedValue);' +
                                                             '</script>'">
                                                             72.3</div>
@@ -364,34 +381,45 @@
                                     <div class="betting-section">
                                         <div class="point-betting" th:id="'bettingId' + ${battle.btId}">
                                             <div th:if="${battlePointTOList[iterStat.index].flag==0}"
-                                                class="point-betting-button" style="background-color: blueviolet;">LEFT
+                                                class="point-betting-button" style="background-color: blueviolet;">HOST
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==0}"
                                                 class="point-betting-button" active="F"
-                                                th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">LEFT</div>
+                                                th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">HOST</div>
                                             <div class="search">
                                                 <div class="search__input">
                                                     <i class="fa-solid fa-coins ico_fontawesome"></i>
-                                                    <logincheck th:if="${nickname}">
-                                                        <input
-                                                            th:unless="${battlePointTOList[iterStat.index].alreadyBet==1}"
-                                                            class="point-betting-input" type="search" name="search"
-                                                            placeholder="BETTING HERE">
-                                                        <input
-                                                            th:if="${battlePointTOList[iterStat.index].alreadyBet==1}"
-                                                            class="point-betting-input" type="search" name="search"
-                                                            placeholder="YOU ALREADY BET" readonly>
-                                                    </logincheck>
-                                                    <input th:unless="${nickname}" class="point-betting-input"
-                                                        type="search" name="search" placeholder="LOGIN FIRST" readonly>
+                                                    <battleStateCheck th:if="${battle.state=='A'}">
+                                                        <logincheck th:if="${nickname}">
+                                                            <input
+                                                                th:unless="${battlePointTOList[iterStat.index].alreadyBet==1}"
+                                                                class="point-betting-input" type="search" name="search"
+                                                                placeholder="BETTING HERE">
+                                                            <input
+                                                                th:if="${battlePointTOList[iterStat.index].alreadyBet==1}"
+                                                                class="point-betting-input" type="search" name="search"
+                                                                placeholder="YOU ALREADY BET" readonly>
+                                                        </logincheck>
+                                                        <input th:unless="${nickname}" class="point-betting-input"
+                                                            type="search" name="search" placeholder="LOGIN FIRST"
+                                                            readonly>
+                                                    </battleStateCheck>
+                                                    <battleStateCheck th:if="${battle.state=='P'}">
+                                                        <input class="point-betting-input" type="search" name="search"
+                                                            placeholder="PROCEEDING" readonly>
+                                                    </battleStateCheck>
+                                                    <battleStateCheck th:if="${battle.state=='T'}">
+                                                        <input class="point-betting-input" type="search" name="search"
+                                                            placeholder="TERMINATED" readonly>
+                                                    </battleStateCheck>
                                                 </div>
                                             </div>
                                             <div th:if="${battlePointTOList[iterStat.index].flag==1}"
-                                                class="point-betting-button" style="background-color: blueviolet;">RIGHT
+                                                class="point-betting-button" style="background-color: blueviolet;">CLIENT
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==1}"
                                                 class="point-betting-button" active="F"
-                                                th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">RIGHT</div>
+                                                th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">CLIENT</div>
                                         </div>
                                     </div>
                                 </div>

@@ -1,8 +1,10 @@
 package platform.game.service.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -45,6 +47,9 @@ public class Member {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<PointHistory> memPointHistoryList = new ArrayList<>();
+
+    // @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    // private List<PointHistory> memPointHistoryList = new ArrayList<>();
 
     public String getRole(String code) {
         switch (code) {

@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/libs.min.css">
     <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/list_custom.css" />
     <script src="../js/module/swiper.js"></script>
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
@@ -37,6 +37,8 @@
     document.addEventListener("DOMContentLoaded", function () {
         const active = document.getElementById("[[${navBoard}]]");
         active.classList.add("uk-active");
+        const submenu = active.parentNode;
+        submenu.classList.remove("none");
     });
 </script>
 
@@ -100,19 +102,20 @@
                                             <!--게시판-->
                                             <div class="board_write">
                                                 <div class="form-container">
-                                                    <div class="form-row uk-width-1-6">
-                                                        <label for="subject" class="form-label">제목</label>
-                                                        <input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input">
+                                                    <div class="uk-grid uk-child-width-1-2@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                                        <div class="form-row uk-width-1-5">
+                                                            <!-- <label for="tags" class="form-label">태그</label> -->
+                                                            <select class="board_write_select js-select" name="tags">
+                                                                <option name="tags" th:value="${post.postTags}" th:text="${post.postTags}" ></option>
+                                                            </select>
+                                                        </div>
+                                                        <!-- <label for="tags" class="form-label">태그</label>
+                                                        <input type="text" name="tags" th:value="${post.postTags}" class="board_view_input" readonly/> -->
+                                                        <div class="form-row uk-width-3-4">
+                                                            <input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input uk-width-expand">
+                                                        </div>
                                                     </div>
-                                                    <br />
-                                                    <div class="form-row uk-width-1-6">
-                                                        <label for="tags" class="form-label">태그</label>
-                                                        <input type="text" name="tags" th:value="${post.postTags}" class="board_view_input" readonly/>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <label for="content" class="form-label">내용</label>
-                                                    </div>
-                                                    <br />
+                                                    <br>
                                                     <div class="form-input">
                                                         <textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea>
                                                     </div>

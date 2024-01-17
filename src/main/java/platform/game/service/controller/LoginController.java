@@ -1,9 +1,11 @@
 package platform.game.service.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,19 +16,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.mail.javamail.JavaMailSender;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import platform.game.service.action.MailAction;
 import platform.game.service.action.SignAction;
 import platform.game.service.entity.AuthRequest;
+import platform.game.service.entity.Member;
+import platform.game.service.entity.PointHistory;
+import platform.game.service.entity.SigninHistory;
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
+import platform.game.service.repository.IpUtils;
 import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.repository.SigninHistoryRepository;
+import platform.game.service.repository.UpdatePointHistory;
+import platform.game.service.service.MemberInfoDetails;
+import platform.game.service.service.SigninHistoryService;
 import platform.game.service.service.jwt.SecurityPassword;
 
 @RestController
@@ -51,8 +62,26 @@ public class LoginController {
     @Autowired
     private SignAction signAction;
 
+    // 로그인시 포인트 적립
     @Autowired
     private MemberInfoRepository MemberRepository;
+
+    @Autowired
+    private SigninHistoryRepository signinHistoryRepository;
+
+    @Autowired
+    @Qualifier("updatePointHistoryImpl")
+    private UpdatePointHistory updatePointHistory;
+    
+    @Autowired
+    private SigninHistoryService signinHistoryService;
+
+    @Autowired
+    private HttpServletRequest request; // HttpServletRequest를 주입받습니다.
+
+    
+    // 다른 메서드들은 그대로 유지
+
 
     @GetMapping("")
     public ModelAndView login() {
@@ -136,6 +165,35 @@ public class LoginController {
         if (cookie != null) {
             // 성공
             response.addCookie(cookie);
+
+             // 사용자의 IP 주소 가져오기
+            String memIp = IpUtils.getIpAddress(request);
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+            // SigninHistory 저장
+            SigninHistory signinHistory = SigninHistory.builder()
+                    /* 현재 로그인한 사용자의 Member 객체 */
+                    .member(member)
+                    .memIp(memIp)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            // Save the SigninHistory
+            signinHistoryRepository.save(signinHistory);
+           // 첫 로그인 여부 업데이트 및 포인트 증가
+            if (signinHistoryService.isFirstLogin(member)) {
+                System.out.println("첫 로그인입니다.");
+                // 포인트 증가 로직
+                int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
+                if (updatedPoints < 0) {
+                    // 포인트 증가 실패
+                    System.out.println("포인트 증가 실패");
+                    return 1; // 실패 시 처리 (원하는 값 또는 의미 있는 값을 반환)
+                }
+            
+            System.out.println("포인트 증가 성공");
+        } else {
+            System.out.println("이미 로그인한 사용자입니다.");
+        }
+
             System.out.println("로그인 성공");
             return 0;
         } else {

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BoardCpageTO;
 import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.PostInfoRepository;
+import platform.game.service.repository.UpdatePointHistory;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -39,6 +41,10 @@ public class BoardController {
 
     @Autowired
     private CommentInfoRepository commentInfoRepository;
+
+    @Autowired
+    @Qualifier("updatePointHistoryImpl")
+    private UpdatePointHistory updatePointHistory;
 
     // @RequestMapping("/shop")
     // public String shop(){
@@ -75,16 +81,24 @@ public class BoardController {
                 boardCd_name = "Share the strategy";
                 navBoard = navBoard + "strategy";
                 break;
-
-            default:
+                
+                default:
                 break;
-        }
-
-        String loginCheck = "true";
-
-        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            System.out.println("멤버 있음 ");
-            loginCheck = "true";
+            }
+            
+            ModelAndView modelAndView = new ModelAndView();
+            String loginCheck = "true";
+            
+            if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+                System.out.println("멤버 있음 ");
+                Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+                if (member != null) {
+                    modelAndView.addObject("nickname", member.getMemNick());
+                    modelAndView.addObject("level", member.getMemLvl());
+                    modelAndView.addObject("currentPoint", member.getMemCurPoint());
+                    modelAndView.addObject("memId",member.getMemId());
+                }
+                loginCheck = "true";
         } else {
             System.out.println("멤버 없음");
             loginCheck = "false";
@@ -116,7 +130,6 @@ public class BoardController {
 
         cpageTO.setBoardLists(lists);
 
-        ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_list");
         modelAndView.addObject("lists", lists);
         modelAndView.addObject("loginCheck", loginCheck);
@@ -178,10 +191,17 @@ public class BoardController {
         // hit 증가시키기
         post.setPostHit(post.getPostHit() + 1);
         postInfoRepository.save(post);
-
+        
+        ModelAndView modelAndView = new ModelAndView();
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
+            if (member != null) {
+                modelAndView.addObject("nickname", member.getMemNick());
+                modelAndView.addObject("level", member.getMemLvl());
+                modelAndView.addObject("currentPoint", member.getMemCurPoint());
+                modelAndView.addObject("memId",member.getMemId());
+            }
             loginCheck = "true";
             id = member.getMemId();
         } else {
@@ -201,7 +221,6 @@ public class BoardController {
         ArrayList<Comment> comment = commentInfoRepository.findByPost_PostId(postId);
         ArrayList<CommentTO> commentTree = buildCommentTree(comment);
 
-        ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("board_view");
         modelAndView.addObject("post", post);
         modelAndView.addObject("comment", comment);
@@ -212,8 +231,12 @@ public class BoardController {
         modelAndView.addObject("commentTree", commentTree);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+        modelAndView.addObject("post", post);
+        modelAndView.addObject("commentTree", getCommentTreeByPostId(postId));
+
         return modelAndView;
     }
+
 
     @RequestMapping("/write")
     public ModelAndView listWrite(@RequestParam(name = "board_cd") String boardCd) {
@@ -252,6 +275,15 @@ public class BoardController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
+        
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                modelAndView.addObject("nickname", member.getMemNick());
+                modelAndView.addObject("level", member.getMemLvl());
+                modelAndView.addObject("currentPoint", member.getMemCurPoint());
+                modelAndView.addObject("memId",member.getMemId());
+            }
         modelAndView.setViewName("board_write");
         modelAndView.addObject("board_cd", boardCd);
         modelAndView.addObject("boardCd_name", boardCd_name);
@@ -260,35 +292,63 @@ public class BoardController {
         return modelAndView;
     }
 
+    @Transactional
     @RequestMapping("/write_ok")
-    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request,
-            Model model) {
+    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request, Model model) {
         System.out.println("Controller_listWriteOk 호출");
-        Post post = new Post();
-        Date date = new Date();
-        Member member = null;
-        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                    .getMember();
-        }
-        post.setPostTitle(request.getParameter("subject"));
-        post.setPostTags(request.getParameter("tags"));
-        post.setPostContent(request.getParameter("content"));
-        post.setCreatedAt(date);
-        post.setUpdatedAt(date);
-        post.setBoardCd(request.getParameter("board_cd"));
-        post.setMember(member);
-        post.setPostCommentCnt(0);
 
         int flag = 1;
-        try {
-            postInfoRepository.save(post);
 
-            flag = 0;
+        try {
+            // 게시글 목록을 가져오는 로직
+            ArrayList<Post> posts = postInfoRepository.findByBoardCdOrderByPostIdDesc(boardCd);
+
+            Post post = new Post();
+            Date date = new Date();
+            Member member = null;
+
+            if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+                member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+            }
+            post.setPostTitle(request.getParameter("subject"));
+            post.setPostTags(request.getParameter("tags"));
+            post.setPostContent(request.getParameter("content"));
+            post.setCreatedAt(date);
+            post.setUpdatedAt(date);
+            post.setBoardCd(request.getParameter("board_cd"));
+            post.setMember(member);
+            post.setPostCommentCnt(0);
+
+            postInfoRepository.save(post);
+            // 변경: 첫 번째 글 작성 시에는 특정 포인트를 주기
+            if (post.isFirstPost(posts)) {
+                int firstPostPoint = 100;
+                updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50103", firstPostPoint);
+                flag = 0;
+                System.out.println("첫 번째 글 작성 포인트 지급");
+                int point = 1;
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
+            } else if (post.isMultipleOfFivePosts(posts)) {
+                int additionalPostPoint = 50;
+                updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50104", additionalPostPoint);
+                flag = 0;
+
+                System.out.println("5개의 글 작성 포인트 지급");
+                int point = 2;
+
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
+
+            } else {
+                flag = 0;
+                System.out.println("포인트 지급 없음");
+            }
+            
         } catch (Exception e) {
             System.out.println("WriteOk(Post post) 오류 : " + e.getMessage());
             flag = 1;
         }
+
 
         if (flag == 0) {
             // 글쓰기 성공 시 처리
@@ -307,7 +367,6 @@ public class BoardController {
         Post post = new Post();
 
         post = postInfoRepository.findByPostId(postId);
-        
 
         String boardCd_name = "Notice";
         String navBoard = "nav-";
@@ -342,6 +401,15 @@ public class BoardController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
+
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getMember();
+        if (member != null) {
+            modelAndView.addObject("nickname", member.getMemNick());
+            modelAndView.addObject("level", member.getMemLvl());
+            modelAndView.addObject("currentPoint", member.getMemCurPoint());
+            modelAndView.addObject("memId",member.getMemId());
+        }
         modelAndView.setViewName("board_modify");
         modelAndView.addObject("post", post);
         modelAndView.addObject("cpage", cpage);
@@ -359,38 +427,41 @@ public class BoardController {
             @RequestParam("cpage") int cpage) {
         System.out.println("Controller_listModify_ok 호출");
         Date date = new Date();
-
-        // Find the existing post by ID
-        Optional<Post> optionalPost = postInfoRepository.findById(postId);
-        Post post = optionalPost.get();
-        // Update the post with the new values
-        post.setPostTitle(title);
-        post.setPostTags(tags);
-        post.setPostContent(content);
-        post.setUpdatedAt(date);
-
-        System.out.println("modify_ok post : " + post);
-        post.getBoardCd();
-
-        // Save the updated post
-        int flag = 1;
         try {
-            postInfoRepository.save(post);
-            flag = 0;
+            // Find the existing post by ID
+            Optional<Post> optionalPost = postInfoRepository.findById(postId);
+            Post post = optionalPost.get();
+            // Update the post with the new values
+            post.setPostTitle(title);
+            post.setPostTags(tags);
+            post.setPostContent(content);
+            post.setUpdatedAt(date);
+            
+            post.getBoardCd();
+
+            // Save the updated post
+            int flag = 1;
+            try {
+                postInfoRepository.save(post);
+                flag = 0;
+            } catch (Exception e) {
+                System.out.println("수정 오류 : " + e.getMessage());
+                flag = 1;
+            }
+
+            System.out.println("flag : " + flag);
+
+            if (flag == 0) {
+                // 글쓰기 성공 시 처리
+                return "redirect:./view?board_cd=" + post.getBoardCd() + "&post_id=" + postId + "&cpage=" + cpage;
+            } else {
+                // 글쓰기 실패 시 처리
+                return "redirect:/error";
+            }
         } catch (Exception e) {
-            System.out.println("수정 오류 : " + e.getMessage());
-            flag = 1;
+            System.out.println(e.getMessage());
         }
-
-        System.out.println("flag : " + flag);
-
-        if (flag == 0) {
-            // 글쓰기 성공 시 처리
-            return "redirect:./view?board_cd=" + post.getBoardCd() + "&post_id=" + postId + "&cpage=" + cpage;
-        } else {
-            // 글쓰기 실패 시 처리
-            return "redirect:/error";
-        }
+        return null;
     }
 
     @GetMapping("/delete")
@@ -402,7 +473,6 @@ public class BoardController {
 
         post = postInfoRepository.findByPostId(postId);
 
-        
         String boardCd_name = "Notice";
         String navBoard = "nav-";
         switch (post.getBoardCd()) {
@@ -436,6 +506,14 @@ public class BoardController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getMember();
+        if (member != null) {
+            modelAndView.addObject("nickname", member.getMemNick());
+            modelAndView.addObject("level", member.getMemLvl());
+            modelAndView.addObject("currentPoint", member.getMemCurPoint());
+            modelAndView.addObject("memId",member.getMemId());
+        }
         modelAndView.setViewName("board_delete");
         modelAndView.addObject("post", post);
         modelAndView.addObject("cpage", cpage);
@@ -595,5 +673,18 @@ public class BoardController {
         }
 
         return rootNodes;
+    }
+
+    // 포인트 지급 관련 메세지 전송
+    @GetMapping("/point_ok")
+    public ModelAndView PointOk(@RequestParam("board_cd") int boardCd, @RequestParam("point") int point){
+        System.out.println("point_ok 호출");
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("point_ok");
+        modelAndView.addObject("boardCd", boardCd);
+        modelAndView.addObject("point", point);
+    
+        return modelAndView;
     }
 }

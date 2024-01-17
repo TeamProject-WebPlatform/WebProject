@@ -44,7 +44,9 @@ public class PointHistory {
     private String pointKindCd;
 
     private Integer pointCnt;
-
+    private Integer curPoint;
+    private Integer totalPoint;
+    
     private String createdAt;
     
 }
