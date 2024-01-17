@@ -24,7 +24,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
 
 </head>
-
+<script th:if="${message}">
+    alert("[[${message}]]");
+    // 추가적인 동작 수행
+    // 예: 페이지 리로딩
+    // location.reload();
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const active = document.getElementById("[[${navBoard}]]");
@@ -223,12 +228,7 @@
                         </div>
                     </div>
                 </div>
-                <script th:if="${message}">
-                    alert("[[${message}]]");
-                    // 추가적인 동작 수행
-                    // 예: 페이지 리로딩
-                    location.reload();
-                </script>
+                
             </main>
         </div>
     </div>

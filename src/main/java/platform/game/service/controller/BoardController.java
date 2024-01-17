@@ -298,7 +298,6 @@ public class BoardController {
         System.out.println("Controller_listWriteOk 호출");
 
         int flag = 1;
-        String message = ""; // 메시지 변수 추가
 
         try {
             // 게시글 목록을 가져오는 로직
@@ -322,27 +321,28 @@ public class BoardController {
             post.setPostCommentCnt(0);
 
             postInfoRepository.save(post);
-
             // 변경: 첫 번째 글 작성 시에는 특정 포인트를 주기
             if (post.isFirstPost(posts)) {
-                int firstPostPoint = 100; // 첫 번째 글 작성 시 부여할 포인트
-                updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50103", firstPostPoint);
+                int firstPostPoint = 100;
+                updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50103", firstPostPoint);
                 flag = 0;
-                message = "첫 번째 글을 작성해주셔서 감사합니다! 보너스 포인트 100";
                 System.out.println("첫 번째 글 작성 포인트 지급");
+                int point = 1;
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
             } else if (post.isMultipleOfFivePosts(posts)) {
-                // 변경: 5개 단위로 작성할 때마다 다른 포인트를 주기
-                int additionalPostPoint = 50; // 5개 단위로 작성 시 추가로 부여할 포인트
-                updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50104", additionalPostPoint);
+                int additionalPostPoint = 50;
+                updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50104", additionalPostPoint);
                 flag = 0;
-                message = "축하합니다! 5개의 글을 작성하셨습니다. 보너스 포인트가 지급되었습니다! 50포인트";
+
                 System.out.println("5개의 글 작성 포인트 지급");
+                int point = 2;
+
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
+
             } else {
                 flag = 0;
                 System.out.println("포인트 지급 없음");
             }
-            // 메시지를 Model에 추가
-            model.addAttribute("message", message);
             
         } catch (Exception e) {
             System.out.println("WriteOk(Post post) 오류 : " + e.getMessage());
@@ -673,5 +673,18 @@ public class BoardController {
         }
 
         return rootNodes;
+    }
+
+    // 포인트 지급 관련 메세지 전송
+    @GetMapping("/point_ok")
+    public ModelAndView PointOk(@RequestParam("board_cd") int boardCd, @RequestParam("point") int point){
+        System.out.println("point_ok 호출");
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("point_ok");
+        modelAndView.addObject("boardCd", boardCd);
+        modelAndView.addObject("point", point);
+    
+        return modelAndView;
     }
 }
