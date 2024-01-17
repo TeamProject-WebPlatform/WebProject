@@ -151,7 +151,7 @@
                                                     <!--게시물 댓글 갯수-->
                                                     <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                     <!--새로운 글 작성시 보여지는 new 표시-->
-                                                    <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
+                                                    <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
                                                         <img src="../img/icon_new.gif" alt="NEW">
                                                     </span>
                                                 </td>
