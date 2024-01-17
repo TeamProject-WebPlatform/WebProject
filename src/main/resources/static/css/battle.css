@@ -368,6 +368,10 @@ body.dark-theme .battle-card-info .info-title a {
     background-color: #00ff40;
     box-shadow: rgba(0,255,64,0.5) 0px 0px 17px 3px;
 }
+.info-state > .N{
+    background-color: rgb(255, 90, 84);
+    box-shadow: rgba(255,90,84,0.5) 0px 0px 17px 3px;
+}
 .info-battle-point-section {
     background-color: rgb(130, 127, 143);
     border-radius: 25px;

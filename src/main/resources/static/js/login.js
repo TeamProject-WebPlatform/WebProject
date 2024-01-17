@@ -246,7 +246,7 @@ const verifyNicknameContraints = function () {
         nicknameLabel.style.color = "red";
         return false;
     }
-    if (nickname.length < 4 || nickname.length > 10) {
+    if (nickname.length < 4 || nickname.length > 8) {
         nicknameLabel.style.color = "red";
         return false;
     }

@@ -592,6 +592,7 @@ body.dark-theme .friend-requests-item__action button.reject:hover {
     margin-bottom : 7px;
 }
 .battle-info-value{
+    width: 50%;
     margin-top: 7px;
     margin-bottom : 7px;
 

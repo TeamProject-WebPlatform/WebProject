@@ -28,7 +28,7 @@ public class BattleCardAction {
         for (var battle : battleList) {
 
             BattleTO bto = new BattleTO(battle, battle.getBtPost(),true);
-            BattlePointTO pto = new BattlePointTO(battle);
+            BattlePointTO pto = new BattlePointTO(0,battle);
 
             // 베팅 중복 체크
             List<MemberBetting> list = battle.getMemBettingList();
@@ -57,7 +57,7 @@ public class BattleCardAction {
             return null;
         }
         BattleTO bto = new BattleTO(battle, battle.getBtPost(),false);
-        BattlePointTO pto = new BattlePointTO(battle);
+        BattlePointTO pto = new BattlePointTO(0,battle);
 
         List<MemberBetting> list = battle.getMemBettingList();
         for (int i = 0; i < list.size(); i++) {

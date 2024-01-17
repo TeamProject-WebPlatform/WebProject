@@ -5,17 +5,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import platform.game.service.entity.Battle;
@@ -26,7 +23,6 @@ import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.MemberBettingRepository;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.UpdatePointHistoryImpl;
-import platform.game.service.service.MemberInfoDetails;
 
 @Controller
 public class PointUpdateController {
@@ -40,8 +36,6 @@ public class PointUpdateController {
     private ObjectMapper objectMapper;
     @Autowired
     private TransactionTemplate transactionTemplate;
-    @Autowired
-    private UpdatePointHistoryImpl updatePointHistoryImpl;
     @Autowired
     private MemberInfoRepository memberInfoRepository;
 
@@ -104,7 +98,7 @@ public class PointUpdateController {
             // 객체를 JSON 문자열로 변환
             Optional<Battle> optionalBattle = battleRepository.findByBtId(btId);
             Battle battle = optionalBattle.get();
-            BattlePointTO to = new BattlePointTO(battle);
+            BattlePointTO to = new BattlePointTO(memId,battle);
             
             if(!successFlag.get()){
                 to.setFlag(-1);
