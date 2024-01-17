@@ -10,14 +10,14 @@
     <meta name="HandheldFriendly" content="true">
     <meta name="format-detection" content="telephone=no">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="./css/libs.min.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/main_custom.css" />
+    <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/libs.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/battle_view.css" />
 
-    <script src="./js/module/swiper.js"></script>
-    <script src="./js/libs.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="../js/libs.js"></script>
+    <script src="../js/main.js"></script>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -25,6 +25,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
 
 </head>
+<script type="text/javascript">
+    // 답글 입력 폼의 표시/숨김을 토글
+    function toggleReplyForm(span) {
+        const commentId = span.getAttribute("data-comment-id");
+        const replyForm = document.querySelector(`.reply-form[data-comment-id="${commentId}"]`);
+        replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const active = document.getElementById("nav-battle");
+        active.classList.add("uk-active");
+        // 댓글 작성 확인 함수 부분
+        document.getElementById('cbtn').addEventListener('click', function () {
+            document.getElementsByName("ccontent").value;
+            document.getElementsByName("postId").value;
+            document.cfrm.submit();
+        });
+        // 댓글 삭제 확인
+        const deleteButtons = document.getElementsByClassName("delete-comment");
+        Array.from(deleteButtons).forEach(button => {
+            button.addEventListener('click', function () {
+                const commentId = button.getAttribute("data-comment-id");
+                console.log('클릭');
+
+                const form = document.getElementById('dcfrm');
+                const commentIdInput = document.createElement('input');
+                commentIdInput.type = 'hidden';
+                commentIdInput.name = 'comment_id';
+                commentIdInput.value = commentId;
+                form.appendChild(commentIdInput);
+                document.getElementsByName("rcontent").value;
+                // form을 submit
+                form.submit();
+            });
+        });
+    });
+</script>
+<script>
+    function submitReplyForm(parent_comment_id) {
+        var use = "rcontent" + parent_comment_id;
+        var rcontent = document.getElementById(use).value;
+        var boardCd = /*[[${ post.boardCd }]]*/'00000';
+        var postId = /*[[${ post.postId }]]*/27;
+        var cpage = /*[[${ cpage }]]*/1;
+        var parent_comment_id = parent_comment_id;
+
+        console.log("rcontent : " + rcontent);
+        console.log("boardCd : " + boardCd);
+        console.log("postId : " + postId);
+        console.log("cpage : " + cpage);
+        console.log("parent_comment_id : " + parent_comment_id);
+
+        var replyHref = `reply_comment_write_ok?board_cd=${boardCd}&post_id=${postId}&cpage=${cpage}&rcontent=${rcontent}&parent_comment_id=${parent_comment_id}`;
+        console.log(replyHref);
+        window.location.href = replyHref;
+    }
+</script>
+
+<!--로그인 알람-->
+<script>
+    function checkLoginAndNavigate() {
+        alert('로그인이 필요합니다.');
+    }
+</script>
 
 <body class="page-home dark-theme">
 
@@ -33,7 +97,7 @@
 
 
     <!-- Loader-->
-    <!-- <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div> -->
+    <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div>
     <!-- Loader end-->
 
     <div class="page-wrapper">
@@ -48,245 +112,274 @@
 
             <!-- 메인 -->
             <main class="page-main">
-                <div class="uk-grid" data-uk-grid>
-                    <div class="uk-width-2-3@xl">
-                        <div class="widjet --filters">
-                            <div class="widjet__head">
-                                <h3 class="uk-text-lead">battle View</h3>
+                <div class="widjet --filters">
+                    <div class="widjet__head">
+                        <h3 class="uk-text-lead">BATTLE</h3>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="content-header">
+                        헤더 뭐넣을지 아직
+                    </div>
+                    <div class="content-main">
+                        <div class="uk-grid" data-uk-grid>
+                            <div class="uk-width-1-5@xl profile-section">
+                                <div class="profile-card">
+                                    <a href="">
+                                        <div class="profile-header">
+                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <div class="profile-user-level-icon"><i
+                                                        class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                <div class="profile-user_level"><span>99</span></div>
+                                                <div class="profile-user_nick"><span>타락파워전사선조</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="profile-dividing-line"></div>
+                                    <div class="profile-main">
+                                        <div class="profile-introduction">
+                                            간단한 소개글
+                                        </div>
+                                        <div class="profile-dividing-line"></div>
+                                        <div class="profile-badge-section">
+                                            <div class="badge-line">
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                            </div>
+                                            <div class="badge-line">
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                            </div>
+                                            <div class="badge-line">
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="widjet__body">
-                                <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
-                                    <div class="uk-width-1-1">
-                                        <!--게시판 코드 들어가는 장소-->
-                                        <!-- <div class="widjet-game__title"> -->
-                                            <div class="contents_sub">
-                                                <div class="board_view">
-                                                    <!-- Post title-->
-                                                    <h3 class="fw-bolder mb-1"></h3>
-                                                    <table>
-                                                        <tr>
-                                                            <th width="10%">글쓴이</th>
-                                                            <td width="10%">나옹</td>
-                                                            <th width="10%">등록일</th>
-                                                            <td width="20%"></td>
-                                                            <th width="10%">조회</th>
-                                                            <td width="20%">2</td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="board_view_table">
-                                                        <tr>
-                                                            <td colspan="4" height="200" valign="top" style="padding: 20px; line-height: 160%">내용입니다.</td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                                <form action="comment_delete_ok" method="post" name="dcfrm" id="dcfrm">
-                                                    <!-- <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                                    <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                                    <input type="hidden" name="cpage" th:value="${cpage}" /> -->
-                                                    <div class="uk-grid uk-grid-small uk-child-width-1-2@m" data-uk-grid>
-                                                        <div><br /><strong>댓글</strong>
-                                                            <div class="user-item --active">
-                                                                
-                                                                    <!-- 댓글 내용 출력 -->
-                                                                    <div class="user-item__box">
-                                                                        <strong><span>안녕</span></strong>
-                                                                        (<span>날짜</span>)
-                                                                        <a>
-                                                                            <span style="cursor: pointer; color: red;"> x </span>
-                                                                        </a>
-                                                                        <br />
-                                                                        <div class="coment_re_txt">아이고야</div>
-                                                            
-                                                                        <!-- 대댓글 쓰기 -->
-                                                                        <a>
-                                                                            <span class="reply-text" onclick="toggleReplyForm(this)">답글 쓰기</span>
-                                                                            <div class="reply-form" style="display: none;">
-                                                                                <form action="reply_comment_write_ok" method="post" name="rfrm" id="rfrm">
-                                                                                    <!-- <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                                                                    <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                                                                    <input type="hidden" name="cpage" th:value="${cpage}" /> -->
-                                                                                    <!-- <input type="hidden" id="parent_comment_id" name="parent_comment_id" th:value="${commentNode.comment.commentId}" /> -->
-                                                                                    <textarea name="rcontent" cols="" rows="" class="reply-textarea" placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
-                                                                                    <input type="button" id="rbtn" value="답글 등록" class="reply-button" />
-                                                                                </form>
-                                                                            </div>
-                                                                        </a>
-                                                                        <!-- 대댓글 표시 -->
-                                                                        <div>
-                                                                            <div class="user-item__box">
-                                                                                <strong><span>살려줘</span></strong>
-                                                                                (<span>날짜</span>)
-                                                                                <a>
-                                                                                    <span class="delete-comment" style="cursor: pointer; color: red;"> x </span>
-                                                                                </a><br />
-                                                                                <div class="coment_re_txt" ></div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                            <div class="uk-width-3-5@xl post-section">
+                                <div class="post-info">
+                                    <!-- Post title-->
+                                    <div class="post-title">
+                                        <span th:text="${post.postTitle}"></span>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="post-sub">
+                                        <div class="writer"><span th:text="${post.member.memNick}">글쓴이</span></div>
+                                        <div>
+                                            <div class="date"><span
+                                                    th:text="${#dates.format(post.updatedAt, 'yyyy-MM-dd')}">등록일</span>
                                             </div>
-                                            <form action="comment_write_ok" method="post" name="cfrm">
-                                                <!-- <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
-                                                <input type="hidden" name="cpage" th:value="${cpage}" />
-                                                <input type="hidden" name="post_id" th:value="${post.postId}" /> -->
-                                                <table>
-                                                    <tr>
-                                                        <td class="bg01" width="100%">
-                                                            <!-- 내용 입력<br/> -->
-                                                            <textarea name="ccontent" cols="" rows="" class="coment_input_text"
-                                                                placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
-                                                        </td>
-                                                        <td align="right" class="bg01 bg02">
-                                                            <!-- <a th:if="${loginCheck}">
-                                                                로그인 상태인 경우의 댓글 작성
-                                                                <input type="button" id="cbtn" value="댓글등록"
-                                                                    class="btn_re btn_txt01" />
-                                                            </a>
-                                                            <a th:unless="${loginCheck}" href="/login">
-                                                                로그인 상태가 아닌 경우 댓글 링크
-                                                                <input type="button" value="댓글등록" class="btn_re btn_txt01"
-                                                                    style="cursor: pointer;" />
-                                                            </a> -->
-                                                            <!-- <input type="button" id="cbtn" value="댓글등록"
-                                                            class="btn_re btn_txt01" /> -->
-                                                            <input type="button" value="댓글등록" class="btn_re btn_txt01"
-                                                                    style="cursor: pointer;" />
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                            <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small btn_area" data-uk-grid>
-                                                <div class="width-1-2 uk-flex uk-flex-between">
-                                                    <div>
-                                                        <input type="button" value="목록" class="btn_list btn_txt02">
-                                                    </div>
-                                                    <div class="align_right">
-                                                        <a href="#">
-                                                            <!-- 본인이 작성한 글이면 보임 -->
-                                                            <input type="button" value="수정" class="btn_list btn_txt02">
-                                                        </a>
-                                                        <a href="#">
-                                                            <input type="button" value="삭제" class="btn_list btn_txt02">
-                                                            <!-- 본인이 작성한 글이면 보임 -->
-                                                        </a>
-                                                        <a href="#">
-                                                            <!-- 로그인 상태인 경우의 링크 -->
-                                                            <input type="button" value="쓰기" class="btn_write btn_txt01">
-                                                        </a>
-                                                        <a class="align_right" unless="" href="/login">
-                                                            <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                                            <input type="button" value="쓰기" class="btn_write btn_txt01"
-                                                                onclick="checkLoginAndNavigate()">
-                                                        </a>
-                                                    </div>
-                                                <!--//게시판-->
-                                                </div>
+                                            <div class="hit"><span th:text="${'추천 : '+post.postLikeCnt}">추천수</span>
                                             </div>
-                                        <!-- </div> -->
+                                            <div class="hit"><span th:text="${'조회 : '+post.postHit}">조회수</span></div>
+                                            <!-- <div class="hit"><span>조회 : 123123213</span></div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="battle-info">
+                                    <div>
+                                        <div>
+                                            <td>게임 : </td>
+                                            <td>BattleGround</td>
+                                        </div>
+                                        <div>
+                                            <td>포인트 : </td>
+                                            <td>100,000</td>
+                                        </div>
+                                        <div>
+                                            <td>신청 기한 : </td>
+                                            <td>14:00 2024.01.14</td>
+                                        </div>
+                                        <div>
+                                            <td>시작 시간 : </td>
+                                            <td>15:00 2024.01.14</td>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="post-text">
+                                    이 경우 공무원 자신의 책임은 면제되지 아니한다, 대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과 법률을 집행하기 위하여 필요한 사항에
+                                    관하여 대통령령을 발할 수 있다. 군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에
+                                    관한 죄중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다, 국가원로자문회의의 조직·직무범위 기타 필요한 사항은
+                                    법률로 정한다.
+                                    각급 선거관리위원회는 선거인명부의 작성등 선거사무와 국민투표사무에 관하여 관계 행정기관에 필요한 지시를 할 수 있다, 그 재의를 요구할 수 있다.
+                                    선거운동은 각급 선거관리위원회의 관리하에 법률이 정하는 범위안에서 하되. 다만.
+                                    국회는 상호원조 또는 안전보장에 관한 조약. 농업생산성의 제고와 농지의 합리적인 이용을 위하거나 불가피한 사정으로 발생하는 농지의 임대차와 위탁경영은
+                                    법률이 정하는 바에 의하여 인정된다. 국교는 인정되지 아니하며, 대통령은 제4항과 제5항의 규정에 의하여 확정된 법률을 지체없이 공포하여야 한다.
+                                    언론·출판·집회·결사의 자유. 행정각부의 설치·조직과 직무범위는 법률로 정한다. 국가의 세입·세출의 결산. 법률이 정하는 바에 의하여 연임할 수 있다.
+                                    제5항에 의하여 법률이 확정된 후 또는 제4항에 의한 확정법률이 정부에 이송된 후 5일 이내에 대통령이 공포하지 아니할 때에는 국회의장이 이를
+                                    공포한다. 법원은 최고법원인 대법원과 각급법원으로 조직된다. 모든 국민은 법률이 정하는 바에 의하여 납세의 의무를 진다. 국가는 균형있는 국민경제의
+                                    성장 및 안정과 적정한 소득의 분배를 유지하고.
+                                    주거에 대한 압수나 수색을 할 때에는 검사의 신청에 의하여 법관이 발부한 영장을 제시하여야 한다, 국정의 중요한 사항에 관한 대통령의 자문에 응하기
+                                    위하여 국가원로로 구성되는 국가원로자문회의를 둘 수 있다. 이 헌법시행 당시의 법령과 조약은 이 헌법에 위배되지 아니하는 한 그 효력을 지속한다,
+                                    대통령은 전시·사변 또는 이에 준하는 국가비상사태에 있어서 병력으로써 군사상의 필요에 응하거나 공공의 안녕질서를 유지할 필요가 있을 때에는 법률이
+                                    정하는 바에 의하여 계엄을 선포할 수 있다.
+                                    국가는 전통문화의 계승·발전과 민족문화의 창달에 노력하여야 한다, 국회의원은 그 지위를 남용하여 국가·공공단체 또는 기업체와의 계약이나 그 처분에
+                                    의하여 재산상의 권리·이익 또는 직위를 취득하거나 타인을 위하여 그 취득을 알선할 수 없다. 사영기업을 국유 또는 공유로 이전하거나 그 경영을 통제
+                                    또는 관리할 수 없다, 제1항의 지시를 받은 당해 행정기관은 이에 응하여야 한다.
+                                    국회는 회계연도 개시 30일전까지 이를 의결하여야 한다, 국회는 국무총리 또는 국무위원의 해임을 대통령에게 건의할 수 있다, 그 임기는 4년으로 하며.
+                                    국민경제의 발전을 위한 중요정책의 수립에 관하여 대통령의 자문에 응하기 위하여 국민경제자문회의를 둘 수 있다.
+                                    체포·구속·압수 또는 수색을 할 때에는 적법한 절차에 따라 검사의 신청에 의하여 법관이 발부한 영장을 제시하여야 한다. 국회의원이 회기전에 체포 또는
+                                    구금된 때에는 현행범인이 아닌 한 국회의 요구가 있으면 회기중 석방된다. 국가는 지역간의 균형있는 발전을 위하여 지역경제를 육성할 의무를 진다, 다만.
+                                    법률이 정하는 바에 의하여 최저임금제를 시행하여야 한다. 1차에 한하여 중임할 수 있다. 대통령에 대한 탄핵소추는 국회재적의원 과반수의 발의와
+                                    국회재적의원 3분의 2 이상의 찬성이 있어야 한다, 재판관은 대통령이 임명한다.
+                                </div>
+                            </div>
+                            <!-- 신청 리스트 -->
+                            <div class="uk-width-1-5@xl requests-section">
+                                <div class="widjet --friend-requests">
+                                    <div class="widjet__head">
+                                        <div class="uk-text-lead title"><i
+                                                class="fa-solid fa-users-between-lines ico_fontawesome"></i></div>
+                                    </div>
+                                    <div class="widjet__body">
+                                        <ul class="friend-requests-list">
+                                            <li class="friend-requests-item">
+                                                <div class="friend-request-item-main">
+                                                    <div class="level_icon"><i
+                                                            class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                    <div class="level">
+                                                        <div>34</div>
+                                                    </div>
+                                                    <div class="friend-requests-item__name">
+                                                        <div>타락파워전사후예</div>
+                                                    </div>
+                                                </div>
+                                                <div class="friend-request-item-header">
+                                                    <div class="friend-requests-item__avatar"><img
+                                                            src="../img/user-list-5.png" alt="user">
+                                                    </div>
+                                                    <div class="friend-requests-item__action">
+                                                        <button class="fa-solid fa-check ico_fontawesome"
+                                                            type="button"></button>
+                                                        <button class="reject fa-solid fa-xmark ico_fontawesome"
+                                                            type="button"></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="uk-width-1-3@xl">
-                        <div class="widjet --friend-requests">
-                            <div class="widjet__head">
-                                <h3 class="uk-text-lead">Friend Requests</h3>
+                    <div class="content-comment">
+                        <div class="uk-grid" data-uk-grid>
+                            <div class="uk-width-1-5@xl"></div>
+                            <div class="uk-width-3-5@xl comment-section">
+                                <div class="comment-section-header">
+                                    <div><span>댓글</span></div>
+                                    <div><span>등록순</span></div>
+                                    <div><span>|</span></div>
+                                    <div><span>최신순</span></div>
+                                </div>
+
+                                <div class="comment-section-main" th:each="commentNode : ${commentTree}">
+                                    <!-- 댓글 내용 출력 -->
+                                    <!-- 커멘트 헤더 -->
+                                    <div class="comment-header">
+                                        <span th:text="${commentNode.comment.member.memNick}"></span>
+                                        <span th:text="${'('+#dates.format(commentNode.comment.updatedAt, 'yyyy-MM-dd hh:mm')+')'}"></span>
+                                        <a th:if="${commentNode.comment.member.memNick==nickname}">
+                                            <span class="delete-comment"
+                                                th:attr="data-comment-id=${commentNode.comment.commentId}"
+                                                style="cursor: pointer; color: red;"> x </span>
+                                        </a>
+                                    </div>
+                                    <!-- 커멘트 내용 -->
+                                    <div class="comment-main">
+                                        <div class="comment_text" th:text="${commentNode.comment.commentContent}"></div>
+                                    </div>
+                                    <div>
+                                        <!-- 대댓글 쓰기 -->
+                                        <a th:if="${loginCheck}">
+                                            <span class="reply-text"
+                                                th:attr="data-comment-id=${commentNode.comment.commentId}"
+                                                onclick="toggleReplyForm(this)">답글 쓰기</span>
+                                            <div class="reply-form"
+                                                th:attr="data-comment-id=${commentNode.comment.commentId}"
+                                                style="display: none;">
+                                                <form action="reply_comment_write_ok" method="post" name="rfrm"
+                                                    id="rfrm">
+                                                    <input type="hidden" name="board_cd"
+                                                        th:value="${post.boardCd}" />
+                                                    <input type="hidden" name="post_id" th:value="${post.postId}" />
+                                                    <input type="hidden" name="cpage" th:value="${cpage}" />
+                                                    <input type="hidden" id="parent_comment_id"
+                                                        name="parent_comment_id"
+                                                        th:value="${commentNode.comment.commentId}" />
+                                                    <textarea name="rcontent"
+                                                        th:id="'rcontent' + ${commentNode.comment.commentId}"
+                                                        cols="" rows="" class="reply-textarea"
+                                                        placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
+                                                    <input type="button" id="rbtn" value="답글 등록"
+                                                        class="reply-button"
+                                                        th:onclick="'submitReplyForm(' + ${commentNode.comment.commentId} + ' )'" />
+                                                </form>
+                                            </div>
+                                        </a>
+                                        <!-- 대댓글 표시 -->
+                                        <div th:each="reply : ${commentNode.replies}">
+                                            <div class="user-item__box">
+                                                <strong><span
+                                                        th:text="${reply.comment.member.memNick}"></span></strong>
+                                                (<span
+                                                    th:text="${#dates.format(reply.comment.updatedAt, 'yyyy-MM-dd hh:mm')}"></span>)
+                                                <a th:if="${writePost}">
+                                                    <span class="delete-comment"
+                                                        th:attr="data-comment-id=${reply.comment.commentId}"
+                                                        style="cursor: pointer; color: red;"> x </span>
+                                                </a><br />
+                                                <div class="coment_re_txt"
+                                                    th:text="${reply.comment.commentContent}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <form action="comment_write_ok" method="post" name="cfrm">
+                                    <input type="hidden" name="board_cd" th:value="${post.boardCd}" />
+                                    <input type="hidden" name="cpage" th:value="${cpage}" />
+                                    <input type="hidden" name="post_id" th:value="${post.postId}" />
+                                    <table>
+                                        <tr>
+                                            <td class="bg01" width="100%">
+                                                <!-- 내용 입력<br/> -->
+                                                <textarea name="ccontent" cols="" rows="" class="coment_input_text"
+                                                    placeholder="댓글 내용을 입력하세요" style="width: 100%;"></textarea>
+                                            </td>
+                                            <td align="right" class="bg01 bg02">
+                                                <a th:if="${loginCheck}">
+                                                    <!-- 로그인 상태인 경우의 댓글 작성 -->
+                                                    <input type="button" id="cbtn" value="댓글등록" class="btn_re btn_txt01" />
+                                                </a>
+                                                <a th:unless="${loginCheck}" href="/login">
+                                                    <!-- 로그인 상태가 아닌 경우 댓글 링크 -->
+                                                    <input type="button" value="댓글등록" class="btn_re btn_txt01"
+                                                        style="cursor: pointer;" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
                             </div>
-                            <div class="widjet__body">
-                                <ul class="friend-requests-list">
-                                    <li class="friend-requests-item">
-                                        <div class="friend-requests-item__avatar"><img src="assets/img/user-list-5.png" alt="user"></div>
-                                        <div class="friend-requests-item__name">Fred Emil</div>
-                                        <div class="friend-requests-item__action"><button class="confirm ico_tick-circle" type="button"></button><button class="reject ico_trash" type="button"></button></div>
-                                    </li>
-                                    <li class="friend-requests-item">
-                                        <div class="friend-requests-item__avatar"><img src="assets/img/user-list-8.png" alt="user"></div>
-                                        <div class="friend-requests-item__name">Leo Maxwell</div>
-                                        <div class="friend-requests-item__action"><button class="confirm ico_tick-circle" type="button"></button><button class="reject ico_trash" type="button"></button></div>
-                                    </li>
-                                    <li class="friend-requests-item">
-                                        <div class="friend-requests-item__avatar"><img src="assets/img/user-list-4.png" alt="user"></div>
-                                        <div class="friend-requests-item__name">Olivia Mark</div>
-                                        <div class="friend-requests-item__action"><button class=" ico_tick-circle" type="button"></button><button class="reject ico_trash" type="button"></button></div>
-                                    </li>
-
-
-
-
-                                </ul>
-                            </div>
-                            <input type="button">
                         </div>
                     </div>
-                </div>    
+                </div>
+
             </main>
         </div>
     </div>
-    <div class="page-modals">
-        <div class="uk-flex-top" id="modal-report" data-uk-modal>
-            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default"
-                    type="button" data-uk-close></button>
-                <h2 class="uk-modal-title">Report</h2>
-                <form class="uk-form-stacked" action="#">
-                    <div class="uk-margin">
-                        <div class="uk-form-label">Subject</div>
-                        <div class="uk-form-controls"><select class="js-select">
-                                <option value="">Choose Subject</option>
-                                <option value="Subject 1">Subject 1</option>
-                                <option value="Subject 2">Subject 2</option>
-                                <option value="Subject 3">Subject 3</option>
-                            </select></div>
-                    </div>
-                    <div class="uk-margin">
-                        <div class="uk-form-label">Details</div>
-                        <div class="uk-form-controls"><textarea class="uk-textarea" name="details"
-                                placeholder="Try to include all details..."></textarea></div>
-                        <div class="uk-form-controls uk-margin-small-top">
-                            <div data-uk-form-custom><input type="file"><button class="uk-button uk-button-default"
-                                    type="button" tabindex="-1"><i class="ico_attach-circle"></i><span>Attach
-                                        File</span></button></div>
-                        </div>
-                    </div>
-                    <div class="uk-margin">
-                        <div class="uk-grid uk-flex-right" data-uk-grid>
-                            <div><button class="uk-button uk-button-small uk-button-link">Cancel</button></div>
-                            <div><button class="uk-button uk-button-small uk-button-danger">Submit</button></div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="uk-flex-top" id="modal-help" data-uk-modal>
-            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default"
-                    type="button" data-uk-close></button>
-                <h2 class="uk-modal-title">Help</h2>
-                <div class="search">
-                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
-                            placeholder="Search"></div>
-                    <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
-                </div>
-                <div class="uk-margin-small-left uk-margin-small-bottom uk-margin-medium-top">
-                    <h4>Popular Q&A</h4>
-                    <ul>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Upload Your Developed
-                                Game</span></li>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>How to Go Live Stream</span>
-                        </li>
-                        <li><img src="./img/svgico/clipboard-text.svg" alt="icon"><span>Get in touch with the Creator
-                                Support Team</span></li>
-                    </ul>
-                    <ul>
-                        <li><a href="#!">browse all articles</a></li>
-                        <li><a href="#!">Send Feedback</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+    <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
 
 </body>
 

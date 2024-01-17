@@ -8,6 +8,7 @@
     /* align-items: flex-start; */
 }
 
+
 .user{
     width: 100%;
     justify-content:space-around;
@@ -27,7 +28,7 @@
     background-color: #222;
     color: white;
     /* background-image: url("../img/acheivement-3.png"); */
-    background-size: 100% 100%;
+    background-size: cover;
     background-repeat: no-repeat;
 }
 .profile-header{

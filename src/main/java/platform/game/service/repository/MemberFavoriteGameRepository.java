@@ -23,6 +23,9 @@ public interface MemberFavoriteGameRepository extends JpaRepository<MemberFavori
     @Query(value = "insert into member_favorite_game values(:rank ,:mem_id,default)", nativeQuery = true)
     Integer setAddUserFavGame(int rank, long mem_id);
 
+    @Query(value = "insert into member_favorite_game values(:rank ,:mem_id,default)", nativeQuery = true)
+    Integer setAddUserFavGame(int rank, long mem_id);
+
     @Query(value = "insert into member_favorite_game values (:rank,:mem_id,:game_cd)", nativeQuery = true)
     void RegisterGame(int rank, long mem_id, String game_cd);
 
@@ -31,6 +34,12 @@ public interface MemberFavoriteGameRepository extends JpaRepository<MemberFavori
     @Modifying(clearAutomatically = true)
     @Query(value = "update member_favorite_game set game_cd=:game_cd where mem_id=:mem_id and mem_fav_game_id=:rank", nativeQuery = true)
     void GameModify(String game_cd, long mem_id, int rank);
+
+    @Query(value = "SELECT game_cd, COUNT(*) as count " +
+            "FROM member_favorite_game " +
+            "GROUP BY game_cd " +
+            "ORDER BY count DESC", nativeQuery = true)
+    List<String> findMostCommonGameCd();
 
     // 1,2,3 순위 게임 코드 가져오기
     @Query(value="select game_cd from member_favorite_game where mem_id=:mem_id and mem_fav_game_id=:fav_id", nativeQuery = true)

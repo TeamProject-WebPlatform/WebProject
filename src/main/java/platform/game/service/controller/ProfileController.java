@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import net.minidev.json.JSONObject;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.MemberRanking;

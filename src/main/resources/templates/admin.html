@@ -23,50 +23,28 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
 
+    <script>
+        function memSelect() {
+            var memInfo_type = document.getElementById("memInfo_type").value;
+            var memInfo_value = document.getElementById("memInfo_value").value;
+    
+            console.log("memInfo_type:", memInfo_type);
+            console.log("memInfo_value:", memInfo_value);
+    
+            location.href = "./list_search?memInfo_type=" + memInfo_type +"&memInfo_value=" + memInfo_value;
+        }
+        function reSelect(){
+            location.href = "./list";
+        }
+    </script>
+
 </head>
 
-<script type="text/javascript">
-    function modifyPost(){
-        var confirmation = confirm('게시물을 수정하시겠습니까?');
-        if (confirmation) {
-            document.mfrm.submit();
-        }
-    }
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const active = document.getElementById("[[${navBoard}]]");
-        active.classList.add("uk-active");
-        const submenu = active.parentNode;
-        submenu.classList.remove("none");
-    });
-</script>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
-<!-- Place the first <script> tag in your HTML's <head> -->
-<script src="https://cdn.tiny.cloud/1/11ke68tblqi9bteupd15i02mhw6968shdr0dv7jih3vpigpm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
-<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
-<script>
-    tinymce.init({
-        selector: 'textarea',
-        plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
-        mergetags_list: [
-        { value: 'First.Name', title: 'First Name' },
-        { value: 'Email', title: 'Email' },
-        ],
-        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-    });
-</script>
 
 <body class="page-home dark-theme">
 
     <input id="toggle" type="checkbox">
-
-
 
     <!-- Loader-->
     <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div>
@@ -85,53 +63,54 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <h3 class="uk-text-lead" th:text='${boardCd_name}'></h3>
+                        <h3 class="uk-text-lead">Admin Page</h3>
+                    </div>
+                    <div class="widjet__body">
+                        <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-4@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div class="uk-width-1-5">
+                                <select class="js-select" id="memInfo_type">
+                                    <option value="memId">회원번호</option>
+                                    <option value="memUserId">사용자 아이디</option>
+                                    <option value="memNick">사용자 닉네임</option>
+                                </select>
+                            </div>
+                            <div class="search uk-width-4-5" >
+                                <!-- <div class="search"> -->
+                                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="memInfo_value"></div>
+                                    <div class="search__btn"><button type="button" onclick="memSelect()"><i class="ico_search"></i></button></div>
+                                    &nbsp;
+                                    &nbsp;
+                                    <!-- &nbsp; -->
+                                    <div class="search__refresh"><button type="button" style="float: right;" onclick="reSelect()"><i class="fa-solid fa-rotate-right ico_fontawesome"></i></button></div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="widjet --filters">
+                <div class="widjet --filters uk-child-width-1-2@xl">
+                    <div class="widjet__head">
+                        <h3 class="uk-text-lead">Info</h3>
+                    </div>
                     <div class="widjet__body">
-                        <div class="uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
-                            <div class="uk-width-1-1">
-                                <!--게시판 코드 들어가는 장소-->
-                                <!-- <div class="con_txt"> -->
-                                <div class="widjet-game__title">
-                                    <form action="modify_ok" method="post" name="mfrm">
-                                        <input type="hidden" name="post_id" th:value="${post.postId}" />
-                                        <input type="hidden" name="cpage" th:value="${cpage}" />
-                                        <div class="contents_sub">	
-                                            <!--게시판-->
-                                            <div class="board_write">
-                                                <div class="form-container">
-                                                    <div class="form-row uk-width-1-6">
-                                                        <label for="subject" class="form-label">제목</label>
-                                                        <input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input">
-                                                    </div>
-                                                    <br />
-                                                    <div class="form-row uk-width-1-6">
-                                                        <label for="tags" class="form-label">태그</label>
-                                                        <input type="text" name="tags" th:value="${post.postTags}" class="board_view_input" readonly/>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <label for="content" name="content" class="form-label">내용</label>
-                                                    </div>
-                                                    <br>
-                                                    <div class="form-input">
-                                                        <textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="btn_area">
-                                                <div class="align_left">
-                                                    <a th:href="@{list(board_cd=${post.boardCd}, cpage=${cpage})}"><input type="button" value="목록" class="btn_list btn_txt02" style="cursor: pointer;"></a>
-                                                </div>
-                                                <div class="align_right">
-                                                    <input type="button" id="mbtn" value="수정" class="btn_list btn_txt01" style="cursor: pointer;" onclick="modifyPost()">
-                                                </div>
-                                            </div>
-                                            <!--//게시판-->
-                                        </div>
-                                    </form>
-                                </div>
+                        <div class="uk-grid uk-child-width-1-5@xl uk-child-width-1-4@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div class="uk-width-1-5" th:text="${'총 회원수: ' + userNum}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widjet__head">
+                        <h3 class="uk-text-lead">FavoriteGame</h3>
+                    </div>
+                    <div class="widjet__body">
+                        <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div th:text="${'1번 게임: ' + mostFavoriteGame[0][0] + ' ' + mostFavoriteGame[0][1] + '명'}">
+                            </div>
+                        </div>
+                        <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div th:text="${'2번 게임: ' + mostFavoriteGame[1][0] + ' ' + mostFavoriteGame[1][1] + '명'}">
+                            </div>
+                        </div>
+                        <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div th:text="${'3번 게임: ' + mostFavoriteGame[2][0] + ' ' + mostFavoriteGame[2][1] + '명'}">
                             </div>
                         </div>
                     </div>
@@ -139,7 +118,7 @@
             </main>
         </div>
     </div>
-    <div class="page-modals">
+    <!-- <div class="page-modals">
         <div class="uk-flex-top" id="modal-report" data-uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical"><button class="uk-modal-close-default"
                     type="button" data-uk-close></button>
@@ -199,8 +178,7 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </div> -->
 </body>
 
 </html>
