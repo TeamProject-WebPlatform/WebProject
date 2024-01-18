@@ -31,7 +31,10 @@
         <main class="page-main">
         <div class="widjet__body">
             <div class="user-info">
-                <div class="user-info__avatar"><img src="../img/profile.png" alt="profile"></div>
+                <div class="user-info__avatar" style="border:3px solid white">
+                    <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="profile" style="width:100%; height:100%">
+                    <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="profile" style="width:100%; height:100%">
+                </div>
                 <div class="user-info__box">
                     <div class="user-info__detail" th:text="${'아이디 : ' + member.memUserid}"></div>
                     <div class="user-info__detail" th:text="${'닉네임 : ' + member.memNick}">d</div>

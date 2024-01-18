@@ -1,3 +1,5 @@
+/* 프로필 카드 부분 */
+
 .profile-container {
     display: flex;
     flex-direction: row;
@@ -30,4 +32,6 @@
     margin-top:20px;
     margin-right:3px;
 }
+
+/* 프로필 수정 부분 */
 
