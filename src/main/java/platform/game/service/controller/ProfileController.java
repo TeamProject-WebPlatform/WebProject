@@ -258,6 +258,17 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    @PostMapping("/badgelist")
+    public ResponseEntity<String> BadgeList(@RequestBody Map<String,List<String>> badges){
+        int flag=0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                        .getMember();
+
+        List<String> badgeList = badges.get("BadgeList");
+        System.out.println(badgeList);
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
     // 파일이 있는지 여부 확인
     private File findExistingFile(String memberId) {
 
