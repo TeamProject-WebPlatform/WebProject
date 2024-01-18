@@ -14,30 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.upload').addEventListener('change', ProfileImage);
 });
 
-
-function addToPreviewList(category) {
-    let PreviewHeader = document.querySelector('.profile-header');
-    let PreviewCard = document.querySelector('.profile-card');
-    let PreviewShopBadge = document.querySelector('.shopbadge');
-
-    category = category.replace(/"/g, '');
-
-
-    // 리스트 아이템에 해당 아이템을 제거하는 버튼 생성
-    let deleteButton = document.createElement('button');
-    //deleteButton.textContent = 'x';
-
-    // 클릭 이벤트를 연결하여 해당 아이템을 제거하는 함수 호출
-    deleteButton.addEventListener('click', function () {
-        removeFromPreviewList(listItem);
-        switch (category) {
-            case '801' : PreviewHeader.style.backgroundImage = ""; break;
-            case '802' : PreviewCard.style.backgroundImage = ""; break;
-            case '803' : PreviewShopBadge.style.backgroundImage = ""; break
-        }
-    });
-}
-
+// 헤더 미리보기
 function HeaderPreview(){
     let PreviewHeader = document.querySelector('.profile-header');
     let HeaderItem = document.getElementById('headeritem').value;
@@ -46,6 +23,7 @@ function HeaderPreview(){
     PreviewHeader.style.backgroundImage = 'url(' + imagePath + ')';
 }
 
+// 카드 미리보기
 function CardPreview(){
     let PreviewCard = document.querySelector('.profile-card');
     let CardItem = document.getElementById('carditem').value;
@@ -54,6 +32,7 @@ function CardPreview(){
     PreviewCard.style.backgroundImage = 'url(' + imagePath + ')';
 }
 
+// 대표 뱃지 미리보기
 function RepBadgePreview(){
     let PreviewRepBadge = document.querySelector('.badge');
     let BadgeItem = document.getElementById('repbadge').value;
@@ -62,13 +41,16 @@ function RepBadgePreview(){
     PreviewRepBadge.src = imagePath;
 }
 
-function BadgePreview(){
-    let PreviewBadge = document.querySelector('.shopbadge');
-    let BadgeItem = document.getElementById('badges').value;
-    console.log(BadgeItem);
+// 뱃지 설정 미리보기
+function BadgePreview(number){
+    let PreviewBadge = document.querySelector('.badge'+number);
+    let BadgeItem = document.getElementById('badges'+number).value;
     
+    let imagePath = '../img/shop_img/' + BadgeItem + '.png';
+    console.log(BadgeItem);
 }
 
+// 헤더 저장
 const RegisterHeader = async function() {
     let HeaderItem = document.getElementById('headeritem').value;
 
@@ -96,6 +78,8 @@ const RegisterHeader = async function() {
         console.error("Error: " + error);
     }
 }
+
+// 카드 저장
 async function RegisterCard() {
     let CardItem = document.getElementById('carditem').value;
 
@@ -124,6 +108,8 @@ async function RegisterCard() {
     }
 }
 
+
+// 대표 뱃지 저장
 async function RegisterRepBadge() {
     let BadgeItem = document.getElementById('repbadge').value;
 
@@ -152,6 +138,7 @@ async function RegisterRepBadge() {
     }
 }
 
+// 프로필 사진 변경
 async function ProfileImage(e) {
     const file = e.currentTarget.files[0];
     var formdata = new FormData();

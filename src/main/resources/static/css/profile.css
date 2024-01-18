@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: row;
 }
-.widjet__body {
+#header_select_body, #card_select_body, #rep_select_body{
     display:flex;
     flex-direction: row;
 }
@@ -33,5 +33,34 @@
     margin-right:3px;
 }
 
-/* 프로필 수정 부분 */
+/* 프로필 페이지 수정 부분 */
+.badges-list li {
+    margin: 5px;
+    padding: 10px;
+}
 
+.profile-badge-section{
+    width: 80%;
+    height: 150px;
+    font-size:12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+    padding-top: 5px;
+}
+
+.profile-badge-section .badge-line1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 99%;
+    height: 33%;
+}
+
+.profile-badge-section img {
+    width:35px;
+    height: 35px;
+    margin: 5px;
+}

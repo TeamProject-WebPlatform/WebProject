@@ -13,6 +13,7 @@
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/libs.min.css">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/profile.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
@@ -148,7 +149,7 @@
                             </div>
                             <div class="widjet__body">
                                 <ul class="badges-list" > 
-                                    <li id="badge" th:each="item:${memberItems}"><img th:src="@{'./img/shop_img/' + ${item} + '.png'}"></li>
+                                    <li th:each="item,i:${memberItems}"><img th:title="${item}" th:src="@{'./img/shop_img/' + ${item} + '.png'}"></li>
                                 </ul>
                             </div>
                         </div>

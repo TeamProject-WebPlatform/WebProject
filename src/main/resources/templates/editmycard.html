@@ -67,7 +67,21 @@
                         </div>
                         <div class="profile-dividing-line"></div>
                         <div class="profile-badge-section">
-                            <span class="badge shopbadge"></span>
+                            <div class="badge-line1">
+                                <span class="badge1" style="background-image: url(../img/doyun_icon.png);"></span>
+                                <span class="badge2"></span>
+                                <span class="badge3"></span>
+                            </div>
+                            <div class="badge-line2">
+                                <span class="badge4"></span>
+                                <span class="badge5"></span>
+                                <span class="badge6"></span>
+                            </div>
+                            <div class="badge-line3">
+                                <span class="badge7"></span>
+                                <span class="badge8"></span>
+                                <span class="badge9"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -105,7 +119,21 @@
                         </div>
                         <div class="profile-dividing-line"></div>
                         <div class="profile-badge-section">
-                            <span class="badge shopbadge"></span>
+                            <div class="badge-line">
+                                <div class="badge1"><img src="../img/doyun_icon.png"></div>
+                                <div class="badge2"><img src="../img/doyun_icon.png"></div>
+                                <div class="badge3"><img src="../img/doyun_icon.png"></div>
+                            </div>
+                            <div class="badge-line">
+                                <div class="badge4"><img src="../img/doyun_icon.png"></div>
+                                <div class="badge5"><img src="../img/doyun_icon.png"></div>
+                                <div class="badge6"><img src="../img/doyun_icon.png"></div>
+                            </div>
+                            <div class="badge-line">
+                                <div class="badge7"><img src="../img/doyun_icon.png"></div>
+                                <div class="badge8"><img src="../img/doyun_icon.png"></div>
+                                <div class="badge9"><img src="../img/doyun_icon.png"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -125,7 +153,7 @@
                 </div>
             </div>
             <h3 class="uk-text-lead">Profile Header</h3>
-            <div class="widjet__body">
+            <div class="widjet__body" id="header_select_body">
                 <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="header_select" data-uk-grid>
                     <div>
                         <select id="headeritem" class="js-select" onchange="HeaderPreview()">
@@ -138,7 +166,7 @@
             </div>
 
             <h3 class="uk-text-lead">Profile Card</h3>
-            <div class="widjet__body">
+            <div class="widjet__body" id="card_select_body">
                 <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="card_select" data-uk-grid>
                     <div>
                         <select id="carditem" class="js-select" onchange="CardPreview()">
@@ -151,7 +179,7 @@
             </div>
 
             <h3 class="uk-text-lead">Representative badge</h3>
-            <div class="widjet__body">
+            <div class="widjet__body" id="rep_select_body">
                 <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="badgerep_select" data-uk-grid>
                     <div>
                         <select id="repbadge" class="js-select" onchange="RepBadgePreview()">
@@ -169,19 +197,19 @@
                     <table>
                         <tr>
                             <td>                        
-                                <select id="badges" class="js-select">
+                                <select id="badges1" class="js-select" onchange="BadgePreview(1)">
                                     <option value="x">뱃지 선택</option>
                                     <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
                                 </select>
                             </td>
                             <td>                        
-                                <select id="badges" class="js-select">
+                                <select id="badges4" class="js-select">
                                     <option value="x">뱃지 선택</option>
                                     <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
                                 </select>
                             </td>
                             <td>                        
-                                <select id="badges" class="js-select">
+                                <select id="badges7" class="js-select">
                                     <option value="x">뱃지 선택</option>
                                     <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
                                 </select>
@@ -189,38 +217,39 @@
                         </tr>
                         <tr>
                             <td>                        
-                                <select id="badges" class="js-select">
+                                <select id="badges2" class="js-select">
                                     <option value="x">뱃지 선택</option>
                                     <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
                                 </select>
                             </td>
                             <td>                        
-                                <select id="badges" class="js-select">
+                                <select id="badges5" class="js-select">
                                     <option value="x">뱃지 선택</option>
                                     <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
                                 </select>
                             </td>
                             <td>                        
-                                <select id="badges" class="js-select">
+                                <select id="badges8" class="js-select">
                                     <option value="x">뱃지 선택</option>
                                     <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
                                 </select>
                             </td>
-                        </tr>                        <tr>
+                        </tr>                        
+                        <tr>
                             <td>                        
-                                <select id="badges" class="js-select">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
-                                </select>
-                            </td>
-                            <td>                        
-                                <select id="badges" class="js-select">
+                                <select id="badges3" class="js-select">
                                     <option value="x">뱃지 선택</option>
                                     <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
                                 </select>
                             </td>
                             <td>                        
-                                <select id="badges" class="js-select">
+                                <select id="badges6" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges9" class="js-select">
                                     <option value="x">뱃지 선택</option>
                                     <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
                                 </select>
