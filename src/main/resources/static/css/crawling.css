@@ -233,7 +233,21 @@ body.dark-theme .board_write_tr > th{
     color: #00f0f0;
     border-bottom: 1px solid rgb(0, 177, 177);
 }
-
+.reply-text{
+    /* width: 200px; */
+    /* margin-top: 15px; */
+    padding: 5px 10px 5px 10px;
+    background-color: #040615;
+    -webkit-box-shadow: 2px 2px 7px 0px #00000024; 
+    border: none;
+    border-radius:28px;	
+}
+body.dark-theme .reply-text{
+    /* width: 200px; */
+    font-size:13px; 
+    background-color: #040615;
+    -webkit-box-shadow: 2px 2px 7px 0px #00000024; 
+}
 /* 댓글 */
 html body.dark-theme .user-item.--active .user-item__text {
     color: #fff;
@@ -245,12 +259,12 @@ html body.dark-theme .user-item.--active .user-item__text {
 }
 body.dark-theme .comment_view{
     /* width: 100%; */
-    border-top: 1px solid rgb(0, 177, 177);
-    border-bottom: 1px solid rgb(0, 177, 177);
+    /* border-top: 1px solid rgb(0, 177, 177); */
+    /* border-bottom: 1px solid rgb(0, 177, 177); */
     background-color: rgba(244, 97, 25, 0.05);
 }
 
-body.dark-theme .user-item {
+/* body.dark-theme .user-item {
     background-color: initial;
     
 }
@@ -266,7 +280,7 @@ body.dark-theme .user-item {
 .user-item.--active .user-item__time {
     color: #F46119;
 }
-
+ */
 
 .coment_input_text{
     resize: none;
@@ -368,10 +382,15 @@ body.dark-theme .btn_comment { background-color: #222; color:#ffffff; }
 body.dark-theme .btn_re {  background-color: #222; color:#ffffff; }
 
 
-.btn_write:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
-.btn_list:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
-.btn_comment:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
-.btn_re:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
+.btn_write:hover { background-color:#222; color: var( --main-color-dark); }
+.btn_list:hover { background: color #222;; color: var( --main-color-dark); }
+.btn_comment:hover { background-color:#222; color: var( --main-color-dark); }
+.btn_re:hover { background-color:#222; color: var( --main-color-dark); }
+
+body.dark-theme .btn_write:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
+body.dark-theme .btn_list:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
+body.dark-theme .btn_comment:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
+body.dark-theme .btn_re:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
 
 
 .btn_write:active { position:relative; top:1px; }

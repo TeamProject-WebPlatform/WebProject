@@ -12,6 +12,15 @@ body.dark-theme .board_view_title{
 }
 /* hr {display:none;} */
 
+.uk-text-lead {
+    margin-bottom: 15px;
+    color: #353535;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.33;
+}
+
 
 /* 리스트 */
 .contents_sub { width:100%; margin:0; }
@@ -20,7 +29,7 @@ body.dark-theme .board_view_title{
 
 .board_top { width:100%; height: 230px; overflow:hidden; font-size: 12px;/*margin:10px 0;*/ }
 .board_top2 { width:100%; overflow:hidden; font-size: 12px;/*margin:10px 0;*/ }
-.board_top3 { width:100%; min-height: 155px; overflow:hidden; font-size: 12px;/*margin:10px 0;*/ }
+.board_top3 { width:100%; overflow:hidden; font-size: 12px;/*margin:10px 0;*/ }
 .board_top .f_search { float:right; width:550px; text-align:right; }
 .board_top .bold { float:left; width:200px; margin:10px 0; }
 .board_top > table { margin-top: 2%; margin-bottom: 1%;}
