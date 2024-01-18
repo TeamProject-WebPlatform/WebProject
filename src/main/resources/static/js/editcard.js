@@ -166,7 +166,7 @@ async function ProfileImage(e) {
         if(!response.ok) {
             throw new Error("서버 응답이 실패했습니다");
         }
-        const flag = response.text();
+        const flag = await response.text();
         if(flag=='1') {
             alert("프로필 사진이 변경되었습니다.");
             location.reload();

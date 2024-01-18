@@ -3,7 +3,6 @@ package platform.game.service.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +21,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
-import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.Post;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
-import platform.game.service.model.TO.BattleTO;
-import platform.game.service.model.TO.LevelRankTO;
-import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
-import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberProfileRepository;

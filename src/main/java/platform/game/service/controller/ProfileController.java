@@ -67,13 +67,11 @@ public class ProfileController {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
                 List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
-                String profileImage = profileRepository.findByProfileImage(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memberItems", memberItems);
-                mav.addObject("profileImage", profileImage);
             }
         } else {
             System.out.println("멤버 없음");
@@ -186,15 +184,30 @@ public class ProfileController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> ProfileImage(@RequestPart("image") MultipartFile image){
+    public ResponseEntity<String> ProfileImage(@RequestPart("image") MultipartFile image) {
         int flag=0;
-        String upload = "src/main/resources/static/profileimage";
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getMember();
+
+        String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage\\";
+        String filename = member.getMemId() + "_" + image.getOriginalFilename();
 
         try {
+            // 프로필 사진 저장 경로 폴더 // 없을 시 폴더 생성
             if(!new File(upload).exists()){
                 new File(upload).mkdir();
             }
-            flag = 1;
+
+            File DuplicateFile = findExistingFile(member.getMemId()+"");
+
+            if(DuplicateFile!=null){
+                DuplicateFile.delete();
+            }
+
+            image.transferTo(new File(upload+filename));
+            if (profileRepository.UpdateProfileImage(filename,member.getMemId())==1){
+                flag = 1;
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } 
@@ -243,5 +256,21 @@ public class ProfileController {
         }
 
         return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    // 파일이 있는지 여부 확인
+    private File findExistingFile(String memberId) {
+
+        String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage";
+        File[] files = new File(upload).listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName().startsWith(memberId)) {
+                    return file;
+                }
+            }
+        }
+        return null; // 동일한 memberId로 시작하는 파일이 없으면 null 반환
     }
 }
