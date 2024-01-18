@@ -25,11 +25,11 @@
 
     <script>
         const EditProfile = function(){
-            window.open("/profile/editprofile","editprofile","width=700, height=700");
+            window.open("/profile/editprofile","editprofile","width=700, height=700,left=250, top=150");
         }
 
         const EditMyCard = function(){
-            window.open("/profile/editmycard","editmycard","width=700px, height=700px");
+            window.open("/profile/editmycard","editmycard","width=700, height=700,left=250, top=150");
         }
     </script>
 
@@ -68,8 +68,8 @@
                             <div class="widjet__body">
                                 <div class="user-info">
                                     <div class="user-info__avatar" style="border: 3px solid white;">
-                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="profile" style="cursor: pointer; width:100%; height:100%">
-                                        <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="profile" style="cursor: pointer; width:100%; height:100%">
+                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="profile" style="width:100%; height:100%">
+                                        <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="profile" style="width:100%; height:100%">
                                     </div>
                                     <div class="user-info__box">
                                         <div class="user-info__title" th:text="${'LV : ' + member.memLvl + ' &nbsp ' + member.memNick}"></div>

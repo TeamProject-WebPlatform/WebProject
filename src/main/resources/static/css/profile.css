@@ -1,0 +1,33 @@
+.profile-container {
+    display: flex;
+    flex-direction: row;
+}
+.widjet__body {
+    display:flex;
+    flex-direction: row;
+}
+
+#equip_information {
+    margin:0px 10px 0px 15px;
+    padding-left:20px;
+    padding-right: 20px;
+    width:350px;
+    text-align: center;
+    line-height: 1.8;
+}
+
+#header_select, #card_select, #badgerep_select {
+    width:80%;
+}
+
+#header, #card, #badgerep, #badge {
+    width:20%;
+    padding:20px;
+    margin-left: 20px;
+}
+
+#badge {
+    margin-top:20px;
+    margin-right:3px;
+}
+

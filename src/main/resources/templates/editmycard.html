@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../css/libs.min.css">
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/shop_custom.css" />
+    <link rel="stylesheet" href="../css/profile.css" />
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
@@ -27,9 +28,8 @@
 <body class="page-home dark-theme">
 
     <div class="page-wrapper">
-        <main class="page-main">
-
-            <div class="widjet__body" style="display: inline-block; width:100%;" uk-width-1-1 th:switch="${memberProfile.profileCard}">
+        <main class="page-main" th:switch="${memberProfile.profileCard}">
+            <div class = "profile-container">
                 <form>
                     <input type="file" class="upload" accept="image/*" style="display: none;">
                 </form>
@@ -109,64 +109,128 @@
                         </div>
                     </div>
                 </div>
-            <div class="user-info" style="display: inline-block;" >
-                <h2 id="equipitem">장착 중인 아이템</h2>
-                <div id="upload"></div>
-                <div class="user-info__box" >
-                    <div class="user-info__card" th:text="${'프로필 사진 테두리 : ' + memberProfile.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'프로필 카드 테두리 : ' + memberProfile.profileCard}"></div>
-                    <div class="user-info__card" th:text="${'대표 뱃지 : ' + memberProfile.ProfileRepBadge}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 1 : ' + memberProfile.ProfileBadges2}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 2 : ' + memberProfile.ProfileBadges3}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 3 : ' + memberProfile.ProfileBadges4}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 4 : ' + memberProfile.ProfileBadges5}"></div>
+
+                <!-- 장착 아이템 정보-->
+                <div class="widjet__body" style="display: inline-block;" id="equip_information">
+                    <div class="user-info" style="display: inline-block;" >
+                        <h3 class="uk-text-lead" id="equipitem">Equipped Items</h3>
+                        <div id="upload"></div>
+                        <div class="user-info__box" >
+                            <div class="user-info__card" th:text="${'프로필 사진 테두리 : ' + memberProfile.profileHeader}"></div>
+                            <div class="user-info__card" th:text="${'프로필 카드 테두리 : ' + memberProfile.profileCard}"></div>
+                            <div class="user-info__card" th:text="${'대표 뱃지 : ' + memberProfile.ProfileRepBadge}"></div>
+                            <div class="user-info__card" th:text="${'뱃지 적용 목록 : ' + memberProfile.ProfileBadges2}"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <h3 class="uk-text-lead">Profile Header</h3>
-        <div class="widjet__body" style="display: inline-block; width:100%;">
-            <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
-                <div><select id="headeritem" class="js-select" onchange="HeaderPreview()">
-                        <option value="x">프로필 사진 테두리 선택</option>
-                        <option th:each="result:${header}" th:value="${result[0]}" th:text="${result[1]}"></option>
-                    </select></div>
-                    <button id="header" class="uk-button uk-button-secondary" type="button">저장</button>
+            <h3 class="uk-text-lead">Profile Header</h3>
+            <div class="widjet__body">
+                <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="header_select" data-uk-grid>
+                    <div>
+                        <select id="headeritem" class="js-select" onchange="HeaderPreview()">
+                            <option value="x">프로필 사진 테두리 선택</option>
+                            <option th:each="result:${header}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button id="header" class="uk-button uk-button-secondary" type="button">저장</button>
             </div>
-        </div>
 
-        <h3 class="uk-text-lead">Profile Card</h3>
-        <div class="widjet__body" style="display: inline-block; width:100%;">
-            <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
-                <div><select id="carditem" class="js-select" onchange="CardPreview()">
-                        <option value="x">프로필 카드 테두리 선택</option>
-                        <option th:each="result:${card}" th:value="${result[0]}" th:text="${result[1]}"></option>
-                    </select></div>
-                    <button id="card" class="uk-button uk-button-secondary" type="button">저장</button>
+            <h3 class="uk-text-lead">Profile Card</h3>
+            <div class="widjet__body">
+                <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="card_select" data-uk-grid>
+                    <div>
+                        <select id="carditem" class="js-select" onchange="CardPreview()">
+                            <option value="x">프로필 카드 테두리 선택</option>
+                            <option th:each="result:${card}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button id="card" class="uk-button uk-button-secondary" type="button">저장</button>
             </div>
-        </div>
 
-        <h3 class="uk-text-lead">Representative badge</h3>
-        <div class="widjet__body" style="display: inline-block; width:100%;">
-            <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
-                <div><select id="repbadge" class="js-select" onchange="RepBadgePreview()">
-                        <option value="">대표 뱃지 선택</option>
-                        <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
-                    </select></div>
-                    <button id="badgerep" class="uk-button uk-button-secondary" type="button">저장</button>
+            <h3 class="uk-text-lead">Representative badge</h3>
+            <div class="widjet__body">
+                <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="badgerep_select" data-uk-grid>
+                    <div>
+                        <select id="repbadge" class="js-select" onchange="RepBadgePreview()">
+                            <option value="">대표 뱃지 선택</option>
+                            <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button id="badgerep" class="uk-button uk-button-secondary" type="button">저장</button>
             </div>
-        </div>
 
-        <h3>프로필 뱃지</h3>
-        <div class="widjet__body" style="display: inline-block; width:100%;">
-            <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
-                <div><select id="badges" class="js-select">
-                        <option value="x">뱃지 선택</option>
-                        <option></option>
-                    </select></div>
-                    <button id="badge" class="uk-button uk-button-secondary" type="button">저장</button>
+            <h3 class="uk-text-lead">Profile Badges</h3>
+            <div class="widjet__body" style="display: inline-block; width:100%; text-align: right;">
+                <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
+                    <table>
+                        <tr>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                        </tr>                        <tr>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges" class="js-select">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <button id="badge" class="uk-button uk-button-secondary" type="button">저장</button>
             </div>
-        </div>
-    </main>
+        </main>
     </div>
     <script src="/js/libs.js"></script>
     <script src="/js/main.js"></script>
