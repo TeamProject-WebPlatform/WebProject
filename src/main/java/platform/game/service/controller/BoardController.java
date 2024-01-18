@@ -67,33 +67,34 @@ public class BoardController {
                 navBoard = navBoard + "event";
                 break;
             case "20004":
-                boardCd_name = "free";
+                boardCd_name = "Free";
                 navBoard = navBoard + "free";
                 break;
             case "20005":
-                boardCd_name = "information";
-                navBoard = navBoard + "information";
+                boardCd_name = "Share";
+                navBoard = navBoard + "share";
                 break;
             case "20006":
-                boardCd_name = "strategy";
+                boardCd_name = "Strategy";
                 navBoard = navBoard + "strategy";
                 break;
-                
-                default:
+
+            default:
                 break;
+        }
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            System.out.println("멤버 있음 ");
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                modelAndView.addObject("nickname", member.getMemNick());
+                modelAndView.addObject("level", member.getMemLvl());
+                modelAndView.addObject("currentPoint", member.getMemCurPoint());
+                modelAndView.addObject("memId", member.getMemId());
             }
-            
-            ModelAndView modelAndView = new ModelAndView();
-            
-            if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-                System.out.println("멤버 있음 ");
-                Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-                if (member != null) {
-                    modelAndView.addObject("nickname", member.getMemNick());
-                    modelAndView.addObject("level", member.getMemLvl());
-                    modelAndView.addObject("currentPoint", member.getMemCurPoint());
-                    modelAndView.addObject("memId",member.getMemId());
-                }
         } else {
             System.out.println("멤버 없음");
         }
@@ -183,7 +184,7 @@ public class BoardController {
         // hit 증가시키기
         post.setPostHit(post.getPostHit() + 1);
         postInfoRepository.save(post);
-        
+
         ModelAndView modelAndView = new ModelAndView();
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -192,7 +193,7 @@ public class BoardController {
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
-                modelAndView.addObject("memId",member.getMemId());
+                modelAndView.addObject("memId", member.getMemId());
             }
             id = member.getMemId();
         }
@@ -224,7 +225,6 @@ public class BoardController {
 
         return modelAndView;
     }
-
 
     @RequestMapping("/write")
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -264,15 +264,15 @@ public class BoardController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        
+
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                    .getMember();
-            if (member != null) {
-                modelAndView.addObject("nickname", member.getMemNick());
-                modelAndView.addObject("level", member.getMemLvl());
-                modelAndView.addObject("currentPoint", member.getMemCurPoint());
-                modelAndView.addObject("memId",member.getMemId());
-            }
+                .getMember();
+        if (member != null) {
+            modelAndView.addObject("nickname", member.getMemNick());
+            modelAndView.addObject("level", member.getMemLvl());
+            modelAndView.addObject("currentPoint", member.getMemCurPoint());
+            modelAndView.addObject("memId", member.getMemId());
+        }
         modelAndView.setViewName("board_write");
         modelAndView.addObject("board_cd", boardCd);
         modelAndView.addObject("boardCd_name", boardCd_name);
@@ -283,7 +283,8 @@ public class BoardController {
 
     @Transactional
     @RequestMapping("/write_ok")
-    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request, Model model) {
+    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request,
+            Model model) {
         System.out.println("Controller_listWriteOk 호출");
 
         int flag = 1;
@@ -317,7 +318,7 @@ public class BoardController {
                 flag = 0;
                 System.out.println("첫 번째 글 작성 포인트 지급");
                 int point = 1;
-                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd") + "&point=" + point;
             } else if (post.isMultipleOfFivePosts(posts)) {
                 int additionalPostPoint = 50;
                 updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50104", additionalPostPoint);
@@ -326,18 +327,17 @@ public class BoardController {
                 System.out.println("5개의 글 작성 포인트 지급");
                 int point = 2;
 
-                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd") + "&point=" + point;
 
             } else {
                 flag = 0;
                 System.out.println("포인트 지급 없음");
             }
-            
+
         } catch (Exception e) {
             System.out.println("WriteOk(Post post) 오류 : " + e.getMessage());
             flag = 1;
         }
-
 
         if (flag == 0) {
             // 글쓰기 성공 시 처리
@@ -393,12 +393,12 @@ public class BoardController {
         ModelAndView modelAndView = new ModelAndView();
 
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+                .getMember();
         if (member != null) {
             modelAndView.addObject("nickname", member.getMemNick());
             modelAndView.addObject("level", member.getMemLvl());
             modelAndView.addObject("currentPoint", member.getMemCurPoint());
-            modelAndView.addObject("memId",member.getMemId());
+            modelAndView.addObject("memId", member.getMemId());
         }
         modelAndView.setViewName("board_modify");
         modelAndView.addObject("post", post);
@@ -426,7 +426,7 @@ public class BoardController {
             post.setPostTags(tags);
             post.setPostContent(content);
             post.setUpdatedAt(date);
-            
+
             post.getBoardCd();
 
             // Save the updated post
@@ -498,12 +498,12 @@ public class BoardController {
 
         ModelAndView modelAndView = new ModelAndView();
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+                .getMember();
         if (member != null) {
             modelAndView.addObject("nickname", member.getMemNick());
             modelAndView.addObject("level", member.getMemLvl());
             modelAndView.addObject("currentPoint", member.getMemCurPoint());
-            modelAndView.addObject("memId",member.getMemId());
+            modelAndView.addObject("memId", member.getMemId());
         }
         modelAndView.setViewName("board_delete");
         modelAndView.addObject("post", post);
@@ -670,14 +670,14 @@ public class BoardController {
 
     // 포인트 지급 관련 메세지 전송
     @GetMapping("/point_ok")
-    public ModelAndView PointOk(@RequestParam("board_cd") int boardCd, @RequestParam("point") int point){
+    public ModelAndView PointOk(@RequestParam("board_cd") int boardCd, @RequestParam("point") int point) {
         System.out.println("point_ok 호출");
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("point_ok");
         modelAndView.addObject("boardCd", boardCd);
         modelAndView.addObject("point", point);
-    
+
         return modelAndView;
     }
 }
