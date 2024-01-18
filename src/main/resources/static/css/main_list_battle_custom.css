@@ -92,21 +92,29 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-top: 1.5%;
+    margin-bottom: 1.5%;
     padding: 10px;
     border-radius: 5px;
     background-color: rgba(244, 97, 25, 0.05);
     border: 1px solid grey;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    height:250px;
+    height: 160px;
     font-weight: 800;
 }
 
 .battle-profile-media {
     display: block;
     position: relative;
-    height: 180px;
+    height: 50px;
     overflow: hidden;
     border-radius: 5px;
+}
+
+
+.hot-battle .battle-profile-media {
+    min-height: 0px !important;
+    max-height: 200px !important;
 }
 
 .battle-profile-media img {
@@ -117,8 +125,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 100px;
     min-height: 100%;
     object-fit: cover;
     object-position: top center;
@@ -138,10 +146,10 @@
     align-items: center;
     width: 30%;
     border-radius: 20px;
-    width: 30%;
     margin: 5% 2% 5% 2%;
     height: 96%;
     color:white;
+    font: 10px;
     box-shadow: rgb(38, 57, 77) 0px 5px 30px -10px;
 }
 .battle-card__box .profile-dividing-line{
@@ -161,10 +169,12 @@
 }
 
 .battle-profile-info {
-    width: 50%;
+    width: 100%;
+    /* height: 100px; */
     display: flex;
     padding: 10px 20px;
     flex-direction: column;
+    font-size: 12px;
     align-items: center;
 }
 
@@ -174,14 +184,14 @@
 }
 
 .battle-profile-media {
-    height: 200px;
-    width: 200px;
+    width: 100px;
+    height: 50px;
 }
 
 .battle-profile-media img {
     border-radius: 10px;
 
-    height: 100%;
+    /* height: 100px; */
 
 }
 
@@ -190,6 +200,7 @@
     width: 34%;
     height: 100%;
     display: flex;
+    font-size: 12px;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: center;
@@ -235,7 +246,7 @@ body.dark-theme .battle-card-info .info-title a {
 }
 
 .battle-card-info .info-center .vs {
-    width: 16%;
+    width: 10%;
     display: flex;
     justify-content: center;
 }
@@ -254,7 +265,7 @@ body.dark-theme .battle-card-info .info-title a {
 }
 
 .info-center-header .info-point-header-list {
-    width: 50%;
+    width: 70%;
 }
 
 .info-center-left .info-point-header-list {
@@ -283,8 +294,8 @@ body.dark-theme .battle-card-info .info-title a {
 }
 
 .info-center-header .info-point-percent {
-    width: 50%;
-    font-size: 30px;
+    width: 30%;
+    font-size: 18px;
     display: flex;
     justify-content: center;
 }
@@ -297,6 +308,10 @@ body.dark-theme .battle-card-info .info-title a {
 .info-center-left .info-point-bar-box {
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.host-point-reward-ratio{
+    font-size: 10px;
 }
 
 .info-center-right .info-point-bar-box {
@@ -334,13 +349,14 @@ body.dark-theme .battle-card-info .info-title a {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 13px;    
+    font-size: 10px;    
 }
 .info-state{
     color: black;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 7px;
 }
 .info-state > div{
     padding: 0 5px 0 5px;
@@ -391,7 +407,7 @@ body.dark-theme .battle-card-info .info-title a {
     margin-right: 5%;
     color: #ffbf00;
     font-weight: 800;
-    font-size: 26px;
+    font-size: 20px;
 }
 .info-battle-point {
     color: rgb(255, 255, 255);

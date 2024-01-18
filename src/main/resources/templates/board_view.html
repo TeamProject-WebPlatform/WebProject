@@ -16,6 +16,8 @@
     <!-- <link rel="stylesheet" href="../css/list_custom.css" /> -->
     <!-- <link rel="stylesheet" href="../css/main_custom.css" /> -->
     <link rel="stylesheet" href="../css/crawling.css" />
+
+
     <script src="../js/module/swiper.js"></script>
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
@@ -155,8 +157,8 @@
                                             <input type="hidden" name="cpage" th:value="${cpage}" />
                                             <div class="uk-grid uk-grid-small uk-child-width-1-2@m" data-uk-grid>
                                                 <div><br /><strong>댓글</strong>
-                                                    <div class="user-item --active" th:each="commentNode : ${commentTree}">
-                                                        
+                                                    <div class="comment_view">
+                                                        <div class="user-item --active" th:each="commentNode : ${commentTree}">
                                                             <!-- 댓글 내용 출력 -->
                                                             <div class="user-item__box">
                                                                 <strong><span th:text="${commentNode.comment.member.memNick}"></span></strong>
@@ -192,7 +194,9 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        </div>
                                                     </div>
+                                                    <br>
                                                 </div>
                                             </div>
                                         </form>

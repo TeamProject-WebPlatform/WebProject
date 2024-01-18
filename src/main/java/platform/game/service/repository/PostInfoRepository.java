@@ -67,4 +67,8 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer> {
         ArrayList<Post> getPostsByMember(@Param("memberId") int memberId);
 
         long count();
+        
+        // 리스트 5개 만 출력 
+        ArrayList<Post> findTop5ByBoardCdOrderByPostIdDesc(String boardCd);
+        ArrayList<Post> findTop10ByBoardCdOrderByPostIdDesc(String boardCd);
 }

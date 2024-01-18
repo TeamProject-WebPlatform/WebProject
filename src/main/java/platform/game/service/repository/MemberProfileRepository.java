@@ -15,7 +15,7 @@ public interface MemberProfileRepository extends JpaRepository<MemberProfile, Lo
 
     MemberProfile findProfileIntroByMemId(Long memId);
 
-    @Query(value = "insert into member_profile values (:mem_id,default,default,default,default,default,default,default,default,default)", nativeQuery = true)
+    @Query(value = "insert into member_profile values (:mem_id,default,default,default,default,default,default,default,default,default,default)", nativeQuery = true)
     Integer setAddUserProfile(long mem_id);
 
     @Modifying(clearAutomatically = true)

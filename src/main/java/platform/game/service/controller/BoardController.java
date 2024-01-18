@@ -702,7 +702,7 @@ public class BoardController {
     }
  
     public int getPostCountByMember(List<Post> posts) {
-        int count = 0;
+        int count = 1;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
         .getMember();
         for (Post p : posts) {
@@ -730,14 +730,17 @@ public class BoardController {
 
     // 뎃글
     public int getCommentCountByMember(List<Comment> comments) {
-        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
         if (member == null) {
             return 0;
         }
-        return (int) comments.stream()
+        int commentCount = (int) comments.stream()
                 .filter(comment -> comment.getMember() != null && comment.getMember().getMemId() == member.getMemId())
                 .count();
+        System.out.println("현재 게시글 작성자: " + member.getMemId());
+        System.out.println("댓글 개수: " + commentCount);
+
+        return commentCount;
     }
 
     public boolean isFirstComment(List<Comment> comments) {
@@ -748,6 +751,7 @@ public class BoardController {
         int commentCount = getCommentCountByMember(comments);
         return commentCount > 0 && (commentCount % 5 == 0);
     }
+
 
     // 포인트 지급 관련 메세지 전송
     @GetMapping("/point_ok")

@@ -32,7 +32,7 @@ import platform.game.service.entity.SigninHistory;
 import platform.game.service.model.DAO.UserDAO;
 import platform.game.service.model.TO.UserSignTO;
 import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
-import platform.game.service.repository.IpUtils;
+import platform.game.service.action.IpAction;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.SigninHistoryRepository;
 import platform.game.service.repository.UpdatePointHistory;
@@ -75,12 +75,6 @@ public class LoginController {
     
     @Autowired
     private SigninHistoryService signinHistoryService;
-
-    @Autowired
-    private HttpServletRequest request; // HttpServletRequest를 주입받습니다.
-
-    
-    // 다른 메서드들은 그대로 유지
 
 
     @GetMapping("")
@@ -162,60 +156,59 @@ public class LoginController {
     @PostMapping("/generateToken")
     public int authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletResponse response, HttpServletRequest request) {
         Cookie cookie = signAction.generateToken(authRequest);
-        if (cookie != null) {
-            // 성공
-            response.addCookie(cookie);
+        if (cookie == null) {
+            System.out.println("로그인 실패");
+            return 1;
+        }
+        // 로그인 성공
+        response.addCookie(cookie);
 
-            // 사용자의 IP 주소 가져오기
-            String memIp = IpUtils.getIpAddress(request);
-            
-            // Principal을 Object로 받음
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            
-            // MemberInfoDetails 객체로부터 Member 정보 추출
-            if (principal instanceof MemberInfoDetails) {
-                MemberInfoDetails userDetails = (MemberInfoDetails) principal;
-                Member member = userDetails.getMember();
+        // 사용자의 IP 주소 가져오기
+        String memIp = IpAction.getIpAddress(request);
+        
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // MemberInfoDetails 객체로부터 Member 정보 추출
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+        
+        // Principal을 Object로 받음
+        if (!(principal instanceof MemberInfoDetails)) {
+            // 사용자 정보가 MemberInfoDetails가 아닌 경우에 대한 처리
+            System.out.println("올바르지 않은 사용자 정보입니다.");
+            return 1;
+        }
 
-                // 첫 로그인 여부 업데이트 및 포인트 증가
-                if (signinHistoryService.isFirstLogin(member)) {
-                    System.out.println("오늘 첫 로그인입니다.");
-                    // 포인트 증가 로직
-                    int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
-                    if (updatedPoints < 0) {
-                        // 포인트 증가 실패
-                        System.out.println("포인트 증가 실패");
-                        return 1; // 실패 시 처리 (원하는 값 또는 의미 있는 값을 반환)
-                    }
+        // 첫 로그인 여부 업데이트 및 포인트 증가
+        if (signinHistoryService.isFirstLogin(member)) {
+            System.out.println("오늘 첫 로그인입니다.");
+            // 포인트 증가 로직
+            int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
 
-                    System.out.println("포인트 증가 성공");
-                } else {
-                    System.out.println("이미 로그인한 사용자입니다.");
-                }
+            if (updatedPoints < 0) {
+                // 포인트 증가 실패
+                System.out.println("포인트 증가 실패");
+                return 1; // 실패 시 처리 (원하는 값 또는 의미 있는 값을 반환)
+            }
 
-                System.out.println("로그인 성공");
+            System.out.println("포인트 증가 성공");
+        } else {
+            System.out.println("이미 로그인한 사용자입니다.");
+        }
 
-                // SigninHistory 저장
-                SigninHistory signinHistory = SigninHistory.builder()
+        System.out.println("로그인 성공");
+
+        // SigninHistory 저장
+        SigninHistory signinHistory = SigninHistory.builder()
                 .member(member)
                 .memIp(memIp)
                 .createdAt(LocalDateTime.now())
                 .build();
 
-                // Save the SigninHistory
-                signinHistoryRepository.save(signinHistory);
-                
-                return 0;
-            } else {
-                // 사용자 정보가 MemberInfoDetails가 아닌 경우에 대한 처리
-                System.out.println("올바르지 않은 사용자 정보입니다.");
-                return 1;
-            }
-        } else {
-            System.out.println("로그인 실패");
-            return 1;
-        }
+        // SigninHistory 저장
+        signinHistoryRepository.save(signinHistory);
+
+        return 0;
     }
+
 
     // 아래 부터는 스팀, 카카오 로그인 관련--------------------------------------------
     @GetMapping("/steam/callback")
