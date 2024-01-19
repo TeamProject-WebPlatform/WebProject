@@ -94,3 +94,7 @@
     margin: 0 0 15px 30px;
     font-size: 16px;
 }
+
+#introduce:focus {
+    color:white;
+}
