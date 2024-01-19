@@ -107,16 +107,6 @@ public class AdminController {
             }
         }
 
-        // for (int i = 0; i < rows; i++) {
-        // for (int j = 0; j < cols; j++) {
-        // System.out.print("배열: " + mostFavoriteGame[i][j] + " ");
-        // }
-        // System.out.println();
-        // }
-
-        // System.out.println("총 회원수: " + userNum);
-        // System.out.println("총 게시판 글 수: " + postCount);
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin");
         modelAndView.addObject("userNum", userNum);
@@ -124,6 +114,8 @@ public class AdminController {
         modelAndView.addObject("noticePostCount", noticePostCount);
         modelAndView.addObject("postCount", postCount);
         modelAndView.addObject("visitCount", visitCount);
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -136,9 +128,22 @@ public class AdminController {
         // 현재 작성되어 있는 게시판 글 수(각각의 게시판 글 갯수 보여주기)
         long postCount = postInfoRepository.count();
         // 게시판 종류별 게시판 글 수
-        long noticePostCount = postInfoRepository.count();
+        String[] noticePostCount = new String[6];
+        int j = 0;
+        for (int i = 20001; i < 20007; i++) {
+            String z = Integer.toString(i); // 단순 int를 string으로 변환
+            noticePostCount[j] = postInfoRepository.countByBoardCd(z);
+            j++;
+        }
+
         // 현재 회원가입이 되어있는 사용자 인원수 가져오기
         long userNum = memberInfoRepository.count();
+
+        // 현재 회원가입이 되어있는 사용자 인원수 가져오기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        System.out.println("총 방문자 수: " + visitCount.getRemark1());
+        System.out.println("어제 방문자 수: " + visitCount.getRemark2());
+        System.out.println("오늘 방문자 수: " + visitCount.getRemark3());
 
         // 가장 많은 사람이 선호하는 게임 분류하기
         List<String> favoriteGame = memberFavoriteGameRepository.findMostCommonGameCd();
@@ -223,6 +228,10 @@ public class AdminController {
         modelAndView.addObject("mostFavoriteGame", mostFavoriteGame);
         modelAndView.addObject("noticePostCount", noticePostCount);
         modelAndView.addObject("memFG", memFG);
+        modelAndView.addObject("postCount", postCount);
+        modelAndView.addObject("visitCount", visitCount);
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
