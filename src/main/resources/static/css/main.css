@@ -5944,6 +5944,15 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
 
 /* 푸터 */
 
+.page-footer {
+    display: block;
+    /* z-index: 3; */
+    /* position: absolute; */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
 .page-footer__inner {
     -webkit-box-align: center;
     -ms-flex-align: center;

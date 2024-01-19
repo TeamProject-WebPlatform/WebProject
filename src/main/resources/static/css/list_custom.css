@@ -12,6 +12,10 @@ body.dark-theme .board_view_title{
 }
 /* hr {display:none;} */
 
+.widjet_size{
+    min-height: 600px;
+    padding-right: 15px;
+}
 
 /* 리스트 */
 .contents_sub { width:100%; margin:0; }

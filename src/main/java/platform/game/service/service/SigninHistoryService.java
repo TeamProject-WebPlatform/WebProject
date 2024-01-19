@@ -1,5 +1,6 @@
 package platform.game.service.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,12 @@ public class SigninHistoryService {
 
     @Transactional
     public boolean isFirstLogin(Member member) {
-        LocalDateTime currentDateTime = LocalDateTime.now();
         
+        LocalDateTime currentMidnightDateTime = LocalDate.now().atStartOfDay();
+
         SigninHistory latestSignin = signinHistoryRepository.findTopByMemberOrderByCreatedAtDesc(member);
 
-        if (latestSignin == null || latestSignin.getCreatedAt().isAfter(currentDateTime)) {
+        if (latestSignin == null || latestSignin.getCreatedAt().isAfter(currentMidnightDateTime)) {
             // 첫 로그인 시 모든 로그인 기록 삭제
             deleteByMember(member);
             return true;
