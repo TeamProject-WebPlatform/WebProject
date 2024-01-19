@@ -15,12 +15,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Item;
 import platform.game.service.entity.Member;
-import platform.game.service.entity.MemberItem;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.service.MemberInfoDetails;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.ItemInfoRepository;
 import platform.game.service.repository.MemberItemInfoRepository;
+import platform.game.service.repository.MemberProfileRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,11 @@ public class ShopController {
     private ItemInfoRepository itemInfoRepository;
     @Autowired
     private MemberItemInfoRepository memberItemInfoRepository;
+    @Autowired
+    private CommonCodeRepository commonCodeRepository;
+
+    @Autowired
+    private MemberProfileRepository memberProfileRepository;
 
     @RequestMapping("/shop")
     public ModelAndView shop() {
@@ -49,12 +58,14 @@ public class ShopController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(member.getMemId());
                 List<Integer> memberHaveItems = memberItemInfoRepository.HaveItemCheck(member.getMemId());
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
                 modelAndView.addObject("haveitem", memberHaveItems);
+                modelAndView.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
@@ -63,6 +74,10 @@ public class ShopController {
         modelAndView.addObject("navshop", navShop);
         modelAndView.addObject("totalItemCount", totalItemCount);
         modelAndView.addObject("items", items);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
         return modelAndView;
     }
 
@@ -99,6 +114,10 @@ public class ShopController {
         modelAndView.addObject("navshop", navShop);
         modelAndView.addObject("totalItemCount", totalItemCount);
         modelAndView.addObject("items", items);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -107,18 +126,17 @@ public class ShopController {
     public ResponseEntity<String> ItemPurchase(@RequestBody JsonNode item) {
 
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+                .getMember();
 
         int flag = 0;
 
         int point = item.get("Point").asInt();
         String itemCd = item.get("Category").asText();
 
-        
-        if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd)==1&&memberItemInfoRepository.UpdatePoint(point, member.getMemId())==1){
-            flag=1;
+        if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd) == 1
+                && memberItemInfoRepository.UpdatePoint(point, member.getMemId()) == 1) {
+            flag = 1;
         }
-        
 
         return ResponseEntity.ok(String.valueOf(flag));
     }

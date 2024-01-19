@@ -84,7 +84,8 @@ const setSwiperWrapper = async function () {
         html += `
             <div class="swiper-slide">`;
 
-        html += createSwiperProfile(datalist[i].mem_lvl, datalist[i].mem_nick, userprofile[i].profileIntro, userprofile[i].profileHeader, userprofile[i].profileCard, userprofile[i].ProfileRepBadge);
+        html += createSwiperProfile(datalist[i].mem_lvl, datalist[i].mem_nick, userprofile[i].profileIntro, userprofile[i].profileHeader, 
+            userprofile[i].profileCard, userprofile[i].profileRepBadge, userprofile[i].profileImage, userprofile[i].profileBadgeList);
 
         html += `   
             </div>`;
@@ -104,29 +105,47 @@ const setSwiperWrapper = async function () {
     // Swiper 초기화 및 업데이트
     setSwiper(profileSlidesPerView);
 }
-const createSwiperProfile = function (level, nickname, introduce, header, card, repbadge) {
+const createSwiperProfile = function (level, nickname, introduce, header, card, repbadge, profileimage, badgelist) {
     let memNickname = nickname;
     let memImageName = "doyun_icon.png";
     let memLevel = level;
     let memHeader = header + ".png";
-    let memHeaderStyle = "";
     let memCard = card + ".png";
-    let memCardStyle = "";
     let memSymbolImageName = repbadge + ".png";
-    let memRepBadgeStyle = "";
     let memIntroduction = introduce;
 
-    if (header != null) {
+    let memHeaderStyle = "";
+    let memCardStyle = "";
+    let memRepBadgeStyle = "";
+    let memBadgeList = ["","","","","","","","",""];
+
+    if (header != 'x') {
         memHeaderStyle = `style="background-image:url(../img/shop_img/${memHeader});"`;
     }
 
-    if (card != null) {
+    if (card != 'x') {
         memCardStyle = `style="background-image:url(../img/shop_img/${memCard});"`;
     }
 
-    if (repbadge != null) {
-        memRepBadgeStyle = `src="../img/shop_img/${memSymbolImageName}";`
+    if (repbadge != 'x') {
+        memRepBadgeStyle = `<img class="badge" src="../img/shop_img/${memSymbolImageName}";>`
     } 
+
+    if(profileimage!='x'){
+        memImageName= `profileimage/${profileimage}`;
+    }
+
+    if (badgelist != 'x'){
+        memBadgeList = badgelist.split(', ');
+
+        for(let i=0; i<memBadgeList.length; i++) {
+            if (memBadgeList[i] != 'x'){
+                memBadgeList[i] = `<img src="../img/shop_img/${memBadgeList[i]}.png">`
+            } else {
+                memBadgeList[i] = "";
+            }
+        }
+    }
 
     let membProfileHTML = `
         <div class="profile-card" ${memCardStyle}>
@@ -148,19 +167,19 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
                 <div class="profile-dividing-line"></div>
                 <div class="profile-badge-section">
                     <div class="badge-line">
-                        <span class="badge">&#127774;</span>
-                        <span class="badge">&#127775;</span>
-                        <span class="badge">&#127806;</span>
+                        <div class="badge">${memBadgeList[0]}</div>
+                        <div class="badge">${memBadgeList[3]}</div>
+                        <div class="badge">${memBadgeList[6]}</div>
                     </div>
                     <div class="badge-line">
-                        <span class="badge">&#127851;</span>
-                        <span class="badge">&#127774;</span>
-                        <span class="badge">&#127775;</span>
+                        <div class="badge">${memBadgeList[1]}</div>
+                        <div class="badge">${memBadgeList[4]}</div>
+                        <div class="badge">${memBadgeList[7]}</div>
                     </div>
                     <div class="badge-line">
-                        <span class="badge">&#127806;</span>
-                        <span class="badge">&#127851;</span>
-                        <span class="badge">&#127774;</span>
+                        <div class="badge">${memBadgeList[2]}</div>
+                        <div class="badge">${memBadgeList[5]}</div>
+                        <div class="badge">${memBadgeList[8]}</div>
                     </div>
                 </div>
             </div>

@@ -1,15 +1,12 @@
 package platform.game.service.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import platform.game.service.entity.Member;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;

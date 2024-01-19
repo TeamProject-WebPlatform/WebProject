@@ -62,9 +62,13 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer> {
         // 게시물 삭제하기
         void deleteByPostId(int postId);
 
-         // 특정 사용자가 작성한 글 목록 조회
+        // 특정 사용자가 작성한 글 목록 조회
         @Query(value = "SELECT * FROM post WHERE mem_id = :memberId", nativeQuery = true)
         ArrayList<Post> getPostsByMember(@Param("memberId") int memberId);
 
+        // 전체 게시판 글 수
         long count();
+
+        // 공지사항 게시판 글 수
+        String countByBoardCd(String boardCd);
 }

@@ -31,6 +31,7 @@ import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Battle;
 import platform.game.service.entity.BattlePost;
 import platform.game.service.entity.Comment;
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BattlePointTO;
@@ -39,6 +40,7 @@ import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.BattleCustomRepositoryImpl;
 import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.CommentInfoRepository;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.UpdatePointHistoryImpl;
@@ -65,11 +67,12 @@ public class BattleController {
     BattleCustomRepositoryImpl battleCustomRepositoryImpl;
     @Autowired
     private UpdatePointHistoryImpl updatePointHistoryImpl;
-    
-    
+
+    @Autowired
+    CommonCodeRepository commonCodeRepository;
 
     @RequestMapping("")
-    public ModelAndView battle(){
+    public ModelAndView battle() {
         long id = 0;
         ModelAndView mav = new ModelAndView("battle");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -77,18 +80,22 @@ public class BattleController {
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
-                mav.addObject("currentPoint",member.getMemCurPoint());
+                mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
-                mav.addObject("memId",id);
+                mav.addObject("memId", id);
             }
         } else {
         }
         List[] battleList = battleCardAction.getBattleList(id);
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
-        
-        mav.addObject("battleTOList",battleTOList);
-        mav.addObject("battlePointTOList",battlePointTOList);
+
+        mav.addObject("battleTOList", battleTOList);
+        mav.addObject("battlePointTOList", battlePointTOList);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        mav.addObject("totalCount", visitCount.getRemark1());
+        mav.addObject("todayCount", visitCount.getRemark3());
 
         return mav;
     }
@@ -102,31 +109,34 @@ public class BattleController {
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
-                mav.addObject("currentPoint",member.getMemCurPoint());
+                mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
-                mav.addObject("memId",id);
+                mav.addObject("memId", id);
             }
-        } 
+        }
         Post post = new Post();
         post = postInfoRepository.findByPostId(postId);
         Object[] battleTOs = battleCardAction.getBattleTO(id, postId, btId);
 
-        BattleTO bto = (BattleTO)battleTOs[0];
-        BattlePointTO pto = (BattlePointTO)battleTOs[1];
+        BattleTO bto = (BattleTO) battleTOs[0];
+        BattlePointTO pto = (BattlePointTO) battleTOs[1];
 
         ArrayList<Comment> comments = commentInfoRepository.findByPost_PostId(postId);
         ArrayList<CommentTO> commentTree = buildCommentTree(comments);
 
-        commentTree.sort(Comparator.comparing(commentTO -> commentTO.getComment().getCreatedAt().getTime())); // 최신이 아래로 내려감.
-        
-        String[][] tmp = bto.getApplicants()!=null ? bto.getApplicants() : null;
-        if(tmp==null){
+        commentTree.sort(Comparator.comparing(commentTO -> commentTO.getComment().getCreatedAt().getTime())); // 최신이 아래로
+                                                                                                              // 내려감.
+
+        String[][] tmp = bto.getApplicants() != null ? bto.getApplicants() : null;
+        if (tmp == null) {
             mav.addObject("applicants", "");
-        }else{
+        } else {
             String[][] applicants = new String[tmp.length][5];
-            for(int i =0;i<tmp.length;i++){
+            for (int i = 0; i < tmp.length; i++) {
                 String[] s = tmp[i];
-                Member member = memberInfoRepository.findById(Long.parseLong(s[0])).isPresent() ? memberInfoRepository.findById(Long.parseLong(s[0])).get() : null;
+                Member member = memberInfoRepository.findById(Long.parseLong(s[0])).isPresent()
+                        ? memberInfoRepository.findById(Long.parseLong(s[0])).get()
+                        : null;
                 applicants[i][0] = s[0]; // memId
                 applicants[i][1] = s[1]; // 보류 상태
                 applicants[i][2] = s[2]; // 신청 시간
@@ -135,16 +145,21 @@ public class BattleController {
             }
             mav.addObject("applicants", applicants);
         }
-        
-        mav.addObject("bto",bto);
-        mav.addObject("pto",pto);
+
+        mav.addObject("bto", bto);
+        mav.addObject("pto", pto);
         mav.addObject("post", post);
         mav.addObject("commentTree", commentTree);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        mav.addObject("totalCount", visitCount.getRemark1());
+        mav.addObject("todayCount", visitCount.getRemark3());
         return mav;
     }
+
     @RequestMapping("/write")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ModelAndView writePage(@RequestParam("postId") int postId,@RequestParam("btId") int btId) {
+    public ModelAndView writePage(@RequestParam("postId") int postId, @RequestParam("btId") int btId) {
         ModelAndView mav = new ModelAndView("battle_write");
         long id = 0;
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -152,31 +167,33 @@ public class BattleController {
                     .getMember();
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
-                mav.addObject("currentPoint",member.getMemCurPoint());
+                mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
-                mav.addObject("memId",id);
-                mav.addObject("level",member.getMemLvl());
+                mav.addObject("memId", id);
+                mav.addObject("level", member.getMemLvl());
             }
         }
-        if(postId!=-1 && btId!=-1){
+        if (postId != -1 && btId != -1) {
             // modify
             Post post = postInfoRepository.findById(postId).get();
             Battle battle = battleRepository.findById(btId).get();
             BattlePost battlePost = battle.getBtPost();
-            if(battle.getClientMember()!=null || post.getMember().getMemId()!=id){
+            if (battle.getClientMember() != null || post.getMember().getMemId() != id) {
                 // 클라이언트가 있으므로 수정 불가
-                ModelAndView failMav = new ModelAndView(new RedirectView("/view?postId="+postId+"&btId="+btId));
+                ModelAndView failMav = new ModelAndView(new RedirectView("/view?postId=" + postId + "&btId=" + btId));
                 return failMav;
             }
-            LocalDateTime ddDate = battlePost.getBtPostDeadLine().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            LocalDateTime stDate = battlePost.getBtStartDt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            mav.addObject("isModify",true);
-            mav.addObject("postId",postId);
-            mav.addObject("btId",btId);
-            mav.addObject("title",post.getPostTitle());
-            mav.addObject("content",post.getPostContent());
-            mav.addObject("point",battlePost.getBtPostPoint());
-            mav.addObject("game",battlePost.getGameCd());
+            LocalDateTime ddDate = battlePost.getBtPostDeadLine().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            LocalDateTime stDate = battlePost.getBtStartDt().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            mav.addObject("isModify", true);
+            mav.addObject("postId", postId);
+            mav.addObject("btId", btId);
+            mav.addObject("title", post.getPostTitle());
+            mav.addObject("content", post.getPostContent());
+            mav.addObject("point", battlePost.getBtPostPoint());
+            mav.addObject("game", battlePost.getGameCd());
             // ddDate의 연, 월, 일, 시간, 분
             mav.addObject("ddYear", ddDate.getYear());
             mav.addObject("ddMonth", ddDate.getMonthValue());
@@ -193,6 +210,7 @@ public class BattleController {
         }
         return mav;
     }
+
     @PostMapping("/write_ok")
     public String writePost(HttpServletRequest request) {
         String isModify = request.getParameter("isModify");
@@ -201,21 +219,21 @@ public class BattleController {
         String game = request.getParameter("game");
         String point = request.getParameter("point");
         String content = request.getParameter("content");
-        
+
         String ddyear = request.getParameter("ddyear");
         String ddmonth = request.getParameter("ddmonth");
         String ddday = request.getParameter("ddday");
         String ddhour = request.getParameter("ddhour");
         String ddminute = request.getParameter("ddminute");
         String ddDateString = ddyear + "-" + ddmonth + "-" + ddday + " " + ddhour + ":" + ddminute;
-        
+
         String styear = request.getParameter("styear");
         String stmonth = request.getParameter("stmonth");
         String stday = request.getParameter("stday");
         String sthour = request.getParameter("sthour");
         String stminute = request.getParameter("stminute");
         String stDateString = styear + "-" + stmonth + "-" + stday + " " + sthour + ":" + stminute;
-        
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date ddDate = null;
         Date stDate = null;
@@ -227,65 +245,70 @@ public class BattleController {
             // 아마 에러가 안뜰 것으로 예상해서 롤백 구현x
         }
         int[] data = new int[2];
-        try{    
-            if(isModify.equals("true")){
+        try {
+            if (isModify.equals("true")) {
                 int dPoint = Integer.parseInt(request.getParameter("dPoint"));
                 int postId = Integer.parseInt(request.getParameter("postId"));
                 int btId = Integer.parseInt(request.getParameter("btId"));
-                data = battleCustomRepositoryImpl.modifyPost(postId,btId,memId,title,game,point,content,ddDate,stDate);
-                if(dPoint < 0){
+                data = battleCustomRepositoryImpl.modifyPost(postId, btId, memId, title, game, point, content, ddDate,
+                        stDate);
+                if (dPoint < 0) {
                     // 포인트를 더썼으니까
                     updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50104", dPoint);
-                }else if(dPoint > 0){
+                } else if (dPoint > 0) {
                     // 포인트를 줄였으니까
                     updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50103", dPoint);
                 }
-            }else{
-                data = battleCustomRepositoryImpl.writePost(memId,title,game,point,content,ddDate,stDate);
+            } else {
+                data = battleCustomRepositoryImpl.writePost(memId, title, game, point, content, ddDate, stDate);
                 updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50101", -Integer.parseInt(point));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         int postId = data[0];
         int btId = data[1];
-        return "redirect:/battle/view?postId="+postId+"&btId="+btId;
+        return "redirect:/battle/view?postId=" + postId + "&btId=" + btId;
     }
+
     @PostMapping("/delete")
     @ResponseBody
-    public String deletPost(@RequestParam("postId") int postId,@RequestParam("btId") int btId) {
+    public String deletPost(@RequestParam("postId") int postId, @RequestParam("btId") int btId) {
         int flag = 0;
         // battlePost 삭제 -> battle 삭제, post 삭제
-        try{
-            flag = battleCustomRepositoryImpl.deletePost(postId,btId);
-            
-        }catch(Exception e){
+        try {
+            flag = battleCustomRepositoryImpl.deletePost(postId, btId);
+
+        } catch (Exception e) {
             return "-1";
         }
         // flag = 1 정상
         // flag = -1 삭제 불가(클라이언트 존재)
         return String.valueOf(flag);
     }
+
     @RequestMapping("/comment")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public String writeComment(@RequestParam("postId") int postId,@RequestParam("btId") int btId,
+    public String writeComment(@RequestParam("postId") int postId, @RequestParam("btId") int btId,
             @RequestParam("content") String content) {
         Member member = null;
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
-        }else return "redirect:./battle/view?postId=" + postId + "&btId=" + btId;
+        } else
+            return "redirect:./battle/view?postId=" + postId + "&btId=" + btId;
 
-        
-        try{
+        try {
             battleCustomRepositoryImpl.insertComment(postId, content, member);
-        }catch(Exception e){}
-        
+        } catch (Exception e) {
+        }
+
         return "redirect:./view?postId=" + postId + "&btId=" + btId;
     }
+
     @RequestMapping("/recomment")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public String writeReplyComment(@RequestParam("postId") int postId,@RequestParam("btId") int btId,
+    public String writeReplyComment(@RequestParam("postId") int postId, @RequestParam("btId") int btId,
             @RequestParam("parent_comment_id") int commentId,
             @RequestParam("content") String content) {
         Member member = null;
@@ -293,38 +316,40 @@ public class BattleController {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
         }
-        try{
-            battleCustomRepositoryImpl.insertComment(postId, content,commentId, member);
-        }catch(Exception e){}
-        
+        try {
+            battleCustomRepositoryImpl.insertComment(postId, content, commentId, member);
+        } catch (Exception e) {
+        }
 
         // 댓글이 등록된 후에 해당 게시물로 이동
         return "redirect:./view?postId=" + postId + "&btId=" + btId;
     }
+
     @PostMapping("/delcomment")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseBody
-    public String deleteComment(@RequestParam("commentId") int commentId){
+    public String deleteComment(@RequestParam("commentId") int commentId) {
         int flag = 0;
-        try{
+        try {
             flag = battleCustomRepositoryImpl.deleteComment(commentId);
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             flag = -1;
         }
-        
+
         return String.valueOf(flag);
     }
+
     @PostMapping("/reqeust")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseBody
     public String reqeustBattle(@RequestParam("memId") long memId,
-                            @RequestParam("btId") int btId,
-                            @RequestParam("postId") int postId){ 
+            @RequestParam("btId") int btId,
+            @RequestParam("postId") int postId) {
         int flag = 0;
-        try{
-            flag = battleCustomRepositoryImpl.reqeustBattle(memId,btId,postId);   
-        }catch(Exception e){
+        try {
+            flag = battleCustomRepositoryImpl.reqeustBattle(memId, btId, postId);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             flag = -1;
         }
@@ -334,46 +359,46 @@ public class BattleController {
     @PostMapping("/reqeustManage")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseBody
-    public String manageRequest(@RequestParam("requester") long memId,@RequestParam("isAccept") int isAccept,@RequestParam("btId") int btId){
+    public String manageRequest(@RequestParam("requester") long memId, @RequestParam("isAccept") int isAccept,
+            @RequestParam("btId") int btId) {
         int flag = 0;
-        try{
-            flag = battleCustomRepositoryImpl.manageRequest(memId,isAccept,btId); 
-        }catch(Exception e){
+        try {
+            flag = battleCustomRepositoryImpl.manageRequest(memId, isAccept, btId);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             flag = -1;
         }
 
-        return String.valueOf(flag); 
+        return String.valueOf(flag);
     }
 
     @PostMapping("/like")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseBody
-    public Object[] like(@RequestParam("type") String type, @RequestParam("postId") int postId, @RequestParam("commentId") int commentId, @RequestParam("like") int like){
-        Object[] flag = new Object[]{0,0};
+    public Object[] like(@RequestParam("type") String type, @RequestParam("postId") int postId,
+            @RequestParam("commentId") int commentId, @RequestParam("like") int like) {
+        Object[] flag = new Object[] { 0, 0 };
         long memId = 0;
         Member member = null;
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
-            if(member!=null){
+            if (member != null) {
                 memId = member.getMemId();
             }
         }
-        
-        try{
-            flag = battleCustomRepositoryImpl.like(memId,type,postId,commentId,like);
-        }catch(DataIntegrityViolationException e){
+
+        try {
+            flag = battleCustomRepositoryImpl.like(memId, type, postId, commentId, like);
+        } catch (DataIntegrityViolationException e) {
             // 이미 한 투표
-            flag = new Object[]{-1,-1};
-        }catch(Exception e){
+            flag = new Object[] { -1, -1 };
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            flag = new Object[]{-2,-2};
+            flag = new Object[] { -2, -2 };
         }
         return flag;
     }
-
-
 
     private ArrayList<CommentTO> buildCommentTree(ArrayList<Comment> comments) {
         Map<Integer, CommentTO> commentNodeMap = new HashMap<>();
@@ -404,6 +429,5 @@ public class BattleController {
 
         return rootNodes;
     }
-
 
 }

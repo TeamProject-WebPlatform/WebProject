@@ -13,6 +13,7 @@
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/libs.min.css">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/profile.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
@@ -25,11 +26,11 @@
 
     <script>
         const EditProfile = function(){
-            window.open("/profile/editprofile","editprofile","width=700, height=700");
+            window.open("/profile/editprofile","editprofile","width=700, height=700,left=250, top=150");
         }
 
         const EditMyCard = function(){
-            window.open("/profile/editmycard","editmycard","width=700px, height=700px");
+            window.open("/profile/editmycard","editmycard","width=700, height=700,left=250, top=150");
         }
     </script>
 
@@ -67,12 +68,21 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="user-info">
-                                    <div class="user-info__avatar"><img src="../img/profile.png" alt="profile" onclick="EditMyCard()"></div>
+                                    <div class="user-info__avatar" style="border: 3px solid white;">
+                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="profile" style="width:100%; height:100%">
+                                        <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="profile" style="width:100%; height:100%">
+                                    </div>
                                     <div class="user-info__box">
                                         <div class="user-info__title" th:text="${'LV : ' + member.memLvl + ' &nbsp ' + member.memNick}"></div>
                                         <div class="user-info__text" th:text="${memberProfile.profileIntro}"></div>
                                     </div>
-                                </div><a class="uk-button uk-button-danger" onclick="EditProfile()"><i class="ico_edit"></i><span class="uk-margin-small-left">Edit Profile</span></a>
+                                </div>
+                                <div class="user-info">
+                                    <div style="display:flex; flex-direction: column;">
+                                        <a class="uk-button uk-button-danger" onclick="EditProfile()" style="margin-bottom: 20px;"><i class="ico_edit"></i><span class="uk-margin-small-left">Edit Profile</span></a>
+                                        <a class="uk-button uk-button-danger" onclick="EditMyCard()" style=""><i class="ico_edit"></i><span class="uk-margin-small-left">Edit My Card</span></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="widjet --bio">
@@ -88,6 +98,7 @@
                                             <option value="30003">오버워치</option>
                                             <option value="30004">발로란트</option>
                                             <option value="30005">피파 온라인</option>
+                                            <option value="30006">스팀</option>
                                         </select></div>
                                     <div><select id="second-game" class="js-select">
                                         <option value="">2순위 선호 게임 </option>
@@ -96,6 +107,7 @@
                                         <option value="30003">오버워치</option>
                                         <option value="30004">발로란트</option>
                                         <option value="30005">피파 온라인</option>
+                                        <option value="30006">스팀</option>
                                         </select></div>
                                     <div><select id="third-game" class="js-select">
                                             <option value="">3순위 선호 게임</option>
@@ -104,9 +116,10 @@
                                             <option value="30003">오버워치</option>
                                             <option value="30004">발로란트</option>
                                             <option value="30005">피파 온라인</option>
+                                            <option value="30006">스팀</option>
                                         </select></div>
-                                        <div>
-                                            <button id="game-submit" class="uk-button uk-button-secondary" type="button">등록</button>
+                                        <div style="text-align: right;">
+                                            <button id="game-submit" class="uk-button uk-button-secondary">등록</button>
                                         </div>
                                 </div>
                             </div>
@@ -120,40 +133,28 @@
                                     <div th:each="to:${memberRanking}">
                                         <div class="user-info__title" th:text="${to.rankCode+' : '+to.rank+'위'}"></div>
                                     </div>
-                                    <div>
-                                        <button id="game-submit" class="uk-button uk-button-secondary" type="button">세부 랭킹 보러 가기</button>
+                                    <div style="display: flex;
+                                    justify-content: flex-end;">
+                                        <button id="game-submit" class="uk-button uk-button-secondary" type="button">랭킹 보러 가기</button>
                                     </div>
                                 </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="uk-width-1-2@l">
+                    <div class="uk-width">
                         <div class="widjet --badges">
                             <div class="widjet__head">
-                                <h3 class="uk-text-lead">Badge</h3><a href="04_profile.html">View All</a>
+                                <h3 class="uk-text-lead">Badge</h3>
                             </div>
                             <div class="widjet__body">
-                                <ul class="badges-list" >
-                                    <li id="badge" th:each="item:${memberItems}"><img th:src="@{'./img/shop_img/' + ${item} + '.png'}"></li>
+                                <ul class="badges-list" > 
+                                    <li th:each="item,i:${memberItems}"><img th:title="${item}" th:src="@{'./img/shop_img/' + ${item} + '.png'}"></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="uk-width-1-2@l">
-                        <div class="widjet --games">
-                            <div class="widjet__head">
-                                <h3 class="uk-text-lead">Games</h3><a href="04_profile.html">View All</a>
-                            </div>
-                            <div class="widjet__body">
-                                <ul class="games-list">
-                                    <li><img src="../img/game-1.jpg" alt="game"></li>
-                                    <li><img src="../img/game-2.jpg" alt="game"></li>
-                                    <li><img src="../img/game-3.jpg" alt="game"></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </main>
         </div>

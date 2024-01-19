@@ -53,10 +53,10 @@
 
         //alert('확인');
 
-        location.href = "./list_MixList?board_cd=" + /*[[${boardCd}]]*/20004 +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
+        location.href = "./list_MixList?board_cd=" + "[[${boardCd}]]" +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
     }
     function reSelect(){
-        location.href = "./list?board_cd=" + /*[[${boardCd}]]*/20004;
+        location.href = "./list?board_cd=" + "[[${boardCd}]]";
     }
 </script>
 
@@ -288,6 +288,13 @@
             </div>
         </div>
     </div> -->
+    <script>
+        document.getElementById("s_txt_btn").addEventListener("keyup", function(event){
+            if(event.key == "Enter"){
+                onSelect();
+            }
+        });
+    </script>
 </body>
 
 </html>
