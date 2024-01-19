@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const Cardregister = document.getElementById("card");
     const RepBadgeregister = document.getElementById("badgerep");
     const Badgeregister = document.getElementById("badge");
-    const ProfileImageChange = document.querySelector('.profile');
+    const ProfileImageChange = document.querySelector('#profile');
 
 
     Headregister.addEventListener('click', RegisterHeader);

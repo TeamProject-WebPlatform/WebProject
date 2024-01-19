@@ -193,7 +193,7 @@
                 </div>
 
                 <!-- 장착 아이템 정보-->
-                <div class="widjet__body" style="display: inline-block;" id="equip_information">
+                <div class="widjet__body" id="equip_information">
                     <div class="user-info" style="display: inline-block;" >
                         <h3 class="uk-text-lead" id="equipitem">Equipped Items</h3>
                         <div class="user-info__box">
@@ -210,6 +210,10 @@
                                 <div id="badgelist" class="user-info__card" th:if="${!badge.equals('x')}" th:text="${badge}"></div>
                             </div>
                         </div>
+                    </div>
+                    <br>
+                    <div>
+                        <button id="profile" class="uk-button uk-button-secondary" type="button">프로필 사진 변경</button>
                     </div>
                 </div>
             </div>
