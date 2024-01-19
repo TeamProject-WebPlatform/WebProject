@@ -177,11 +177,14 @@ public class ProfileController {
         List<Object[]> CardList = profileRepository.HaveCardList(member.getMemId());
         List<Object[]> BadgeList = profileRepository.HaveBadgeList(member.getMemId());
 
+        String[] Badge = profileRepository.findByBadgeList(member.getMemId()).split(", ");
+
         mav.addObject("member", member);
         mav.addObject("memberProfile", memberProfile);
         mav.addObject("header", HeaderList);
         mav.addObject("card", CardList);
         mav.addObject("badge", BadgeList);
+        mav.addObject("badgelist", Badge);
 
         return mav;
     }

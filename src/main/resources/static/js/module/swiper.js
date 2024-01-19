@@ -135,7 +135,7 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
                     <div class="profile-user_info">
                         <div class="profile-user_level"><span>LV : ${memLevel}</span></div>
                         <div class="profile-user_nick"><span>${memNickname}</span></div>
-                        ${memRepBadgeStyle}
+                        <img ${memRepBadgeStyle}>
                     </div>
                 </div>
             </a>

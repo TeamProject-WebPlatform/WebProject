@@ -38,6 +38,10 @@ public interface MemberProfileRepository extends JpaRepository<MemberProfile, Lo
     @Query(value="select profile_image from member_profile where mem_id=:mem_id", nativeQuery = true)
     String findByProfileImage(long mem_id);
 
+    // 뱃지 리스트 불러오기
+    @Query(value="select profile_badge_list from member_profile where mem_id=:mem_id",nativeQuery = true)
+    String findByBadgeList(long mem_id);
+
     // 갖고 있는 헤더 아이템 불러오기
     @Query(value="select i.item_nm, i.item_info from item i join member_item mi on i.item_cd = mi.item_cd and i.item_kind_cd like '801%' and mi.mem_id=:mem_id",nativeQuery = true)
     List<Object[]> HaveHeaderList(long mem_id);
