@@ -234,14 +234,9 @@
                                                     <!-- 본인이 작성한 글이면 보임 -->
                                                     <input type="button" value="삭제" class="btn_list btn_txt02">
                                                 </a>
-                                                <a th:if="${loginCheck}" th:href="@{write(board_cd=${post.boardCd})}">
+                                                <a th:href="@{write(board_cd=${post.boardCd})}">
                                                     <!-- 로그인 상태인 경우의 링크 -->
                                                     <input type="button" value="쓰기" class="btn_write btn_txt01">
-                                                </a>
-                                                <a class="align_right" th:unless="${loginCheck}" href="/login">
-                                                    <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                                    <input type="button" value="쓰기" class="btn_write btn_txt01"
-                                                        onclick="checkLoginAndNavigate()">
                                                 </a>
                                             </div>
                                         <!--//게시판-->

@@ -16,10 +16,12 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Battle;
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberBetting;
 import platform.game.service.entity.PointHistory;
 import platform.game.service.model.TO.MemberBettingTO;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.service.LevelService;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -30,6 +32,8 @@ public class WalletController {
     EntityManager entityManager;
     @Autowired
     LevelService levelService;
+    @Autowired
+    CommonCodeRepository commonCodeRepository;
 
     @Transactional
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -63,12 +67,15 @@ public class WalletController {
         List<PointHistory> list = member.getMemPointHistoryList();
         Collections.sort(list, Collections.reverseOrder(Comparator.comparing(PointHistory::getPointHistoryId)));
         mav.addObject("memberPointHistoryList", list);
-        
-        
+
         // 레벨 디자인
         mav.addObject("memberLevel", member.getMemLvl());
         List<Integer> levelDesign = levelService.getLevelDesign();
-        mav.addObject("levelDesign",levelDesign);
+        mav.addObject("levelDesign", levelDesign);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        mav.addObject("totalCount", visitCount.getRemark1());
+        mav.addObject("todayCount", visitCount.getRemark3());
 
         return mav;
     }

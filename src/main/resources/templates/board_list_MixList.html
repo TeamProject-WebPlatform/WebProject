@@ -48,12 +48,12 @@
 
         //alert('확인');
 
-        location.href = "list_MixList?board_cd=" + [[${boardCd}]] +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
+        location.href = "list_MixList?board_cd=" + "[[${boardCd}]]" +"&selectedOption=" + selectedOption +"&searchValue=" + searchValue + "&selectedSize=" + selectedSize +"&selectTag=" + selectTag;
     }
 </script>
 <script>
     function reSelect(){
-        location.href = "list?board_cd=" + [[${boardCd}]];
+        location.href = "list?board_cd=" + "[[${boardCd}]]";
     }
 </script>
 
@@ -145,7 +145,7 @@
                                                     <!--게시물 댓글 갯수-->
                                                     <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                     <!--새로운 글 작성시 보여지는 new 표시-->
-                                                    <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.updatedAt, 'yyyy-MM-dd')}">
+                                                    <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
                                                         <img src="../img/icon_new.gif" alt="NEW">
                                                     </span>
                                                 </td>
@@ -284,6 +284,13 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById("s_txt_btn").addEventListener("keyup", function(event){
+            if(event.key == "Enter"){
+                onSelect();
+            }
+        });
+    </script>
 </body>
 
 </html>

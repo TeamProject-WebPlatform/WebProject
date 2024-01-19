@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>GAMMOA</title>
+    <meta content="Templines" name="author">
+    <meta content="TeamHost" name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/libs.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/main_custom.css" />
+    <link rel="stylesheet" href="../css/battle_view.css" />
+    <link rel="stylesheet" href="../css/battle_write.css" />
+
+    <script src="../js/libs.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- <script src="../js/battle.js"></script> -->
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+
+</head>
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        // 포인트 관련
+        let beforePoint = /*[[${point}]]*/0;
+        // 날짜 관련 --------
+        var currentDate = new Date();
+
+        // 년, 월, 일, 시, 분, 초, 밀리초에 접근 가능
+        var curYear = currentDate.getFullYear();
+        var curMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+        var curDay = currentDate.getDate();
+
+        let isModify = /*[[${isModify}]]*/'';
+        let ddyear = /*[[${ddYear}]]*/'';
+        let styear = /*[[${stYear}]]*/'';
+        
+        let ddmonth = /*[[${ddMonth}]]*/'';
+        let stmonth = /*[[${stMonth}]]*/'';
+        
+        let ddday = /*[[${ddDay}]]*/'';
+        let stday = /*[[${stDay}]]*/'';
+        
+        let ddhour = /*[[${ddHour}]]*/'';
+        let sthour = /*[[${stHour}]]*/'';
+        
+        let ddminute = /*[[${ddMinute}]]*/'';
+        let stminute = /*[[${stMinute}]]*/'';
+        // 연도 선택을 위한 옵션 동적 생성
+        let yearSelects = document.querySelectorAll('.year');
+        yearSelects.forEach(function (yearSelect) {
+            for (let year = new Date().getFullYear(); year <= new Date().getFullYear() + 1; year++) {
+                let option = document.createElement('option');
+                option.value = year;
+                option.text = year + "년";
+                yearSelect.add(option);
+
+                if(!isModify && year==curYear) option.selected=true;
+                if(isModify && yearSelect.name==='ddyear' && year===ddyear) option.selected=true;
+                if(isModify && yearSelect.name==='styear' && year===styear) option.selected=true;
+            }
+        })
+        // 월 선택을 위한 옵션 동적 생성
+        let monthSelects = document.querySelectorAll('.month');
+        monthSelects.forEach(function (monthSelect) {
+            for (let month = 1; month <= 12; month++) {
+                let option = document.createElement('option');
+                option.value = month;
+                option.text = month + "월";
+                monthSelect.add(option);
+                
+                if(!isModify && month==curMonth) option.selected=true;
+                if(isModify && monthSelect.name==='ddmonth' && month===ddmonth) option.selected=true;
+                if(isModify && monthSelect.name==='stmonth' && month===stmonth) option.selected=true;
+            }
+        })
+
+        // 일 선택을 위한 옵션 동적 생성
+        let daySelects = document.querySelectorAll('.day');
+        daySelects.forEach(function (daySelect) {
+            for (let day = 1; day <= 31; day++) {
+                let option = document.createElement('option');
+                option.value = day;
+                option.text = day + "일";
+                daySelect.add(option);
+
+                if(!isModify && day==curDay) option.selected=true;
+                if(isModify && daySelect.name==='ddday' && day===ddday) option.selected=true;
+                if(isModify && daySelect.name==='stday' && day===stday) option.selected=true;
+            }
+        })
+
+        // 시간 선택을 위한 옵션 동적 생성
+        let hourSelects = document.querySelectorAll('.hour');
+        hourSelects.forEach(function (hourSelect) {
+            for (let hour = 0; hour <= 23; hour++) {
+                let option = document.createElement('option');
+                option.value = hour;
+                option.text = hour + "시";
+                hourSelect.add(option);
+
+                if(isModify && hourSelect.name==='ddhour' && hour===ddhour) option.selected=true;
+                if(isModify && hourSelect.name==='sthour' && hour===sthour) option.selected=true;
+            }
+        })
+        // 분 선택을 위한 옵션 동적 생성
+        let minuteSelects = document.querySelectorAll('.minute');
+        minuteSelects.forEach(function (minuteSelect) {
+            for (let minute = 0; minute <= 59; minute++) {
+                let option = document.createElement('option');
+                option.value = minute;
+                option.text = minute + "분";
+                minuteSelect.add(option);
+                
+                if(isModify && minuteSelect.name==='ddminute' && minute===ddminute) option.selected=true;
+                if(isModify && minuteSelect.name==='stminute' && minute===stminute) option.selected=true;
+            }
+        })
+
+        // 폼 제출 시 선택된 날짜 및 시간 가져오기
+        document.getElementById('btn-write').addEventListener('click', function (e) {
+   
+            let title = document.querySelector(".post-section textarea").value;
+            let game = document.getElementById("game").value;
+            let point = document.getElementById("point").value;
+            let content = document.getElementById("content").value;
+
+            let ddSelectedYear = yearSelects[0].value;
+            let ddSelectedMonth = monthSelects[0].value;
+            let ddSelectedDay = daySelects[0].value;
+            let ddSelectedHour = hourSelects[0].value;
+            let ddSelectedMinute = minuteSelects[0].value;
+
+            let stSelectedYear = yearSelects[1].value;
+            let stSelectedMonth = monthSelects[1].value;
+            let stSelectedDay = daySelects[1].value;
+            let stSelectedHour = hourSelects[1].value;
+            let stSelectedMinute = minuteSelects[1].value;
+            
+            let ddDate = new Date(ddSelectedYear, ddSelectedMonth-1, ddSelectedDay, ddSelectedHour, ddSelectedMinute);
+            let stDate = new Date(stSelectedYear, stSelectedMonth-1, stSelectedDay, stSelectedHour, stSelectedMinute);
+            
+            if(!checkDate(ddDate,stDate)){
+                alert('날짜 선택이 잘못 되었습니다.\n1. 신청 기한은 최소 1시간 입니다.\n2. 시작 시간은 신청 기한과 최소 15분 차이나야 합니다.');
+                return;
+            }
+            if(isModify) {
+                document.getElementById("dPoint").value = beforePoint-point;
+                if(!checkPoint(point-beforePoint)){
+                    alert('보유 포인트가 부족합니다.');
+                    return;
+                }
+            }else{
+                if(!checkPoint(point)){
+                    alert('보유 포인트가 부족합니다.');
+                    return;
+                }
+            }
+            document.forms["pfrm"].submit();
+        });
+    })
+    function checkPoint(point){
+        let currentPoint = Number(document.getElementById("current-point").getAttribute("point"));
+        // 포인트와 현재 포인트 비교
+        if(point > currentPoint) return false;
+        return true;
+    }
+    function checkDate(ddDate,stDate){
+        let curDate = new Date();
+
+        let ddDatePlus15Min = ddDate.setMinutes(ddDate.getMinutes() + 15);
+        let curDatePlust1Hour = curDate.setHours(curDate.getHours() + 1);
+
+        if(curDatePlust1Hour > ddDate){
+            console.log("신청 기간은 최소 1시간");
+            return false;
+        }
+        if(ddDatePlus15Min>stDate){
+            console.log("최소 15분 차이");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+
+<body class="page-home dark-theme">
+    <input id="toggle" type="checkbox">
+    <!-- Loader-->
+    <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div>
+    <!-- Loader end-->
+
+    <div class="page-wrapper">
+        <!-- 헤더 Fragment -->
+        <header th:replace="~{fragments/header :: headerFragment}">헤더 Fragment</header>
+        <!--  -->
+        <div class="page-content">
+            <!-- 사이드바 Fragment -->
+            <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss="sidebar is-show" id="sidebar">사이드바
+                Fragment</aside>
+            <!--  -->
+
+            <!-- 메인 -->
+            <main class="page-main">
+                <div class="widjet --filters">
+                    <div class="widjet__head">
+                        <a th:href="@{/battle}">
+                            <h3 class="uk-text-lead">BATTLE</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="content-header">
+                        헤더 뭐넣을지 아직
+                    </div>
+                    <div class="content-main">
+                        <div class="uk-grid" data-uk-grid>
+                            <div class="uk-width-1-5@xl profile-section">
+                                <div class="profile-card">
+                                    <a href="">
+                                        <div class="profile-header">
+                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <div class="profile-user-level-icon"><i
+                                                        class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
+                                                <div class="profile-user_level"><span th:text="${level}">99</span></div>
+                                                <div class="profile-user_nick"><span
+                                                        th:text="${nickname}">타락파워전사선조</span></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="profile-dividing-line"></div>
+                                    <div class="profile-main">
+                                        <div class="profile-introduction">
+                                            간단한 소개글
+                                        </div>
+                                        <div class="profile-dividing-line"></div>
+                                        <div class="profile-badge-section">
+                                            <div class="badge-line">
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                                <span class="badge">&#127806;</span>
+                                            </div>
+                                            <div class="badge-line">
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                                <span class="badge">&#127775;</span>
+                                            </div>
+                                            <div class="badge-line">
+                                                <span class="badge">&#127806;</span>
+                                                <span class="badge">&#127851;</span>
+                                                <span class="badge">&#127774;</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form th:action="@{/battle/write_ok}" method="post" name="pfrm">
+                                <input type="hidden" name="isModify" th:value="${isModify}">
+                                <input type="hidden" name="dPoint" id="dPoint" value="">
+                                <input th:if="${isModify==true}" type="hidden" name="postId" th:value="${postId}">
+                                <input th:if="${isModify==true}" type="hidden" name="btId" th:value="${btId}">
+                                <input type="hidden" name="memId" th:value="${memId}">
+                                <div class="uk-width-3-5@xl post-section">
+                                    <div class="post-info">
+                                        <!-- Post title-->
+                                        <div class="post-title">
+                                            <textarea th:unless="${isModify==true}" name="title" class="battle-textarea" placeholder="타이틀을 작성"></textarea>
+                                            <textarea th:if="${isModify==true}" name="title" class="battle-textarea" th:text="${title}"></textarea>
+                                        </div>
+                                        <div class="line"></div>
+                                        <div class="post-sub">
+                                            <div class="writer"><span th:text="${nickname}">글쓴이</span></div>
+                                            <div>
+                                                <div class="date"><span></span></div>
+                                                <div class="hit"><span></span></div>
+                                                <div class="hit"><span></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="battle-info">
+                                        <div>
+                                            <div>
+                                                <div class="battle-info-key">게임 : </div>
+                                                <div class="battle-info-value">
+                                                    <textarea th:unless="${isModify==true}" name="game" id="game" class="battle-textarea"></textarea>
+                                                    <textarea th:if="${isModify==true}" name="game" id="game" class="battle-textarea" th:text="${game}"></textarea>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="battle-info-key">포인트 : </div>
+                                                <div class="battle-info-value">
+                                                    <textarea th:unless="${isModify==true}" name="point" id="point" class="battle-textarea"></textarea>
+                                                    <textarea th:if="${isModify==true}" name="point" id="point" class="battle-textarea" th:text="${point}"></textarea>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="battle-info-key">신청 기한 : </div>
+                                                <div class="battle-info-value">
+                                                    <div class="date-picker" id="deadline-dt">
+                                                        <div>
+                                                            <!-- 연도 선택 -->
+                                                            <select class="year" name="ddyear"></select>
+                                                            <!-- 월 선택 -->
+                                                            <select class="month" name="ddmonth"></select>
+                                                            <!-- 일 선택 -->
+                                                            <select class="day" name="ddday"></select>
+                                                        </div>
+                                                        <div>
+                                                            <!-- 시간 선택 -->
+                                                            <select class="hour" name="ddhour"></select>
+                                                            <!-- 분 선택 -->
+                                                            <select class="minute" name="ddminute"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="battle-info-key">시작 시간 : </div>
+                                                <div class="battle-info-value">
+                                                    <div class="date-picker" id="start-dt">
+                                                        <div>
+                                                            <!-- 연도 선택 -->
+                                                            <select class="year" name="styear"></select>
+                                                            <!-- 월 선택 -->
+                                                            <select class="month" name="stmonth"></select>
+                                                            <!-- 일 선택 -->
+                                                            <select class="day" name="stday"></select>
+                                                        </div>
+                                                        <div>
+                                                            <!-- 시간 선택 -->
+                                                            <select class="hour" name="sthour"></select>
+                                                            <!-- 분 선택 -->
+                                                            <select class="minute" name="stminute"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="post-text">
+                                        <textarea th:unless="${isModify==true}" name="content" id="content" class="battle-textarea" placeholder="게시글 내용 작성"></textarea>
+                                        <textarea th:if="${isModify==true}" name="content" id="content" class="battle-textarea" th:text="${content}"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="uk-width-1-5@xl requests-section">
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="content-footer">
+                        <div class="button-section">
+                            <div>
+                                <a th:href="@{/battle}"><input type="button" value="목록" class="btn_re"></a>
+                                <input type="button" id="btn-write"value="저장" class="btn_re">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+
+    <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
+
+</body>
+
+</html>

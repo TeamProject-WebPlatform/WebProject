@@ -42,7 +42,7 @@ public class MemberProfile {
 
     @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
     private String ProfileRepBadge;
-    
-    @Column(columnDefinition = "varchar(255) NOT NULL DEFAULT 'x,x,x,x,x,x,x,x,x'")
+
+    @Column(columnDefinition = "varchar(255) NOT NULL DEFAULT 'x, x, x, x, x, x, x, x, x'")
     private String ProfileBadgeList;
 }

@@ -2,15 +2,11 @@ package platform.game.service.entity;
 
 import java.util.Date;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -26,10 +22,13 @@ import lombok.NoArgsConstructor;
 public class BattlePost {
 
     @Id
+    private int postId; // 외래키로 사용할 postId
+
     @OneToOne(fetch = FetchType.LAZY)
+    @MapsId // postId를 기본키로 사용
     @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
-    
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "btId", referencedColumnName = "btId")
     private Battle battle;
@@ -39,5 +38,8 @@ public class BattlePost {
     private String gameCd;
     private Date btPostDeadLine;
     private int btPostPoint;
+
+    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+    private long bettingFinTime;
 
 }

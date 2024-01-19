@@ -21,10 +21,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import net.minidev.json.JSONObject;
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.MemberRanking;
 import platform.game.service.model.TO.FavoriteGameTO;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberItemInfoRepository;
 import platform.game.service.repository.MemberProfileRepository;
@@ -54,6 +57,9 @@ public class ProfileController {
     @Autowired
     private SecurityPassword securityPassword;
 
+    @Autowired
+    private CommonCodeRepository commonCodeRepository;
+
     @GetMapping("")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ModelAndView Profile() {
@@ -80,6 +86,10 @@ public class ProfileController {
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
         mav.addObject("member", member);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        mav.addObject("totalCount", visitCount.getRemark1());
+        mav.addObject("todayCount", visitCount.getRemark3());
         return mav;
     }
 
@@ -168,7 +178,7 @@ public class ProfileController {
     }
 
     @GetMapping("/editmycard")
-    public ModelAndView EditMyCard(){
+    public ModelAndView EditMyCard() {
         ModelAndView mav = new ModelAndView("editmycard");
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
@@ -192,45 +202,45 @@ public class ProfileController {
     // 프로필 사진 변경
     @PostMapping("/upload")
     public ResponseEntity<String> ProfileImage(@RequestPart("image") MultipartFile image) {
-        int flag=0;
+        int flag = 0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+                .getMember();
 
         String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage\\";
         String filename = member.getMemId() + "_" + image.getOriginalFilename();
 
         try {
             // 프로필 사진 저장 경로 폴더 // 없을 시 폴더 생성
-            if(!new File(upload).exists()){
+            if (!new File(upload).exists()) {
                 new File(upload).mkdir();
             }
 
-            File DuplicateFile = findExistingFile(member.getMemId()+"");
+            File DuplicateFile = findExistingFile(member.getMemId() + "");
 
-            if(DuplicateFile!=null){
+            if (DuplicateFile != null) {
                 DuplicateFile.delete();
             }
 
-            image.transferTo(new File(upload+filename));
-            if (profileRepository.UpdateProfileImage(filename,member.getMemId())==1){
+            image.transferTo(new File(upload + filename));
+            if (profileRepository.UpdateProfileImage(filename, member.getMemId()) == 1) {
                 flag = 1;
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        } 
+        }
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
     // 프로필 헤더 업데이트
     @PostMapping("/headerprofile")
-    public ResponseEntity<String> HeaderProfile(@RequestBody Map<String,String> header){
-        int flag=0;
+    public ResponseEntity<String> HeaderProfile(@RequestBody Map<String, String> header) {
+        int flag = 0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                        .getMember();
+                .getMember();
 
         String NewHeader = header.get("Header");
         System.out.println(NewHeader);
-        if(profileRepository.UpdateProfileHeader(NewHeader,member.getMemId())==1){
+        if (profileRepository.UpdateProfileHeader(NewHeader, member.getMemId()) == 1) {
             flag = 1;
         }
 
@@ -239,13 +249,13 @@ public class ProfileController {
 
     // 프로필 카드 업데이트
     @PostMapping("/cardprofile")
-    public ResponseEntity<String> CardProfile(@RequestBody Map<String,String> card){
-        int flag=0;
+    public ResponseEntity<String> CardProfile(@RequestBody Map<String, String> card) {
+        int flag = 0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                        .getMember();
+                .getMember();
 
         String NewCard = card.get("Card");
-        if(profileRepository.UpdateProfileCard(NewCard,member.getMemId())==1){
+        if (profileRepository.UpdateProfileCard(NewCard, member.getMemId()) == 1) {
             flag = 1;
         }
 
@@ -254,13 +264,13 @@ public class ProfileController {
 
     // 대표 뱃지 업데이트
     @PostMapping("/repbadgeprofile")
-    public ResponseEntity<String> RedBadgeProfile(@RequestBody Map<String,String> badge){
-        int flag=0;
+    public ResponseEntity<String> RedBadgeProfile(@RequestBody Map<String, String> badge) {
+        int flag = 0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                        .getMember();
+                .getMember();
 
         String NewRepBadge = badge.get("RepBadge");
-        if(profileRepository.UpdateProfileRepBadge(NewRepBadge,member.getMemId())==1){
+        if (profileRepository.UpdateProfileRepBadge(NewRepBadge, member.getMemId()) == 1) {
             flag = 1;
         }
 
@@ -269,14 +279,14 @@ public class ProfileController {
 
     // 뱃지 리스트 설정 업데이트
     @PostMapping("/badgelist")
-    public ResponseEntity<String> BadgeList(@RequestBody Map<String,List<String>> badges){
-        int flag=0;
+    public ResponseEntity<String> BadgeList(@RequestBody Map<String, List<String>> badges) {
+        int flag = 0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                        .getMember();
+                .getMember();
 
         String badgeList = badges.get("BadgeList").toString();
-        badgeList = badgeList.substring(1,badgeList.length()-1);
-        if(profileRepository.UpdateProfileBadgeList(badgeList, member.getMemId())==1){
+        badgeList = badgeList.substring(1, badgeList.length() - 1);
+        if (profileRepository.UpdateProfileBadgeList(badgeList, member.getMemId()) == 1) {
             flag = 1;
         }
         return ResponseEntity.ok(String.valueOf(flag));

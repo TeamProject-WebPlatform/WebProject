@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,10 +43,10 @@ public class Member {
     private String memCertified;
     private String memCreatedAt;
     private String memDeletedAt;
-
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<MemberBetting> memBettingList = new ArrayList<>();
-
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<PointHistory> memPointHistoryList = new ArrayList<>();
 
