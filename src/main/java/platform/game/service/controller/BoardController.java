@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Comment;
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BoardCpageTO;
@@ -29,6 +30,7 @@ import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.UpdatePointHistory;
 import platform.game.service.repository.CommentInfoRepository;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -46,6 +48,9 @@ public class BoardController {
     @Autowired
     @Qualifier("updatePointHistoryImpl")
     private UpdatePointHistory updatePointHistory;
+
+    @Autowired
+    private CommonCodeRepository commonCodeRepository;
 
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
@@ -131,6 +136,11 @@ public class BoardController {
         modelAndView.addObject("cpage", cpageTO);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -222,6 +232,10 @@ public class BoardController {
         modelAndView.addObject("navBoard", navBoard);
         modelAndView.addObject("post", post);
         modelAndView.addObject("commentTree", getCommentTreeByPostId(postId));
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -277,6 +291,10 @@ public class BoardController {
         modelAndView.addObject("board_cd", boardCd);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -405,6 +423,10 @@ public class BoardController {
         modelAndView.addObject("cpage", cpage);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -510,6 +532,10 @@ public class BoardController {
         modelAndView.addObject("cpage", cpage);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }

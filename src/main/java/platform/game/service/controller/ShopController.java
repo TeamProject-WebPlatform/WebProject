@@ -15,10 +15,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Item;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberItem;
 import platform.game.service.service.MemberInfoDetails;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.ItemInfoRepository;
 import platform.game.service.repository.MemberItemInfoRepository;
 
@@ -33,6 +36,8 @@ public class ShopController {
     private ItemInfoRepository itemInfoRepository;
     @Autowired
     private MemberItemInfoRepository memberItemInfoRepository;
+    @Autowired
+    private CommonCodeRepository commonCodeRepository;
 
     @RequestMapping("/shop")
     public ModelAndView shop() {
@@ -63,6 +68,10 @@ public class ShopController {
         modelAndView.addObject("navshop", navShop);
         modelAndView.addObject("totalItemCount", totalItemCount);
         modelAndView.addObject("items", items);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
         return modelAndView;
     }
 
@@ -99,6 +108,10 @@ public class ShopController {
         modelAndView.addObject("navshop", navShop);
         modelAndView.addObject("totalItemCount", totalItemCount);
         modelAndView.addObject("items", items);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -107,18 +120,17 @@ public class ShopController {
     public ResponseEntity<String> ItemPurchase(@RequestBody JsonNode item) {
 
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+                .getMember();
 
         int flag = 0;
 
         int point = item.get("Point").asInt();
         String itemCd = item.get("Category").asText();
 
-        
-        if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd)==1&&memberItemInfoRepository.UpdatePoint(point, member.getMemId())==1){
-            flag=1;
+        if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd) == 1
+                && memberItemInfoRepository.UpdatePoint(point, member.getMemId()) == 1) {
+            flag = 1;
         }
-        
 
         return ResponseEntity.ok(String.valueOf(flag));
     }

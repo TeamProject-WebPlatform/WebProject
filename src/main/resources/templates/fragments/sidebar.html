@@ -65,8 +65,21 @@
                 <li class=""><a href="#modal-report" data-uk-toggle><i class="ico_report"></i><span>Report</span></a>
                 </li>
                 <li><a href="#modal-help" data-uk-toggle><i class="ico_help"></i><span>Help</span></a></li>
+                
+                <li class="uk-nav-header">Visiter</li>
+                <div>
+                    <table>
+                        <tr>
+                            <td th:text="${'TODAY '}"></td>
+                            <td th:text="${todayCount}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="${'TOTAL '}"></td>
+                            <td th:text="${totalCount}"></td>
+                        </tr>
+                    </table>
+                </div>
             </ul>
         </div>
     </aside>
-
 </body>

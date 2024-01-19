@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.WinRankTO;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -35,6 +37,9 @@ public class RankController {
 
     @Autowired
     MemberFavoriteGameRepository memberFavoriteGameRepository;
+
+    @Autowired
+    CommonCodeRepository commonCodeRepository;
 
     @GetMapping("/getRankFragment")
     public String getRankFragment(@RequestParam("board_cd") String boardCd, Model model) {
@@ -116,6 +121,11 @@ public class RankController {
             System.out.println("멤버 없음");
         }
 
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        mav.addObject("totalCount", visitCount.getRemark1());
+        mav.addObject("todayCount", visitCount.getRemark3());
+
         return mav;
     }
 
@@ -172,6 +182,10 @@ public class RankController {
         } else {
             System.out.println("멤버 없음");
         }
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        mav.addObject("totalCount", visitCount.getRemark1());
+        mav.addObject("todayCount", visitCount.getRemark3());
 
         return mav;
     }
@@ -229,6 +243,10 @@ public class RankController {
         } else {
             System.out.println("멤버 없음");
         }
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        mav.addObject("totalCount", visitCount.getRemark1());
+        mav.addObject("todayCount", visitCount.getRemark3());
 
         return mav;
     }
