@@ -200,9 +200,6 @@
     function checkPoint(){
         let currentPoint = Number(document.getElementById("current-point").getAttribute("point"));
         let battlePoint = Number(document.getElementById("battle_point").innerHTML);
-        
-        console.log(currentPoint);
-        console.log(battlePoint);
         // 포인트와 현재 포인트 비교
         if(battlePoint > currentPoint) return false;
         return true;

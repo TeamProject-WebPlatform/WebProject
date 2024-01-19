@@ -176,7 +176,9 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         int flag = query.executeUpdate();
         if (flag != 1)
             throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
-
+        // 신청자 포인트 차감
+        int point = btp.getBtPostPoint();
+        updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50106", -point);
         return flag;
     }
 
@@ -198,10 +200,13 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                     .append(isAccept == 0 ? "1" : "2")
                     .append(applicantsStr, index + requesterStr.length() + 2, applicantsStr.length());
             String updatedApplicantsStr = temp.toString();
-
             btp.setBtPostApplicants(updatedApplicantsStr);
             
+            // 거절한 사람 베팅 포인트 반환
+            updatePointHistoryImpl.insertPointHistoryByMemId(requester, "50107", btp.getBtPostPoint());
+            
             if (isAccept == 0) {
+                // 신청자 수락
                 Battle battle = optionalBattle.get();
                 Member client = entityManager.getReference(Member.class, requester);
                 battle.setClientMember(client);
@@ -212,11 +217,19 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                 long delay = data[1];
                 btp.setBettingFinTime(targetTime);
                 try{
-
                     bettingStateChangeService.sendMessageToChangeState(btId, "A",delay,new BattleMemberTO(client));
                 }catch(Exception e){
                     System.out.println(e.getMessage());
                     throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+                }
+                // 다른 신청자들 포인트 반환 작업
+                String[] applicants = updatedApplicantsStr.split("/");
+                for(int i =0;i<applicants.length;i++){
+                    String[] info = applicants[i].split(",");
+                    if(info[1].equals("0")){
+                        long memId = Long.parseLong(info[0]);
+                        updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50107", btp.getBtPostPoint());
+                    }
                 }
             }
             battlePostRepository.save(btp);
@@ -440,6 +453,18 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                         "WHERE post_id=:postId");
         query.setParameter("postId", postId);
         query.executeUpdate();
+
+        // 배틀 신청 보류자들 포인트 반환
+        
+        String[] applicants = bp.getBtPostApplicants().split("/");
+        for(int i =0;i<applicants.length;i++){
+            String[] info = applicants[i].split(",");
+            if(info[1].equals("0")){
+                long requester = Long.parseLong(info[0]);
+                updatePointHistoryImpl.insertPointHistoryByMemId(requester, "50107", bp.getBtPostPoint());
+            }
+        }
+
         // bp DELETE
         query = entityManager.createNativeQuery(
                 "DELETE FROM battle_post " +
@@ -464,6 +489,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         if (query.executeUpdate() != 1)
             throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
 
+        
 
         return 1;
     }
