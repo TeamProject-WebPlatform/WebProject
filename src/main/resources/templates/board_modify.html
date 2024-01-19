@@ -101,23 +101,20 @@
                                         <div class="contents_sub">	
                                             <!--게시판-->
                                             <div class="board_write">
-                                                <div class="form-container">
+                                                <div class="form-container uk-grid uk-child-width-1-2@xl uk-child-width-1-2@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
                                                     <div class="form-row uk-width-1-6">
-                                                        <label for="subject" class="form-label">제목</label>
+                                                        <select class="js-select" id="list_tag">
+                                                            <option th:value="${post.postTags}" th:text="${post.postTags}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-row uk-width-2-3">
                                                         <input type="text" name="subject" th:value="${post.postTitle}" class="board_view_input">
                                                     </div>
-                                                    <br />
-                                                    <div class="form-row uk-width-1-6">
-                                                        <label for="tags" class="form-label">태그</label>
-                                                        <input type="text" name="tags" th:value="${post.postTags}" class="board_view_input" readonly/>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <label for="content" name="content" class="form-label">내용</label>
-                                                    </div>
-                                                    <br>
-                                                    <div class="form-input">
-                                                        <textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea>
-                                                    </div>
+                                                </div>
+                                                <br />
+                                                <label for="content" name="content" class="form-label">내용</label>
+                                                <div class="form-input">
+                                                    <textarea name="content" class="board_editor_area" th:text="${post.postContent}"></textarea>
                                                 </div>
                                             </div>
                                             <div class="btn_area">

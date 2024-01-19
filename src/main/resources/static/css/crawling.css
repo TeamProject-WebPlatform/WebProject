@@ -84,7 +84,7 @@ body.dark-theme .board_editor_area { background-color: #040615; color: #fff; bor
 
 /*현종 테스트중*/
 /* .board_view { border-top:1px solid #464646; } */
-.board_view .board_view_table { border-collapse:collapse; background-color: #F5F5F5; }
+.board_view .board_view_table { border-collapse:collapse; background-color: #F5F5F5; min-height: 500px;}
 body.dark-theme .board_view_table { background-color:#040615; }
 .board_view th, .board_view td { height:25px; text-align:left; padding:8px;}
 .board_view th { border-bottom:1px solid rgb(0, 177, 177); color: rgb(0, 177, 177); font-weight:600; background-color: #FEF7F3; border-radius: 5px;}
