@@ -12,11 +12,9 @@
 #equip_information {
     height:440px;
     margin:0px 10px 0px 15px;
-    padding-left:20px;
-    padding-right: 20px;
     width:350px;
     text-align: center;
-    line-height: 1.8;
+    line-height: 1.5;
 }
 
 #header_select, #card_select, #badgerep_select {
@@ -32,6 +30,10 @@
 #badge {
     margin-top:20px;
     margin-right:3px;
+}
+
+#equip_line {
+    border: 1px dashed white;
 }
 
 /* 프로필 페이지 수정 부분 */

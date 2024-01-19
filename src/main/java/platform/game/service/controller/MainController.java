@@ -143,7 +143,6 @@ public class MainController {
             MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(mem_id);
             list.add(memberProfile);
         }
-
         return list;
     }
 
