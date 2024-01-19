@@ -71,4 +71,9 @@ public interface PostInfoRepository extends JpaRepository<Post, Integer> {
 
         // 공지사항 게시판 글 수
         String countByBoardCd(String boardCd);
+
+        // 리스트 5개 만 출력
+        ArrayList<Post> findTop5ByBoardCdOrderByPostIdDesc(String boardCd);
+
+        ArrayList<Post> findTop10ByBoardCdOrderByPostIdDesc(String boardCd);
 }
