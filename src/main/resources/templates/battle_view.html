@@ -32,7 +32,7 @@
     let nickname;
     let btId;
     let postId;
-
+    
     // 답글 입력 폼의 표시/숨김을 토글
     function toggleReplyForm(span) {
         const commentId = span.getAttribute("data-comment-id");
@@ -189,13 +189,21 @@
         nickname = /*[[${nickname}]]*/'';
         btId = /*[[${bto.btId}]]*/0;
         postId = /*[[${post.postId}]]*/0;
-        document.getElementById("request_btn").addEventListener("click", function () {
+        hostNick = /*[[${post.member.memNick}]]*/'';
+        clientNick = /*[[${bto.clientNick}]]*/'';
+        if(nickname === hostNick || nickname === clientNick){
+            document.querySelector(".point-betting-input").readOnly = true;
+        }
+        if(document.getElementById("request_btn")){
+            document.getElementById("request_btn").addEventListener("click", function () {
             // 신청 기능
             if (!memId) {
                 window.location.href = "/login";
             }
             requestBattle();
-        });
+        });     
+        }
+        
     });
     function checkPoint(){
         let currentPoint = Number(document.getElementById("current-point").getAttribute("point"));
@@ -205,7 +213,6 @@
         return true;
     }
     async function requestBattle() {
-        console.log("신청 시작");
         if(!checkPoint()){
             alert('보유 포인트가 부족합니다.');
             return;
@@ -574,8 +581,8 @@
                                                             th:text="'Lv ' + ${bto.clientLvl}">Lv30
                                                         </div>
                                                         <div th:unless=${bto.client} class="battle-profile-lvl"></div>
-                                                        <div th:if=${bto.client} th:text="${bto.clientNick}"></div>
-                                                        <div th:unless=${bto.client} th:text="${bto.clientNick}"></div>
+                                                        <div th:if=${bto.client} th:text="${bto.clientNick}" class="profile-user_nick"></div>
+                                                        <div th:unless=${bto.client} th:text="${bto.clientNick}" class="profile-user_nick"></div>
                                                     </div>
                                                     <div class="battle-profile-history">
                                                         <div>

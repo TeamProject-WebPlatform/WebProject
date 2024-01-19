@@ -29,24 +29,27 @@
 </head>
 
 <script th:inline="javascript">
+    let nickname;
+    document.addEventListener("DOMContentLoaded",function(){
+        nickname = /*[[${nickname}]]*/'';
+        document.querySelectorAll(".battle-card__box").forEach(function(x){
+            x.querySelector(".point-betting-input").addEventListener('input',function (event) {
+                let currentValue = event.target.value;
+                let sanitizedValue = currentValue.replace(/\D/g, '');
+                event.target.value = sanitizedValue;
+            })
+        })
+    })
     function search_battle(){
-        console.log(1);
+
     }
     function selectBattleGame(){
         
     }
-    function selectBattleState(){
+    function selectBattleState(state){
+        console.log(state);
+    }
 
-    }
-    function search_battle(){
-        console.log(1);
-    }
-    function selectBattleGame(){
-        
-    }
-    function selectBattleState(){
-
-    }
 </script>
 
 <body class="page-favourites dark-theme">
@@ -111,10 +114,12 @@
                             </div>
                             <div class="uk-width-1-6 height50px">
                                 <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleState(this.value)">
-                                    <option value="">ALL(상태)</option>
-                                    <option value="Category 1">대기</option>
-                                    <option value="Category 2">진행</option>
-                                    <option value="Category 3">종료</option>
+                                    <option value="ALL">전체</option>
+                                    <option value="N">매칭</option>
+                                    <option value="A">베팅</option>
+                                    <option value="B">대기</option>
+                                    <option value="P">진행</option>
+                                    <option value="T">종료</option>
                                 </select>
                             </div>
                             <div class="search uk-width-2-3 height50px">
@@ -133,7 +138,7 @@
                                         <div class="battle-profile-nickname">
                                             <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.hostLvl}">Lv30
                                             </div>
-                                            <div th:text="${battle.hostNick}"></div>
+                                            <div class="battle-profile-nick" th:text="${battle.hostNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>

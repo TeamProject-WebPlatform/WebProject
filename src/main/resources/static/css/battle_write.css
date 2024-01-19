@@ -5,7 +5,9 @@
     background-color: #222222;
     color : #fff;
 }
-
+.content-main .post-section{
+    width: 760px;
+}
 .post-text .battle-textarea{
     width: 100%;
     min-height: 400px;
@@ -53,6 +55,27 @@
         padding-right: 40px !important; */
     }
     .requests-section{
-        display: none;
+        /* display: none; */
     }
+}
+
+.write-rule-section{
+    background: #ffffff;
+    padding-left: 0px;
+    width: 390px;
+    margin-left: 40px;
+    padding:10px;
+    margin-bottom: 25px;
+    line-height: 30px;
+
+}
+
+.write-rule-section .sentence{
+    display: flex;
+    margin-top : 10px;
+    margin-left: 10px;
+}
+
+.dark-theme .write-rule-section{
+    background-color: #222222;
 }

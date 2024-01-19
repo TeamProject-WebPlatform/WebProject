@@ -116,6 +116,8 @@ public class BattleController {
         }
         Post post = new Post();
         post = postInfoRepository.findByPostId(postId);
+        post.setPostHit(post.getPostHit()+1);
+        postInfoRepository.save(post);
         Object[] battleTOs = battleCardAction.getBattleTO(id, postId, btId);
 
         BattleTO bto = (BattleTO) battleTOs[0];
@@ -137,7 +139,7 @@ public class BattleController {
                 Member member = memberInfoRepository.findById(Long.parseLong(s[0])).isPresent()
                         ? memberInfoRepository.findById(Long.parseLong(s[0])).get()
                         : null;
-                applicants[i][0] = s[0]; // memId
+                applicants[i][0] = s[0]; // memId 
                 applicants[i][1] = s[1]; // 보류 상태
                 applicants[i][2] = s[2]; // 신청 시간
                 applicants[i][3] = member != null ? member.getMemNick() : null; // 닉네임

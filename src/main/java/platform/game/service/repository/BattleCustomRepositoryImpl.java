@@ -454,16 +454,19 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         query.setParameter("postId", postId);
         query.executeUpdate();
 
+        System.out.println(4);
         // 배틀 신청 보류자들 포인트 반환
-        
-        String[] applicants = bp.getBtPostApplicants().split("/");
-        for(int i =0;i<applicants.length;i++){
-            String[] info = applicants[i].split(",");
-            if(info[1].equals("0")){
-                long requester = Long.parseLong(info[0]);
-                updatePointHistoryImpl.insertPointHistoryByMemId(requester, "50107", bp.getBtPostPoint());
+        if(!bp.getBtPostApplicants().equals("")){
+            String[] applicants = bp.getBtPostApplicants().split("/");
+            for(int i =0;i<applicants.length;i++){
+                String[] info = applicants[i].split(",");
+                if(info[1].equals("0")){
+                    long requester = Long.parseLong(info[0]);
+                    updatePointHistoryImpl.insertPointHistoryByMemId(requester, "50107", bp.getBtPostPoint());
+                }
             }
         }
+        
 
         // bp DELETE
         query = entityManager.createNativeQuery(

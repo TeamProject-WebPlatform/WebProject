@@ -11,7 +11,43 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script src="../js/module/cookie.js"></script>
+        <link rel="stylesheet" href="../css/header_point.css" />
         <script th:inline="javascript">
+            let now;
+            let max;
+            let isIntervalRunning = false;
+
+            const counter = ($counter) => {
+                if (isIntervalRunning) {
+                    now += (max-currentPoint);
+                    currentPoint = max;
+                    return;
+                }else{
+                    now = max - currentPoint;
+                    currentPoint = max;
+                }
+                
+
+                isIntervalRunning = true;
+                // currentPoint 1700 이고 max = 2000이면
+                // now는 300 -> 270 -> 243 -> 220 -> 200 
+                // 1800 일때 now는 200임
+                // 1900 되니까 now 에서 100을 더해줘서 키워되야됨 300
+                const handle = setInterval(() => {
+                    if(now>0) $counter.innerHTML = Math.ceil(max - now);
+                    else if(now<0) $counter.innerHTML = Math.floor(max - now);
+                    // 목표수치에 도달하면 정지
+                    if ((now < 1 && now >=0) || (now>-1 && now<=0)) {
+                        clearInterval(handle);
+                        now = 0;
+                        isIntervalRunning = false;
+                    }
+                    // 증가되는 값이 계속하여 작아짐
+                    const step = now / 10;
+                    // 값을 적용시키면서 다음 차례에 영향을 끼침
+                    now -= step;
+                }, 50);
+            }
             // 다크 모드 설정 값
 
             let currentThemeIndex = 0;
@@ -35,8 +71,9 @@
             } else {
                 setCookie('darkMode', 'Y', 7);
             }
+
             document.addEventListener('DOMContentLoaded', function () {
-                logo_img_paths = [getContextPath()+"/img/logo_white.png", getContextPath()+"/img/logo_black.png"];
+                logo_img_paths = [getContextPath() + "/img/logo_white.png", getContextPath() + "/img/logo_black.png"];
                 if (getCookie('darkMode') === 'Y') {
                     document.getElementById('logo_img').src = logo_img_paths[0];
                     document.querySelector(".page-header__logo_text").style.color = logo_text[0];
@@ -78,7 +115,7 @@
             document.addEventListener("DOMContentLoaded", function () {
                 memId = /*[[${memId}]]*/0;
                 if (memId !== 0) pointConnect();
-                document.getElementById("current-point").setAttribute("point",currentPoint);
+                document.getElementById("current-point").setAttribute("point", currentPoint);
             });
             function pointConnect() {
                 var socket = new SockJS('/ws');
@@ -89,16 +126,18 @@
                     memInfoStompClient.subscribe(`/topic/headerInfo/` + memId, function (response) {
                         try {
                             let headerInfo = JSON.parse(response.body);
-                            console.log(headerInfo);
                             if (headerInfo.flag === 2) {
                                 alert("포인트 부족");
                             }
                             if (headerInfo.flag === 1) {
                                 // 정상
-                                currentPoint = headerInfo.currentPoint;
-                                document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
-                                document.getElementById("current-point").setAttribute("point",currentPoint);
-                            }else if(headerInfo.flag===0 || headerInfo.flag===-1){
+                                let targetPoint = headerInfo.currentPoint;
+                                const $counter = document.querySelector("#current-point");
+                                max = targetPoint;
+                                setTimeout(() => counter($counter), 10);
+
+                                document.getElementById("current-point").setAttribute("point", targetPoint);
+                            } else if (headerInfo.flag === 0 || headerInfo.flag === -1) {
                                 // 에러
                                 alert("에러");
                             }
@@ -122,8 +161,8 @@
             }
             function getContextPath() {
                 var path = window.location.pathname.split('/');
-                var contextPath ="";
-                for(let i =0;i<path.length-1;i++){
+                var contextPath = "";
+                for (let i = 0; i < path.length - 1; i++) {
                     contextPath += "/..";
                 }
                 // console.log("path : "+contextPath)
@@ -154,8 +193,9 @@
                     <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
                     <a th:if="${nickname}" class="action-btn wallet" th:href="@{/wallet}"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
-                    <div id="current-point" point="" 
-                        th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}"></div>
+                    <div id="current-point" point=""
+                            th:text="${currentPoint}"></div>
+
                     <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                             class="animation-ripple-delay1"></span></a>
                     <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
@@ -171,11 +211,6 @@
 
             </div>
         </div>
-        <script>
-            function formatNumber(number) {
-                return new Intl.NumberFormat('en-US').format(number);
-            }
-        </script>
     </header>
 
 </body>
