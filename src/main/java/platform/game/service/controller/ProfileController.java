@@ -1,5 +1,6 @@
 package platform.game.service.controller;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,13 +73,11 @@ public class ProfileController {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
                 List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
-                String profileImage = profileRepository.findByProfileImage(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memberItems", memberItems);
-                mav.addObject("profileImage", profileImage);
             }
         } else {
             System.out.println("멤버 없음");
@@ -127,6 +128,7 @@ public class ProfileController {
         return mav;
     }
 
+    // 자기소개 업데이트
     @PostMapping("/updateintroduce")
     public ResponseEntity<String> UpdateIntroduce(@RequestBody Map<String, String> introduce) {
         int flag = 0;
@@ -142,6 +144,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 비밀번호 변경
     @PostMapping("/changepassword")
     public ResponseEntity<String> ChangePassword(@RequestBody Map<String, String> password) {
         int flag = 0;
@@ -157,6 +160,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 닉네임 변경
     @PostMapping("/changenick")
     public ResponseEntity<String> ChangeNick(@RequestBody Map<String, String> nickname) {
         int flag = 0;
@@ -183,15 +187,51 @@ public class ProfileController {
         List<Object[]> CardList = profileRepository.HaveCardList(member.getMemId());
         List<Object[]> BadgeList = profileRepository.HaveBadgeList(member.getMemId());
 
+        String[] Badge = profileRepository.findByBadgeList(member.getMemId()).split(", ");
+
         mav.addObject("member", member);
         mav.addObject("memberProfile", memberProfile);
         mav.addObject("header", HeaderList);
         mav.addObject("card", CardList);
         mav.addObject("badge", BadgeList);
+        mav.addObject("badgelist", Badge);
 
         return mav;
     }
 
+    // 프로필 사진 변경
+    @PostMapping("/upload")
+    public ResponseEntity<String> ProfileImage(@RequestPart("image") MultipartFile image) {
+        int flag = 0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
+
+        String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage\\";
+        String filename = member.getMemId() + "_" + image.getOriginalFilename();
+
+        try {
+            // 프로필 사진 저장 경로 폴더 // 없을 시 폴더 생성
+            if (!new File(upload).exists()) {
+                new File(upload).mkdir();
+            }
+
+            File DuplicateFile = findExistingFile(member.getMemId() + "");
+
+            if (DuplicateFile != null) {
+                DuplicateFile.delete();
+            }
+
+            image.transferTo(new File(upload + filename));
+            if (profileRepository.UpdateProfileImage(filename, member.getMemId()) == 1) {
+                flag = 1;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    // 프로필 헤더 업데이트
     @PostMapping("/headerprofile")
     public ResponseEntity<String> HeaderProfile(@RequestBody Map<String, String> header) {
         int flag = 0;
@@ -207,6 +247,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 프로필 카드 업데이트
     @PostMapping("/cardprofile")
     public ResponseEntity<String> CardProfile(@RequestBody Map<String, String> card) {
         int flag = 0;
@@ -221,6 +262,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 대표 뱃지 업데이트
     @PostMapping("/repbadgeprofile")
     public ResponseEntity<String> RedBadgeProfile(@RequestBody Map<String, String> badge) {
         int flag = 0;
@@ -233,5 +275,36 @@ public class ProfileController {
         }
 
         return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    // 뱃지 리스트 설정 업데이트
+    @PostMapping("/badgelist")
+    public ResponseEntity<String> BadgeList(@RequestBody Map<String, List<String>> badges) {
+        int flag = 0;
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
+
+        String badgeList = badges.get("BadgeList").toString();
+        badgeList = badgeList.substring(1, badgeList.length() - 1);
+        if (profileRepository.UpdateProfileBadgeList(badgeList, member.getMemId()) == 1) {
+            flag = 1;
+        }
+        return ResponseEntity.ok(String.valueOf(flag));
+    }
+
+    // 설정한 프로필 사진 파일이 있는지 여부 확인
+    private File findExistingFile(String memberId) {
+
+        String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage";
+        File[] files = new File(upload).listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName().startsWith(memberId)) {
+                    return file; // memberId로 시작한 파일이 있을 경우 파일을 return
+                }
+            }
+        }
+        return null; // memberId로 시작하는 파일이 없으면 null return
     }
 }

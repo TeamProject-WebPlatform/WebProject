@@ -19,11 +19,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Item;
 import platform.game.service.entity.Member;
-import platform.game.service.entity.MemberItem;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.ItemInfoRepository;
 import platform.game.service.repository.MemberItemInfoRepository;
+import platform.game.service.repository.MemberProfileRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,9 @@ public class ShopController {
     private MemberItemInfoRepository memberItemInfoRepository;
     @Autowired
     private CommonCodeRepository commonCodeRepository;
+
+    @Autowired
+    private MemberProfileRepository memberProfileRepository;
 
     @RequestMapping("/shop")
     public ModelAndView shop() {
@@ -54,12 +58,14 @@ public class ShopController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(member.getMemId());
                 List<Integer> memberHaveItems = memberItemInfoRepository.HaveItemCheck(member.getMemId());
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
                 modelAndView.addObject("haveitem", memberHaveItems);
+                modelAndView.addObject("memberProfile",memberProfile);
             }
         } else {
             System.out.println("멤버 없음");

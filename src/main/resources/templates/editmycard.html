@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>Editprofile</title>
+    <title>Edit profile</title>
     <meta content="Templines" name="author">
     <meta content="TeamHost" name="description">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,15 +10,16 @@
     <meta name="format-detection" content="telephone=no">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="/css/libs.min.css">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="../css/libs.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/shop_custom.css" />
+    <link rel="stylesheet" href="../css/profile.css" />
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="/css/main_custom.css" />
     <script src="/js/editcard.js"></script>
 </head>
 
@@ -27,59 +28,32 @@
 <body class="page-home dark-theme">
 
     <div class="page-wrapper">
-        <main class="page-main">
-
-            <div class="widjet__body" style="display: inline-block; width:100%;" th:switch="${memberProfile.profileCard}">
-                <!-- 프로필 카드 배경 있음-->
-                <div th:case="x"class="profile-card" style="margin:auto; display: inline-block;">
-                    <!-- 프로필 사진 테두리 있음-->
-                    <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
-                        <i class="fa-solid fa-camera"></i>
-                        <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
-                        <div class="profile-user_info">
-                            <p class="profile-user_level" th:text="${'LV : ' + member.memLvl}"></p>
-                            <p class="profile-user_nick" th:text="${member.memNick}"></p>
-                            <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
-                            <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
-                        </div>
-                    </div>
-                    <!-- 프로필 사진 테두리 기본-->
-                    <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
-                        <i class="fa-solid fa-camera"></i>
-                        <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
-                        <div class="profile-user_info">
-                            <p class="profile-user_level" th:text="${'LV : ' + member.memLvl}"></p>
-                            <p class="profile-user_nick" th:text="${member.memNick}"></p>
-                            <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
-                            <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
-                        </div>
-                    </div>
-                <div class="profile-dividing-line"></div>
-                <div class="profile-main">
-                    <div class="profile-introduction" th:text="${memberProfile.profileIntro}">
-                    </div>
-                    <div class="profile-dividing-line"></div>
-                    <div class="profile-badge-section">
-                        <span class="badge shopbadge"></span>
-                    </div>
-                </div>
-                </div>
+        <main class="page-main" th:switch="${memberProfile.profileCard}">
+            <div class = "profile-container">
+                <form>
+                    <input type="file" class="upload" accept="image/*" style="display: none;">
+                </form>
                 <!-- 프로필 카드 배경 기본-->
-                <div th:case="*"class="profile-card" style="margin:auto; display: inline-block;" th:style="'margin:auto; display: inline-block; background-image: url(../img/shop_img/' + ${memberProfile.profileCard} + '.png);'" >
+                <div th:case="x"class="profile-card" style="margin:auto; display: inline-block;" onclick="ProfileImage()">
                     <!-- 프로필 사진 테두리 있음-->
                     <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
-                        <i class="fa-solid fa-camera"></i>
-                        <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
+                        <div class="profile-image">
+                            <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
+                            <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" class="profile">
+                        </div>
                         <div class="profile-user_info">
                             <p class="profile-user_level" th:text="${'LV : ' + member.memLvl}"></p>
                             <p class="profile-user_nick" th:text="${member.memNick}"></p>
-                            <img class="badge" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
+                            <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
+                            <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
                         </div>
                     </div>
                     <!-- 프로필 사진 테두리 기본-->
                     <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
-                        <i class="fa-solid fa-camera"></i>
-                        <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
+                        <div class="profile-image">
+                            <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
+                            <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" class="profile">
+                        </div>
                         <div class="profile-user_info">
                             <p class="profile-user_level" th:text="${'LV : ' + member.memLvl}"></p>
                             <p class="profile-user_nick" th:text="${member.memNick}"></p>
@@ -93,67 +67,260 @@
                         </div>
                         <div class="profile-dividing-line"></div>
                         <div class="profile-badge-section">
-                            <span class="badge shopbadge"></span>
+                            <div class="badge-line">
+                                <div>
+                                    <img class="badge1" th:if="${!badgelist[0].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[0]} + '.png'}">
+                                    <img class="badge1" th:if="${badgelist[0].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge2" th:if="${!badgelist[1].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[1]} + '.png'}">
+                                    <img class="badge2" th:if="${badgelist[1].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge3" th:if="${!badgelist[2].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[2]} + '.png'}">
+                                    <img class="badge3" th:if="${badgelist[2].equals('x')}" alt="">
+                                </div>
+                            </div>
+                            <div class="badge-line">
+                                <div>
+                                    <img class="badge4" th:if="${!badgelist[3].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[3]} + '.png'}">
+                                    <img class="badge4" th:if="${badgelist[3].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge5" th:if="${!badgelist[4].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[4]} + '.png'}">
+                                    <img class="badge5" th:if="${badgelist[4].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge6" th:if="${!badgelist[5].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[5]} + '.png'}">
+                                    <img class="badge6" th:if="${badgelist[5].equals('x')}" alt="">
+                                </div>
+                            </div>
+                            <div class="badge-line">
+                                <div>
+                                    <img class="badge7" th:if="${!badgelist[6].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[6]} + '.png'}">
+                                    <img class="badge7" th:if="${badgelist[6].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge8" th:if="${!badgelist[7].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[7]} + '.png'}">
+                                    <img class="badge8" th:if="${badgelist[7].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge9" th:if="${!badgelist[8].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[8]} + '.png'}">
+                                    <img class="badge9" th:if="${badgelist[8].equals('x')}" alt="">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            <div class="user-info" style="display: inline-block;" >
-                <h2 id="equipitem">장착 중인 아이템</h2>
-                <div class="user-info__box" >
-                    <div class="user-info__card" th:text="${'프로필 사진 테두리 : ' + memberProfile.profileHeader}"></div>
-                    <div class="user-info__card" th:text="${'프로필 카드 테두리 : ' + memberProfile.profileCard}"></div>
-                    <div class="user-info__card" th:text="${'대표 뱃지 : ' + memberProfile.ProfileRepBadge}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 1 : ' + memberProfile.ProfileBadges2}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 2 : ' + memberProfile.ProfileBadges3}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 3 : ' + memberProfile.ProfileBadges4}"></div>
-                    <div class="user-info__card" th:text="${'뱃지 4 : ' + memberProfile.ProfileBadges5}"></div>
+                <!-- 프로필 카드 배경 있음-->
+                <div th:case="*"class="profile-card" style="margin:auto; display: inline-block;" th:style="'margin:auto; display: inline-block; background-image: url(../img/shop_img/' + ${memberProfile.profileCard} + '.png);'" >
+                    <!-- 프로필 사진 테두리 있음-->
+                    <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
+                        <div class="profile-image">
+                            <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
+                            <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" class="profile">
+                        </div>
+                        <div class="profile-user_info">
+                            <p class="profile-user_level" th:text="${'LV : ' + member.memLvl}"></p>
+                            <p class="profile-user_nick" th:text="${member.memNick}"></p>
+                            <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
+                            <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
+                        </div>
+                    </div>
+                    <!-- 프로필 사진 테두리 기본-->
+                    <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
+                        <div class="profile-image">
+                            <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
+                            <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" class="profile">
+                        </div>
+                        <div class="profile-user_info">
+                            <p class="profile-user_level" th:text="${'LV : ' + member.memLvl}"></p>
+                            <p class="profile-user_nick" th:text="${member.memNick}"></p>
+                            <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
+                            <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
+                        </div>
+                    </div>
+                    <div class="profile-dividing-line"></div>
+                    <div class="profile-main">
+                        <div class="profile-introduction" th:text="${memberProfile.profileIntro}">
+                        </div>
+                        <div class="profile-dividing-line"></div>
+                        <div class="profile-badge-section" th:with="badgelist=${badgelist}">
+                            <div class="badge-line">
+                                <div>
+                                    <img class="badge1" th:if="${!badgelist[0].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[0]} + '.png'}">
+                                    <img class="badge1" th:if="${badgelist[0].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge2" th:if="${!badgelist[1].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[1]} + '.png'}">
+                                    <img class="badge2" th:if="${badgelist[1].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge3" th:if="${!badgelist[2].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[2]} + '.png'}">
+                                    <img class="badge3" th:if="${badgelist[2].equals('x')}" alt="">
+                                </div>
+                            </div>
+                            <div class="badge-line">
+                                <div>
+                                    <img class="badge4" th:if="${!badgelist[3].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[3]} + '.png'}">
+                                    <img class="badge4" th:if="${badgelist[3].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge5" th:if="${!badgelist[4].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[4]} + '.png'}">
+                                    <img class="badge5" th:if="${badgelist[4].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge6" th:if="${!badgelist[5].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[5]} + '.png'}">
+                                    <img class="badge6" th:if="${badgelist[5].equals('x')}" alt="">
+                                </div>
+                            </div>
+                            <div class="badge-line">
+                                <div>
+                                    <img class="badge7" th:if="${!badgelist[6].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[6]} + '.png'}">
+                                    <img class="badge7" th:if="${badgelist[6].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge8" th:if="${!badgelist[7].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[7]} + '.png'}">
+                                    <img class="badge8" th:if="${badgelist[7].equals('x')}" alt="">
+                                </div>
+                                <div>
+                                    <img class="badge9" th:if="${!badgelist[8].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[8]} + '.png'}">
+                                    <img class="badge9" th:if="${badgelist[8].equals('x')}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 장착 아이템 정보-->
+                <div class="widjet__body" style="display: inline-block;" id="equip_information">
+                    <div class="user-info" style="display: inline-block;" >
+                        <h3 class="uk-text-lead" id="equipitem">Equipped Items</h3>
+                        <div class="user-info__box">
+                            <div class="user-info__card" th:text="${'프로필 사진 테두리 : ' + memberProfile.profileHeader}"></div>
+                            <div class="user-info__card" th:text="${'프로필 카드 테두리 : ' + memberProfile.profileCard}"></div>
+                            <div class="user-info__card" th:text="${'대표 뱃지 : ' + memberProfile.ProfileRepBadge}"></div>
+                        </div>
+                    </div>
+                    <hr id="equip_line">
+                    <div class="user-info" style="display: inline-block;" >
+                        <div class="user-info__box">
+                            <h3 class="uk-text-lead">Equipped BadgeList</h3>
+                            <div th:each="badge : ${#sets.toSet(badgelist)}">
+                                <div id="badgelist" class="user-info__card" th:if="${!badge.equals('x')}" th:text="${badge}"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <h3>프로필 사진 테두리</h3>
-        <div class="widjet__body" style="display: inline-block; width:100%;">
-            <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
-                <div><select id="headeritem" class="js-select" onchange="HeaderPreview()">
-                        <option value="x">프로필 사진 테두리 선택</option>
-                        <option th:each="result:${header}" th:value="${result[0]}" th:text="${result[1]}"></option>
-                    </select></div>
-                    <button id="header" class="uk-button uk-button-secondary" type="button">저장</button>
+            <h3 class="uk-text-lead">Profile Header</h3>
+            <div class="widjet__body" id="header_select_body">
+                <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="header_select" data-uk-grid>
+                    <div>
+                        <select id="headeritem" class="js-select" onchange="HeaderPreview()">
+                            <option value="x">프로필 사진 테두리 선택</option>
+                            <option th:each="result:${header}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button id="header" class="uk-button uk-button-secondary" type="button">저장</button>
             </div>
-        </div>
 
-        <h3>프로필 카드 테두리</h3>
-        <div class="widjet__body" style="display: inline-block; width:100%;">
-            <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
-                <div><select id="carditem" class="js-select" onchange="CardPreview()">
-                        <option value="x">프로필 카드 테두리 선택</option>
-                        <option th:each="result:${card}" th:value="${result[0]}" th:text="${result[1]}"></option>
-                    </select></div>
-                    <button id="card" class="uk-button uk-button-secondary" type="button">저장</button>
+            <h3 class="uk-text-lead">Profile Card</h3>
+            <div class="widjet__body" id="card_select_body">
+                <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="card_select" data-uk-grid>
+                    <div>
+                        <select id="carditem" class="js-select" onchange="CardPreview()">
+                            <option value="x">프로필 카드 테두리 선택</option>
+                            <option th:each="result:${card}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button id="card" class="uk-button uk-button-secondary" type="button">저장</button>
             </div>
-        </div>
 
-        <h3>대표 뱃지</h3>
-        <div class="widjet__body" style="display: inline-block; width:100%;">
-            <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
-                <div><select id="repbadge" class="js-select" onchange="RepBadgePreview()">
-                        <option value="">대표 뱃지 선택</option>
-                        <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
-                    </select></div>
-                    <button id="badgerep" class="uk-button uk-button-secondary" type="button">저장</button>
+            <h3 class="uk-text-lead">Representative badge</h3>
+            <div class="widjet__body" id="rep_select_body">
+                <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="badgerep_select" data-uk-grid>
+                    <div>
+                        <select id="repbadge" class="js-select" onchange="RepBadgePreview()">
+                            <option value="x">대표 뱃지 선택</option>
+                            <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button id="badgerep" class="uk-button uk-button-secondary" type="button">저장</button>
             </div>
-        </div>
 
-        <h3>프로필 뱃지</h3>
-        <div class="widjet__body" style="display: inline-block; width:100%;">
-            <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
-                <div><select id="badges" class="js-select">
-                        <option value="x">뱃지 선택</option>
-                        <option></option>
-                    </select></div>
-                    <button id="badge" class="uk-button uk-button-secondary" type="button">저장</button>
+            <h3 class="uk-text-lead">Profile Badges</h3>
+            <div class="widjet__body" style="display: inline-block; width:100%; text-align: right;">
+                <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" data-uk-grid>
+                    <table>
+                        <tr>
+                            <td>                        
+                                <select id="badges1" class="js-select" onchange="BadgePreview(1)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges4" class="js-select" onchange="BadgePreview(4)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges7" class="js-select" onchange="BadgePreview(7)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>                        
+                                <select id="badges2" class="js-select" onchange="BadgePreview(2)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges5" class="js-select" onchange="BadgePreview(5)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges8" class="js-select" onchange="BadgePreview(8)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                        </tr>                        
+                        <tr>
+                            <td>                        
+                                <select id="badges3" class="js-select" onchange="BadgePreview(3)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges6" class="js-select" onchange="BadgePreview(6)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                            <td>                        
+                                <select id="badges9" class="js-select" onchange="BadgePreview(9)">
+                                    <option value="x">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <button id="badge" class="uk-button uk-button-secondary" type="button">저장</button>
             </div>
-        </div>
-    </main>
+        </main>
     </div>
     <script src="/js/libs.js"></script>
     <script src="/js/main.js"></script>

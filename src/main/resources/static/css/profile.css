@@ -1,0 +1,69 @@
+/* 프로필 카드 부분 */
+
+.profile-container {
+    display: flex;
+    flex-direction: row;
+}
+#header_select_body, #card_select_body, #rep_select_body{
+    display:flex;
+    flex-direction: row;
+}
+
+#equip_information {
+    height:440px;
+    margin:0px 10px 0px 15px;
+    width:350px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+#header_select, #card_select, #badgerep_select {
+    width:80%;
+}
+
+#header, #card, #badgerep, #badge {
+    width:20%;
+    padding:20px;
+    margin-left: 20px;
+}
+
+#badge {
+    margin-top:20px;
+    margin-right:3px;
+}
+
+#equip_line {
+    border: 1px dashed white;
+}
+
+/* 프로필 페이지 수정 부분 */
+.badges-list li {
+    margin: 5px;
+    padding: 10px;
+}
+
+.profile-badge-section{
+    width: 80%;
+    height: 150px;
+    font-size:12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+    padding-top: 5px;
+}
+
+.profile-badge-section .badge-line1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 99%;
+    height: 33%;
+}
+
+.profile-badge-section img {
+    width:35px;
+    height: 35px;
+    margin: 5px;
+}
