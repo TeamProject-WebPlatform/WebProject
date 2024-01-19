@@ -118,6 +118,7 @@ public class ProfileController {
         return mav;
     }
 
+    // 자기소개 업데이트
     @PostMapping("/updateintroduce")
     public ResponseEntity<String> UpdateIntroduce(@RequestBody Map<String, String> introduce) {
         int flag = 0;
@@ -133,6 +134,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 비밀번호 변경
     @PostMapping("/changepassword")
     public ResponseEntity<String> ChangePassword(@RequestBody Map<String, String> password) {
         int flag = 0;
@@ -148,6 +150,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 닉네임 변경
     @PostMapping("/changenick")
     public ResponseEntity<String> ChangeNick(@RequestBody Map<String, String> nickname) {
         int flag = 0;
@@ -183,6 +186,7 @@ public class ProfileController {
         return mav;
     }
 
+    // 프로필 사진 변경
     @PostMapping("/upload")
     public ResponseEntity<String> ProfileImage(@RequestPart("image") MultipartFile image) {
         int flag=0;
@@ -214,7 +218,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
-
+    // 프로필 헤더 업데이트
     @PostMapping("/headerprofile")
     public ResponseEntity<String> HeaderProfile(@RequestBody Map<String,String> header){
         int flag=0;
@@ -230,6 +234,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 프로필 카드 업데이트
     @PostMapping("/cardprofile")
     public ResponseEntity<String> CardProfile(@RequestBody Map<String,String> card){
         int flag=0;
@@ -244,6 +249,7 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 대표 뱃지 업데이트
     @PostMapping("/repbadgeprofile")
     public ResponseEntity<String> RedBadgeProfile(@RequestBody Map<String,String> badge){
         int flag=0;
@@ -258,18 +264,22 @@ public class ProfileController {
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
+    // 뱃지 리스트 설정 업데이트
     @PostMapping("/badgelist")
     public ResponseEntity<String> BadgeList(@RequestBody Map<String,List<String>> badges){
         int flag=0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                         .getMember();
 
-        List<String> badgeList = badges.get("BadgeList");
-        System.out.println(badgeList);
+        String badgeList = badges.get("BadgeList").toString();
+        badgeList = badgeList.substring(1,badgeList.length()-1);
+        if(profileRepository.UpdateProfileBadgeList(badgeList, member.getMemId())==1){
+            flag = 1;
+        }
         return ResponseEntity.ok(String.valueOf(flag));
     }
 
-    // 파일이 있는지 여부 확인
+    // 설정한 프로필 사진 파일이 있는지 여부 확인
     private File findExistingFile(String memberId) {
 
         String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage";
@@ -278,10 +288,10 @@ public class ProfileController {
         if (files != null) {
             for (File file : files) {
                 if (file.isFile() && file.getName().startsWith(memberId)) {
-                    return file;
+                    return file; // memberId로 시작한 파일이 있을 경우 파일을 return
                 }
             }
         }
-        return null; // 동일한 memberId로 시작하는 파일이 없으면 null 반환
+        return null; // memberId로 시작하는 파일이 없으면 null return
     }
 }

@@ -167,7 +167,7 @@ async function RegisterBadgeList() {
     let BadgeItem8 = document.getElementById('badges8').value;
     let BadgeItem9 = document.getElementById('badges9').value;
 
-    let badgelist = [BadgeItem1, BadgeItem2, BadgeItem3, BadgeItem4, BadgeItem5, BadgeItem6, BadgeItem7, BadgeItem8, BadgeItem9];
+    let badgelist = [BadgeItem1,BadgeItem2,BadgeItem3,BadgeItem4,BadgeItem5,BadgeItem6,BadgeItem7,BadgeItem8,BadgeItem9];
     //console.log(badgelist);
 
     try {

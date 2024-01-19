@@ -73,4 +73,10 @@ public interface MemberProfileRepository extends JpaRepository<MemberProfile, Lo
     @Transactional
     @Query(value="update member_profile set profile_image=:image where mem_id=:mem_id", nativeQuery = true)
     Integer UpdateProfileImage(String image, long mem_id);
+
+    // 뱃지 리스트 변경
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value="update member_profile set profile_badge_list=:BadgeList where mem_id=:mem_id",nativeQuery = true)
+    Integer UpdateProfileBadgeList(String BadgeList, long mem_id);
 }
