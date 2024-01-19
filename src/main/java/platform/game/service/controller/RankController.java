@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
@@ -24,6 +25,7 @@ import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
+import platform.game.service.repository.RankingRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -34,6 +36,9 @@ public class RankController {
 
     @Autowired
     RankDAO rankDAO;
+
+    @Autowired
+    RankingRepository rankingRepository;
 
     @Autowired
     MemberFavoriteGameRepository memberFavoriteGameRepository;
@@ -101,10 +106,16 @@ public class RankController {
         ModelAndView mav = new ModelAndView("levelrank");
         if (game_cd == "") {
             List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelRank();
+            List<Object[]> getRankerProfile = rankingRepository.getLevelRankerProfile("0");
             mav.addObject("level", getLevelTable);
+            mav.addObject("profile", getRankerProfile);
+            System.out.println(getRankerProfile.get(0)[0]);
         } else {
             List<LevelRankTO> getOtherLevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
+            List<Object[]> getRankerProfile = rankingRepository.getLevelRankerProfile(game_cd);
             mav.addObject("otherlevel", getOtherLevelTable);
+            mav.addObject("profile", getRankerProfile);
+            System.out.println(getRankerProfile);
         }
 
         mav.addObject("navRank", navRank);
@@ -163,10 +174,14 @@ public class RankController {
         ModelAndView mav = new ModelAndView("winraterank");
         if (game_cd == "") {
             List<WinRankTO> getWinRateTable = sqlMapperInter.getWinRateRank();
+            List<Object[]> getRankerProfile = rankingRepository.getWinRateRankerProfile("0");
             mav.addObject("win", getWinRateTable);
+            mav.addObject("profile", getRankerProfile);
         } else {
             List<WinRankTO> getOtherWinRateTable = sqlMapperInter.getOtherWinRateRank(game_cd);
+            List<Object[]> getRankerProfile = rankingRepository.getWinRateRankerProfile(game_cd);
             mav.addObject("otherwin", getOtherWinRateTable);
+            mav.addObject("profile", getRankerProfile);
         }
 
         mav.addObject("navRank", navRank);
@@ -224,10 +239,14 @@ public class RankController {
         ModelAndView mav = new ModelAndView("pointrank");
         if (game_cd == "") {
             List<PointRankTO> getPointTable = sqlMapperInter.getPointRank();
+            List<Object[]> getRankerProfile = rankingRepository.getPointRankerProfile("0");
             mav.addObject("point", getPointTable);
+            mav.addObject("profile", getRankerProfile);
         } else {
             List<PointRankTO> getOtherPointTable = sqlMapperInter.getOtherPointRank(game_cd);
+            List<Object[]> getRankerProfile = rankingRepository.getPointRankerProfile(game_cd);
             mav.addObject("otherpoint", getOtherPointTable);
+            mav.addObject("profile", getRankerProfile);
         }
 
         mav.addObject("navRank", navRank);
