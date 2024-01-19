@@ -43,9 +43,6 @@ public class ShopController {
     @Autowired
     private MemberProfileRepository memberProfileRepository;
 
-    @Autowired
-    private MemberProfileRepository memberProfileRepository;
-
     @RequestMapping("/shop")
     public ModelAndView shop() {
         long totalItemCount = itemInfoRepository.count();
@@ -68,7 +65,7 @@ public class ShopController {
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
                 modelAndView.addObject("haveitem", memberHaveItems);
-                modelAndView.addObject("memberProfile",memberProfile);
+                modelAndView.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
