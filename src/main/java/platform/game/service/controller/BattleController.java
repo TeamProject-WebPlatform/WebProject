@@ -15,6 +15,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -40,8 +41,10 @@ import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.PostInfoRepository;
+import platform.game.service.repository.UpdatePointHistoryImpl;
 import platform.game.service.service.MemberInfoDetails;
 
+@EnableAsync
 @Controller
 @ComponentScan(basePackages = { "platform.game.service.action", "platform.game.service.repository",
         "platform.game.service.model" })
@@ -60,6 +63,8 @@ public class BattleController {
     BattleRepository battleRepository;
     @Autowired
     BattleCustomRepositoryImpl battleCustomRepositoryImpl;
+    @Autowired
+    private UpdatePointHistoryImpl updatePointHistoryImpl;
     
     
 
@@ -160,11 +165,11 @@ public class BattleController {
             BattlePost battlePost = battle.getBtPost();
             if(battle.getClientMember()!=null || post.getMember().getMemId()!=id){
                 // 클라이언트가 있으므로 수정 불가
-                return new ModelAndView(new RedirectView("/view?postId="+postId+"&btId"+btId));
+                ModelAndView failMav = new ModelAndView(new RedirectView("/view?postId="+postId+"&btId="+btId));
+                return failMav;
             }
             LocalDateTime ddDate = battlePost.getBtPostDeadLine().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
             LocalDateTime stDate = battlePost.getBtStartDt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
             mav.addObject("isModify",true);
             mav.addObject("postId",postId);
             mav.addObject("btId",btId);
@@ -222,20 +227,44 @@ public class BattleController {
             // 아마 에러가 안뜰 것으로 예상해서 롤백 구현x
         }
         int[] data = new int[2];
-
-        if(isModify.equals("true")){
-            int postId = Integer.parseInt(request.getParameter("postId"));
-            int btId = Integer.parseInt(request.getParameter("btId"));
-            data = battleCustomRepositoryImpl.modifyPost(postId,btId,memId,title,game,point,content,ddDate,stDate);
-        }else{
-            data = battleCustomRepositoryImpl.writePost(memId,title,game,point,content,ddDate,stDate);
+        try{    
+            if(isModify.equals("true")){
+                int dPoint = Integer.parseInt(request.getParameter("dPoint"));
+                int postId = Integer.parseInt(request.getParameter("postId"));
+                int btId = Integer.parseInt(request.getParameter("btId"));
+                data = battleCustomRepositoryImpl.modifyPost(postId,btId,memId,title,game,point,content,ddDate,stDate);
+                if(dPoint < 0){
+                    // 포인트를 더썼으니까
+                    updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50104", dPoint);
+                }else if(dPoint > 0){
+                    // 포인트를 줄였으니까
+                    updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50103", dPoint);
+                }
+            }else{
+                data = battleCustomRepositoryImpl.writePost(memId,title,game,point,content,ddDate,stDate);
+                updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50101", -Integer.parseInt(point));
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
         int postId = data[0];
         int btId = data[1];
-        if(isModify.equals("true")){
-
-        }
         return "redirect:/battle/view?postId="+postId+"&btId="+btId;
+    }
+    @PostMapping("/delete")
+    @ResponseBody
+    public String deletPost(@RequestParam("postId") int postId,@RequestParam("btId") int btId) {
+        int flag = 0;
+        // battlePost 삭제 -> battle 삭제, post 삭제
+        try{
+            flag = battleCustomRepositoryImpl.deletePost(postId,btId);
+            
+        }catch(Exception e){
+            return "-1";
+        }
+        // flag = 1 정상
+        // flag = -1 삭제 불가(클라이언트 존재)
+        return String.valueOf(flag);
     }
     @RequestMapping("/comment")
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -247,8 +276,11 @@ public class BattleController {
                     .getMember();
         }else return "redirect:./battle/view?postId=" + postId + "&btId=" + btId;
 
-        battleCustomRepositoryImpl.insertComment(postId, content, member);
-
+        
+        try{
+            battleCustomRepositoryImpl.insertComment(postId, content, member);
+        }catch(Exception e){}
+        
         return "redirect:./view?postId=" + postId + "&btId=" + btId;
     }
     @RequestMapping("/recomment")
@@ -261,8 +293,10 @@ public class BattleController {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
         }
-        battleCustomRepositoryImpl.insertComment(postId, content,commentId, member);
-
+        try{
+            battleCustomRepositoryImpl.insertComment(postId, content,commentId, member);
+        }catch(Exception e){}
+        
 
         // 댓글이 등록된 후에 해당 게시물로 이동
         return "redirect:./view?postId=" + postId + "&btId=" + btId;
@@ -271,7 +305,14 @@ public class BattleController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseBody
     public String deleteComment(@RequestParam("commentId") int commentId){
-        int flag = battleCustomRepositoryImpl.deleteComment(commentId);
+        int flag = 0;
+        try{
+            flag = battleCustomRepositoryImpl.deleteComment(commentId);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            flag = -1;
+        }
+        
         return String.valueOf(flag);
     }
     @PostMapping("/reqeust")
@@ -279,10 +320,30 @@ public class BattleController {
     @ResponseBody
     public String reqeustBattle(@RequestParam("memId") long memId,
                             @RequestParam("btId") int btId,
-                            @RequestParam("postId") int postId){
-        int flag = battleCustomRepositoryImpl.reqeustBattle(memId,btId,postId);      
-
+                            @RequestParam("postId") int postId){ 
+        int flag = 0;
+        try{
+            flag = battleCustomRepositoryImpl.reqeustBattle(memId,btId,postId);   
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            flag = -1;
+        }
         return String.valueOf(flag);
+    }
+
+    @PostMapping("/reqeustManage")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String manageRequest(@RequestParam("requester") long memId,@RequestParam("isAccept") int isAccept,@RequestParam("btId") int btId){
+        int flag = 0;
+        try{
+            flag = battleCustomRepositoryImpl.manageRequest(memId,isAccept,btId); 
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            flag = -1;
+        }
+
+        return String.valueOf(flag); 
     }
 
     @PostMapping("/like")

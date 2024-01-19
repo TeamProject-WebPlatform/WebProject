@@ -78,6 +78,7 @@
             document.addEventListener("DOMContentLoaded", function () {
                 memId = /*[[${memId}]]*/0;
                 if (memId !== 0) pointConnect();
+                document.getElementById("current-point").setAttribute("point",currentPoint);
             });
             function pointConnect() {
                 var socket = new SockJS('/ws');
@@ -96,6 +97,7 @@
                                 // 정상
                                 currentPoint = headerInfo.currentPoint;
                                 document.getElementById("current-point").innerHTML = formatNumber(currentPoint);
+                                document.getElementById("current-point").setAttribute("point",currentPoint);
                             }else if(headerInfo.flag===0 || headerInfo.flag===-1){
                                 // 에러
                                 alert("에러");
@@ -109,8 +111,8 @@
                 });
             }
 
-            function sendPointChange(point, pointKindCd) {
-                memInfoStompClient.send(`/app/memPointChange`, {}, JSON.stringify({
+            async function sendPointChange(point, pointKindCd) {
+                await memInfoStompClient.send(`/app/memPointChange`, {}, JSON.stringify({
                     memId: Number(memId),
                     pointKindCd: pointKindCd,
                     currentPoint: Number(currentPoint),
@@ -152,7 +154,7 @@
                     <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
                     <a th:if="${nickname}" class="action-btn wallet" th:href="@{/wallet}"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
-                    <div id="current-point"
+                    <div id="current-point" point="" 
                         th:text="${#numbers.formatInteger(#numbers.formatInteger(currentPoint,0),0,'COMMA')}"></div>
                     <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                             class="animation-ripple-delay1"></span></a>

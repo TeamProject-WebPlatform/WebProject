@@ -43,15 +43,6 @@ public class MemberProfile {
     @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
     private String ProfileRepBadge;
     
-    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
-    private String ProfileBadges2;
-
-    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
-    private String ProfileBadges3;
-
-    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
-    private String ProfileBadges4;
-
-    @Column(columnDefinition = "varchar(100) NOT NULL DEFAULT 'x'")
-    private String ProfileBadges5;
+    @Column(columnDefinition = "varchar(255) NOT NULL DEFAULT 'x'")
+    private String ProfileBadgeList;
 }

@@ -26,15 +26,11 @@
 .widjet__head>div {
     height: 30px;
     display: flex;
-    width: 200px;
+    width: 350px;
     align-items: center;
     justify-content: space-between;
 }
 
-.widjet__head>div select {
-    width: 50px;
-    margin-right: px;
-}
 
 .widjet__head>div>div {
 
@@ -324,6 +320,22 @@ body.dark-theme .battle-card-info .info-title a {
     align-items: center;
     justify-content: space-between;
 }
+.left-time{
+    position: absolute;
+    margin-left: 83px;
+    margin-top: -31px;
+    z-index: 1;
+    border: 2px solid #ffbf00;
+    background-color: white;
+    width: 70px;
+    height: 24px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(20deg);
+    font-weight: 700;
+}
 .info-game, .info-state{
     width: 20%;
     height: 100%;
@@ -348,6 +360,7 @@ body.dark-theme .battle-card-info .info-title a {
     background-color: #ffbf00;
     animation: glowAnimation 1s infinite alternate;
     box-shadow: rgba(255,191,0,0.5) 0px 0px 17px 3px;
+    z-index: 2;
 }
 @keyframes glowAnimation {
     0% {
@@ -360,17 +373,25 @@ body.dark-theme .battle-card-info .info-title a {
         box-shadow: rgba(255,191,0,0.5) 0px 0px 17px 3px;
     } */
 }
+.info-state > .B{
+    background-color: rgb(255, 124, 36);
+    box-shadow: rgba(255, 124, 36,0.5) 0px 0px 17px 3px;
+    z-index: 2;
+}
 .info-state > .P{
     background-color: rgb(20, 0, 199);
     box-shadow: rgba(12,0,199,0.5) 0px 0px 17px 3px;
+    z-index: 2;
 }
 .info-state > .T{
     background-color: #00ff40;
     box-shadow: rgba(0,255,64,0.5) 0px 0px 17px 3px;
+    z-index: 2;
 }
 .info-state > .N{
     background-color: rgb(255, 90, 84);
     box-shadow: rgba(255,90,84,0.5) 0px 0px 17px 3px;
+    z-index: 2;
 }
 .info-battle-point-section {
     background-color: rgb(130, 127, 143);
@@ -437,4 +458,73 @@ body.dark-theme .battle-card-info .info-title a {
 .info-header {
     height: 10%;
     display: flex;
+}
+.button-section{
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    margin-right: 20px;
+    margin-top:5px;
+}
+.content-footer .button-section{
+    margin: 0px;
+    display: flex;
+    justify-content: space-between !important;
+}
+.content-footer .button-section >div{
+    display: flex;
+}
+.post-section .button-section{
+    margin : 0px;
+}
+.widjet__head .btn_re{
+    font-size: 14px;
+}
+
+.none {
+    display: none;
+}
+
+.btn-top-section{
+    display: flex;
+    flex-direction: column;
+}
+.btn-top-section .btn_re{
+    margin: 0 !important;
+}
+.btn-top-section i{
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    position: absolute;
+    margin-left: 40px;
+    margin-top: -14px;
+    z-index: 2;
+}
+.dark-theme .content-footer .button-section{
+    background-color: #0C1826;
+    border-top : 1px solid rgba(255,255,255,0.3);
+}
+.content-footer .button-section{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-height: 200px;
+    background-color: rgba(244, 97, 25, 0.05);
+    border-top : 1px solid rgba(0,0,0,0.3);
+    padding : 10px 10px;
+}
+.battle-card-section .button-section{
+    background-color: #f5f5f5;
+}
+.dark-theme .battle-card-section .button-section{
+    background-color: #040615;
+}
+.battle-card-section .content-footer{
+    padding-top: 12px;
+}
+.battle-card-section .button-section .btn_re{
+    height: 100% !important;
+    width: 100px;
+
 }
