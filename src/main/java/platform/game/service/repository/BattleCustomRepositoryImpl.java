@@ -433,6 +433,13 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         int point = bp.getBtPostPoint();
         long memId = bt.getHostMember().getMemId();
         updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50105", point);
+
+        // comment DELETE
+        query = entityManager.createNativeQuery(
+                "DELETE FROM comment " +
+                        "WHERE post_id=:postId");
+        query.setParameter("postId", postId);
+        query.executeUpdate();
         // bp DELETE
         query = entityManager.createNativeQuery(
                 "DELETE FROM battle_post " +

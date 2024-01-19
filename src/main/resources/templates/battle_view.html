@@ -197,7 +197,22 @@
             requestBattle();
         });
     });
+    function checkPoint(){
+        let currentPoint = Number(document.getElementById("current-point").getAttribute("point"));
+        let battlePoint = Number(document.getElementById("battle_point").innerHTML);
+        
+        console.log(currentPoint);
+        console.log(battlePoint);
+        // 포인트와 현재 포인트 비교
+        if(battlePoint > currentPoint) return false;
+        return true;
+    }
     async function requestBattle() {
+        console.log("신청 시작");
+        if(!checkPoint()){
+            alert('보유 포인트가 부족합니다.');
+            return;
+        }
         try {
             const response = await fetch(`/battle/reqeust?memId=${memId}&btId=${btId}&postId=${postId}`, {
                 method: 'POST',
@@ -352,7 +367,7 @@
                                         </div>
                                         <div>
                                             <div class="battle-info-key">포인트 : </div>
-                                            <div class="battle-info-value"
+                                            <div class="battle-info-value" id="battle_point"
                                                 th:text="${#numbers.formatInteger(#numbers.formatInteger(bto.point,0),0,'COMMA')}">
                                                 100,000</div>
                                         </div>
