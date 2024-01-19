@@ -109,13 +109,14 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
     let memImageName = "doyun_icon.png";
     let memLevel = level;
     let memHeader = header + ".png";
-    let memHeaderStyle = "";
     let memCard = card + ".png";
-    let memCardStyle = "";
     let memSymbolImageName = repbadge + ".png";
-    let memRepBadgeStyle = "";
     let memIntroduction = introduce;
-    let memBadgeList = badgelist;
+
+    let memHeaderStyle = "";
+    let memCardStyle = "";
+    let memRepBadgeStyle = "";
+    let memBadgeList = "";
 
     if (header != 'x') {
         memHeaderStyle = `style="background-image:url(../img/shop_img/${memHeader});"`;
@@ -131,6 +132,18 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
 
     if(profileimage!='x'){
         memImageName= `profileimage/${profileimage}`;
+    }
+
+    if (badgelist != 'x'){
+        memBadgeList = badgelist.split(', ');
+
+        for(let i=0; i<memBadgeList.length; i++) {
+            if (memBadgeList[i] != 'x'){
+                memBadgeList[i] = `<img src="../img/shop_img/${memBadgeList[i]}.png">`
+            } else {
+                memBadgeList[i] = "";
+            }
+        }
     }
 
     let membProfileHTML = `
@@ -153,19 +166,19 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
                 <div class="profile-dividing-line"></div>
                 <div class="profile-badge-section">
                     <div class="badge-line">
-                        <div class="badge"></div>
-                        <div class="badge"></div>
-                        <div class="badge"></div>
+                        <div class="badge">${memBadgeList[0]}</div>
+                        <div class="badge">${memBadgeList[3]}</div>
+                        <div class="badge">${memBadgeList[6]}</div>
                     </div>
                     <div class="badge-line">
-                        <div class="badge"></div>
-                        <div class="badge"></div>
-                        <div class="badge"></div>
+                        <div class="badge">${memBadgeList[1]}</div>
+                        <div class="badge">${memBadgeList[4]}</div>
+                        <div class="badge">${memBadgeList[7]}</div>
                     </div>
                     <div class="badge-line">
-                        <div class="badge"></div>
-                        <div class="badge"></div>
-                        <div class="badge"></div>
+                        <div class="badge">${memBadgeList[2]}</div>
+                        <div class="badge">${memBadgeList[5]}</div>
+                        <div class="badge">${memBadgeList[8]}</div>
                     </div>
                 </div>
             </div>
