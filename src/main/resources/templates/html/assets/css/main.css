@@ -1713,7 +1713,7 @@ a:hover {
     top: 75px;
     left: -250px;
     width: 250px;
-    height: calc(100vh - 75px);
+    /* height: calc(100vh - 75px); */
     padding: 30px 20px 30px 0;
     overflow-y: auto;
     border-right: 1px solid #F2F2F2;

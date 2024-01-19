@@ -19,6 +19,7 @@
 
 html,
 body {
+    -ms-overflow-style: none;
     color: #353535;
     font-family: "Nunito";
     font-size: 16px;
@@ -26,6 +27,8 @@ body {
     font-weight: normal;
     line-height: 1.31;
 }
+
+
 
 h1,
 h2,
@@ -5937,4 +5940,36 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
 .widjet.--filters .nice-select{
     
     border: 2px solid black;
+}
+
+/* 푸터 */
+
+.page-footer__inner {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -45px -50px -45px;
+    height: 80px;
+    text-align: center;
+    /* line-height: 10px; */
+    background-color: #fff;
+}
+
+.page-footer_text{
+    margin-top: 20px;
+    /* padding-top: 20px; */
+}
+
+body.dark-theme .page-footer__inner {
+    background: #0C1826;
+}
+
+body.dark-theme .page-footer__sidebar {
+    border-right: 1px solid #030410;
 }

@@ -171,38 +171,16 @@
                                                                         <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- <div class="profile-badge-section">
-                                                                    <div class="profile-main">
-                                                                        <div class="badge-line">
-                                                                            <span class="badge">&#127774;</span>
-                                                                            <span class="badge">&#127775;</span>
-                                                                            <span class="badge">&#127806;</span>
-                                                                        </div>
-                                                                        <div class="badge-line">
-                                                                            <span class="badge">&#127851;</span>
-                                                                            <span class="badge">&#127774;</span>
-                                                                            <span class="badge">&#127775;</span>
-                                                                        </div>
-                                                                        <div class="badge-line">
-                                                                            <span class="badge">&#127806;</span>
-                                                                            <span class="badge">&#127851;</span>
-                                                                            <span class="badge">&#127774;</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> -->
+                  
                                                             </div>
-                                                            <!-- <div class="battle-profile-media">
-                                                                <a href="10_game-profile.html">
-                                                                    <img th:src="@{'../img/' + ${battle.hostImgName}}" alt="NO IMG" />
-                                                                </a>
-                                                            </div> -->
+                                            
                                                         </div>
                         
                         
                                                         <div class="battle-card-info" th:attr="btId = ${battle.btId}">
                                                             <div class="info-title"><a th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
                                                                     th:text="${battle.title}"></a></div>
-                                                            <div class="info-sub">
+                                                            <div class="uk-width-1-1 uk-flex info-sub">
                                                                 <div class="info-game">
                                                                     <div>BattleGround</div>
                                                                     <!-- <div th:if="">여기에 이제 코드 별로</div> -->
@@ -305,56 +283,6 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                        
-                                                            <!-- 배팅 -->
-                                                            <!-- <div class="betting-section">
-                                                                <div class="point-betting" th:id="'bettingId' + ${battle.btId}">
-                                                                    <div th:if="${battlePointTOList[iterStat.index].flag==0}"
-                                                                        class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">HOST
-                                                                    </div>
-                                                                    <div th:unless="${battlePointTOList[iterStat.index].flag==0}"
-                                                                        class="point-betting-button" active="F"
-                                                                        th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">HOST</div>
-                                                                    <div class="search">
-                                                                        <div class="search__input">
-                                                                            <i class="fa-solid fa-coins ico_fontawesome"></i>
-                                                                            <battleStateCheck th:if="${battle.state=='A'}">
-                                                                                <logincheck th:if="${nickname}">
-                                                                                    <input
-                                                                                        th:unless="${battlePointTOList[iterStat.index].alreadyBet==1}"
-                                                                                        class="point-betting-input" type="search" name="search"
-                                                                                        placeholder="BETTING HERE">
-                                                                                    <input
-                                                                                        th:if="${battlePointTOList[iterStat.index].alreadyBet==1}"
-                                                                                        class="point-betting-input" type="search" name="search"
-                                                                                        placeholder="YOU ALREADY BET" readonly>
-                                                                                </logincheck>
-                                                                                <input th:unless="${nickname}" class="point-betting-input"
-                                                                                    type="search" name="search" placeholder="LOGIN FIRST"
-                                                                                    readonly>
-                                                                            </battleStateCheck>
-                                                                            <battleStateCheck th:if="${battle.state=='P'}">
-                                                                                <input class="point-betting-input" type="search" name="search"
-                                                                                    placeholder="PROCEEDING" readonly>
-                                                                            </battleStateCheck>
-                                                                            <battleStateCheck th:if="${battle.state=='T'}">
-                                                                                <input class="point-betting-input" type="search" name="search"
-                                                                                    placeholder="TERMINATED" readonly>
-                                                                            </battleStateCheck>
-                                                                            <battleStateCheck th:if="${battle.state=='N'}">
-                                                                                <input class="point-betting-input" type="search" name="search"
-                                                                                    placeholder="MATCHING" readonly>
-                                                                            </battleStateCheck>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div th:if="${battlePointTOList[iterStat.index].flag==1}"
-                                                                        class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">CLIENT
-                                                                    </div>
-                                                                    <div th:unless="${battlePointTOList[iterStat.index].flag==1}"
-                                                                        class="point-betting-button" active="F"
-                                                                        th:onclick="'betPoint(' + ${battle.btId} + ', 1)'">CLIENT</div>
-                                                                </div>
-                                                            </div> -->
                                                         </div>
                         
                         
@@ -397,26 +325,7 @@
                                                                         <div class="battle-profile-win-rate"></div>
                                                                     </div>
                                                                 </div>
-                                                                <!-- <div class="profile-main">
-                                                                    <div class="profile-dividing-line"></div>
-                                                                    <div class="profile-badge-section">
-                                                                        <div class="badge-line">
-                                                                            <span class="badge">&#127774;</span>
-                                                                            <span class="badge">&#127775;</span>
-                                                                            <span class="badge">&#127806;</span>
-                                                                        </div>
-                                                                        <div class="badge-line">
-                                                                            <span class="badge">&#127851;</span>
-                                                                            <span class="badge">&#127774;</span>
-                                                                            <span class="badge">&#127775;</span>
-                                                                        </div>
-                                                                        <div class="badge-line">
-                                                                            <span class="badge">&#127806;</span>
-                                                                            <span class="badge">&#127851;</span>
-                                                                            <span class="badge">&#127774;</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> -->
+
                                                             </div>
                                                         </div>
                                                         
@@ -623,17 +532,16 @@
                         </div>
                     </div>
 
-
-
-
-
-
                 </div>
+
+                <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
             </main>
         </div>
     </div>
+    
+    
     <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
-
+    
 </body>
 
 </html>
