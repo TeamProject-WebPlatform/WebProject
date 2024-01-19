@@ -68,17 +68,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="uk-grid uk-child-width-1-2@xl uk-child-width-1-2@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                <div class="uk-grid uk-child-width-1-2@xl uk-child-width-1-2@l uk-child-width-1-2@s uk-grid-small" data-uk-grid>
                     <!--좌측 부분-->
                     <div>
                         <div class="widjet__head">
-                            <h3 class="uk-text-lead">Member Info</h3>
+                            <h3 class="uk-text-lead">Number of visitors today</h3>
                         </div>
                         <div class="widjet__body">
-                            <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-3@l uk-child-width-1-3@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                <div th:text="${'총 회원수: ' + userNum}"></div>
-                                <div th:text="${'관리자수: ' + userNum}"></div>
-                                <div th:text="${'일반 유저수: ' + userNum}"></div>
+                            <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
+                                <div th:text="${'전체 방문한 회원 수: ' + visitCount.remark1 + '명'}">
+                                </div>
+                            </div>
+                            <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
+                                <div th:text="${'어제 방문한 회원 수: ' + visitCount.remark2 + '명'}">
+                                </div>
+                            </div>
+                            <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
+                                <div th:text="${'오늘 방문한 회원 수: ' + visitCount.remark3 + '명'}">
+                                </div>
                             </div>
                         </div>
                         &nbsp;
@@ -118,20 +125,13 @@
                         </div>
                         &nbsp;
                         <div class="widjet__head">
-                            <h3 class="uk-text-lead">Number of visitors today</h3>
+                            <h3 class="uk-text-lead">Member Info</h3>
                         </div>
                         <div class="widjet__body">
-                            <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
-                                <div th:text="${'전체 방문한 회원 수: ' + visitCount.remark1 + '명'}">
-                                </div>
-                            </div>
-                            <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
-                                <div th:text="${'어제 방문한 회원 수: ' + visitCount.remark2 + '명'}">
-                                </div>
-                            </div>
-                            <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
-                                <div th:text="${'오늘 방문한 회원 수: ' + visitCount.remark3 + '명'}">
-                                </div>
+                            <div class="uk-grid uk-child-width-1-3@xl uk-child-width-1-3@l uk-child-width-1-3@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                <div th:text="${'총 회원수: ' + userNum}"></div>
+                                <div th:text="${'관리자수: ' + userNum}"></div>
+                                <div th:text="${'일반 유저수: ' + userNum}"></div>
                             </div>
                         </div>
                     </div>
