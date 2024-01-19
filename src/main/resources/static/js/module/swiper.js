@@ -116,7 +116,7 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
     let memHeaderStyle = "";
     let memCardStyle = "";
     let memRepBadgeStyle = "";
-    let memBadgeList = "";
+    let memBadgeList = ["","","","","","","","",""];
 
     if (header != 'x') {
         memHeaderStyle = `style="background-image:url(../img/shop_img/${memHeader});"`;

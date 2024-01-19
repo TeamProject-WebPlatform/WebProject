@@ -43,6 +43,9 @@ public class ShopController {
     @Autowired
     private MemberProfileRepository memberProfileRepository;
 
+    @Autowired
+    private MemberProfileRepository memberProfileRepository;
+
     @RequestMapping("/shop")
     public ModelAndView shop() {
         long totalItemCount = itemInfoRepository.count();
