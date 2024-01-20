@@ -47,8 +47,12 @@
         var curYear = currentDate.getFullYear();
         var curMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
         var curDay = currentDate.getDate();
+        var curHour = currentDate.getHours();
+        var curMinute = currentDate.getMinutes();
 
         let isModify = /*[[${isModify}]]*/'';
+        let game = /*[[${game}]]*/'';
+
         let ddyear = /*[[${ddYear}]]*/'';
         let styear = /*[[${stYear}]]*/'';
 
@@ -116,6 +120,7 @@
                 option.text = hour + "시";
                 hourSelect.add(option);
 
+                if (!isModify && hour == (curHour+1)%24) option.selected = true;
                 if (isModify && hourSelect.name === 'ddhour' && hour === ddhour) option.selected = true;
                 if (isModify && hourSelect.name === 'sthour' && hour === sthour) option.selected = true;
             }
@@ -128,6 +133,9 @@
                 option.value = minute;
                 option.text = minute + "분";
                 minuteSelect.add(option);
+
+                if (!isModify && minuteSelect.name === 'ddminute' && minute == curMinute) option.selected = true;
+                if (!isModify && minuteSelect.name === 'stminute' && minute == (curMinute+15)%60) option.selected = true;
 
                 if (isModify && minuteSelect.name === 'ddminute' && minute === ddminute) option.selected = true;
                 if (isModify && minuteSelect.name === 'stminute' && minute === stminute) option.selected = true;
@@ -175,6 +183,18 @@
             }
             document.forms["pfrm"].submit();
         });
+        if(isModify){
+            let selectedGame = document.querySelector(".selectedGame");
+            let options = selectedGame.querySelectorAll("option");
+            options.forEach(function(option){
+                if(option.value==game){
+                    option.selected = true;
+                }
+            })
+            if(game=='30006' || game=='30099'){
+                document.querySelector(".selectedGameInput").style.display="block";
+            }
+        }
     })
     function checkPoint(point) {
         let currentPoint = Number(document.getElementById("current-point").getAttribute("point"));
@@ -197,6 +217,14 @@
             return false;
         }
         return true;
+    }
+    function selectGame(value){
+        if(value=='30006' || value=='30099'){
+            document.querySelector(".selectedGameInput").style.display="block";
+        }else{
+            document.querySelector(".selectedGameInput").style.display="none";
+            document.getElementById("selectedGameInput").value="";
+        }
     }
 </script>
 
@@ -221,14 +249,14 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <a th:href="@{/battle}">
+                        <a th:href="@{/battle?page=1}">
                             <h3 class="uk-text-lead">BATTLE</h3>
                         </a>
                     </div>
                 </div>
                 <div class="content">
                     <div class="content-header">
-                        헤더 뭐넣을지 아직
+                        
                     </div>
                     <div class="content-main">
                         <div class="uk-grid" data-uk-grid>
@@ -301,16 +329,40 @@
                                     <div class="battle-info">
                                         <div>
                                             <div>
-                                                <div class="battle-info-key">게임 : </div>
-                                                <div class="battle-info-value">
-                                                    <textarea th:unless="${isModify==true}" name="game" id="game"
-                                                        class="battle-textarea"></textarea>
-                                                    <textarea th:if="${isModify==true}" name="game" id="game"
-                                                        class="battle-textarea" th:text="${game}"></textarea>
+                                                <div class="battle-info-key first-key">
+                                                    <div>
+                                                        게임 : 
+                                                    </div>
+                                                </div>
+                                                <div class="battle-info-value for-select">
+                                                    <div name="game" id="game"
+                                                        class="battle-game-select">
+                                                        <select name="selectedGame" class="js-select uk-flex-1 height95per margintop1per selectStyle selectedGame" style="display: none;"
+                                                        onchange="selectGame(this.value)">
+                                                            <option value="">게임선택</option>
+                                                            <option value="30001">LeagueofLegends</option>
+                                                            <option value="30002">BattleGround</option>
+                                                            <option value="30003">Overwatch</option>
+                                                            <option value="30004">Valorant</option>
+                                                            <option value="30005">FIFA</option>
+                                                            <option value="30006">Steam</option>
+                                                            <option value="30099">etc</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="selectedGameInput" style="display: none;">
+                                                        <textarea th:unless="${isModify==true}" name="selectedGameInput" id="selectedGameInput"
+                                                            class="battle-textarea" placeholder="게임 이름 입력" style=""></textarea>
+                                                        <textarea th:if="${isModify==true}" name="selectedGameInput" id="selectedGameInput"
+                                                                class="battle-textarea" th:text="${etcGameNm}"></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="battle-info-key">포인트 : </div>
+                                                <div class="battle-info-key">
+                                                    <div>
+                                                        포인트 : 
+                                                    </div>
+                                                </div>
                                                 <div class="battle-info-value">
                                                     <textarea th:unless="${isModify==true}" name="point" id="point"
                                                         class="battle-textarea"></textarea>
@@ -319,7 +371,11 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="battle-info-key">신청 기한 : </div>
+                                                <div class="battle-info-key">
+                                                    <div>
+                                                        신청 기한 : 
+                                                    </div>
+                                                </div>
                                                 <div class="battle-info-value">
                                                     <div class="date-picker" id="deadline-dt">
                                                         <div>
@@ -340,7 +396,11 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="battle-info-key">시작 시간 : </div>
+                                                <div class="battle-info-key">
+                                                    <div>
+                                                        시작 시간 : 
+                                                    </div>
+                                                </div>
                                                 <div class="battle-info-value">
                                                     <div class="date-picker" id="start-dt">
                                                         <div>
@@ -372,6 +432,9 @@
                                 </div>
                             </form>
                             <div class="uk-width-1-5@xl write-rule-section">
+                                <div class="rule-header">
+                                    BATTLE RULE<div style="color:red; font-size:25px;">@필독</div>
+                                </div>
                                 <div>
                                     <div class="sentence">
                                         <div class="no"> 1.&nbsp; </div>
@@ -399,6 +462,10 @@
                                         <div>호스트의 부정행위를 막기 위해 대결 결과를 인증할 수 있는 <strong style="color:brown">스크린샷</strong>을 남겨 두시길 바랍니다. 스크릿샷을 남겨 두지 않은 배틀에 대해서는
                                             본인 과실입니다.</div>
                                     </div>
+                                    <div class="sentence">
+                                        <div class="no"> 7.&nbsp; </div>
+                                        <div>매칭이 성사된 이후 경기는 취소할 수 없으니 신중히 시작하시길 바랍니다.</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -408,7 +475,7 @@
                     <div class="content-footer">
                         <div class="button-section">
                             <div>
-                                <a th:href="@{/battle}"><input type="button" value="목록" class="btn_re"></a>
+                                <a th:href="@{/battle?page=1}"><input type="button" value="목록" class="btn_re"></a>
                                 <input type="button" id="btn-write" value="저장" class="btn_re">
                             </div>
 

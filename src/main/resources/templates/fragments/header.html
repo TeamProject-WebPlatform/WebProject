@@ -19,14 +19,14 @@
 
             const counter = ($counter) => {
                 if (isIntervalRunning) {
-                    now += (max-currentPoint);
+                    now += (max - currentPoint);
                     currentPoint = max;
                     return;
-                }else{
+                } else {
                     now = max - currentPoint;
                     currentPoint = max;
                 }
-                
+
 
                 isIntervalRunning = true;
                 // currentPoint 1700 이고 max = 2000이면
@@ -34,10 +34,10 @@
                 // 1800 일때 now는 200임
                 // 1900 되니까 now 에서 100을 더해줘서 키워되야됨 300
                 const handle = setInterval(() => {
-                    if(now>0) $counter.innerHTML = Math.ceil(max - now);
-                    else if(now<0) $counter.innerHTML = Math.floor(max - now);
+                    if (now > 0) $counter.innerHTML = Math.ceil(max - now);
+                    else if (now < 0) $counter.innerHTML = Math.floor(max - now);
                     // 목표수치에 도달하면 정지
-                    if ((now < 1 && now >=0) || (now>-1 && now<=0)) {
+                    if ((now < 1 && now >= 0) || (now > -1 && now <= 0)) {
                         clearInterval(handle);
                         now = 0;
                         isIntervalRunning = false;
@@ -168,6 +168,23 @@
                 // console.log("path : "+contextPath)
                 return contextPath;
             }
+            function formatNumberTok(value) {
+                var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
+                return formattedValue;
+            }
+            function getColorRatio(bettingRatio) {
+                if (bettingRatio >= 90) {
+                    return '#FF0000'; // 빨간색
+                } else if (bettingRatio >= 70) {
+                    return '#FFA500'; // 주황색
+                } else if (bettingRatio >= 50) {
+                    return '#00FF00'; // 연두색
+                } else if (bettingRatio >= 30) {
+                    return '#00F0FF'; // 민트색
+                } else {
+                    return '#0FCFA5'; // 검은색
+                }
+            }
         </script>
         <div class="page-header__inner">
             <!-- 헤더 사이드바(로고) -->
@@ -182,9 +199,9 @@
             <div class="page-header__content">
                 <div class="page-header__search">
                     <div class="search">
-                        <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
+                        <!-- <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
                                 placeholder="Search"></div>
-                        <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div>
+                        <div class="search__btn"><button type="button"><i class="ico_microphone"></i></button></div> -->
                     </div>
                 </div>
 
@@ -193,13 +210,12 @@
                     <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
                     <a th:if="${nickname}" class="action-btn wallet" th:href="@{/wallet}"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
-                    <div id="current-point" point=""
-                            th:text="${currentPoint}"></div>
+                    <div id="current-point" point="" th:text="${currentPoint}"></div>
 
-                    <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
+                    <!-- <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                             class="animation-ripple-delay1"></span></a>
                     <a th:if="${nickname}" class="action-btn" href="07_friends.html"><i
-                            class="ico_notification"></i><span class="animation-ripple-delay2"></span></a>
+                            class="ico_notification"></i><span class="animation-ripple-delay2"></span></a> -->
                     <a th:if="${nickname}" th:href="@{/logout}" class="action-btn"><i
                             class="fa-solid fa-right-from-bracket ico_logout"></i></a>
                     <a th:unless="${nickname}" th:href="@{/login}" class="action-btn"><i

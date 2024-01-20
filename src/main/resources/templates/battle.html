@@ -30,26 +30,81 @@
 
 <script th:inline="javascript">
     let nickname;
-    document.addEventListener("DOMContentLoaded",function(){
+    let selectedListCnt;
+    let selectedGame;
+    let selectedState;
+    let page ; 
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        
         nickname = /*[[${nickname}]]*/'';
-        document.querySelectorAll(".battle-card__box").forEach(function(x){
-            x.querySelector(".point-betting-input").addEventListener('input',function (event) {
+        selectedListCnt = /*[[${selectedListCnt}]]*/10;
+        selectedGame = /*[[${selectedGame}]]*/'ALL';
+        selectedState = /*[[${selectedState}]]*/'ALL';
+        page = /*[[${page}]]*/1; // paging은 뒤로가기 때문에 get파라미터로 가지는게 좋아보임 
+        document.querySelectorAll(".battle-card__box").forEach(function (x) {
+            x.querySelector(".point-betting-input").addEventListener('input', function (event) {
                 let currentValue = event.target.value;
                 let sanitizedValue = currentValue.replace(/\D/g, '');
                 event.target.value = sanitizedValue;
             })
+        });
+        document.getElementById("selectListCnt").querySelectorAll("option").forEach(function(option){
+            if(option.value==selectedListCnt) option.selected=true;
+        })
+        document.getElementById("selectGame").querySelectorAll("option").forEach(function(option){
+            if(option.value==selectedGame) option.selected=true;
+        })
+        document.getElementById("selectState").querySelectorAll("option").forEach(function(option){
+            if(option.value==selectedState) option.selected=true;
         })
     })
-    function search_battle(){
-
+    function selectListCnt(cnt) {
+        selectedListCnt = cnt;
+        requestBattleList();
     }
-    function selectBattleGame(){
+    function selectGame(game) {
+        selectedGame = game;
+        requestBattleList();
+    }
+    function selectState(state) {
+        selectedState = state;
+        requestBattleList();
+    }
+    function requestBattleList() {
+        if(!page) page=1;
+        if(!selectedListCnt) selectedListCnt=10;
+        if(!selectedGame) selectedGame='30000';
+        if(!selectedState) selectedState='ALL';
+
+        let postData = {
+            page: page,
+            selectedListCnt: selectedListCnt,
+            selectedGame: selectedGame,
+            selectedState: selectedState
+        };
+        postDataToBack(postData);
+    }
+    function postDataToBack(postData){
+        let form = document.createElement("form");
+        form.method = "get";
+        form.action = "/battle?page=" + page;
         
-    }
-    function selectBattleState(state){
-        console.log(state);
-    }
+        for (var key in postData) {
+            if (postData.hasOwnProperty(key)) {
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = postData[key];
+                form.appendChild(input);
+            }
+        }
 
+        // form을 body에 추가하고 submit
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 
 <body class="page-favourites dark-theme">
@@ -75,45 +130,52 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <a th:href="@{/battle}"><h3 class="uk-text-lead">BATTLE</h3></a>
-                        
+                        <a th:href="@{/battle?page=1}">
+                            <h3 class="uk-text-lead">BATTLE</h3>
+                        </a>
+
                         <div>
                             <div class="button-section">
-                                <div>
-                                    <a th:href="@{/battle}"><input type="button"
-                                            value="목록" class="btn_re"></a>
-                                    <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
-                                        <!-- 로그인 상태인 경우의 링크 -->
-                                        <input type="button" value="쓰기" class="btn_re">
-                                    </a>
-                                    <a th:unless="${nickname}" href="/login">
-                                        <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                        <input type="button" value="쓰기" class="btn_re">
-                                    </a>
-                                </div>
+                                <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
+                                    <!-- 로그인 상태인 경우의 링크 -->
+                                    <input type="button" value="쓰기" class="btn_re">
+                                </a>
+                                <a th:unless="${nickname}" href="/login">
+                                    <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                    <input type="button" value="쓰기" class="btn_re">
+                                </a>
                             </div>
-                            <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleGame(this.value)">
-                                <option value="">10개</option>
-                                <option value="Category 1">20개</option>
-                                <option value="Category 2">30개</option>
+                            <select class="js-select uk-flex-1 height95per margintop1per selectStyle" id="selectListCnt"
+                                style="display: none;" onchange="selectListCnt(this.value)">
+                                <option value="10">10개</option>
+                                <option value="20">20개</option>
+                                <option value="30">30개</option>
                             </select>
-                            <div class="search__refresh"><button type="button" style="float: right;cursor: pointer;" onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div>
+                            <!-- <div class="search__refresh"><button type="button" style="float: right;cursor: pointer;"
+                                    onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div> -->
 
                         </div>
                     </div>
-                    
+
                     <div class="widjet__body">
-                        <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-4@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                        <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-4@l uk-child-width-1-2@s uk-flex-middle uk-grid-small"
+                            data-uk-grid>
                             <div class="uk-width-1-6 height50px">
-                                <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleGame(this.value)">
-                                    <option value="">ALL(GAME)</option>
-                                    <option value="Category 1">League of Legends</option>
-                                    <option value="Category 2">BattleGround</option>
-                                    <option value="Category 3">Steam</option>
+                                <select class="js-select uk-flex-1 height95per margintop1per" id="selectGame"
+                                    style="display: none;" onchange="selectGame(this.value)">
+                                    <option value="30000">게임</option>
+                                    <option value="30001">LeagueofLegends</option>
+                                    <option value="30002">BattleGround</option>
+                                    <option value="30003">Overwatch</option>
+                                    <option value="30004">Valorant</option>
+                                    <option value="30005">FIFA</option>
+                                    <option value="30006">Steam</option>
+                                    <option value="30099">etc</option>
                                 </select>
                             </div>
                             <div class="uk-width-1-6 height50px">
-                                <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleState(this.value)">
+                                <select class="js-select uk-flex-1 height95per margintop1per" id="selectState"
+                                    style="display: none;" onchange="selectState(this.value)">
                                     <option value="ALL">전체</option>
                                     <option value="N">매칭</option>
                                     <option value="A">베팅</option>
@@ -123,12 +185,14 @@
                                 </select>
                             </div>
                             <div class="search uk-width-2-3 height50px">
-                                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="s_txt_btn" value=""></div>
-                                    <div class="search__btn"><button type="button" onclick="search_battle()"><i class="ico_search"></i></button></div>
+                                <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
+                                        placeholder="Search" id="s_txt_btn" value=""></div>
+                                <div class="search__btn"><button type="button" onclick="search_battle()"><i
+                                            class="ico_search"></i></button></div>
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l battle-card-section" id="battleCardSection">
                         <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}">
@@ -138,6 +202,7 @@
                                         <div class="battle-profile-nickname">
                                             <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.hostLvl}">Lv30
                                             </div>
+                                            <div>&nbsp;/&nbsp;</div>
                                             <div class="battle-profile-nick" th:text="${battle.hostNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
@@ -185,12 +250,18 @@
 
 
                                 <div class="battle-card-info" th:attr="btId = ${battle.btId}">
-                                    <div class="info-title"><a th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
+                                    <div class="info-title"><a
+                                            th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
                                             th:text="${battle.title}"></a></div>
                                     <div class="info-sub">
                                         <div class="info-game">
-                                            <div>BattleGround</div>
-                                            <!-- <div th:if="">여기에 이제 코드 별로</div> -->
+                                            <div th:unless="${battle.gameCd=='30006' or battle.gameCd=='30099'}"
+                                                th:utext="'<script>' +
+                                                'var gameName = getGameName('+${battle.gameCd}+');' +
+                                                'document.write(gameName);' +
+                                                '</script>'"></div>
+                                            <div th:if="${battle.gameCd=='30006' or battle.gameCd=='30099'}"
+                                                th:text="${battle.etcGame}"></div>
                                         </div>
                                         <div class="info-battle-point-section">
                                             <i class="fa-solid fa-trophy"></i>
@@ -211,8 +282,9 @@
                                             <div class="P none">진행중</div>
                                             <div class="T none">종료됨</div>
                                             <div class="N none">매칭 중</div>
-                                            
-                                            <div th:if="${battle.state=='A'}" class="left-time" th:attr="delay = ${battle.delay}">30:00</div>
+
+                                            <div th:if="${battle.state=='A'}" class="left-time"
+                                                th:attr="delay = ${battle.delay}">30:00</div>
                                         </div>
                                     </div>
                                     <div class="info-center">
@@ -224,8 +296,8 @@
                                                             <i class="fa-solid fa-coins ico_fontawesome"></i>
                                                         </div>
                                                         <div class="host-total-point" th:utext="'<script>' +
-                                                            'var value = ' + ${battlePointTOList[iterStat.index].hostTotalPoint} + ';' +
-                                                            'var formattedValue = formatNumberTok(value);' +
+                                                            'var pvalue = ' + ${battlePointTOList[iterStat.index].hostTotalPoint} + ';' +
+                                                            'var formattedValue = formatNumberTok(pvalue);' +
                                                             'document.write(formattedValue);' +
                                                             '</script>'">
                                                             72.3</div>
@@ -266,8 +338,8 @@
                                                 <div class="info-point-header-list">
                                                     <div class="info-point-amount">
                                                         <div class="client-total-point" th:utext="'<script>' +
-                                                            'var value = ' + ${battlePointTOList[iterStat.index].clientTotalPoint} + ';' +
-                                                            'var formattedValue = formatNumberTok(value);' +
+                                                            'var pvalue = ' + ${battlePointTOList[iterStat.index].clientTotalPoint} + ';' +
+                                                            'var formattedValue = formatNumberTok(pvalue);' +
                                                             'document.write(formattedValue);' +
                                                             '</script>'">
                                                             72.3</div>
@@ -303,7 +375,9 @@
                                     <div class="betting-section">
                                         <div class="point-betting" th:id="'bettingId' + ${battle.btId}">
                                             <div th:if="${battlePointTOList[iterStat.index].flag==0}"
-                                                class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">HOST
+                                                class="point-betting-button"
+                                                style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">
+                                                HOST
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==0}"
                                                 class="point-betting-button" active="F"
@@ -331,8 +405,8 @@
                                                             placeholder="PROCEEDING" readonly>
                                                     </battleStateCheck>
                                                     <battleStateCheck th:if="${battle.state=='B'}">
-                                                        <input class="point-betting-input" type="search"
-                                                            name="search" placeholder="AWAITING" readonly>
+                                                        <input class="point-betting-input" type="search" name="search"
+                                                            placeholder="AWAITING" readonly>
                                                     </battleStateCheck>
                                                     <battleStateCheck th:if="${battle.state=='T'}">
                                                         <input class="point-betting-input" type="search" name="search"
@@ -345,7 +419,9 @@
                                                 </div>
                                             </div>
                                             <div th:if="${battlePointTOList[iterStat.index].flag==1}"
-                                                class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">CLIENT
+                                                class="point-betting-button"
+                                                style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">
+                                                CLIENT
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==1}"
                                                 class="point-betting-button" active="F"
@@ -366,22 +442,26 @@
                                     </div>
                                     <div class="battle-profile-info">
                                         <div class="battle-profile-nickname">
-                                            <div th:if="${battle.client}" class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30</div>
+                                            <div th:if="${battle.client}" class="battle-profile-lvl"
+                                                th:text="'Lv ' + ${battle.clientLvl}">Lv30</div>
                                             <div th:unless="${battle.client}" class="battle-profile-lvl"></div>
-                                            
+
                                             <div class="battle-profile-nick" th:text="${battle.clientNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>
-                                                <div th:if="${battle.client}" class="battle-profile-win" th:text="${battle.clientWin}+' 승'">77 승
+                                                <div th:if="${battle.client}" class="battle-profile-win"
+                                                    th:text="${battle.clientWin}+' 승'">77 승
                                                 </div>
-                                                <div th:if="${battle.client}" >&nbsp;/&nbsp;</div>
-                                                <div th:if="${battle.client}" class="battle-profile-lose" th:text="${battle.clientLose}+' 패'">25
+                                                <div th:if="${battle.client}">&nbsp;/&nbsp;</div>
+                                                <div th:if="${battle.client}" class="battle-profile-lose"
+                                                    th:text="${battle.clientLose}+' 패'">25
                                                     패</div>
                                                 <div th:unless="${battle.client}" class="battle-profile-win"></div>
-                                                <div th:unless="${battle.client}" class="battle-profile-slash">&nbsp;&nbsp;</div>
-                                                <div th:unless="${battle.client}" class="battle-profile-lose"></div>    
-                                                
+                                                <div th:unless="${battle.client}" class="battle-profile-slash">
+                                                    &nbsp;&nbsp;</div>
+                                                <div th:unless="${battle.client}" class="battle-profile-lose"></div>
+
                                             </div>
                                             <div th:if="${battle.client}"
                                                 th:with="total = ${(battle.clientWin + battle.clientLose)}, rate=${(battle.clientWin * 100.0 / total)}">
@@ -423,9 +503,10 @@
                             <div class="button-section">
                                 <div class="btn-top-section">
                                     <i class="fa-solid fa-caret-up ico_fontawesome"></i>
-                                    <input id="scrollToTopBtn" type="button" value="TOP" class="btn_re" onclick="scrollToTop()">
+                                    <input id="scrollToTopBtn" type="button" value="TOP" class="btn_re"
+                                        onclick="scrollToTop()">
                                 </div>
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -436,7 +517,7 @@
     </div>
 
     <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
-    
+
 
     <!-- <a href="https://kr.freepik.com/free-vector/letter-x-dry-brush-stroke-typography-vector_36226783.htm#query=x&position=0&from_view=keyword&track=sph&uuid=297639a8-be16-41f2-a58f-22984bdd6a87">작가 rawpixel.com</a> 출처 Freepik -->
 </body>

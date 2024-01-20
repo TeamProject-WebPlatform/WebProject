@@ -1,5 +1,8 @@
 @charset "utf-8";
-
+.battle-card__box * {
+    font-family: "Nunito";
+    font-style: normal;
+}
 .height50px {
     height: 50px;
 }
@@ -28,11 +31,12 @@
 .widjet__head>div {
     height: 30px;
     display: flex;
-    width: 350px;
     align-items: center;
     justify-content: space-between;
 }
-
+.widjet .widjet__head .selectStyle{
+    width: 100px;
+}
 
 .widjet__head>div>div {
 
@@ -481,6 +485,8 @@ body.dark-theme .battle-card-info .info-title a {
 }
 .widjet__head .btn_re{
     font-size: 14px;
+    width: 100px;
+    margin-right: 10px;
 }
 
 .none {
@@ -529,4 +535,8 @@ body.dark-theme .battle-card-info .info-title a {
     height: 100% !important;
     width: 100px;
 
+}
+
+.content-footer{
+    margin-bottom: 50px;
 }

@@ -597,10 +597,13 @@ body.dark-theme .friend-requests-item__action button.reject:hover {
     
 }
 .battle-info-key{
+    display: flex;
+    justify-content: flex-end;
     width: 40%;
     margin-left : 10%;
     margin-top: 7px;
     margin-bottom : 7px;
+    padding-right: 30px;
 }
 .battle-info-value{
     width: 50%;

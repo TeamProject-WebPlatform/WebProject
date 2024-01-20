@@ -36,9 +36,9 @@ public class BattlePost {
     private String btPostApplicants;
     private Date btStartDt;
     private String gameCd;
+    private String etcGameNm;
     private Date btPostDeadLine;
     private int btPostPoint;
-
     @Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
     private long bettingFinTime;
 

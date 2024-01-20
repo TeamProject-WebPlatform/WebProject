@@ -29,10 +29,10 @@
 
 </head>
 <script th:inline="javascript">
-    let nickname;
-    let btId;
-    let postId;
-    
+    var nickname;
+    var btId;
+    var postId;
+    var gameCd;
     // 답글 입력 폼의 표시/숨김을 토글
     function toggleReplyForm(span) {
         const commentId = span.getAttribute("data-comment-id");
@@ -64,7 +64,7 @@
                     break;
                 case 1:
                     alert('삭제되었습니다.');
-                    location.href = "../battle";
+                    location.href = "../battle?page=1";
                     break;
             }
         } catch (error) {
@@ -185,12 +185,14 @@
             console.error('DB 호출 중 오류가 발생했습니다.', error);
         }
     }
+
     document.addEventListener("DOMContentLoaded", function () {
         nickname = /*[[${nickname}]]*/'';
         btId = /*[[${bto.btId}]]*/0;
         postId = /*[[${post.postId}]]*/0;
         hostNick = /*[[${post.member.memNick}]]*/'';
         clientNick = /*[[${bto.clientNick}]]*/'';
+        gameCd = /*[[${bto.gameCd}]]*/'';
         if(nickname === hostNick || nickname === clientNick){
             document.querySelector(".point-betting-input").readOnly = true;
         }
@@ -288,16 +290,13 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <a th:href="@{/battle}">
+                        <a th:href="@{/battle?page=1}">
                             <h3 class="uk-text-lead">BATTLE</h3>
                         </a>
                     </div>
                 </div>
                 <div class="content">
                     <div class="content-header">
-                        헤더 뭐넣을지 아직
-                        <div th:if="${bto.client}" th:text="${456}"></div>
-                        <div th:unless="${bto.client}" th:text="${123}"></div>
                     </div>
                     <div class="content-main">
                         <div class="uk-grid" data-uk-grid>
@@ -367,7 +366,11 @@
                                     <div>
                                         <div>
                                             <div class="battle-info-key">게임 : </div>
-                                            <div class="battle-info-value" th:text="${bto.gameCd}">BattleGround</div>
+                                            <div th:unless="${bto.gameCd=='30006' or bto.gameCd=='30099'}" class="battle-info-value" th:utext="'<script>' +
+                                                'var gameName = getGameName('+${bto.gameCd}+');' +
+                                                'document.write(gameName);' +
+                                                '</script>'">BattleGround</div>
+                                            <div th:if="${bto.gameCd=='30006' or bto.gameCd=='30099'}" class="battle-info-value" th:text="${bto.etcGame}">BattleGround</div>
                                         </div>
                                         <div>
                                             <div class="battle-info-key">포인트 : </div>
@@ -908,7 +911,7 @@
                                     </a>
                                 </div>
                                 <div>
-                                    <a th:href="@{/battle}"><input type="button" value="목록" class="btn_re"></a>
+                                    <a th:href="@{/battle?page=1}"><input type="button" value="목록" class="btn_re"></a>
                                     <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
                                         <!-- 로그인 상태인 경우의 링크 -->
                                         <input type="button" value="쓰기" class="btn_re">

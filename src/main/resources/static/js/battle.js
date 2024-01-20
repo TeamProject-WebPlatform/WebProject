@@ -252,20 +252,13 @@ function betPoint(btId, flag) {
         button.style.color = "white";
     }
 }
-function formatNumberTok(value) {
-    var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
-    return formattedValue;
-}
-function getColorRatio(bettingRatio) {
-    if (bettingRatio >= 90) {
-        return '#FF0000'; // 빨간색
-    } else if (bettingRatio >= 70) {
-        return '#FFA500'; // 주황색
-    } else if (bettingRatio >= 50) {
-        return '#00FF00'; // 연두색
-    } else if (bettingRatio >= 30) {
-        return '#00F0FF'; // 민트색
-    } else {
-        return '#0FCFA5'; // 검은색
-    }
+function getGameName(code){
+    let gameName = "";
+    if(code=='30001') gameName = 'LeagueofLegends';
+    if(code=='30002') gameName = 'BattleGround';
+    if(code=='30003') gameName = 'Overwatch';
+    if(code=='30004') gameName = 'Valorant';
+    if(code=='30005') gameName = 'FIFA';
+
+    return gameName;
 }

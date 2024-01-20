@@ -1,6 +1,7 @@
 package platform.game.service.repository;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -322,7 +323,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
 
     @Transactional
     @Override
-    public int[] writePost(long memId, String title, String game, String point, String content, Date ddDate,
+    public int[] writePost(long memId, String title, String game,String etcGame, String point, String content, Date ddDate,
             Date stDate) {
         // post에 추가
         // battle에 추가
@@ -365,12 +366,13 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         // BATTLE_POST INSERT
         query = entityManager.createNativeQuery(
                 "INSERT INTO battle_post " +
-                        "(bt_post_applicants, bt_post_dead_line, bt_post_point, game_cd, post_id, bt_id, bt_start_dt) "
+                        "(bt_post_applicants, bt_post_dead_line, bt_post_point, game_cd,etc_game_nm=:etcGame, post_id, bt_id, bt_start_dt) "
                         +
                         "VALUES('', :ddDate , :point, :gameCd, :postId, :btId , :stDate)");
         query.setParameter("ddDate", ddDate);
         query.setParameter("point", point);
         query.setParameter("gameCd", game);
+        query.setParameter("etc_game_nm", etcGame);
         query.setParameter("postId", postId);
         query.setParameter("btId", btId);
         query.setParameter("stDate", stDate);
@@ -382,7 +384,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
 
     @Transactional
     @Override
-    public int[] modifyPost(int postId, int btId, long memId, String title, String game, String point, String content,
+    public int[] modifyPost(int postId, int btId, long memId, String title, String game, String etcGame,String point, String content,
             Date ddDate, Date stDate) {
         // post에 추가
         // battle에 추가
@@ -413,11 +415,12 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         // BATTLE_POST INSERT
         query = entityManager.createNativeQuery(
                 "UPDATE battle_post " +
-                        "SET bt_post_dead_line=:ddDate, bt_post_point=:point, game_cd=:gameCd, bt_start_dt=:stDate " +
+                        "SET bt_post_dead_line=:ddDate, bt_post_point=:point, game_cd=:gameCd,etc_game_nm=:etcGame, bt_start_dt=:stDate " +
                         "WHERE post_id=:postId");
         query.setParameter("ddDate", ddDate);
         query.setParameter("point", point);
         query.setParameter("gameCd", game);
+        query.setParameter("etcGame", etcGame);
         query.setParameter("postId", postId);
         query.setParameter("stDate", stDate);
         if (query.executeUpdate() != 1)
@@ -495,5 +498,20 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         
 
         return 1;
+    }
+    @Override
+    public List<Battle> getBattleListByCondition(int page, int selectedListCnt, String selectedGame, String selectedState) {
+        List<Battle> list = new ArrayList<>();
+        selectedState="A";
+        selectedGame="30002";
+        
+        Query query = entityManager.createNativeQuery(
+                "SELECT b FROM battle b " +
+                "JOIN battle_post bp ON b.bt_id = bp.bt_id " +
+                "WHERE b.bt_state = :selectedState AND bp.game_cd = :selectedGame", Battle.class);
+        query.setParameter("selectedState", selectedState);
+        query.setParameter("selectedGame", selectedGame);
+        list = query.getResultList();
+        return list;    
     }
 }
