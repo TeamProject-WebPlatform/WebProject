@@ -93,11 +93,11 @@ public interface SqlMapperInter {
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<LevelRankTO> getLevelRank();
 
-        // 구분 없이 포인트 랭킹
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.rank_code='WinRate' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
+        // 구분 없이 승률 랭킹
+        @Select("SELECT r.rank, m.mem_userid, m.mem_lvl, CASE WHEN m.mem_total_game_cnt > 0 THEN round((m.mem_game_win_cnt / m.mem_total_game_cnt) * 100, 2) ELSE 0 END AS winrate FROM ranking r JOIN member m ON r.rank_code = 'WinRate' AND m.mem_id = r.mem_id AND r.game_cd = 0 ORDER BY r.rank;")
         public List<WinRankTO> getWinRateRank();
 
-        // 구분 없이 승률 랭킹
+        // 구분 없이 포인트 랭킹
         @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<PointRankTO> getPointRank();
 

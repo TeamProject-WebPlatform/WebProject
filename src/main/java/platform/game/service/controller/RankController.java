@@ -109,13 +109,11 @@ public class RankController {
             List<Object[]> getRankerProfile = rankingRepository.getLevelRankerProfile("0");
             mav.addObject("level", getLevelTable);
             mav.addObject("profile", getRankerProfile);
-            System.out.println(getRankerProfile.get(0)[0]);
         } else {
             List<LevelRankTO> getOtherLevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
-            List<Object[]> getRankerProfile = rankingRepository.getLevelRankerProfile(game_cd);
+            List<Object[]> getOtherRankerProfile = rankingRepository.getLevelRankerProfile(game_cd);
             mav.addObject("otherlevel", getOtherLevelTable);
-            mav.addObject("profile", getRankerProfile);
-            System.out.println(getRankerProfile);
+            mav.addObject("otherprofile", getOtherRankerProfile);
         }
 
         mav.addObject("navRank", navRank);
@@ -179,9 +177,9 @@ public class RankController {
             mav.addObject("profile", getRankerProfile);
         } else {
             List<WinRankTO> getOtherWinRateTable = sqlMapperInter.getOtherWinRateRank(game_cd);
-            List<Object[]> getRankerProfile = rankingRepository.getWinRateRankerProfile(game_cd);
+            List<Object[]> getOtherRankerProfile = rankingRepository.getWinRateRankerProfile(game_cd);
             mav.addObject("otherwin", getOtherWinRateTable);
-            mav.addObject("profile", getRankerProfile);
+            mav.addObject("otherprofile", getOtherRankerProfile);
         }
 
         mav.addObject("navRank", navRank);
@@ -244,9 +242,9 @@ public class RankController {
             mav.addObject("profile", getRankerProfile);
         } else {
             List<PointRankTO> getOtherPointTable = sqlMapperInter.getOtherPointRank(game_cd);
-            List<Object[]> getRankerProfile = rankingRepository.getPointRankerProfile(game_cd);
+            List<Object[]> getOtherRankerProfile = rankingRepository.getPointRankerProfile(game_cd);
             mav.addObject("otherpoint", getOtherPointTable);
-            mav.addObject("profile", getRankerProfile);
+            mav.addObject("otherprofile", getOtherRankerProfile);
         }
 
         mav.addObject("navRank", navRank);

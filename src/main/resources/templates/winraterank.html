@@ -78,45 +78,141 @@
                                     WinRateChart();
                                 </script>
                                 <div></div>
-                                <!-- 통합 랭킹 카드 -->
-                                <div class="profile-card" th:if="${win!=null and i.index<5}" th:each="to, i:${win}" style="display: inline-block;">
-                                    <a href="/mypage/${to.mem_userid}">
-                                        <div class="profile-header">
-                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                <div th:if="${win!=null and i.index<5}" th:each="to, i:${win}" th:switch="${profile.get(i.index)[3]}" style="display: inline-block;">
+                                    <!-- 통합 랭킹 카드 -->
+                                    <div th:case="x" class="profile-card" style="display: inline-block;">
+                                        <div class="profile-header" th:if="${!profile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.get(i.index)[2]} + '.png);'">
+                                            <div class="profile-image">
+                                                <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
+                                                <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                            </div>
                                             <div class="profile-user_info">
-                                                <!-- <i th:text="${to.rank}"></i> 1등~5등 뱃지 영역 -->
                                                 <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
                                                 <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
-                                                <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL"> <!-- 개인 설정 뱃지 -->
+                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
                                             <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
                                         </div>
-                                    </a>
-                                    <div class="profile-dividing-line"></div>
-                                    <div class="profile-main">
-                                        <div class="profile-introduction">
-                                            안녕하세요
+                                        <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
+                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
+                                            </div>
+                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
+                                        </div>
+                                        <div class="profile-dividing-line"></div>
+                                        <div class="profile-main">
+                                            <div class="profile-introduction" th:text="${profile.get(i.index)[0]}"></div>
+                                        </div>
+                                    </div>
+
+                                    <div th:case="*" class="profile-card" th:style="'display: inline-block; background-image: url(../img/shop_img/' + ${profile.get(i.index)[3]} + '.png);'">
+                                        <div class="profile-header" th:if="${!profile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.get(i.index)[2]} + '.png);'">
+                                            <div class="profile-image">
+                                                <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
+                                            </div>
+                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
+                                        </div>
+                                        <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
+                                            <div class="profile-image">
+                                                <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
+                                            </div>
+                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
+                                        </div>
+                                        <div class="profile-dividing-line"></div>
+                                        <div class="profile-main">
+                                            <div class="profile-introduction" th:text="${profile.get(i.index)[0]}">
+                                                
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <!-- 특정 게임 랭크 카드 -->
-                                <div class="profile-card" th:if="${otherwin!=null and i.index<5}" th:each="to, i:${otherwin}" style="display: inline-block;">
-                                    <a href="/mypage/${to.mem_userid}">
-                                        <div class="profile-header">
-                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                <div th:if="${otherwin!=null and i.index<5}"  th:each="to, i:${otherwin}" th:switch="${otherprofile.get(i.index)[3]}" style="display: inline-block;">
+                                    <div th:case="x" class="profile-card" style="display: inline-block;">
+                                        <div class="profile-header" th:if="${!otherprofile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${otherprofile.get(i.index)[2]} + '.png);'">
+                                            <div class="profile-image">
+                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${otherprofile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE"> 
+                                            </div>
                                             <div class="profile-user_info">
-                                                <!-- <i th:text="${to.rank}"></i> 1등~5등 뱃지 영역 -->
                                                 <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
                                                 <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
-                                                <img class="badge" src="../img/starbucks.png" alt="NO-SYMBOL"> <!-- 개인 설정 뱃지 -->
+                                                <img class="badge" th:if="${!otherprofile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${otherprofile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${otherprofile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
                                             <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
                                         </div>
-                                    </a>
-                                    <div class="profile-dividing-line"></div>
-                                    <div class="profile-main">
-                                        <div class="profile-introduction">
-                                            안녕하세요
+
+                                        <div class="profile-header" th:if="${otherprofile.get(i.index)[2].equals('x')}">
+                                            <div class="profile-image">
+                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${otherprofile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" th:if="${!otherprofile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${otherprofile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${otherprofile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
+                                            </div>
+                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
+                                        </div>
+
+                                        <div class="profile-dividing-line"></div>
+                                        <div class="profile-main">
+                                            <div class="profile-introduction" th:text="${otherprofile.get(i.index)[0]}"></div>
+                                        </div>
+                                    </div>
+
+                                    <div th:case="*" class="profile-card" th:style="'display: inline-block; background-image: url(../img/shop_img/' + ${otherprofile.get(i.index)[3]} + '.png);'">
+                                        <div class="profile-header" th:if="${!otherprofile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${otherprofile.get(i.index)[2]} + '.png);'">
+                                            <div class="profile-image">
+                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${otherprofile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE"> 
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" th:if="${!otherprofile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${otherprofile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${otherprofile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-header" th:if="${otherprofile.get(i.index)[2].equals('x')}">
+                                            <div class="profile-image">
+                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${otherprofile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <img class="badge" th:if="${!otherprofile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${otherprofile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${otherprofile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-dividing-line"></div>
+                                        <div class="profile-main">
+                                            <div class="profile-introduction" th:text="${otherprofile.get(i.index)[0]}"></div>
                                         </div>
                                     </div>
                                 </div>
