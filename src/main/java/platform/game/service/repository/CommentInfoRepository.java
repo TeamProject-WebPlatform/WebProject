@@ -8,6 +8,7 @@ import platform.game.service.entity.Comment;
 
 public interface CommentInfoRepository extends JpaRepository<Comment, Integer> {
     ArrayList<Comment> findByPost_PostId(int postId);
+    ArrayList<Comment> findByMember_MemId(long memId);
 
     void deleteByPost_PostId(int postId);
 

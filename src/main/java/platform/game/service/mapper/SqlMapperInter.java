@@ -93,6 +93,10 @@ public interface SqlMapperInter {
         @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<LevelRankTO> getLevelRank();
 
+        // 구분 없이 상위 10명만
+        @Select("SELECT r.rank, m.mem_userid, m.mem_lvl FROM ranking r JOIN member m ON r.rank_code='Level' AND m.mem_id=r.mem_id AND r.game_cd=0 ORDER BY r.rank ASC LIMIT 5")
+        public List<LevelRankTO> getTop5LevelRanks();
+
         // 구분 없이 포인트 랭킹
         @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.rank_code='WinRate' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<WinRankTO> getWinRateRank();

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
+import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
@@ -28,6 +29,11 @@ import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.Post;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
+import platform.game.service.model.TO.BattlePointTO;
+import platform.game.service.model.TO.BattleTO;
+import platform.game.service.model.TO.BoardCpageTO;
+import platform.game.service.model.TO.LevelRankTO;
+import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.CommonCodeRepository;
@@ -47,6 +53,9 @@ public class MainController {
 
     @Autowired
     SigninHistoryService signinHistoryService;
+
+    @Autowired
+    BattleCardAction battleCardAction;
 
     @Autowired
     RankDAO rankDAO;
@@ -91,8 +100,21 @@ public class MainController {
 
     @RequestMapping({ "/", "/home" })
     public ModelAndView main() {
+        String boardCd_notice = "20001";
+        String boardCd_update = "20002";
+        String boardCd_event = "20003";
+        String boardCd_free = "20004";
+        long id = 0;
+
+        ArrayList<Post> notice_lists = postInfoRepository.findTop5ByBoardCdOrderByPostIdDesc(boardCd_notice);
+        ArrayList<Post> update_lists = postInfoRepository.findTop5ByBoardCdOrderByPostIdDesc(boardCd_update);
+        ArrayList<Post> event_lists = postInfoRepository.findTop5ByBoardCdOrderByPostIdDesc(boardCd_event);
+        ArrayList<Post> free_lists = postInfoRepository.findTop10ByBoardCdOrderByPostIdDesc(boardCd_free);
+        List<LevelRankTO> getLevelTable = sqlMapperInter.getTop5LevelRanks();
 
         ModelAndView mav = new ModelAndView("index");
+        BoardCpageTO cpageTO = new BoardCpageTO();
+
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
@@ -102,6 +124,8 @@ public class MainController {
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memId", member.getMemId());
                 mav.addObject("isFirstLogin", isFirstLogin);
+                id = member.getMemId();
+
                 System.out.println("isFirstLogin: " + isFirstLogin);
             }
         } else {
@@ -120,6 +144,24 @@ public class MainController {
 
         mav.addObject("totalCount", total);
         mav.addObject("todayCount", today);
+
+        List[] battleList = battleCardAction.getBattleList(id);
+        List<BattleTO> battleTOList = battleList[0];
+        List<BattlePointTO> battlePointTOList = battleList[1];
+
+        // 필요한 개수만큼 데이터 추출
+        int limit = Math.min(battleTOList.size(), 2);
+        List<BattleTO> limitedBattleTOList = battleTOList.subList(0, limit);
+
+        mav.addObject("notice_lists", notice_lists);
+        mav.addObject("update_lists", update_lists);
+        mav.addObject("event_lists", event_lists);
+        mav.addObject("free_lists", free_lists);
+        mav.addObject("boardCd", boardCd_notice);
+        mav.addObject("cpage", cpageTO);
+        mav.addObject("level", getLevelTable);
+        mav.addObject("battleTOList", limitedBattleTOList);
+        mav.addObject("battlePointTOList", battlePointTOList);
 
         return mav;
     }
