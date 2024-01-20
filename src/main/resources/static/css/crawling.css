@@ -69,6 +69,8 @@ body.dark-theme .board_view_title{
 .board td.left { text-align:left; }
 .board td.category{ font-weight:bold; }   
 
+.
+
 /* board view */
 
 /* .board_write { border-top:1px solid #464646; } */
@@ -280,6 +282,8 @@ body.dark-theme .comment_view{
 }
  */
 
+
+
 .coment_input_text{
     resize: none;
 	border: none;
@@ -425,4 +429,4 @@ body.dark-theme .btn_re:hover { background-color:#FEF7F3; color: var( --main-col
 .contents1 .con_txt{ clear:both;}    
 .contents1 {margin-top: 30px;} */
 
-
+table tr td{text-overflow: ellipsis; white-space: nowrap; max-width: 140px;}

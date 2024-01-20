@@ -240,9 +240,12 @@
                     <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
                 </main>
             </div>
-        <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
-
-        </div>
+        <!-- 팝업 내용 -->
+            <div class="popup" id="popup">
+                <span class="close" onclick="closePopup()">&times;</span>
+                <img class="popup-content" id="popupImage">
+            </div>
+            <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
     </body>
     
 </html>

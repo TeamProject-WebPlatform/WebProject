@@ -110,7 +110,7 @@ public class MainController {
         ArrayList<Post> update_lists = postInfoRepository.findTop5ByBoardCdOrderByPostIdDesc(boardCd_update);
         ArrayList<Post> event_lists = postInfoRepository.findTop5ByBoardCdOrderByPostIdDesc(boardCd_event);
         ArrayList<Post> free_lists = postInfoRepository.findTop10ByBoardCdOrderByPostIdDesc(boardCd_free);
-        List<LevelRankTO> getLevelTable = sqlMapperInter.getTop5LevelRanks();
+        List<LevelRankTO> getLevelTable = sqlMapperInter.getTop10LevelRanks();
 
         ModelAndView mav = new ModelAndView("index");
         BoardCpageTO cpageTO = new BoardCpageTO();
@@ -150,7 +150,7 @@ public class MainController {
         List<BattlePointTO> battlePointTOList = battleList[1];
 
         // 필요한 개수만큼 데이터 추출
-        int limit = Math.min(battleTOList.size(), 2);
+        int limit = Math.min(battleTOList.size(), 4);
         List<BattleTO> limitedBattleTOList = battleTOList.subList(0, limit);
 
         mav.addObject("notice_lists", notice_lists);
