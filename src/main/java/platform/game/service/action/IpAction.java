@@ -1,8 +1,8 @@
-package platform.game.service.repository;
+package platform.game.service.action;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-public class IpUtils {
+public class IpAction {
 
     // HttpServletRequest를 이용하여 사용자의 IP 주소 가져오기
     public static String getIpAddress(HttpServletRequest request) {
