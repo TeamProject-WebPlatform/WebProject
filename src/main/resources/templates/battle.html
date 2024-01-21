@@ -59,6 +59,14 @@
         document.getElementById("selectState").querySelectorAll("option").forEach(function(option){
             if(option.value==selectedState) option.selected=true;
         })
+
+        document.querySelectorAll(".pagination-section .pagination > a").forEach(function(x){
+            if(page == x.querySelector("div").innerHTML){
+                x.classList.add("active");
+            }else{
+                x.classList.remove("active");
+            }
+        })
     })
     function selectListCnt(cnt) {
         selectedListCnt = cnt;
@@ -73,7 +81,7 @@
         requestBattleList();
     }
     function requestBattleList() {
-        if(!page) page=1;
+        page=1;
         if(!selectedListCnt) selectedListCnt=10;
         if(!selectedGame) selectedGame='30000';
         if(!selectedState) selectedState='ALL';
@@ -136,6 +144,14 @@
 
                         <div>
                             <div class="button-section">
+                                <a th:if="${nickname}" th:href="@{'battle?page=1&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}+'&mybattle=true'}">
+                                    <!-- 로그인 상태인 경우의 링크 -->
+                                    <input type="button" value="내글보기" class="btn_re">
+                                </a>
+                                <a th:unless="${nickname}" href="/login">
+                                    <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                    <input type="button" value="내글보기" class="btn_re">
+                                </a>
                                 <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
                                     <!-- 로그인 상태인 경우의 링크 -->
                                     <input type="button" value="쓰기" class="btn_re">
@@ -144,6 +160,7 @@
                                     <!-- 로그인 상태가 아닌 경우의 링크 -->
                                     <input type="button" value="쓰기" class="btn_re">
                                 </a>
+                                
                             </div>
                             <select class="js-select uk-flex-1 height95per margintop1per selectStyle" id="selectListCnt"
                                 style="display: none;" onchange="selectListCnt(this.value)">
@@ -505,6 +522,18 @@
                                     <i class="fa-solid fa-caret-up ico_fontawesome"></i>
                                     <input id="scrollToTopBtn" type="button" value="TOP" class="btn_re"
                                         onclick="scrollToTop()">
+                                </div>
+                                <div class="pagination-section">
+                                    <div class="pagination">
+                                        <a th:if="${startPage>=2}" th:href="@{'battle?page='+${startPage-1}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}"><div>&laquo;</div></a>
+                                        <a class="active" th:if="${startPage <= lastPage}" th:href="@{'battle?page='+${startPage}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}"><div th:text="${startPage}">1</div></a>
+                                        <a class="" th:if="${startPage+1 <= lastPage}" th:href="@{'battle?page='+${startPage+1}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}"><div th:text="${startPage+1}"></div></a>
+                                        <a class="" th:if="${startPage+2 <= lastPage}" th:href="@{'battle?page='+${startPage+2}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}"><div th:text="${startPage+2}">3</div></a>
+                                        <a class="" th:if="${startPage+3 <= lastPage}" th:href="@{'battle?page='+${startPage+3}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}"><div th:text="${startPage+3}">4</div></a>
+                                        <a class="" th:if="${startPage+4 <= lastPage}" th:href="@{'battle?page='+${startPage+4}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}"><div th:text="${startPage+4}">5</div></a>
+                                        <a class="" th:if="${startPage+5 <= lastPage}" th:href="@{'battle?page='+${startPage+5}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}"><div th:text="${startPage+5}">6</div></a>
+                                        <a th:if="${startPage+6 <= lastPage}" th:href="@{'battle?page='+${startPage+6}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}"><div>&raquo;</div></a>
+                                      </div>
                                 </div>
                             </div>
                         </div>

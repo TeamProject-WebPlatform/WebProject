@@ -20,5 +20,6 @@ public interface BattleCustomRepository{
     public int deletePost(int postId, int btId);
     public int manageRequest(long requester,int isAccept,int btId);
     public void terminateBetting(int btId);
-    public List<Battle> getBattleListByCondition(int page,int selectedListCnt, String selectedGame, String selectedState);
+    public List<Battle> getBattleListByCondition(String selectedGame, String selectedState);
+    public List<Battle> getBattleListByCondition(String selectedGame, String selectedState,long memId);
 }

@@ -23,9 +23,25 @@ public class BattleCardAction {
     @Autowired
     BattleCustomRepositoryImpl battleCustomRepositoryImpl;
     
-    public List[] getBattleList(long id,int page,int selectedListCnt, String selectedGame, String selectedState) {
-        List<Battle> battleList = battleCustomRepositoryImpl.getBattleListByCondition(page,selectedListCnt,selectedGame,selectedState);
-        return getTOList(id,battleList);
+    public Object[] getBattleList(long id,int page,int selectedListCnt, String selectedGame, String selectedState,Boolean myBattle) {
+        List<Battle> battleList;
+        if(myBattle){
+            battleList = battleCustomRepositoryImpl.getBattleListByCondition(selectedGame,selectedState,id);
+        }else{
+            battleList = battleCustomRepositoryImpl.getBattleListByCondition(selectedGame,selectedState);
+        }
+        // 모든 리스트 받아왔고 page와 selectedListCnt로
+        // page 1이고 10일때  
+        int startNum = (page-1) * selectedListCnt; 
+        int endNum = page * selectedListCnt;
+        if(endNum >= battleList.size()) endNum = battleList.size();
+        int lastPage = battleList.size()/selectedListCnt+(battleList.size()%selectedListCnt==0?0:1);
+        List<Battle> targetBattleList = new ArrayList<>();
+        for(int i = startNum;i<endNum;i++){
+            targetBattleList.add(battleList.get(i));
+        } 
+        Object[] o = new Object[]{getTOList(id,targetBattleList),lastPage};
+        return o;
     }
     public List[] getBattleList(long id) {
         List<Battle> battleList = battleRepository.findAll();
@@ -58,7 +74,6 @@ public class BattleCardAction {
         List<BattleTO> battleTOList = new ArrayList<>();
         List<BattlePointTO> battlePointTOList = new ArrayList<>();
         for (var battle : battleList) {
-
             BattleTO bto = new BattleTO(battle, battle.getBtPost(),true);
             BattlePointTO pto = new BattlePointTO(0,battle);
 

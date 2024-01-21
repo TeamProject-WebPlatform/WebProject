@@ -16,6 +16,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Battle;
 import platform.game.service.entity.BattlePost;
@@ -500,18 +506,54 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         return 1;
     }
     @Override
-    public List<Battle> getBattleListByCondition(int page, int selectedListCnt, String selectedGame, String selectedState) {
-        List<Battle> list = new ArrayList<>();
-        selectedState="A";
-        selectedGame="30002";
+    public List<Battle> getBattleListByCondition(String selectedGame, String selectedState) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Battle> query = cb.createQuery(Battle.class);
+
+        Root<Battle> root = query.from(Battle.class);
+        Join<Battle, BattlePost> bpJoin = root.join("btPost", JoinType.INNER); // INNER JOIN으로 설정
         
-        Query query = entityManager.createNativeQuery(
-                "SELECT b FROM battle b " +
-                "JOIN battle_post bp ON b.bt_id = bp.bt_id " +
-                "WHERE b.bt_state = :selectedState AND bp.game_cd = :selectedGame", Battle.class);
-        query.setParameter("selectedState", selectedState);
-        query.setParameter("selectedGame", selectedGame);
-        list = query.getResultList();
-        return list;    
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (!selectedState.equals("ALL")) {
+            predicates.add(cb.equal(root.get("btState"), selectedState));
+        }
+
+        if (!selectedGame.equals("30000")) {
+            predicates.add(cb.equal(bpJoin.get("gameCd"),selectedGame));
+        }
+
+        query.where(predicates.toArray(new Predicate[0]));
+        query.orderBy(cb.desc(root.get("btId"))); // 내림차순
+
+        List<Battle> result = entityManager.createQuery(query).getResultList();
+        return result;    
+    }
+    @Override
+    public List<Battle> getBattleListByCondition(String selectedGame, String selectedState,long memId) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Battle> query = cb.createQuery(Battle.class);
+
+        Root<Battle> root = query.from(Battle.class);
+        Join<Battle, BattlePost> bpJoin = root.join("btPost", JoinType.INNER); // INNER JOIN으로 설정
+        
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (!selectedState.equals("ALL")) {
+            predicates.add(cb.equal(root.get("btState"), selectedState));
+        }
+
+        if (!selectedGame.equals("30000")) {
+            predicates.add(cb.equal(bpJoin.get("gameCd"),selectedGame));
+        }
+        Predicate hostMemberPredicate = cb.equal(root.get("hostMember").get("memId"), memId);
+        Predicate clientMemberPredicate = cb.equal(root.get("clientMember").get("memId"), memId);
+        predicates.add(cb.or(hostMemberPredicate, clientMemberPredicate));
+
+        query.where(predicates.toArray(new Predicate[0]));
+        query.orderBy(cb.desc(root.get("btId"))); // 내림차순
+
+        List<Battle> result = entityManager.createQuery(query).getResultList();
+        return result;    
     }
 }

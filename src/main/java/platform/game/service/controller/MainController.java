@@ -144,7 +144,6 @@ public class MainController {
 
         mav.addObject("totalCount", total);
         mav.addObject("todayCount", today);
-
         List[] battleList = battleCardAction.getBattleList(id);
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];

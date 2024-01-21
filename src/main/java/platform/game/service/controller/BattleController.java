@@ -75,9 +75,10 @@ public class BattleController {
     public ModelAndView battle(@RequestParam("page") int page, 
         @RequestParam(value = "selectedListCnt", defaultValue = "10") int selectedListCnt,
         @RequestParam(value = "selectedGame", defaultValue = "30000") String selectedGame,
-        @RequestParam(value = "selectedState", defaultValue = "ALL") String selectedState) {
+        @RequestParam(value = "selectedState", defaultValue = "ALL") String selectedState,
+        @RequestParam(value = "mybattle", defaultValue = "false") Boolean myBattle) {
         
-            long id = 0;
+        long id = 0;
         ModelAndView mav = new ModelAndView("battle");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -91,14 +92,17 @@ public class BattleController {
         }
         // 리스트 정보취득
         mav.addObject("page", page);
+        mav.addObject("startPage",((page-1)/6)*6 + 1);
         mav.addObject("selectedListCnt", selectedListCnt);
         mav.addObject("selectedGame", selectedGame);
         mav.addObject("selectedState", selectedState);
         // 리스트 생성
-        List[] battleList = battleCardAction.getBattleList(id,page,selectedListCnt,selectedGame,selectedState);
+        Object[] o = battleCardAction.getBattleList(id,page,selectedListCnt,selectedGame,selectedState,myBattle);
+        List[] battleList = (List[])o[0];
+        int lastPage = (int)o[1];
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
-
+        mav.addObject("lastPage", lastPage);
         mav.addObject("battleTOList", battleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
         
