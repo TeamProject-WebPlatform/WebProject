@@ -22,4 +22,6 @@ public interface BattleCustomRepository{
     public void terminateBetting(int btId);
     public List<Battle> getBattleListByCondition(String selectedGame, String selectedState);
     public List<Battle> getBattleListByCondition(String selectedGame, String selectedState,long memId);
+    public int controlBattle(int type,int btId,int postId);
+    public int receivePoint(long memId, int btId,int postId);
 }

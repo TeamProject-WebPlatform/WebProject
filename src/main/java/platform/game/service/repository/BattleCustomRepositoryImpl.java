@@ -28,8 +28,9 @@ import platform.game.service.entity.BattlePost;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
+import platform.game.service.service.BattleScheduleService;
 import platform.game.service.service.BettingService;
-import platform.game.service.service.BettingStateChangeService;
+import platform.game.service.service.SendMessageService;
 import platform.game.service.model.TO.BattleMemberTO;
 
 @EnableAsync
@@ -49,10 +50,13 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
     @Autowired
     private BettingService bettingService;
     @Autowired
-    private BettingStateChangeService bettingStateChangeService;
+    private BattleScheduleService battleScheduleService;
+    @Autowired
+    private SendMessageService sendMessageService;
     @Autowired
     private UpdatePointHistoryImpl updatePointHistoryImpl;
-
+    @Autowired
+    private MemberInfoRepository memberInfoRepository;
     @Transactional
     @Override
     public int updateHostBetPoint(int btId, int point) {
@@ -224,10 +228,9 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                 long delay = data[1];
                 btp.setBettingFinTime(targetTime);
                 try{
-                    bettingStateChangeService.sendMessageToChangeState(btId, "A",delay,new BattleMemberTO(client));
+                    sendMessageService.sendMessageToChangeState(btId, "A",delay,new BattleMemberTO(client));
                 }catch(Exception e){
                     System.out.println(e.getMessage());
-                    throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
                 }
                 // 다른 신청자들 포인트 반환 작업
                 String[] applicants = updatedApplicantsStr.split("/");
@@ -238,10 +241,123 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                         updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50107", btp.getBtPostPoint());
                     }
                 }
+
+                // 배틀 시작안할시 자동으로 패배 처리
+                try{
+                    battleScheduleService.battleStartSchedule(btId,btp.getPostId(),btp.getBtStartDt());
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                    throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+                }
             }
             battlePostRepository.save(btp);
         } catch (Exception e) {
             throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+        }
+        return 1;
+    }
+    @Transactional
+    @Override
+    public int controlBattle(int type,int btId,int postId){
+        Battle battle = battleRepository.findById(btId).orElse(null);
+        BattlePost battlePost = battlePostRepository.findByPost_PostId(postId);
+        if(battle == null){
+            return -1;
+        }
+        if(type==1){
+            battle.setBtState("P");
+            battleRepository.save(battle);
+            try{
+                sendMessageService.sendMessageToChangeState(btId, "P");
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+                throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+            }
+        }
+        else if(type==2 || type==3){
+            if(battle.getBtState().equals("P")){
+                battle.setBtState("H");
+                battle.setBtEndDt(new Date());
+                if(type==2) {
+                    battle.setBtResult("0");
+                }else if(type==3) {
+                    battle.setBtResult("1");         
+                }
+                battleRepository.save(battle);
+            
+                // 웹 소켓 메세지
+                try{
+                    sendMessageService.sendMessageToChangeState(btId, "H");
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                    throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+                }
+            }else if(battle.getBtState().equals("C")){
+                battle.setBtEndDt(new Date());
+                String hostChoice = "";
+                String clientChoice = battle.getBtResult();
+                if(type==2){
+                    hostChoice = "0";
+                }else if(type==3){
+                    hostChoice = "1";
+                }
+
+                if(hostChoice.equals(clientChoice)){
+                    // 호스트와 클라이언트의 선택이 동일
+                    battle.setBtState("T");                
+                    battleRepository.save(battle);
+                    
+                    try{
+                        sendMessageService.sendMessageToChangeState(btId, "T");
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                        throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+                    }
+                }else{
+                    battle.setBtState("E");
+                }
+            }
+        }else if(type==4 || type==5){
+            if(battle.getBtState().equals("P")){
+                battle.setBtState("C");
+                battle.setBtEndDt(new Date());
+                if(type==4) {
+                    battle.setBtResult("0");
+                }else if(type==5) {
+                    battle.setBtResult("1");         
+                }
+                battleRepository.save(battle);
+                
+                try{
+                    sendMessageService.sendMessageToChangeState(btId, "C");
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                    throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+                }
+            }else if(battle.getBtState().equals("H")){
+                battle.setBtEndDt(new Date());
+                String hostChoice = battle.getBtResult();
+                String clientChoice = "";
+                if(type==4){
+                    clientChoice = "0";
+                }else if(type==5){
+                    clientChoice = "1";
+                }
+
+                if(hostChoice.equals(clientChoice)){
+                    // 호스트와 클라이언트의 선택이 동일
+                    battle.setBtState("T");                
+                    battleRepository.save(battle);
+                    try{
+                        sendMessageService.sendMessageToChangeState(btId, "T");
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                        throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+                    }
+                }else{
+                    battle.setBtState("E");
+                }
+            }
         }
         return 1;
     }
@@ -256,7 +372,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         battleRepository.save(battle);
 
         try {
-            bettingStateChangeService.sendMessageToChangeState(btId, "B");
+            sendMessageService.sendMessageToChangeState(btId, "B");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -338,7 +454,6 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         int[] data = new int[2];
         Date now = new Date();
         Query query = null;
-
         // POST INSERT
         query = entityManager.createNativeQuery(
                 "INSERT INTO post " +
@@ -368,17 +483,17 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
 
         long btId = (Long) entityManager.createNativeQuery("SELECT LAST_INSERT_ID() FROM battle").getSingleResult();
         data[1] = (int) btId;
-
+        
         // BATTLE_POST INSERT
         query = entityManager.createNativeQuery(
                 "INSERT INTO battle_post " +
-                        "(bt_post_applicants, bt_post_dead_line, bt_post_point, game_cd,etc_game_nm=:etcGame, post_id, bt_id, bt_start_dt) "
+                        "(bt_post_applicants, bt_post_dead_line, bt_post_point, game_cd, etc_game_nm, post_id, bt_id, bt_start_dt) "
                         +
-                        "VALUES('', :ddDate , :point, :gameCd, :postId, :btId , :stDate)");
+                        "VALUES('', :ddDate , :point, :gameCd,:etcGame, :postId, :btId , :stDate)");
         query.setParameter("ddDate", ddDate);
         query.setParameter("point", point);
         query.setParameter("gameCd", game);
-        query.setParameter("etc_game_nm", etcGame);
+        query.setParameter("etcGame", etcGame);
         query.setParameter("postId", postId);
         query.setParameter("btId", btId);
         query.setParameter("stDate", stDate);
@@ -421,12 +536,12 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         // BATTLE_POST INSERT
         query = entityManager.createNativeQuery(
                 "UPDATE battle_post " +
-                        "SET bt_post_dead_line=:ddDate, bt_post_point=:point, game_cd=:gameCd,etc_game_nm=:etcGame, bt_start_dt=:stDate " +
+                        "SET bt_post_dead_line=:ddDate, bt_post_point=:point, game_cd=:gameCd,etc_game_nm=:etc_game_nm, bt_start_dt=:stDate " +
                         "WHERE post_id=:postId");
         query.setParameter("ddDate", ddDate);
         query.setParameter("point", point);
         query.setParameter("gameCd", game);
-        query.setParameter("etcGame", etcGame);
+        query.setParameter("etc_game_nm", etcGame);
         query.setParameter("postId", postId);
         query.setParameter("stDate", stDate);
         if (query.executeUpdate() != 1)
@@ -555,5 +670,32 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
 
         List<Battle> result = entityManager.createQuery(query).getResultList();
         return result;    
+    }
+    @Override
+    @Transactional
+    public int receivePoint(long memId, int btId,int postId){
+        BattlePost bp = battlePostRepository.findById(postId).orElse(null);
+        Battle bt = battleRepository.findByBtId(btId).orElse(null);
+        if(bp==null || bt==null) return -1;
+        int point = bp.getBtPostPoint() * 2;
+        if(bt.getBtResult().equals("0")){
+            // 호스트 승
+            if(bt.getHostMember().getMemId()!=memId) return -1;
+            if(bp.getBtPostPointReceived().equals("1")) return -1;
+        }else if(bt.getBtResult().equals("1")){
+            // 클라 승
+            if(bt.getClientMember().getMemId()!=memId) return -1;
+            if(bp.getBtPostPointReceived().equals("1")) return -1;
+        }
+        System.out.println(1);
+        try {
+            int currentPoint = updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50102", point);
+            bp.setBtPostPointReceived("1");
+            sendMessageService.sendMessageToChagePoint(memId,currentPoint,"50102");
+        } catch (Exception e) {
+            throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
+        }
+
+        return 1;
     }
 }

@@ -130,8 +130,10 @@ public class BattleController {
         }
         Post post = new Post();
         post = postInfoRepository.findByPostId(postId);
-        post.setPostHit(post.getPostHit()+1);
-        postInfoRepository.save(post);
+        if(post!=null) {
+            post.setPostHit(post.getPostHit()+1);
+            postInfoRepository.save(post);
+        }
         Object[] battleTOs = battleCardAction.getBattleTO(id, postId, btId);
 
         BattleTO bto = (BattleTO) battleTOs[0];
@@ -142,7 +144,15 @@ public class BattleController {
 
         commentTree.sort(Comparator.comparing(commentTO -> commentTO.getComment().getCreatedAt().getTime())); // 최신이 아래로
                                                                                                               // 내려감.
+        // 시간 비교
+        Long startDate = bto.getStartDt().getTime();
+        Long currnetDate = new Date().getTime();
+        if(startDate > currnetDate) mav.addObject("isAfterStartDt", false);
+        else mav.addObject("isAfterStartDt", true);
 
+        Long startDeadline = startDate + 1000 * 60 * 30;
+        mav.addObject("startDeadlineDt", new Date(startDeadline));
+        
         String[][] tmp = bto.getApplicants() != null ? bto.getApplicants() : null;
         if (tmp == null) {
             mav.addObject("applicants", "");
@@ -235,6 +245,7 @@ public class BattleController {
         String title = request.getParameter("title");
         String game = request.getParameter("selectedGame");
         String etcGame = request.getParameter("selectedGameInput");
+        if(etcGame==null) etcGame="";
         String point = request.getParameter("point");
         String content = request.getParameter("content");
 
@@ -282,11 +293,11 @@ public class BattleController {
                 updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50101", -Integer.parseInt(point));
             }
         } catch (Exception e) {
+            System.out.println("글쓰기 에러");
             System.out.println(e.getMessage());
         }
-        int postId = data[0];
-        int btId = data[1];
-        return "redirect:/battle/view?postId=" + postId + "&btId=" + btId;
+        // return "redirect:/battle/view?postId=" + data[0] + "&btId=" + data[1];
+        return "redirect:/battle?page=1";
     }
 
     @PostMapping("/delete")
@@ -389,7 +400,20 @@ public class BattleController {
 
         return String.valueOf(flag);
     }
+    @PostMapping("/controlBattle")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String controlBattle(@RequestParam("type") int type,@RequestParam("memId") long memId, @RequestParam("btId") int btId,
+            @RequestParam("postId") int postId) {
+        int flag = 0;
+        try {
+            battleCustomRepositoryImpl.controlBattle(type,btId,postId);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
+        return String.valueOf(flag);
+    }
     @PostMapping("/like")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseBody
@@ -417,7 +441,28 @@ public class BattleController {
         }
         return flag;
     }
-
+    @PostMapping("/receivePoint")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String receivePoint(@RequestParam("btId") int btId,@RequestParam("postId") int postId) {
+        Member member = null;
+        long memId=0;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                memId = member.getMemId();
+            }
+        }
+        int flag = 0;
+        try {
+            flag = battleCustomRepositoryImpl.receivePoint(memId,btId,postId);
+        } catch (Exception e) {
+            flag = -1;
+        }
+        return String.valueOf(flag);
+    }
+    
     private ArrayList<CommentTO> buildCommentTree(ArrayList<Comment> comments) {
         Map<Integer, CommentTO> commentNodeMap = new HashMap<>();
 

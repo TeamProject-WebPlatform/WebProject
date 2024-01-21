@@ -4,7 +4,10 @@
     font-family: "Nunito";
     font-style: normal;
 }
-
+.battle-card__box{
+    
+    min-width: 1400px;
+}
 .height50px {
     height: 50px;
 }
@@ -72,6 +75,9 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     padding-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .js-popular .battle-profile-nickname {
@@ -174,7 +180,14 @@
     justify-content: flex-start;
     padding-left: 1%;
 }
-
+.lvl-section{
+    border: 1px solid white;
+    padding-left: 5px;
+    border-radius: 10px;
+    background: grey;
+    color: black;
+    font-weight: 900;
+}
 .battle-profile-info {
     width: 50%;
     display: flex;
@@ -184,11 +197,11 @@
 }
 
 .battle-profile-lvl {
-    margin-left: 5px;
     margin-right: 5px;
 }
 
 .battle-profile-media {
+    position: relative;
     height: 200px;
     width: 200px;
 }
@@ -227,7 +240,7 @@
 
     display: flex;
     width: 100%;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .battle-profile-history div:nth-child(1) {
@@ -383,6 +396,13 @@ body.dark-theme .battle-card-info .info-title a {
 .info-state>div {
     padding: 0 5px 0 5px;
     border-radius: 20px;
+    min-width: 20px;
+    min-height: 20px
+}
+@media (max-width: 1850px) {
+    .info-state>div {
+        font-size:13px;
+    }
 }
 
 .info-state>.A {
@@ -391,7 +411,6 @@ body.dark-theme .battle-card-info .info-title a {
     box-shadow: rgba(255, 191, 0, 0.5) 0px 0px 17px 3px;
     z-index: 2;
 }
-
 @keyframes glowAnimation {
     0% {
         box-shadow: rgba(255, 191, 0, 0.5) 0px 0px 17px 3px;
@@ -423,7 +442,21 @@ body.dark-theme .battle-card-info .info-title a {
     box-shadow: rgba(0, 255, 64, 0.5) 0px 0px 17px 3px;
     z-index: 2;
 }
-
+.info-state>.C {
+    background-color: #00ff40;
+    box-shadow: rgba(0, 255, 64, 0.5) 0px 0px 17px 3px;
+    z-index: 2;
+}
+.info-state>.H {
+    background-color: #00ff40;
+    box-shadow: rgba(0, 255, 64, 0.5) 0px 0px 17px 3px;
+    z-index: 2;
+}
+.info-state>.E {
+    background-color: #00ff40;
+    box-shadow: rgba(0, 255, 64, 0.5) 0px 0px 17px 3px;
+    z-index: 2;
+}
 .info-state>.N {
     background-color: rgb(255, 90, 84);
     box-shadow: rgba(255, 90, 84, 0.5) 0px 0px 17px 3px;
@@ -634,4 +667,91 @@ body.dark-theme .battle-card-info .info-title a {
 .pagination a.active>div {
     background-color: #222222;
     color: white;
+}
+
+.battle-profile-left .winner{
+    position: absolute;
+    top: 6px;
+    left: calc(100% - 60px);
+    font-size: 40px;
+    border-radius: 10px;
+    color: #ffbf00;
+    animation: crownMovingAnimation 2s infinite alternate;
+}
+.winner .glow{
+    position: absolute;
+    left: 50%;
+    box-shadow: #ffda6d 0px -25px 37px 13px;
+}
+@keyframes crownMovingAnimation {
+    0% {
+        top: 6px;
+    }
+    50% {
+        top : 3px;
+    }
+    100% {
+        top : 6px;
+    }
+}
+
+.receive_btn{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 225px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 20px;
+    background: #ffbf00;
+    color: black;
+    box-shadow: #ffbf00 0px 0px 37px 1px;
+    cursor: pointer;
+}
+.receive_btn > div{
+    
+    width: 100%;
+    display: flex;
+    margin-left : 20px;
+}
+.receive_btn > i{
+    margin-left : 20px;
+}
+.receive_btn .check{
+    display: none;
+
+}
+.receive_btn .click{
+    user-select: none;
+    margin-left : 0px;
+    position: absolute;
+    width: auto;
+    color: rgb(147, 112, 216);
+    font-size: 22px;
+    top: 4%;
+    left: 70%;
+    transform: rotate(20deg);
+    animation: clickGlow 1s infinite alternate;
+}
+.receive_btn:active{
+    background: #ffe189;
+    box-shadow: #ffe189 0px 0px 37px 1px;
+}
+@keyframes clickGlow {
+    0% {
+        color: rgba(147,112,216,1);
+    }
+    20% {
+        color: rgba(147,112,216,1);
+    }
+    100% {
+        color: rgba(147,112,216,0);
+    }
+}
+.pointFloating{
+    position:absolute; 
+    /* display: none;  */
+    top: 7px;
+    left: 45px;
 }

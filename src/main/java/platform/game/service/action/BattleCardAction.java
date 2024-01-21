@@ -14,6 +14,7 @@ import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
 import platform.game.service.repository.BattleCustomRepositoryImpl;
 import platform.game.service.repository.BattleRepository;
+import platform.game.service.service.SendMessageService;
 
 @Component
 public class BattleCardAction {
@@ -56,6 +57,10 @@ public class BattleCardAction {
             return null;
         }
         BattleTO bto = new BattleTO(battle, battle.getBtPost(),false);
+        if(bto.getDelay()<0 && bto.getState().equals("A")) {
+            battleCustomRepositoryImpl.terminateBetting(btId);
+            bto.setState("B");
+        }
         BattlePointTO pto = new BattlePointTO(0,battle);
 
         List<MemberBetting> list = battle.getMemBettingList();
@@ -75,6 +80,11 @@ public class BattleCardAction {
         List<BattlePointTO> battlePointTOList = new ArrayList<>();
         for (var battle : battleList) {
             BattleTO bto = new BattleTO(battle, battle.getBtPost(),true);
+            if(bto.getDelay()<0 && bto.getState().equals("A")) {
+                battleCustomRepositoryImpl.terminateBetting(battle.getBtId());
+                bto.setState("B");
+            }
+
             BattlePointTO pto = new BattlePointTO(0,battle);
 
             // 베팅 중복 체크

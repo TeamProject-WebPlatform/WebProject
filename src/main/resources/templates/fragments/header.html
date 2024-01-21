@@ -34,8 +34,8 @@
                 // 1800 일때 now는 200임
                 // 1900 되니까 now 에서 100을 더해줘서 키워되야됨 300
                 const handle = setInterval(() => {
-                    if (now > 0) $counter.innerHTML = Math.ceil(max - now);
-                    else if (now < 0) $counter.innerHTML = Math.floor(max - now);
+                    if (now > 0) $counter.innerHTML = Math.ceil(max - now).toLocaleString();
+                    else if (now < 0) $counter.innerHTML = Math.floor(max - now).toLocaleString();
                     // 목표수치에 도달하면 정지
                     if ((now < 1 && now >= 0) || (now > -1 && now <= 0)) {
                         clearInterval(handle);
@@ -210,7 +210,7 @@
                     <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
                     <a th:if="${nickname}" class="action-btn wallet" th:href="@{/wallet}"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
-                    <div id="current-point" point="" th:text="${currentPoint}"></div>
+                    <div id="current-point" point="" th:utext="'<script>var currentPointNum = '+${currentPoint}+';var currentPointComma = currentPointNum.toLocaleString(); document.write(currentPointComma);</script>'"></div>
 
                     <!-- <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                             class="animation-ripple-delay1"></span></a>
