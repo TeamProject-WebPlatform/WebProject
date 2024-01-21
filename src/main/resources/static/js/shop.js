@@ -115,7 +115,7 @@ function closePopup() {
 }
 
 // 아이템 구매
-async function getItem(point,category) {
+async function getItem(point,category,pointKindCd) {
     if (confirm("정말 구매 하시겠습니까??") == true){    //확인
         sendPointChange(point, pointKindCd);
         try {

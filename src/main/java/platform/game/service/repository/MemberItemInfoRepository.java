@@ -38,7 +38,7 @@ public interface MemberItemInfoRepository extends JpaRepository<MemberItem, Memb
     // 아이템 구매 후 포인트 차감
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "update member set mem_cur_point = mem_cur_point-:point where mem_id=:mem_id", nativeQuery = true)
+    @Query(value = "update member set mem_cur_point = mem_cur_point+:point where mem_id=:mem_id", nativeQuery = true)
     Integer UpdatePoint(int point, long mem_id);
 
     // 갖고 있는 뱃지들
