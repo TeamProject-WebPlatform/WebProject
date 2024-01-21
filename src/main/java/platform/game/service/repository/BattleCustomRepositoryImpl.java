@@ -1,6 +1,7 @@
 package platform.game.service.repository;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Battle;
 import platform.game.service.entity.BattlePost;
@@ -176,7 +183,9 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         int flag = query.executeUpdate();
         if (flag != 1)
             throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
-
+        // 신청자 포인트 차감
+        int point = btp.getBtPostPoint();
+        updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50106", -point);
         return flag;
     }
 
@@ -198,10 +207,13 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                     .append(isAccept == 0 ? "1" : "2")
                     .append(applicantsStr, index + requesterStr.length() + 2, applicantsStr.length());
             String updatedApplicantsStr = temp.toString();
-
             btp.setBtPostApplicants(updatedApplicantsStr);
             
+            // 거절한 사람 베팅 포인트 반환
+            updatePointHistoryImpl.insertPointHistoryByMemId(requester, "50107", btp.getBtPostPoint());
+            
             if (isAccept == 0) {
+                // 신청자 수락
                 Battle battle = optionalBattle.get();
                 Member client = entityManager.getReference(Member.class, requester);
                 battle.setClientMember(client);
@@ -212,11 +224,19 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                 long delay = data[1];
                 btp.setBettingFinTime(targetTime);
                 try{
-
                     bettingStateChangeService.sendMessageToChangeState(btId, "A",delay,new BattleMemberTO(client));
                 }catch(Exception e){
                     System.out.println(e.getMessage());
                     throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
+                }
+                // 다른 신청자들 포인트 반환 작업
+                String[] applicants = updatedApplicantsStr.split("/");
+                for(int i =0;i<applicants.length;i++){
+                    String[] info = applicants[i].split(",");
+                    if(info[1].equals("0")){
+                        long memId = Long.parseLong(info[0]);
+                        updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50107", btp.getBtPostPoint());
+                    }
                 }
             }
             battlePostRepository.save(btp);
@@ -309,7 +329,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
 
     @Transactional
     @Override
-    public int[] writePost(long memId, String title, String game, String point, String content, Date ddDate,
+    public int[] writePost(long memId, String title, String game,String etcGame, String point, String content, Date ddDate,
             Date stDate) {
         // post에 추가
         // battle에 추가
@@ -352,12 +372,13 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         // BATTLE_POST INSERT
         query = entityManager.createNativeQuery(
                 "INSERT INTO battle_post " +
-                        "(bt_post_applicants, bt_post_dead_line, bt_post_point, game_cd, post_id, bt_id, bt_start_dt) "
+                        "(bt_post_applicants, bt_post_dead_line, bt_post_point, game_cd,etc_game_nm=:etcGame, post_id, bt_id, bt_start_dt) "
                         +
                         "VALUES('', :ddDate , :point, :gameCd, :postId, :btId , :stDate)");
         query.setParameter("ddDate", ddDate);
         query.setParameter("point", point);
         query.setParameter("gameCd", game);
+        query.setParameter("etc_game_nm", etcGame);
         query.setParameter("postId", postId);
         query.setParameter("btId", btId);
         query.setParameter("stDate", stDate);
@@ -369,7 +390,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
 
     @Transactional
     @Override
-    public int[] modifyPost(int postId, int btId, long memId, String title, String game, String point, String content,
+    public int[] modifyPost(int postId, int btId, long memId, String title, String game, String etcGame,String point, String content,
             Date ddDate, Date stDate) {
         // post에 추가
         // battle에 추가
@@ -400,11 +421,12 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         // BATTLE_POST INSERT
         query = entityManager.createNativeQuery(
                 "UPDATE battle_post " +
-                        "SET bt_post_dead_line=:ddDate, bt_post_point=:point, game_cd=:gameCd, bt_start_dt=:stDate " +
+                        "SET bt_post_dead_line=:ddDate, bt_post_point=:point, game_cd=:gameCd,etc_game_nm=:etcGame, bt_start_dt=:stDate " +
                         "WHERE post_id=:postId");
         query.setParameter("ddDate", ddDate);
         query.setParameter("point", point);
         query.setParameter("gameCd", game);
+        query.setParameter("etcGame", etcGame);
         query.setParameter("postId", postId);
         query.setParameter("stDate", stDate);
         if (query.executeUpdate() != 1)
@@ -433,6 +455,28 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         int point = bp.getBtPostPoint();
         long memId = bt.getHostMember().getMemId();
         updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50105", point);
+
+        // comment DELETE
+        query = entityManager.createNativeQuery(
+                "DELETE FROM comment " +
+                        "WHERE post_id=:postId");
+        query.setParameter("postId", postId);
+        query.executeUpdate();
+
+        System.out.println(4);
+        // 배틀 신청 보류자들 포인트 반환
+        if(!bp.getBtPostApplicants().equals("")){
+            String[] applicants = bp.getBtPostApplicants().split("/");
+            for(int i =0;i<applicants.length;i++){
+                String[] info = applicants[i].split(",");
+                if(info[1].equals("0")){
+                    long requester = Long.parseLong(info[0]);
+                    updatePointHistoryImpl.insertPointHistoryByMemId(requester, "50107", bp.getBtPostPoint());
+                }
+            }
+        }
+        
+
         // bp DELETE
         query = entityManager.createNativeQuery(
                 "DELETE FROM battle_post " +
@@ -457,7 +501,59 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         if (query.executeUpdate() != 1)
             throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
 
+        
 
         return 1;
+    }
+    @Override
+    public List<Battle> getBattleListByCondition(String selectedGame, String selectedState) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Battle> query = cb.createQuery(Battle.class);
+
+        Root<Battle> root = query.from(Battle.class);
+        Join<Battle, BattlePost> bpJoin = root.join("btPost", JoinType.INNER); // INNER JOIN으로 설정
+        
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (!selectedState.equals("ALL")) {
+            predicates.add(cb.equal(root.get("btState"), selectedState));
+        }
+
+        if (!selectedGame.equals("30000")) {
+            predicates.add(cb.equal(bpJoin.get("gameCd"),selectedGame));
+        }
+
+        query.where(predicates.toArray(new Predicate[0]));
+        query.orderBy(cb.desc(root.get("btId"))); // 내림차순
+
+        List<Battle> result = entityManager.createQuery(query).getResultList();
+        return result;    
+    }
+    @Override
+    public List<Battle> getBattleListByCondition(String selectedGame, String selectedState,long memId) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Battle> query = cb.createQuery(Battle.class);
+
+        Root<Battle> root = query.from(Battle.class);
+        Join<Battle, BattlePost> bpJoin = root.join("btPost", JoinType.INNER); // INNER JOIN으로 설정
+        
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (!selectedState.equals("ALL")) {
+            predicates.add(cb.equal(root.get("btState"), selectedState));
+        }
+
+        if (!selectedGame.equals("30000")) {
+            predicates.add(cb.equal(bpJoin.get("gameCd"),selectedGame));
+        }
+        Predicate hostMemberPredicate = cb.equal(root.get("hostMember").get("memId"), memId);
+        Predicate clientMemberPredicate = cb.equal(root.get("clientMember").get("memId"), memId);
+        predicates.add(cb.or(hostMemberPredicate, clientMemberPredicate));
+
+        query.where(predicates.toArray(new Predicate[0]));
+        query.orderBy(cb.desc(root.get("btId"))); // 내림차순
+
+        List<Battle> result = entityManager.createQuery(query).getResultList();
+        return result;    
     }
 }

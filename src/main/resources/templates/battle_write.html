@@ -29,6 +29,15 @@
 </head>
 <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
+        // 숫자만 인풋
+        document.getElementById("point").addEventListener('input', function (event) {
+            // 현재 입력된 값
+            let currentValue = event.target.value;
+            // 숫자 이외의 문자 제거
+            let sanitizedValue = currentValue.replace(/\D/g, '');
+            // 수정된 값을 다시 입력란에 설정
+            event.target.value = sanitizedValue;
+        });
         // 포인트 관련
         let beforePoint = /*[[${point}]]*/0;
         // 날짜 관련 --------
@@ -38,20 +47,24 @@
         var curYear = currentDate.getFullYear();
         var curMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
         var curDay = currentDate.getDate();
+        var curHour = currentDate.getHours();
+        var curMinute = currentDate.getMinutes();
 
         let isModify = /*[[${isModify}]]*/'';
+        let game = /*[[${game}]]*/'';
+
         let ddyear = /*[[${ddYear}]]*/'';
         let styear = /*[[${stYear}]]*/'';
-        
+
         let ddmonth = /*[[${ddMonth}]]*/'';
         let stmonth = /*[[${stMonth}]]*/'';
-        
+
         let ddday = /*[[${ddDay}]]*/'';
         let stday = /*[[${stDay}]]*/'';
-        
+
         let ddhour = /*[[${ddHour}]]*/'';
         let sthour = /*[[${stHour}]]*/'';
-        
+
         let ddminute = /*[[${ddMinute}]]*/'';
         let stminute = /*[[${stMinute}]]*/'';
         // 연도 선택을 위한 옵션 동적 생성
@@ -63,9 +76,9 @@
                 option.text = year + "년";
                 yearSelect.add(option);
 
-                if(!isModify && year==curYear) option.selected=true;
-                if(isModify && yearSelect.name==='ddyear' && year===ddyear) option.selected=true;
-                if(isModify && yearSelect.name==='styear' && year===styear) option.selected=true;
+                if (!isModify && year == curYear) option.selected = true;
+                if (isModify && yearSelect.name === 'ddyear' && year === ddyear) option.selected = true;
+                if (isModify && yearSelect.name === 'styear' && year === styear) option.selected = true;
             }
         })
         // 월 선택을 위한 옵션 동적 생성
@@ -76,10 +89,10 @@
                 option.value = month;
                 option.text = month + "월";
                 monthSelect.add(option);
-                
-                if(!isModify && month==curMonth) option.selected=true;
-                if(isModify && monthSelect.name==='ddmonth' && month===ddmonth) option.selected=true;
-                if(isModify && monthSelect.name==='stmonth' && month===stmonth) option.selected=true;
+
+                if (!isModify && month == curMonth) option.selected = true;
+                if (isModify && monthSelect.name === 'ddmonth' && month === ddmonth) option.selected = true;
+                if (isModify && monthSelect.name === 'stmonth' && month === stmonth) option.selected = true;
             }
         })
 
@@ -92,9 +105,9 @@
                 option.text = day + "일";
                 daySelect.add(option);
 
-                if(!isModify && day==curDay) option.selected=true;
-                if(isModify && daySelect.name==='ddday' && day===ddday) option.selected=true;
-                if(isModify && daySelect.name==='stday' && day===stday) option.selected=true;
+                if (!isModify && day == curDay) option.selected = true;
+                if (isModify && daySelect.name === 'ddday' && day === ddday) option.selected = true;
+                if (isModify && daySelect.name === 'stday' && day === stday) option.selected = true;
             }
         })
 
@@ -107,8 +120,9 @@
                 option.text = hour + "시";
                 hourSelect.add(option);
 
-                if(isModify && hourSelect.name==='ddhour' && hour===ddhour) option.selected=true;
-                if(isModify && hourSelect.name==='sthour' && hour===sthour) option.selected=true;
+                if (!isModify && hour == (curHour+1)%24) option.selected = true;
+                if (isModify && hourSelect.name === 'ddhour' && hour === ddhour) option.selected = true;
+                if (isModify && hourSelect.name === 'sthour' && hour === sthour) option.selected = true;
             }
         })
         // 분 선택을 위한 옵션 동적 생성
@@ -119,15 +133,18 @@
                 option.value = minute;
                 option.text = minute + "분";
                 minuteSelect.add(option);
-                
-                if(isModify && minuteSelect.name==='ddminute' && minute===ddminute) option.selected=true;
-                if(isModify && minuteSelect.name==='stminute' && minute===stminute) option.selected=true;
+
+                if (!isModify && minuteSelect.name === 'ddminute' && minute == curMinute) option.selected = true;
+                if (!isModify && minuteSelect.name === 'stminute' && minute == (curMinute+15)%60) option.selected = true;
+
+                if (isModify && minuteSelect.name === 'ddminute' && minute === ddminute) option.selected = true;
+                if (isModify && minuteSelect.name === 'stminute' && minute === stminute) option.selected = true;
             }
         })
 
         // 폼 제출 시 선택된 날짜 및 시간 가져오기
         document.getElementById('btn-write').addEventListener('click', function (e) {
-   
+
             let title = document.querySelector(".post-section textarea").value;
             let game = document.getElementById("game").value;
             let point = document.getElementById("point").value;
@@ -144,50 +161,70 @@
             let stSelectedDay = daySelects[1].value;
             let stSelectedHour = hourSelects[1].value;
             let stSelectedMinute = minuteSelects[1].value;
-            
-            let ddDate = new Date(ddSelectedYear, ddSelectedMonth-1, ddSelectedDay, ddSelectedHour, ddSelectedMinute);
-            let stDate = new Date(stSelectedYear, stSelectedMonth-1, stSelectedDay, stSelectedHour, stSelectedMinute);
-            
-            if(!checkDate(ddDate,stDate)){
+
+            let ddDate = new Date(ddSelectedYear, ddSelectedMonth - 1, ddSelectedDay, ddSelectedHour, ddSelectedMinute);
+            let stDate = new Date(stSelectedYear, stSelectedMonth - 1, stSelectedDay, stSelectedHour, stSelectedMinute);
+
+            if (!checkDate(ddDate, stDate)) {
                 alert('날짜 선택이 잘못 되었습니다.\n1. 신청 기한은 최소 1시간 입니다.\n2. 시작 시간은 신청 기한과 최소 15분 차이나야 합니다.');
                 return;
             }
-            if(isModify) {
-                document.getElementById("dPoint").value = beforePoint-point;
-                if(!checkPoint(point-beforePoint)){
+            if (isModify) {
+                document.getElementById("dPoint").value = beforePoint - point;
+                if (!checkPoint(point - beforePoint)) {
                     alert('보유 포인트가 부족합니다.');
                     return;
                 }
-            }else{
-                if(!checkPoint(point)){
+            } else {
+                if (!checkPoint(point)) {
                     alert('보유 포인트가 부족합니다.');
                     return;
                 }
             }
             document.forms["pfrm"].submit();
         });
+        if(isModify){
+            let selectedGame = document.querySelector(".selectedGame");
+            let options = selectedGame.querySelectorAll("option");
+            options.forEach(function(option){
+                if(option.value==game){
+                    option.selected = true;
+                }
+            })
+            if(game=='30006' || game=='30099'){
+                document.querySelector(".selectedGameInput").style.display="block";
+            }
+        }
     })
-    function checkPoint(point){
+    function checkPoint(point) {
         let currentPoint = Number(document.getElementById("current-point").getAttribute("point"));
         // 포인트와 현재 포인트 비교
-        if(point > currentPoint) return false;
+        if (point > currentPoint) return false;
         return true;
     }
-    function checkDate(ddDate,stDate){
+    function checkDate(ddDate, stDate) {
         let curDate = new Date();
 
         let ddDatePlus15Min = ddDate.setMinutes(ddDate.getMinutes() + 15);
         let curDatePlust1Hour = curDate.setHours(curDate.getHours() + 1);
 
-        if(curDatePlust1Hour > ddDate){
+        if (curDatePlust1Hour > ddDate) {
             console.log("신청 기간은 최소 1시간");
             return false;
         }
-        if(ddDatePlus15Min>stDate){
+        if (ddDatePlus15Min > stDate) {
             console.log("최소 15분 차이");
             return false;
         }
         return true;
+    }
+    function selectGame(value){
+        if(value=='30006' || value=='30099'){
+            document.querySelector(".selectedGameInput").style.display="block";
+        }else{
+            document.querySelector(".selectedGameInput").style.display="none";
+            document.getElementById("selectedGameInput").value="";
+        }
     }
 </script>
 
@@ -212,14 +249,14 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <a th:href="@{/battle}">
+                        <a th:href="@{/battle?page=1}">
                             <h3 class="uk-text-lead">BATTLE</h3>
                         </a>
                     </div>
                 </div>
                 <div class="content">
                     <div class="content-header">
-                        헤더 뭐넣을지 아직
+                        
                     </div>
                     <div class="content-main">
                         <div class="uk-grid" data-uk-grid>
@@ -274,8 +311,10 @@
                                     <div class="post-info">
                                         <!-- Post title-->
                                         <div class="post-title">
-                                            <textarea th:unless="${isModify==true}" name="title" class="battle-textarea" placeholder="타이틀을 작성"></textarea>
-                                            <textarea th:if="${isModify==true}" name="title" class="battle-textarea" th:text="${title}"></textarea>
+                                            <textarea th:unless="${isModify==true}" name="title" class="battle-textarea"
+                                                placeholder="타이틀을 작성"></textarea>
+                                            <textarea th:if="${isModify==true}" name="title" class="battle-textarea"
+                                                th:text="${title}"></textarea>
                                         </div>
                                         <div class="line"></div>
                                         <div class="post-sub">
@@ -290,21 +329,53 @@
                                     <div class="battle-info">
                                         <div>
                                             <div>
-                                                <div class="battle-info-key">게임 : </div>
-                                                <div class="battle-info-value">
-                                                    <textarea th:unless="${isModify==true}" name="game" id="game" class="battle-textarea"></textarea>
-                                                    <textarea th:if="${isModify==true}" name="game" id="game" class="battle-textarea" th:text="${game}"></textarea>
+                                                <div class="battle-info-key first-key">
+                                                    <div>
+                                                        게임 : 
+                                                    </div>
+                                                </div>
+                                                <div class="battle-info-value for-select">
+                                                    <div name="game" id="game"
+                                                        class="battle-game-select">
+                                                        <select name="selectedGame" class="js-select uk-flex-1 height95per margintop1per selectStyle selectedGame" style="display: none;"
+                                                        onchange="selectGame(this.value)">
+                                                            <option value="">게임선택</option>
+                                                            <option value="30001">LeagueofLegends</option>
+                                                            <option value="30002">BattleGround</option>
+                                                            <option value="30003">Overwatch</option>
+                                                            <option value="30004">Valorant</option>
+                                                            <option value="30005">FIFA</option>
+                                                            <option value="30006">Steam</option>
+                                                            <option value="30099">etc</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="selectedGameInput" style="display: none;">
+                                                        <textarea th:unless="${isModify==true}" name="selectedGameInput" id="selectedGameInput"
+                                                            class="battle-textarea" placeholder="게임 이름 입력" style=""></textarea>
+                                                        <textarea th:if="${isModify==true}" name="selectedGameInput" id="selectedGameInput"
+                                                                class="battle-textarea" th:text="${etcGameNm}"></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="battle-info-key">포인트 : </div>
+                                                <div class="battle-info-key">
+                                                    <div>
+                                                        포인트 : 
+                                                    </div>
+                                                </div>
                                                 <div class="battle-info-value">
-                                                    <textarea th:unless="${isModify==true}" name="point" id="point" class="battle-textarea"></textarea>
-                                                    <textarea th:if="${isModify==true}" name="point" id="point" class="battle-textarea" th:text="${point}"></textarea>
+                                                    <textarea th:unless="${isModify==true}" name="point" id="point"
+                                                        class="battle-textarea"></textarea>
+                                                    <textarea th:if="${isModify==true}" name="point" id="point"
+                                                        class="battle-textarea" th:text="${point}"></textarea>
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="battle-info-key">신청 기한 : </div>
+                                                <div class="battle-info-key">
+                                                    <div>
+                                                        신청 기한 : 
+                                                    </div>
+                                                </div>
                                                 <div class="battle-info-value">
                                                     <div class="date-picker" id="deadline-dt">
                                                         <div>
@@ -325,7 +396,11 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <div class="battle-info-key">시작 시간 : </div>
+                                                <div class="battle-info-key">
+                                                    <div>
+                                                        시작 시간 : 
+                                                    </div>
+                                                </div>
                                                 <div class="battle-info-value">
                                                     <div class="date-picker" id="start-dt">
                                                         <div>
@@ -349,13 +424,49 @@
 
                                     </div>
                                     <div class="post-text">
-                                        <textarea th:unless="${isModify==true}" name="content" id="content" class="battle-textarea" placeholder="게시글 내용 작성"></textarea>
-                                        <textarea th:if="${isModify==true}" name="content" id="content" class="battle-textarea" th:text="${content}"></textarea>
+                                        <textarea th:unless="${isModify==true}" name="content" id="content"
+                                            class="battle-textarea" placeholder="게시글 내용 작성"></textarea>
+                                        <textarea th:if="${isModify==true}" name="content" id="content"
+                                            class="battle-textarea" th:text="${content}"></textarea>
                                     </div>
                                 </div>
                             </form>
-                            <div class="uk-width-1-5@xl requests-section">
-
+                            <div class="uk-width-1-5@xl write-rule-section">
+                                <div class="rule-header">
+                                    BATTLE RULE<div style="color:red; font-size:25px;">@필독</div>
+                                </div>
+                                <div>
+                                    <div class="sentence">
+                                        <div class="no"> 1.&nbsp; </div>
+                                        <div><strong style="color:brown">신청 기한</strong>은 지금으로 부터 최소 <strong style="color:brown">1시간</strong></div>
+                                    </div>
+                                    <div class="sentence">
+                                        <div class="no"> 2.&nbsp; </div>
+                                        <div><strong style="color:brown">시작 시간</strong>은 신청 기한에서 <strong style="color:brown">15분</strong> 뒤 부터</div>
+                                    </div>
+                                    <div class="sentence">
+                                        <div class="no"> 3.&nbsp; </div>
+                                        <div>포인트는 글 작성 시 차감되며 정상 진행 되지 않았을 시 반환된다.</div>
+                                    </div>
+                                    <div class="sentence">
+                                        <div class="no"> 4.&nbsp; </div>
+                                        <div><strong style="color:brown">배틀 시작</strong>은 호스트가 직접 해야하며 시작 시간 전에는 누를 수 없으나 시작 시간 <strong style="color:brown">30분</strong>이 지난 시점까지 시작을 누르지 않으면 자동
+                                            종료된다.</div>
+                                    </div>
+                                    <div class="sentence">
+                                        <div class="no"> 5.&nbsp;</div>
+                                        <div><strong style="color:brown">배틀 종료</strong>는 호스트가 직접 해야하며 클라이언트의 동의가 필요하다. 동의 하지 않은 쪽은 차후 자동 패배 처리된다.</div>
+                                    </div>
+                                    <div class="sentence">
+                                        <div class="no"> 6.&nbsp; </div>
+                                        <div>호스트의 부정행위를 막기 위해 대결 결과를 인증할 수 있는 <strong style="color:brown">스크린샷</strong>을 남겨 두시길 바랍니다. 스크릿샷을 남겨 두지 않은 배틀에 대해서는
+                                            본인 과실입니다.</div>
+                                    </div>
+                                    <div class="sentence">
+                                        <div class="no"> 7.&nbsp; </div>
+                                        <div>매칭이 성사된 이후 경기는 취소할 수 없으니 신중히 시작하시길 바랍니다.</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -364,8 +475,8 @@
                     <div class="content-footer">
                         <div class="button-section">
                             <div>
-                                <a th:href="@{/battle}"><input type="button" value="목록" class="btn_re"></a>
-                                <input type="button" id="btn-write"value="저장" class="btn_re">
+                                <a th:href="@{/battle?page=1}"><input type="button" value="목록" class="btn_re"></a>
+                                <input type="button" id="btn-write" value="저장" class="btn_re">
                             </div>
 
                         </div>

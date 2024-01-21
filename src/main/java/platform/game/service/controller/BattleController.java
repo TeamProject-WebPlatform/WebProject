@@ -72,7 +72,12 @@ public class BattleController {
     CommonCodeRepository commonCodeRepository;
 
     @RequestMapping("")
-    public ModelAndView battle() {
+    public ModelAndView battle(@RequestParam("page") int page, 
+        @RequestParam(value = "selectedListCnt", defaultValue = "10") int selectedListCnt,
+        @RequestParam(value = "selectedGame", defaultValue = "30000") String selectedGame,
+        @RequestParam(value = "selectedState", defaultValue = "ALL") String selectedState,
+        @RequestParam(value = "mybattle", defaultValue = "false") Boolean myBattle) {
+        
         long id = 0;
         ModelAndView mav = new ModelAndView("battle");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -84,14 +89,23 @@ public class BattleController {
                 id = member.getMemId();
                 mav.addObject("memId", id);
             }
-        } else {
         }
-        List[] battleList = battleCardAction.getBattleList(id);
+        // 리스트 정보취득
+        mav.addObject("page", page);
+        mav.addObject("startPage",((page-1)/6)*6 + 1);
+        mav.addObject("selectedListCnt", selectedListCnt);
+        mav.addObject("selectedGame", selectedGame);
+        mav.addObject("selectedState", selectedState);
+        // 리스트 생성
+        Object[] o = battleCardAction.getBattleList(id,page,selectedListCnt,selectedGame,selectedState,myBattle);
+        List[] battleList = (List[])o[0];
+        int lastPage = (int)o[1];
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
-
+        mav.addObject("lastPage", lastPage);
         mav.addObject("battleTOList", battleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
+        
         // 사이드바에 방문자 수 보여주기
         CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
         mav.addObject("totalCount", visitCount.getRemark1());
@@ -116,6 +130,8 @@ public class BattleController {
         }
         Post post = new Post();
         post = postInfoRepository.findByPostId(postId);
+        post.setPostHit(post.getPostHit()+1);
+        postInfoRepository.save(post);
         Object[] battleTOs = battleCardAction.getBattleTO(id, postId, btId);
 
         BattleTO bto = (BattleTO) battleTOs[0];
@@ -137,7 +153,7 @@ public class BattleController {
                 Member member = memberInfoRepository.findById(Long.parseLong(s[0])).isPresent()
                         ? memberInfoRepository.findById(Long.parseLong(s[0])).get()
                         : null;
-                applicants[i][0] = s[0]; // memId
+                applicants[i][0] = s[0]; // memId 
                 applicants[i][1] = s[1]; // 보류 상태
                 applicants[i][2] = s[2]; // 신청 시간
                 applicants[i][3] = member != null ? member.getMemNick() : null; // 닉네임
@@ -194,6 +210,7 @@ public class BattleController {
             mav.addObject("content", post.getPostContent());
             mav.addObject("point", battlePost.getBtPostPoint());
             mav.addObject("game", battlePost.getGameCd());
+            mav.addObject("etcGameNm",battlePost.getEtcGameNm()==null?" ":battlePost.getEtcGameNm());
             // ddDate의 연, 월, 일, 시간, 분
             mav.addObject("ddYear", ddDate.getYear());
             mav.addObject("ddMonth", ddDate.getMonthValue());
@@ -216,7 +233,8 @@ public class BattleController {
         String isModify = request.getParameter("isModify");
         long memId = Long.parseLong(request.getParameter("memId"));
         String title = request.getParameter("title");
-        String game = request.getParameter("game");
+        String game = request.getParameter("selectedGame");
+        String etcGame = request.getParameter("selectedGameInput");
         String point = request.getParameter("point");
         String content = request.getParameter("content");
 
@@ -250,7 +268,7 @@ public class BattleController {
                 int dPoint = Integer.parseInt(request.getParameter("dPoint"));
                 int postId = Integer.parseInt(request.getParameter("postId"));
                 int btId = Integer.parseInt(request.getParameter("btId"));
-                data = battleCustomRepositoryImpl.modifyPost(postId, btId, memId, title, game, point, content, ddDate,
+                data = battleCustomRepositoryImpl.modifyPost(postId, btId, memId, title, game,etcGame, point, content, ddDate,
                         stDate);
                 if (dPoint < 0) {
                     // 포인트를 더썼으니까
@@ -260,7 +278,7 @@ public class BattleController {
                     updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50103", dPoint);
                 }
             } else {
-                data = battleCustomRepositoryImpl.writePost(memId, title, game, point, content, ddDate, stDate);
+                data = battleCustomRepositoryImpl.writePost(memId, title, game,etcGame, point, content, ddDate, stDate);
                 updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50101", -Integer.parseInt(point));
             }
         } catch (Exception e) {

@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".left-time").forEach(function (x) {
 
         let delay = x.getAttribute("delay");        
-        console.log(delay);
+
         updateTimerDisplay(delay,x);
         const timerInterval = setInterval(() => {
             // 남은 시간 갱신 0.01초마다 갱신
@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }, 10);
     });
+
 });
 function battleCardConnect() {
     var socket = new SockJS('/ws');
@@ -121,7 +122,6 @@ function battleCardConnect() {
                             }
                         }
                     } else if (endpoint === 1) {
-                        console.log("베팅 상태 변화");
                         let stateTO = JSON.parse(response.body);
                         let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
                         const section = pointInfo.querySelector(".info-state");
@@ -208,8 +208,14 @@ function updateTimerDisplay(remainingTime, timeDisplay) {
 function betPoint(btId, flag) {
     // 포인트 배팅
     // flag : 0-왼 , 1-오
-    const section = document.getElementById("bettingId" + btId);
+    const section = document.querySelector(".battle-card__box[btId='" + btId + "']");
     let pointInputs = section.querySelector(".point-betting-input");
+    let host = section.querySelectorAll(".battle-profile-nick")[0].innerHTML;
+    let client = section.querySelectorAll(".battle-profile-nick")[1].innerHTML;
+    if(nickname === host || nickname === client){
+        alert('자신의 배틀에는 베팅할 수 없습니다.');
+        return;
+    }
     let point = pointInputs.value;
     if (point === "" | isNaN(point)) {
         return;
@@ -246,20 +252,13 @@ function betPoint(btId, flag) {
         button.style.color = "white";
     }
 }
-function formatNumberTok(value) {
-    var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
-    return formattedValue;
-}
-function getColorRatio(bettingRatio) {
-    if (bettingRatio >= 90) {
-        return '#FF0000'; // 빨간색
-    } else if (bettingRatio >= 70) {
-        return '#FFA500'; // 주황색
-    } else if (bettingRatio >= 50) {
-        return '#00FF00'; // 연두색
-    } else if (bettingRatio >= 30) {
-        return '#00F0FF'; // 민트색
-    } else {
-        return '#0FCFA5'; // 검은색
-    }
+function getGameName(code){
+    let gameName = "";
+    if(code=='30001') gameName = 'LeagueofLegends';
+    if(code=='30002') gameName = 'BattleGround';
+    if(code=='30003') gameName = 'Overwatch';
+    if(code=='30004') gameName = 'Valorant';
+    if(code=='30005') gameName = 'FIFA';
+
+    return gameName;
 }

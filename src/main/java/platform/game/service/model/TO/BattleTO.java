@@ -37,6 +37,7 @@ public class BattleTO {
         this.title = post.getPostTitle();
         this.postId = post.getPostId();
         this.gameCd = battlePost.getGameCd();
+        this.etcGame = battlePost.getEtcGameNm()==null?"":battlePost.getEtcGameNm();
         this.state = battle.getBtState();
         if(!isList){
             this.deadlineDt = battlePost.getBtPostDeadLine();
@@ -69,6 +70,7 @@ public class BattleTO {
     String title; // 배틀 타이틀
     int point; // 배틀 포인트
     String gameCd;
+    String etcGame;
     int postId; // 해당 배틀게시글 id
     String state;
 

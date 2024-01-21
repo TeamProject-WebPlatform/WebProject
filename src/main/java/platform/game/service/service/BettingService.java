@@ -27,10 +27,8 @@ public class BettingService {
             long minimumTime = TimeUnit.MINUTES.toMillis(15); // 15분을 밀리초로 변환
             // 클라이언트가 결정된 순간
             long clientDecisionTime = System.currentTimeMillis();
-            System.out.println("clientDecisionTime : "+clientDecisionTime);
             // 배틀 시작 시간
             long battleStartTime = date.getTime(); 
-            System.out.println("battleStartTime : "+battleStartTime);
 
             // targetTime 계산
             long targetTime = battleStartTime - minimumTime;

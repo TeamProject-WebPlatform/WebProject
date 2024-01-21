@@ -12,6 +12,7 @@ import platform.game.service.entity.Battle;
 import platform.game.service.entity.MemberBetting;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
+import platform.game.service.repository.BattleCustomRepositoryImpl;
 import platform.game.service.repository.BattleRepository;
 
 @Component
@@ -19,35 +20,33 @@ public class BattleCardAction {
 
     @Autowired
     BattleRepository battleRepository;
-
-    public List[] getBattleList(long id) {
-        List<BattleTO> battleTOList = new ArrayList<>();
-        List<BattlePointTO> battlePointTOList = new ArrayList<>();
-
-        List<Battle> battleList = battleRepository.findAll();
-        for (var battle : battleList) {
-
-            BattleTO bto = new BattleTO(battle, battle.getBtPost(),true);
-            BattlePointTO pto = new BattlePointTO(0,battle);
-
-            // 베팅 중복 체크
-            List<MemberBetting> list = battle.getMemBettingList();
-            for (int i = 0; i < list.size(); i++) {
-                MemberBetting m = list.get(i);
-                if (m.getMember().getMemId() == id) {
-                    // 이미 한거임
-                    pto.setAlreadyBet(1);
-                    pto.setFlag(m.getBetFlag());
-                }
-            }
-
-            battleTOList.add(bto);
-            battlePointTOList.add(pto);
+    @Autowired
+    BattleCustomRepositoryImpl battleCustomRepositoryImpl;
+    
+    public Object[] getBattleList(long id,int page,int selectedListCnt, String selectedGame, String selectedState,Boolean myBattle) {
+        List<Battle> battleList;
+        if(myBattle){
+            battleList = battleCustomRepositoryImpl.getBattleListByCondition(selectedGame,selectedState,id);
+        }else{
+            battleList = battleCustomRepositoryImpl.getBattleListByCondition(selectedGame,selectedState);
         }
-
-        return new List[] { battleTOList, battlePointTOList };
+        // 모든 리스트 받아왔고 page와 selectedListCnt로
+        // page 1이고 10일때  
+        int startNum = (page-1) * selectedListCnt; 
+        int endNum = page * selectedListCnt;
+        if(endNum >= battleList.size()) endNum = battleList.size();
+        int lastPage = battleList.size()/selectedListCnt+(battleList.size()%selectedListCnt==0?0:1);
+        List<Battle> targetBattleList = new ArrayList<>();
+        for(int i = startNum;i<endNum;i++){
+            targetBattleList.add(battleList.get(i));
+        } 
+        Object[] o = new Object[]{getTOList(id,targetBattleList),lastPage};
+        return o;
     }
-
+    public List[] getBattleList(long id) {
+        List<Battle> battleList = battleRepository.findAll();
+        return getTOList(id,battleList);
+    }
     public Object[] getBattleTO(long id, int postId, int btId) {
         Optional<Battle> optionalBt = battleRepository.findByBtId(btId);
         Battle battle = null;
@@ -70,5 +69,28 @@ public class BattleCardAction {
             }
         }
         return new Object[] {bto,pto};
+    }
+    private List[] getTOList(long id,List<Battle> battleList){
+        List<BattleTO> battleTOList = new ArrayList<>();
+        List<BattlePointTO> battlePointTOList = new ArrayList<>();
+        for (var battle : battleList) {
+            BattleTO bto = new BattleTO(battle, battle.getBtPost(),true);
+            BattlePointTO pto = new BattlePointTO(0,battle);
+
+            // 베팅 중복 체크
+            List<MemberBetting> list = battle.getMemBettingList();
+            for (int i = 0; i < list.size(); i++) {
+                MemberBetting m = list.get(i);
+                if (m.getMember().getMemId() == id) {
+                    // 이미 한거임
+                    pto.setAlreadyBet(1);
+                    pto.setFlag(m.getBetFlag());
+                }
+            }
+
+            battleTOList.add(bto);
+            battlePointTOList.add(pto);
+        }
+        return new List[] { battleTOList, battlePointTOList };
     }
 }

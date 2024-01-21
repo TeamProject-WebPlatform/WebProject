@@ -5,7 +5,9 @@
     background-color: #222222;
     color : #fff;
 }
-
+.content-main .post-section{
+    width: 760px;
+}
 .post-text .battle-textarea{
     width: 100%;
     min-height: 400px;
@@ -53,6 +55,103 @@
         padding-right: 40px !important; */
     }
     .requests-section{
-        display: none;
+        /* display: none; */
     }
+}
+
+.write-rule-section{
+    background: #ffffff;
+    padding-left: 0px;
+    width: 390px;
+    margin-left: 40px;
+    padding:10px;
+    margin-bottom: 25px;
+    line-height: 30px;
+
+}
+.write-rule-section .rule-header{
+    display: flex;
+    margin-left:10px;
+    margin-top:10px;
+    font-size : 30px;
+}
+.write-rule-section .sentence{
+    display: flex;
+    margin-top : 10px;
+    margin-left: 10px;
+}
+
+.dark-theme .write-rule-section{
+    background-color: #222222;
+}
+.button-section{
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    margin-right: 20px;
+    margin-top:5px;
+}
+.content-footer .button-section{
+    margin: 0px;
+    display: flex;
+    justify-content: space-between !important;
+}
+.content-footer .button-section >div{
+    display: flex;
+}
+.post-section .button-section{
+    margin : 0px;
+}
+.dark-theme .content-footer .button-section{
+    background-color: #0C1826;
+    border-top : 1px solid rgba(255,255,255,0.3);
+}
+.content-footer .button-section{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-height: 200px;
+    background-color: rgba(244, 97, 25, 0.05);
+    border-top : 1px solid rgba(0,0,0,0.3);
+    padding : 10px 10px;
+}
+.battle-card-section .button-section{
+    background-color: #f5f5f5;
+}
+.dark-theme .battle-card-section .button-section{
+    background-color: #040615;
+}
+.battle-card-section .content-footer{
+    padding-top: 12px;
+}
+.battle-card-section .button-section .btn_re{
+    height: 100% !important;
+    width: 100px;
+
+}
+.content-footer{
+    margin-bottom: 50px;
+}
+.for-select{
+    margin-top: 0px !important;
+}
+.nice-select{
+    height:30px;
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+}
+.dark-theme.nice-select{
+    border: 1px solid white;
+}
+#selectedGameInput{
+    width: 100%;
+}
+.selectedGameInput{
+    height: 30px;
+    margin-top:5px;
+}
+.first-key{
+    margin-top: 0;
+    margin-bottom: 7px;
 }
