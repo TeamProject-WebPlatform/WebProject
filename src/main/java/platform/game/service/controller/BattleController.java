@@ -33,6 +33,7 @@ import platform.game.service.entity.BattlePost;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
@@ -42,6 +43,7 @@ import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.UpdatePointHistoryImpl;
 import platform.game.service.service.MemberInfoDetails;
@@ -67,6 +69,8 @@ public class BattleController {
     BattleCustomRepositoryImpl battleCustomRepositoryImpl;
     @Autowired
     private UpdatePointHistoryImpl updatePointHistoryImpl;
+    @Autowired
+    MemberProfileRepository profileRepository;
 
     @Autowired
     CommonCodeRepository commonCodeRepository;
@@ -84,10 +88,12 @@ public class BattleController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
                 mav.addObject("memId", id);
+                mav.addObject("memberProfile", memberProfile);
             }
         }
         // 리스트 정보취득
@@ -102,6 +108,7 @@ public class BattleController {
         int lastPage = (int)o[1];
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
+
         mav.addObject("lastPage", lastPage);
         mav.addObject("battleTOList", battleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
@@ -122,10 +129,12 @@ public class BattleController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
                 mav.addObject("memId", id);
+                mav.addObject("memberProfile", memberProfile);
             }
         }
         Post post = new Post();
@@ -182,11 +191,13 @@ public class BattleController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
                 mav.addObject("memId", id);
                 mav.addObject("level", member.getMemLvl());
+                mav.addObject("memberProfile", memberProfile);
             }
         }
         if (postId != -1 && btId != -1) {

@@ -221,8 +221,10 @@
                     <a th:unless="${nickname}" th:href="@{/login}" class="action-btn"><i
                             class="fa-solid fa-right-to-bracket ico_fontawesome"></i></a>
 
-                    <a th:if="${nickname}" class="profile" th:href="@{/profile}"><img src="/img/profile.png"
-                            alt="profile"></a>
+                    <a th:if="${nickname}" class="profile" th:href="@{/profile}">
+                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="profile">
+                        <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="profile">
+                    </a>
                 </div>
 
             </div>

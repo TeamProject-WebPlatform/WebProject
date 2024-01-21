@@ -120,12 +120,15 @@ public class MainController {
                     .getMember();
             boolean isFirstLogin = signinHistoryService.isFirstLogin(member);
             if (member != null) {
+                MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(member.getMemId());
+
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memId", member.getMemId());
                 mav.addObject("isFirstLogin", isFirstLogin);
+                mav.addObject("memberProfile",memberProfile);
+                
                 id = member.getMemId();
-
                 System.out.println("isFirstLogin: " + isFirstLogin);
             }
         } else {

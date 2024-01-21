@@ -25,6 +25,7 @@ import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
+import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.RankingRepository;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -45,6 +46,9 @@ public class RankController {
 
     @Autowired
     CommonCodeRepository commonCodeRepository;
+
+    @Autowired
+    MemberProfileRepository profileRepository;
 
     @GetMapping("/getRankFragment")
     public String getRankFragment(@RequestParam("board_cd") String boardCd, Model model) {
@@ -122,9 +126,11 @@ public class RankController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memId", member.getMemId());
+                mav.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
@@ -188,9 +194,11 @@ public class RankController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memId", member.getMemId());
+                mav.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
@@ -253,9 +261,11 @@ public class RankController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memId", member.getMemId());
+                mav.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
