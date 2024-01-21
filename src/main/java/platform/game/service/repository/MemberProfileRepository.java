@@ -1,6 +1,8 @@
 package platform.game.service.repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -83,4 +85,10 @@ public interface MemberProfileRepository extends JpaRepository<MemberProfile, Lo
     @Transactional
     @Query(value = "update member_profile set profile_badge_list=:BadgeList where mem_id=:mem_id", nativeQuery = true)
     Integer UpdateProfileBadgeList(String BadgeList, long mem_id);
+
+    // 배틀컨트롤러에서 mem_nick을 받아서 정보를 출력
+    @Query(value="select distinct mp.profile_image from member_profile mp join member m on mp.mem_id=m.mem_id where m.mem_nick=:mem_nick",nativeQuery = true)
+    String BattleProfileImage(String mem_nick);
+    @Query(value="select distinct mp.profile_badge_list from member_profile mp join member m on mp.mem_id=m.mem_id where m.mem_nick=:mem_nick",nativeQuery = true)
+    String BattleProfileBadgeList(String mem_nick);
 }

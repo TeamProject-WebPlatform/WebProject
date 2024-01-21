@@ -109,9 +109,17 @@ public class BattleController {
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
 
+        // battleTO에 있는 유저들 프로필 가져오기
+        List<Object[]> battleTOProfile = new ArrayList<Object[]>();
+        for(int i=0; i<battleTOList.size();i++){
+            BattleTO to = battleTOList.get(i);
+            String profile = profileRepository.BattleProfileBadgeList(to.getHostNick());
+            System.out.println(profile);
+        }
         mav.addObject("lastPage", lastPage);
         mav.addObject("battleTOList", battleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
+        //mav.addObject("battleProfile", battleTOProfile);
         
         // 사이드바에 방문자 수 보여주기
         CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
