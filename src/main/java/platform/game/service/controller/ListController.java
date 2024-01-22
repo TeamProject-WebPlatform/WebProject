@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletRequest;
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BoardCpageTO;
 import platform.game.service.repository.PostInfoRepository;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
 
 @Controller
@@ -30,6 +31,9 @@ public class ListController {
 
     @Autowired
     private MemberInfoRepository memberInfoRepository;
+
+    @Autowired
+    private CommonCodeRepository commonCodeRepository;
 
     // 한번에 조건 4개 다 검색하기
     @GetMapping("/list_MixList")
@@ -174,6 +178,10 @@ public class ListController {
         modelAndView.addObject("list_search", selectedOption);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }

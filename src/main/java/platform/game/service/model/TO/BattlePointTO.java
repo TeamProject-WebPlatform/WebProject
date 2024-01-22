@@ -23,6 +23,7 @@ public class BattlePointTO {
         clientPointRewardRatio = clientTotalPoint != 0 ? String.format("%.2f",(totalPoint*1.0f/clientTotalPoint)) :"0";
         this.btId = battle.getBtId();
     }
+    private int endpoint = 0;
     private long memId;
 
     private long hostTotalPoint = 0;            
@@ -41,4 +42,5 @@ public class BattlePointTO {
     private int btId;
     private int alreadyBet=0; // 0은 ㄴㄴ, 1은 ㅇㅇ
     private int flag=-1; // 투표했을시 flag
+
 }

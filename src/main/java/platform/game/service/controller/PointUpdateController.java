@@ -19,10 +19,11 @@ import platform.game.service.entity.Battle;
 import platform.game.service.entity.Member;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BettingInfoTO;
+import platform.game.service.repository.BattleCustomRepositoryImpl;
 import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.MemberBettingRepository;
 import platform.game.service.repository.MemberInfoRepository;
-import platform.game.service.repository.UpdatePointHistoryImpl;
+import platform.game.service.repository.UpdateMemberRepository;
 
 @Controller
 public class PointUpdateController {
@@ -31,7 +32,9 @@ public class PointUpdateController {
     @Autowired
     BattleRepository battleRepository;
     @Autowired
-    MemberBettingRepository memberBettingRepository;
+    BattleCustomRepositoryImpl battleCustomRepositoryImpl;
+    @Autowired
+    UpdateMemberRepository updateMemberRepository;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -70,14 +73,14 @@ public class PointUpdateController {
 
                 if (flag==0) {
                     // 호스트
-                    battleRepository.updateHostBetPoint(btId, point);
+                    battleCustomRepositoryImpl.updateHostBetPoint(btId, point);
                 } else if (flag==1) {
                     // 클라이언트
-                    battleRepository.updateClientBetPoint(btId, point);
+                    battleCustomRepositoryImpl.updateClientBetPoint(btId, point);
                 }
                 // 여기에 memId를 기준으로 member_betting에 정보 추가
                 // 이후에 추가된 정보로 베팅 현황 알수 있게
-                memberBettingRepository.insertData(point,memId,btId,flag);
+                updateMemberRepository.insertData(point,memId,btId,flag);
             } catch(DataIntegrityViolationException e){
                 // 이미 베팅한 곳에 또 베팅 하면 뜨는 에러
                 successFlag.set(false);
@@ -114,4 +117,14 @@ public class PointUpdateController {
             // JSON 변환 오류 처리
         }
     }
+    // @MessageMapping("/bettingStateUpdate")
+    // public void bettingStateUpdate(@Payload BettingStateInfoTO bettingStateInfo)
+    //         throws JsonMappingException, JsonProcessingException {
+    //     // 베팅 상태 업데이트
+                
+    //     String topic = "/topic/pointbetting/" + bettingStateInfo.getBtId();
+
+    //     String jsonString = objectMapper.writeValueAsString(bettingStateInfo);
+    //     messagingTemplate.convertAndSend(topic,jsonString);
+    // }
 }

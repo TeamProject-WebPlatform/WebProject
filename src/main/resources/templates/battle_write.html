@@ -29,6 +29,16 @@
 </head>
 <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
+        // 포인트 관련
+        let beforePoint = /*[[${point}]]*/0;
+        // 날짜 관련 --------
+        var currentDate = new Date();
+
+        // 년, 월, 일, 시, 분, 초, 밀리초에 접근 가능
+        var curYear = currentDate.getFullYear();
+        var curMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+        var curDay = currentDate.getDate();
+
         let isModify = /*[[${isModify}]]*/'';
         let ddyear = /*[[${ddYear}]]*/'';
         let styear = /*[[${stYear}]]*/'';
@@ -52,7 +62,8 @@
                 option.value = year;
                 option.text = year + "년";
                 yearSelect.add(option);
-                
+
+                if(!isModify && year==curYear) option.selected=true;
                 if(isModify && yearSelect.name==='ddyear' && year===ddyear) option.selected=true;
                 if(isModify && yearSelect.name==='styear' && year===styear) option.selected=true;
             }
@@ -66,6 +77,7 @@
                 option.text = month + "월";
                 monthSelect.add(option);
                 
+                if(!isModify && month==curMonth) option.selected=true;
                 if(isModify && monthSelect.name==='ddmonth' && month===ddmonth) option.selected=true;
                 if(isModify && monthSelect.name==='stmonth' && month===stmonth) option.selected=true;
             }
@@ -80,6 +92,7 @@
                 option.text = day + "일";
                 daySelect.add(option);
 
+                if(!isModify && day==curDay) option.selected=true;
                 if(isModify && daySelect.name==='ddday' && day===ddday) option.selected=true;
                 if(isModify && daySelect.name==='stday' && day===stday) option.selected=true;
             }
@@ -93,6 +106,7 @@
                 option.value = hour;
                 option.text = hour + "시";
                 hourSelect.add(option);
+
                 if(isModify && hourSelect.name==='ddhour' && hour===ddhour) option.selected=true;
                 if(isModify && hourSelect.name==='sthour' && hour===sthour) option.selected=true;
             }
@@ -105,16 +119,15 @@
                 option.value = minute;
                 option.text = minute + "분";
                 minuteSelect.add(option);
-                if(isModify && minuteSelect.name==='ddminute' && minute===ddminute) {
-                    option.selected=true;
                 
-                }
+                if(isModify && minuteSelect.name==='ddminute' && minute===ddminute) option.selected=true;
                 if(isModify && minuteSelect.name==='stminute' && minute===stminute) option.selected=true;
             }
         })
 
         // 폼 제출 시 선택된 날짜 및 시간 가져오기
         document.getElementById('btn-write').addEventListener('click', function (e) {
+   
             let title = document.querySelector(".post-section textarea").value;
             let game = document.getElementById("game").value;
             let point = document.getElementById("point").value;
@@ -131,10 +144,51 @@
             let stSelectedDay = daySelects[1].value;
             let stSelectedHour = hourSelects[1].value;
             let stSelectedMinute = minuteSelects[1].value;
+            
+            let ddDate = new Date(ddSelectedYear, ddSelectedMonth-1, ddSelectedDay, ddSelectedHour, ddSelectedMinute);
+            let stDate = new Date(stSelectedYear, stSelectedMonth-1, stSelectedDay, stSelectedHour, stSelectedMinute);
+            
+            if(!checkDate(ddDate,stDate)){
+                alert('날짜 선택이 잘못 되었습니다.\n1. 신청 기한은 최소 1시간 입니다.\n2. 시작 시간은 신청 기한과 최소 15분 차이나야 합니다.');
+                return;
+            }
+            if(isModify) {
+                document.getElementById("dPoint").value = beforePoint-point;
+                if(!checkPoint(point-beforePoint)){
+                    alert('보유 포인트가 부족합니다.');
+                    return;
+                }
+            }else{
+                if(!checkPoint(point)){
+                    alert('보유 포인트가 부족합니다.');
+                    return;
+                }
+            }
             document.forms["pfrm"].submit();
         });
     })
+    function checkPoint(point){
+        let currentPoint = Number(document.getElementById("current-point").getAttribute("point"));
+        // 포인트와 현재 포인트 비교
+        if(point > currentPoint) return false;
+        return true;
+    }
+    function checkDate(ddDate,stDate){
+        let curDate = new Date();
 
+        let ddDatePlus15Min = ddDate.setMinutes(ddDate.getMinutes() + 15);
+        let curDatePlust1Hour = curDate.setHours(curDate.getHours() + 1);
+
+        if(curDatePlust1Hour > ddDate){
+            console.log("신청 기간은 최소 1시간");
+            return false;
+        }
+        if(ddDatePlus15Min>stDate){
+            console.log("최소 15분 차이");
+            return false;
+        }
+        return true;
+    }
 </script>
 
 
@@ -212,6 +266,7 @@
                             </div>
                             <form th:action="@{/battle/write_ok}" method="post" name="pfrm">
                                 <input type="hidden" name="isModify" th:value="${isModify}">
+                                <input type="hidden" name="dPoint" id="dPoint" value="">
                                 <input th:if="${isModify==true}" type="hidden" name="postId" th:value="${postId}">
                                 <input th:if="${isModify==true}" type="hidden" name="btId" th:value="${btId}">
                                 <input type="hidden" name="memId" th:value="${memId}">

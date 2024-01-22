@@ -37,6 +37,9 @@ public class UpdatePointHistoryImpl implements UpdatePointHistory {
             currentPoint = member.get().getMemCurPoint();
             totalPoint = member.get().getMemTotalPoint();
             level = levelService.calculateLevel(totalPoint);
+            if (pointCnt == 0){
+                return currentPoint;
+            }
             if (currentPoint + pointCnt < 0) {
                 return -1;
             }

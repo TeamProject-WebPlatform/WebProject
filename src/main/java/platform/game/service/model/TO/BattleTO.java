@@ -45,6 +45,7 @@ public class BattleTO {
             this.applicantsString = battlePost.getBtPostApplicants();
             applicants = splitApplicants(applicantsString);
         }
+        this.delay = battlePost.getBettingFinTime()-new Date().getTime();
     }
 
     private Member host; // 배틀 주최자
@@ -73,6 +74,8 @@ public class BattleTO {
 
     Date deadlineDt;
     Date startDt;
+
+    long delay;
 
     String applicantsString;// 신청자들 memId,보류상태,신청시간/memId,보류상태
     String[][] applicants;

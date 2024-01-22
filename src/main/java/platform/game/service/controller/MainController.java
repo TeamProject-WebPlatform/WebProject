@@ -3,7 +3,6 @@ package platform.game.service.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.transaction.Transactional;
 import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Comment;
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.Post;
@@ -35,8 +35,8 @@ import platform.game.service.model.TO.BoardCpageTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
-import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommentInfoRepository;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.PostInfoRepository;
@@ -84,6 +84,9 @@ public class MainController {
     @Autowired
     private CommentInfoRepository commentInfoRepository;
 
+    @Autowired
+    private CommonCodeRepository commonCodeRepository;
+
     @RequestMapping("/t/{no}")
     public String template(@PathVariable("no") String no) {
 
@@ -107,18 +110,19 @@ public class MainController {
         ArrayList<Post> update_lists = postInfoRepository.findTop5ByBoardCdOrderByPostIdDesc(boardCd_update);
         ArrayList<Post> event_lists = postInfoRepository.findTop5ByBoardCdOrderByPostIdDesc(boardCd_event);
         ArrayList<Post> free_lists = postInfoRepository.findTop10ByBoardCdOrderByPostIdDesc(boardCd_free);
-        List<LevelRankTO> getLevelTable = sqlMapperInter.getTop5LevelRanks();
+        List<LevelRankTO> getLevelTable = sqlMapperInter.getTop10LevelRanks();
 
         ModelAndView mav = new ModelAndView("index");
         BoardCpageTO cpageTO = new BoardCpageTO();
 
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
             boolean isFirstLogin = signinHistoryService.isFirstLogin(member);
             if (member != null) {
                 mav.addObject("nickname", member.getMemNick());
-                mav.addObject("currentPoint",member.getMemCurPoint());
-                mav.addObject("memId",member.getMemId());
+                mav.addObject("currentPoint", member.getMemCurPoint());
+                mav.addObject("memId", member.getMemId());
                 mav.addObject("isFirstLogin", isFirstLogin);
                 id = member.getMemId();
 
@@ -128,14 +132,26 @@ public class MainController {
             System.out.println("멤버 없음");
         }
 
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        System.out.println("총 방문자 수1: " + visitCount.getRemark1());
+        System.out.println("어제 방문자 수1: " + visitCount.getRemark2());
+        System.out.println("오늘 방문자 수1: " + visitCount.getRemark3());
+        // 사이트 접속하면 방문자수 카운트해서 저장하기
+        int total = Integer.parseInt(visitCount.getRemark1()) + 1;
+        int today = Integer.parseInt(visitCount.getRemark3()) + 1;
+        commonCodeRepository.updateRemarksByCd(String.valueOf(total), String.valueOf(today));
+
+        mav.addObject("totalCount", total);
+        mav.addObject("todayCount", today);
+
         List[] battleList = battleCardAction.getBattleList(id);
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
-        
-        // 필요한 개수만큼 데이터 추출
-        int limit = Math.min(battleTOList.size(), 2);
-        List<BattleTO> limitedBattleTOList = battleTOList.subList(0, limit);
 
+        // 필요한 개수만큼 데이터 추출
+        int limit = Math.min(battleTOList.size(), 4);
+        List<BattleTO> limitedBattleTOList = battleTOList.subList(0, limit);
 
         mav.addObject("notice_lists", notice_lists);
         mav.addObject("update_lists", update_lists);
@@ -144,8 +160,8 @@ public class MainController {
         mav.addObject("boardCd", boardCd_notice);
         mav.addObject("cpage", cpageTO);
         mav.addObject("level", getLevelTable);
-        mav.addObject("battleTOList",limitedBattleTOList);
-        mav.addObject("battlePointTOList",battlePointTOList);
+        mav.addObject("battleTOList", limitedBattleTOList);
+        mav.addObject("battlePointTOList", battlePointTOList);
 
         return mav;
     }
@@ -161,17 +177,23 @@ public class MainController {
                 if (!memberFavoriteGameRepository.existsByMemId(member.getMemId())) {
                     list = rollingRankList;
                 } else {
-                    List<RollingRankTO> first = sqlMapperInter.getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 1));
-                    List<RollingRankTO> second = sqlMapperInter.getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 2));
-                    List<RollingRankTO> third = sqlMapperInter.getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 3));
+                    List<RollingRankTO> first = sqlMapperInter
+                            .getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 1));
+                    List<RollingRankTO> second = sqlMapperInter
+                            .getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 2));
+                    List<RollingRankTO> third = sqlMapperInter
+                            .getOtherRol(memberFavoriteGameRepository.getGameCd(member.getMemId(), 3));
                     List<RollingRankTO> other = sqlMapperInter.getOtherRol("0");
-                    for(int i=0; i<first.size(); i++) list.add(first.get(i));
-                    for(int i=0; i<second.size(); i++) list.add(second.get(i));
-                    for(int i=0; i<third.size(); i++) list.add(third.get(i));
-                    for(int i=0; i<other.size(); i++) list.add(other.get(i));
+                    for (int i = 0; i < first.size(); i++)
+                        list.add(first.get(i));
+                    for (int i = 0; i < second.size(); i++)
+                        list.add(second.get(i));
+                    for (int i = 0; i < third.size(); i++)
+                        list.add(third.get(i));
+                    for (int i = 0; i < other.size(); i++)
+                        list.add(other.get(i));
                 }
-            } 
-            else {
+            } else {
                 list = rollingRankList;
             }
         } else {
@@ -184,12 +206,11 @@ public class MainController {
     @ResponseBody
     public List<MemberProfile> userProfile(@RequestBody List<RollingRankTO> memId) {
         List<MemberProfile> list = new ArrayList<MemberProfile>();
-        for(int i=0;i<16;i++){
+        for (int i = 0; i < 16; i++) {
             long mem_id = memId.get(i).getMem_id();
             MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(mem_id);
             list.add(memberProfile);
         }
-
         return list;
     }
 
@@ -202,7 +223,7 @@ public class MainController {
     public ModelAndView show() {
         return new ModelAndView("shop");
     }
-    
+
     @GetMapping("/battle_view")
     public ModelAndView battleView() {
         return new ModelAndView("battle_view");

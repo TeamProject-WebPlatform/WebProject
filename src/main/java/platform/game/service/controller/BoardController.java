@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import platform.game.service.entity.Comment;
+import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BoardCpageTO;
@@ -34,6 +35,7 @@ import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.UpdatePointHistory;
 import platform.game.service.repository.CommentInfoRepository;
+import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -51,6 +53,9 @@ public class BoardController {
     @Autowired
     @Qualifier("updatePointHistoryImpl")
     private UpdatePointHistory updatePointHistory;
+
+    @Autowired
+    private CommonCodeRepository commonCodeRepository;
 
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
@@ -72,33 +77,34 @@ public class BoardController {
                 navBoard = navBoard + "event";
                 break;
             case "20004":
-                boardCd_name = "free";
+                boardCd_name = "Free";
                 navBoard = navBoard + "free";
                 break;
             case "20005":
-                boardCd_name = "information";
-                navBoard = navBoard + "information";
+                boardCd_name = "Share";
+                navBoard = navBoard + "share";
                 break;
             case "20006":
-                boardCd_name = "strategy";
+                boardCd_name = "Strategy";
                 navBoard = navBoard + "strategy";
                 break;
-                
-                default:
+
+            default:
                 break;
+        }
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            System.out.println("멤버 있음 ");
+            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                modelAndView.addObject("nickname", member.getMemNick());
+                modelAndView.addObject("level", member.getMemLvl());
+                modelAndView.addObject("currentPoint", member.getMemCurPoint());
+                modelAndView.addObject("memId", member.getMemId());
             }
-            
-            ModelAndView modelAndView = new ModelAndView();
-            
-            if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-                System.out.println("멤버 있음 ");
-                Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
-                if (member != null) {
-                    modelAndView.addObject("nickname", member.getMemNick());
-                    modelAndView.addObject("level", member.getMemLvl());
-                    modelAndView.addObject("currentPoint", member.getMemCurPoint());
-                    modelAndView.addObject("memId",member.getMemId());
-                }
         } else {
             System.out.println("멤버 없음");
         }
@@ -135,6 +141,11 @@ public class BoardController {
         modelAndView.addObject("cpage", cpageTO);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -188,7 +199,7 @@ public class BoardController {
         // hit 증가시키기
         post.setPostHit(post.getPostHit() + 1);
         postInfoRepository.save(post);
-        
+
         ModelAndView modelAndView = new ModelAndView();
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -197,7 +208,7 @@ public class BoardController {
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
-                modelAndView.addObject("memId",member.getMemId());
+                modelAndView.addObject("memId", member.getMemId());
             }
             id = member.getMemId();
         }
@@ -226,10 +237,13 @@ public class BoardController {
         modelAndView.addObject("navBoard", navBoard);
         modelAndView.addObject("post", post);
         modelAndView.addObject("commentTree", getCommentTreeByPostId(postId));
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
-
 
     @RequestMapping("/write")
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -269,27 +283,31 @@ public class BoardController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        
+
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                    .getMember();
-            if (member != null) {
-                modelAndView.addObject("nickname", member.getMemNick());
-                modelAndView.addObject("level", member.getMemLvl());
-                modelAndView.addObject("currentPoint", member.getMemCurPoint());
-                modelAndView.addObject("memId",member.getMemId());
-            }
+                .getMember();
+        if (member != null) {
+            modelAndView.addObject("nickname", member.getMemNick());
+            modelAndView.addObject("level", member.getMemLvl());
+            modelAndView.addObject("currentPoint", member.getMemCurPoint());
+            modelAndView.addObject("memId", member.getMemId());
+        }
         modelAndView.setViewName("board_write");
         modelAndView.addObject("board_cd", boardCd);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
 
-
     @Transactional
     @RequestMapping("/write_ok")
-    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request, Model model) {
+    public String listWriteOk(@RequestParam(name = "board_cd") String boardCd, HttpServletRequest request,
+            Model model) {
         System.out.println("Controller_listWriteOk 호출");
 
         int flag = 1;
@@ -323,7 +341,7 @@ public class BoardController {
                 flag = 0;
                 System.out.println("첫 번째 글 작성 포인트 지급");
                 int point = 1;
-                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd") + "&point=" + point;
             } else if (isMultipleOfFivePosts(posts)) {
                 int additionalPostPoint = 50;
                 updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50104", additionalPostPoint);
@@ -332,18 +350,17 @@ public class BoardController {
                 System.out.println("5개의 글 작성 포인트 지급");
                 int point = 2;
 
-                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd")+"&point="+point;
+                return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd") + "&point=" + point;
 
             } else {
                 flag = 0;
                 System.out.println("포인트 지급 없음");
             }
-            
+
         } catch (Exception e) {
             System.out.println("WriteOk(Post post) 오류 : " + e.getMessage());
             flag = 1;
         }
-
 
         if (flag == 0) {
             // 글쓰기 성공 시 처리
@@ -399,18 +416,22 @@ public class BoardController {
         ModelAndView modelAndView = new ModelAndView();
 
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+                .getMember();
         if (member != null) {
             modelAndView.addObject("nickname", member.getMemNick());
             modelAndView.addObject("level", member.getMemLvl());
             modelAndView.addObject("currentPoint", member.getMemCurPoint());
-            modelAndView.addObject("memId",member.getMemId());
+            modelAndView.addObject("memId", member.getMemId());
         }
         modelAndView.setViewName("board_modify");
         modelAndView.addObject("post", post);
         modelAndView.addObject("cpage", cpage);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -432,7 +453,7 @@ public class BoardController {
             post.setPostTags(tags);
             post.setPostContent(content);
             post.setUpdatedAt(date);
-            
+
             post.getBoardCd();
 
             // Save the updated post
@@ -504,18 +525,22 @@ public class BoardController {
 
         ModelAndView modelAndView = new ModelAndView();
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+                .getMember();
         if (member != null) {
             modelAndView.addObject("nickname", member.getMemNick());
             modelAndView.addObject("level", member.getMemLvl());
             modelAndView.addObject("currentPoint", member.getMemCurPoint());
-            modelAndView.addObject("memId",member.getMemId());
+            modelAndView.addObject("memId", member.getMemId());
         }
         modelAndView.setViewName("board_delete");
         modelAndView.addObject("post", post);
         modelAndView.addObject("cpage", cpage);
         modelAndView.addObject("boardCd_name", boardCd_name);
         modelAndView.addObject("navBoard", navBoard);
+        // 사이드바에 방문자 수 보여주기
+        CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
+        modelAndView.addObject("totalCount", visitCount.getRemark1());
+        modelAndView.addObject("todayCount", visitCount.getRemark3());
 
         return modelAndView;
     }
@@ -700,11 +725,11 @@ public class BoardController {
         }
         return null; // 혹은 예외 처리 등을 추가할 수 있습니다.
     }
- 
+
     public int getPostCountByMember(List<Post> posts) {
         int count = 1;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getMember();
+                .getMember();
         for (Post p : posts) {
             if (p.getMember() != null && p.getMember().getMemId() == member.getMemId()) {
                 count++;
@@ -727,10 +752,10 @@ public class BoardController {
         return postCount > 0 && (postCount % 5 == 0);
     }
 
-
     // 뎃글
     public int getCommentCountByMember(List<Comment> comments) {
-        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getMember();
         if (member == null) {
             return 0;
         }
@@ -752,17 +777,16 @@ public class BoardController {
         return commentCount > 0 && (commentCount % 5 == 0);
     }
 
-
     // 포인트 지급 관련 메세지 전송
     @GetMapping("/point_ok")
-    public ModelAndView PointOk(@RequestParam("board_cd") int boardCd, @RequestParam("point") int point){
+    public ModelAndView PointOk(@RequestParam("board_cd") int boardCd, @RequestParam("point") int point) {
         System.out.println("point_ok 호출");
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("point_ok");
         modelAndView.addObject("boardCd", boardCd);
         modelAndView.addObject("point", point);
-    
+
         return modelAndView;
     }
 

@@ -8,7 +8,7 @@ import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 
 @Repository
-public class UpdateMemberRepositryImpl implements UpdateMemberRepositry{
+public class UpdateMemberRepositoryImpl implements UpdateMemberRepository{
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,5 +30,23 @@ public class UpdateMemberRepositryImpl implements UpdateMemberRepositry{
         query.setParameter("memId", memId);
         query.setParameter("point", point);
         return query.executeUpdate();
+    }
+     
+    @Transactional
+    @Override
+    public int insertData(int point, long memId, int btId, int flag) {
+        Query query = entityManager.createNativeQuery(
+                "INSERT INTO member_betting " +
+                "VALUES(now(),:point,:memId,:btId,:flag)");
+        query.setParameter("point", point);
+        query.setParameter("memId", memId);
+        query.setParameter("btId", btId);
+        query.setParameter("flag", flag);
+        
+        int res = query.executeUpdate();
+        if (res != 1)
+            throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백");
+
+        return res;
     }
 }

@@ -18,6 +18,7 @@
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/battle.js"></script>
+    <script src="../js/scrollToTop.js"></script>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -72,7 +73,22 @@
                 <div class="widjet --filters">
                     <div class="widjet__head">
                         <a th:href="@{/battle}"><h3 class="uk-text-lead">BATTLE</h3></a>
+                        
                         <div>
+                            <div class="button-section">
+                                <div>
+                                    <a th:href="@{/battle}"><input type="button"
+                                            value="목록" class="btn_re"></a>
+                                    <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
+                                        <!-- 로그인 상태인 경우의 링크 -->
+                                        <input type="button" value="쓰기" class="btn_re">
+                                    </a>
+                                    <a th:unless="${nickname}" href="/login">
+                                        <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                        <input type="button" value="쓰기" class="btn_re">
+                                    </a>
+                                </div>
+                            </div>
                             <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleGame(this.value)">
                                 <option value="">10개</option>
                                 <option value="Category 1">20개</option>
@@ -107,11 +123,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
                 <div class="uk-grid" data-uk-grid>
-                    <div class="uk-width-2-3@l" id="battleCardSection">
+                    <div class="uk-width-2-3@l battle-card-section" id="battleCardSection">
                         <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}">
-                            <div class="battle-card__box">
+                            <div class="battle-card__box" th:attr="btId = ${battle.btId}">
                                 <div class="battle-profile-left">
                                     <div class="battle-profile-info">
                                         <div class="battle-profile-nickname">
@@ -179,10 +195,19 @@
                                             <i class="fa-solid fa-trophy"></i>
                                         </div>
                                         <div class="info-state">
-                                            <div th:if="${battle.state=='A'}" class="A">베팅 가능!</div>
-                                            <div th:if="${battle.state=='P'}" class="P">진행중</div>
-                                            <div th:if="${battle.state=='T'}" class="T">종료됨</div>
-                                            <div th:if="${battle.state=='N'}" class="N">매칭 중</div>
+                                            <div th:if="${battle.state=='A'}" class="A th">베팅 가능!</div>
+                                            <div th:if="${battle.state=='B'}" class="B th">베팅 종료</div>
+                                            <div th:if="${battle.state=='P'}" class="P th">진행중</div>
+                                            <div th:if="${battle.state=='T'}" class="T th">종료됨</div>
+                                            <div th:if="${battle.state=='N'}" class="N th">매칭 중</div>
+
+                                            <div class="A none">베팅 가능!</div>
+                                            <div class="B none">베팅 종료</div>
+                                            <div class="P none">진행중</div>
+                                            <div class="T none">종료됨</div>
+                                            <div class="N none">매칭 중</div>
+                                            
+                                            <div th:if="${battle.state=='A'}" class="left-time" th:attr="delay = ${battle.delay}">30:00</div>
                                         </div>
                                     </div>
                                     <div class="info-center">
@@ -300,6 +325,10 @@
                                                         <input class="point-betting-input" type="search" name="search"
                                                             placeholder="PROCEEDING" readonly>
                                                     </battleStateCheck>
+                                                    <battleStateCheck th:if="${battle.state=='B'}">
+                                                        <input class="point-betting-input" type="search"
+                                                            name="search" placeholder="AWAITING" readonly>
+                                                    </battleStateCheck>
                                                     <battleStateCheck th:if="${battle.state=='T'}">
                                                         <input class="point-betting-input" type="search" name="search"
                                                             placeholder="TERMINATED" readonly>
@@ -335,7 +364,7 @@
                                             <div th:if="${battle.client}" class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30</div>
                                             <div th:unless="${battle.client}" class="battle-profile-lvl"></div>
                                             
-                                            <div th:text="${battle.clientNick}"></div>
+                                            <div class="battle-profile-nick" th:text="${battle.clientNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>
@@ -345,7 +374,7 @@
                                                 <div th:if="${battle.client}" class="battle-profile-lose" th:text="${battle.clientLose}+' 패'">25
                                                     패</div>
                                                 <div th:unless="${battle.client}" class="battle-profile-win"></div>
-                                                <div th:unless="${battle.client}" >&nbsp;&nbsp;</div>
+                                                <div th:unless="${battle.client}" class="battle-profile-slash">&nbsp;&nbsp;</div>
                                                 <div th:unless="${battle.client}" class="battle-profile-lose"></div>    
                                                 
                                             </div>
@@ -384,6 +413,14 @@
 
                                 </div>
                             </div>
+                        </div>
+                        <div class="content-footer">
+                            <div class="button-section">
+                                <div class="btn-top-section">
+                                    <i class="fa-solid fa-caret-up ico_fontawesome"></i>
+                                    <input id="scrollToTopBtn" type="button" value="TOP" class="btn_re" onclick="scrollToTop()">
+                                </div>
+                                </div>
                         </div>
                     </div>
                 </div>
