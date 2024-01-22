@@ -117,7 +117,6 @@ function closePopup() {
 // 아이템 구매
 async function getItem(point,category) {
     if (confirm("정말 구매 하시겠습니까??") == true){    //확인
-        // sendPointChange(point, pointKindCd);
         try {
             const response = await fetch('/itempurchase', {
                 method:'POST',
@@ -142,6 +141,7 @@ async function getItem(point,category) {
         } catch (error) {
             console.error("Error: " + error);
         }
+        sendPointChange(point, pointKindCd);
     }else{   //취소
         return false;
     }
@@ -149,19 +149,24 @@ async function getItem(point,category) {
 
 // 데이터 전송
 
-function changeCategori(){
+function changeCategori() {
     var ItemSearch = document.getElementById("ItemSearch").value;
     var categorySelect = document.getElementById("categorySelect").value;
+
+    // ItemSearch가 빈 문자열이면 검색어를 비워서 전달하도록 처리
+    if (ItemSearch == "") {
+        ItemSearch = ""; // 빈 문자열로 설정
+    }
+
     console.log(ItemSearch);
     console.log(categorySelect);
 
-    if(ItemSearch==""){
+    if (ItemSearch == "" && categorySelect != "all") {
         location.href = "./shop_search?categorySelect=" + categorySelect;
-    }
-    if(categorySelect=="all"){
+    } else if (categorySelect == "all") {
         location.href = "./shop";
-    }else{
-        location.href = "./shop_search?ItemSearch=" + ItemSearch +"&categorySelect=" + categorySelect;
+    } else {
+        location.href = "./shop_search?ItemSearch=" + ItemSearch + "&categorySelect=" + categorySelect;
     }
 }
 

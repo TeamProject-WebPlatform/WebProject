@@ -71,7 +71,7 @@
                                                 <div class="search__input"><i class="ico_search"></i><input class="" type="search" name="search" placeholder="Search" id="ItemSearch"></div>
                                                 <div class="search__btn"><button type="button" th:onclick="changeCategori()"><i class="ico_search"></i></button></div>
                                             </div>
-                                        </div>
+                                        </div> 
                                         <!-- <div class="uk-text-right"><a href="#!" th:text="'MyPint : ' + ${point}"></a></div> -->
                                         <!-- <div class="uk-text-right"><a href="#!" th:text="${totalItemCount} + ' items'"></a></div> -->
                                     </div>
@@ -81,7 +81,8 @@
                                 <div th:each="item : ${items}">
                                     <div class="game-card" th:data-category="${item.itemKindCd}">
                                         <div class="game-card__box">
-                                            <div class="game-card__media"><a href="#"><img th:src="@{'./img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" th:onclick="openPopup(this)"/></a></div>
+                                            <!-- <div class="game-card__media"><a href="#"><img th:src="@{'./img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" th:onclick="openPopup(this)"/></a></div> -->
+                                            <div class="game-card__media"><a href="#"><img th:src="@{'./img/shop_img/' + ${item.itemNm} + '.png'}" alt="Item Image" th:onclick="showPreview('[[${item.itemNm}]]', '[[${item.itemKindCd}]]')"/></a></div>
                                             <div class="game-card__info"><a class="game-card__title" href="#" th:text="${item.itemNm}"></a>
                                                 <div class="game-card__genre" th:text="${item.itemInfo}"></div>
                                                 <div class="game-card__rating-and-price">

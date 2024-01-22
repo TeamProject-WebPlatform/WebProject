@@ -57,7 +57,7 @@ body.dark-theme .board_view_title{
 .contents_sub table { width:100%; border-collapse:collapse; }
 .contents_sub table img { padding-top:2px; }
 
-.board_top { width:100%; overflow:hidden; /*margin:10px 0;*/ }
+.board_top { width:100%; overflow:hidden; margin:10px 0; }
 .board_top .f_search { float:right; width:550px; text-align:right; }
 .board_top .bold { float:left; width:200px; margin:10px 0; }
 
@@ -180,6 +180,9 @@ body.dark-theme .board_top_tr{
     background-color: #171C25;
 }
 
+.board_ccenter_tr_a {
+    display: inline-block;
+}
 .board_ccenter_tr_a:hover {
     color: rgb(0, 177, 177);
     text-decoration: underline;
