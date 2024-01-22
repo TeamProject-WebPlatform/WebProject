@@ -11,9 +11,10 @@
     <meta name="format-detection" content="telephone=no">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="/css/libs.min.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/list_custom.css">
+    <link rel="stylesheet" href="../css/libs.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/list_custom.css">
+    <link rel="stylesheet" href="../css/ranking.css">
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -93,7 +94,10 @@
                                             </div>
                                         </div>
                                         <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
-                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
+                                            <div class="profile-image">
+                                                <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
+                                                <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                            </div>
                                             <div class="profile-user_info">
                                                 <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
                                                 <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
