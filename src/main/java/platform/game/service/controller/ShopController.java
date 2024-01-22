@@ -82,9 +82,10 @@ public class ShopController {
     }
 
     @GetMapping("/shop_search")
-    public ModelAndView listItemsByKind(@RequestParam("ItemSearch") String itemName,
-            @RequestParam("categorySelect") String itemKindCd) {
+    public ModelAndView listItemsByKind(@RequestParam(name = "ItemSearch", required = false, defaultValue = "") String itemName,
+                                        @RequestParam(name = "categorySelect", required = false, defaultValue = "all") String itemKindCd) {
         int totalItemCount = itemInfoRepository.countByItemKindCd(itemKindCd);
+
         System.out.println("listSearch 호출");
         String navShop = "nav-shop";
         ModelAndView modelAndView = new ModelAndView();
@@ -102,13 +103,17 @@ public class ShopController {
             System.out.println("멤버 없음");
         }
 
-        ArrayList<Item> items = new ArrayList<>();
-        if (itemKindCd == "all") {
-            items = itemInfoRepository.findByItemNmContaining(itemName);
-        } else {
-            items = itemInfoRepository.findByItemNmContainingAndItemKindCdContaining(itemName, itemKindCd);
-        }
+        List<Item> items;
 
+        if ("all".equals(itemKindCd) && itemName.isEmpty()) {
+            items = itemInfoRepository.findAll();
+        } else if (!itemName.isEmpty()) {
+            items = itemInfoRepository.findByItemNmContainingIgnoreCase(itemName);
+        } else {
+            items = itemInfoRepository.findByItemKindCd(itemKindCd);
+        }
+        
+        
         System.out.println("items : " + items);
         modelAndView.setViewName("shop");
         modelAndView.addObject("navshop", navShop);
