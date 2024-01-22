@@ -111,10 +111,9 @@ public class SignAction {
                 boolean flag = memService.addUser(member);
                 boolean addRank = memService.addUserRanking(member);
                 boolean addProfile = memService.addUserProfile(member);
-                boolean addFavGame = memService.addUserFavGame(member);
                 System.out.println("signupAction > 멤버 객체 추가 성공");
                 // 성공하면 common code의 값 update
-                if (flag && addRank && addProfile && addFavGame) {
+                if (flag && addRank && addProfile) {
                     comCdRepo.updateRemark1ByCd(idCode, String.valueOf(lastid));
                     userSignup.setMemId(id);    
                 } else {
