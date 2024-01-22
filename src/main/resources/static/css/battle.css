@@ -113,7 +113,8 @@
     position: relative;
     height: 180px;
     overflow: hidden;
-    border-radius: 5px;
+    border-radius: 50%;
+    border : 3px solid white;
 }
 
 .battle-profile-media img {
