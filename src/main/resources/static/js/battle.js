@@ -73,6 +73,7 @@ function battleCardConnect() {
     battleCardStompClient.connect({}, function (frame) {
         cards.forEach(function (card) {
             let btId = card.getAttribute("btId");
+            let postId = card.getAttribute("postId");
             battleCardStompClient.subscribe(`/topic/pointbetting/` + btId, function (response) {
                 try {
                     let endpoint = JSON.parse(response.body).endpoint;
@@ -123,6 +124,7 @@ function battleCardConnect() {
                         }
                     } else if (endpoint === 1) {
                         let stateTO = JSON.parse(response.body);
+                        const card = document.querySelector(".battle-card__box[btId='" + btId + "']");
                         let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
                         const section = pointInfo.querySelector(".info-state");
                         section.querySelectorAll("div").forEach(function (x) {
@@ -133,16 +135,16 @@ function battleCardConnect() {
                             // 클라이언트 추가됨.
                             const clientSection = document.querySelector(".battle-card__box[btId='" + btId + "'] .battle-profile-right");
                             clientSection.querySelectorAll(".battle-profile-lvl").forEach(function (x) {
-                                x.innerHTML = stateTO.client.level;
+                                x.innerHTML = "Lv "+stateTO.client.level;
                             });
                             clientSection.querySelectorAll(".battle-profile-nick").forEach(function (x) {
                                 x.innerHTML = stateTO.client.nickname;
                             });
                             clientSection.querySelectorAll(".battle-profile-win").forEach(function (x) {
-                                x.innerHTML = stateTO.client.win;
+                                x.innerHTML = stateTO.client.win +" 승";
                             });
                             clientSection.querySelectorAll(".battle-profile-lose").forEach(function (x) {
-                                x.innerHTML = stateTO.client.lose;
+                                x.innerHTML = stateTO.client.lose+" 패";
                             });
                             clientSection.querySelectorAll(".battle-profile-slash").forEach(function (x) {
                                 x.innerHTML = "&nbsp;/&nbsp;"
@@ -152,7 +154,7 @@ function battleCardConnect() {
                             let rate = stateTO.client.win * 100.0 / total;
                             let formattedRate = rate.toFixed(2);
                             clientSection.querySelectorAll(".battle-profile-win-rate").forEach(function (x) {
-                                x.innerHTML = formattedRate;
+                                x.innerHTML = formattedRate+"%";
                             });
                             if (stateTO.state === 'A') {
                                 // 시간 작업
@@ -176,6 +178,15 @@ function battleCardConnect() {
                             }
 
                         }
+                        console.log("상태 값 변경 : "+stateTO.state);
+                        // 베팅 입력란 변경
+                        // 기존 타임리프 태그 none
+                        pointInfo.querySelector(".betting-input-section").style.display = "none";
+                        let host = card.querySelectorAll(".battle-profile-nick")[0].innerHTML;
+                        let client = card.querySelectorAll(".battle-profile-nick")[1].innerHTML;
+                        // insertBettingInputsection(state,nickname,hostNick,clientNick,result,btId,postId,point)
+                        pointInfo.querySelector(".betting-input-section-web").innerHTML = 
+                            insertBettingInputsection(stateTO.state,nickname,host,client,stateTO.result,btId,postId,stateTO.point);
                     }
                 } catch (err) {
                     console.log("에러 : " + err);

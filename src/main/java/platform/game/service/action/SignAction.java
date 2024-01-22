@@ -85,12 +85,12 @@ public class SignAction {
         // 트랜잭션 내에서 쿼리 실행
         transactionTemplate.execute(status -> {
             try {
-                System.out.println("체크 : " + userSignup.toString());
+                // System.out.println("체크 : " + userSignup.toString());
                 // 멤버 id 할당 하기 위해 common code에서 값 select
                 Optional<CommonCode> idInfo = comCdRepo.findByCd(idCode);
                 Long lastid = Long.parseLong(idInfo.get().getRemark1()) + 1;
                 Long id = Long.parseLong(idPrefix + lastid);
-                System.out.println("signupAction > id : " + id);
+                // System.out.println("signupAction > id : " + id);
                 // member 객체 생성
                 Member member = Member.builder()
                         .memId(id)

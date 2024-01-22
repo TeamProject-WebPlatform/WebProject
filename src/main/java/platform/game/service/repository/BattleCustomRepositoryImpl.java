@@ -308,7 +308,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                     battleRepository.save(battle);
                     
                     try{
-                        sendMessageService.sendMessageToChangeState(btId, "T");
+                        sendMessageService.sendMessageToChangeState(btId, "T",battle.getBtResult(),battlePost.getBtPostPoint());
                     }catch(Exception e){
                         System.out.println(e.getMessage());
                         throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);
@@ -349,7 +349,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                     battle.setBtState("T");                
                     battleRepository.save(battle);
                     try{
-                        sendMessageService.sendMessageToChangeState(btId, "T");
+                        sendMessageService.sendMessageToChangeState(btId, "T",battle.getBtResult(),battlePost.getBtPostPoint());
                     }catch(Exception e){
                         System.out.println(e.getMessage());
                         throw new RuntimeException("BattleCustomRepoImpl 트랜잭션 롤백", e);

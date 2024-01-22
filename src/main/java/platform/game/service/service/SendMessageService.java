@@ -31,6 +31,21 @@ public class SendMessageService {
         messagingTemplate.convertAndSend(topic, jsonString);
 
     }
+    public void sendMessageToChangeState(int btId, String state, String result,int point) throws JsonProcessingException{
+        //웹소켓 엔드포인트로 메시지를 보냄
+        BettingStateInfoTO bettingStateInfo = new BettingStateInfoTO();
+        bettingStateInfo.setBtId(btId);  
+        bettingStateInfo.setState(state);   
+        bettingStateInfo.setResult(result);
+        bettingStateInfo.setPoint(point);
+        // BettingInfoTO 객체를 JSON 문자열로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(bettingStateInfo);
+
+        String topic = "/topic/pointbetting/" + bettingStateInfo.getBtId();
+        messagingTemplate.convertAndSend(topic, jsonString);
+
+    }
     public void sendMessageToChangeState(int btId, String state,long delay, BattleMemberTO client) throws JsonProcessingException{
         //웹소켓 엔드포인트로 메시지를 보냄
         BettingStateInfoTO bettingStateInfo = new BettingStateInfoTO();

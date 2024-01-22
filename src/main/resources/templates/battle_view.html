@@ -272,6 +272,7 @@
         var userResponse;
         if (type === 0){
             alert('시작 시간 이후에 가능합니다.');
+            return;
         } else if (type === 1) {
             userResponse = confirm("시작하시겠습니까?\n시작 시간 30분 이후까지 선택하지 않으면 자동 패배 처리됩니다.");
             if (!userResponse) {

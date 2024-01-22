@@ -20,7 +20,6 @@ public class AsyncTaskService {
     @Lazy
     BattleCustomRepositoryImpl battleCustomRepositoryImpl;
 
-    @Async
     public CompletableFuture<Long[]> scheduleTask(int btId, int postId, Date date,int flag) {
         try {
             long startTime = date.getTime();
