@@ -1,7 +1,11 @@
 package platform.game.service.model.TO;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import lombok.Data;
 import platform.game.service.entity.Battle;
+import platform.game.service.entity.MemberBetting;
+import platform.game.service.repository.MemberBettingRepository;
 
 @Data
 public class BattlePointTO {
@@ -43,4 +47,7 @@ public class BattlePointTO {
     private int alreadyBet=0; // 0은 ㄴㄴ, 1은 ㅇㅇ
     private int flag=-1; // 투표했을시 flag
 
+    private int betSuccess; // 0은 ㄴㄴ 1은 ㅇㅇ
+    private int pointReceived;
+    private int pointDstb = -1;
 }

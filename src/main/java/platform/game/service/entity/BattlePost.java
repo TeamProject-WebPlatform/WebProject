@@ -2,6 +2,8 @@ package platform.game.service.entity;
 
 import java.util.Date;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,9 +41,9 @@ public class BattlePost {
     private String etcGameNm;
     private Date btPostDeadLine;
     private int btPostPoint;
-    @Column(columnDefinition = "CAHR(1) NOT NULL DEFAULT '0'")
+    @ColumnDefault("0")
     private String btPostPointReceived;
-    @Column(columnDefinition = "BIGINT NOT NULL DEFAULT 0")
+    @ColumnDefault("0")
     private long bettingFinTime;
 
 }

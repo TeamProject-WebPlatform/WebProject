@@ -11,10 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Battle;
@@ -36,6 +42,7 @@ import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
+import platform.game.service.model.TO.BettingInfoTO;
 import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.BattleCustomRepositoryImpl;
 import platform.game.service.repository.BattleRepository;
@@ -76,6 +83,7 @@ public class BattleController {
         @RequestParam(value = "selectedListCnt", defaultValue = "10") int selectedListCnt,
         @RequestParam(value = "selectedGame", defaultValue = "30000") String selectedGame,
         @RequestParam(value = "selectedState", defaultValue = "ALL") String selectedState,
+        @RequestParam(value = "searchValue", defaultValue = "") String searchValue,
         @RequestParam(value = "mybattle", defaultValue = "false") Boolean myBattle) {
         
         long id = 0;
@@ -96,8 +104,9 @@ public class BattleController {
         mav.addObject("selectedListCnt", selectedListCnt);
         mav.addObject("selectedGame", selectedGame);
         mav.addObject("selectedState", selectedState);
+        mav.addObject("searchValue", searchValue);
         // 리스트 생성
-        Object[] o = battleCardAction.getBattleList(id,page,selectedListCnt,selectedGame,selectedState,myBattle);
+        Object[] o = battleCardAction.getBattleList(id,page,selectedListCnt,selectedGame,selectedState,searchValue,myBattle);
         List[] battleList = (List[])o[0];
         int lastPage = (int)o[1];
         List<BattleTO> battleTOList = battleList[0];
@@ -462,7 +471,28 @@ public class BattleController {
         }
         return String.valueOf(flag);
     }
-    
+    @PostMapping("/receiveBettingPoint")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String receiveBettingPoint(@RequestParam("btId") int btId,@RequestParam("postId") int postId) {
+        Member member = null;
+        long memId=0;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                memId = member.getMemId();
+            }
+        }
+        int flag = 0;
+        try {
+            flag = battleCustomRepositoryImpl.receiveBettingPoint(memId,btId,postId);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            flag = -1;
+        }
+        return String.valueOf(flag);
+    }
     private ArrayList<CommentTO> buildCommentTree(ArrayList<Comment> comments) {
         Map<Integer, CommentTO> commentNodeMap = new HashMap<>();
 

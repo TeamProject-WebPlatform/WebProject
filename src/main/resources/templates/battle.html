@@ -35,19 +35,24 @@
     let selectedGame;
     let selectedState;
     let page;
+    let searchValue;
     document.addEventListener("DOMContentLoaded", function () {
 
         nickname = /*[[${nickname}]]*/'';
         selectedListCnt = /*[[${selectedListCnt}]]*/10;
         selectedGame = /*[[${selectedGame}]]*/'ALL';
         selectedState = /*[[${selectedState}]]*/'ALL';
+        searchValue = /*[[${searchValue}]]*/'';
         page = /*[[${page}]]*/1; // paging은 뒤로가기 때문에 get파라미터로 가지는게 좋아보임 
         document.querySelectorAll(".battle-card__box").forEach(function (x) {
-            x.querySelector(".point-betting-input").addEventListener('input', function (event) {
-                let currentValue = event.target.value;
-                let sanitizedValue = currentValue.replace(/\D/g, '');
-                event.target.value = sanitizedValue;
-            })
+            const y = x.querySelector(".point-betting-input");
+            if (y) {
+                y.addEventListener('input', function (event) {
+                    let currentValue = event.target.value;
+                    let sanitizedValue = currentValue.replace(/\D/g, '');
+                    event.target.value = sanitizedValue;
+                })
+            }
         });
         document.getElementById("selectListCnt").querySelectorAll("option").forEach(function (option) {
             if (option.value == selectedListCnt) option.selected = true;
@@ -67,6 +72,50 @@
             }
         })
     })
+    async function receiveBettingPoint(btId, postId) {
+        const section = document.querySelector(".battle-card__box[btId='" + btId + "'] .receive_btn");
+        const pointFloating = section.querySelector(".pointFloating");
+        const pointFloatingRect = pointFloating.getBoundingClientRect();
+        if (section.getAttribute("dead") === "true") return;
+        try {
+            const response = await fetch(`/battle/receiveBettingPoint?btId=${btId}&postId=${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                })
+            });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            switch (flag) {
+                case 0:
+                case -1:
+                    alert("알 수 없는 에러");
+                    break;
+                case 1:
+                    section.setAttribute("dead", "true");
+                    section.classList.add("inactive");
+                    section.querySelector(".pointFloating").style.display = "block";
+                    console.log(section.querySelector(".pointFloating"));
+                    // 애니메이션
+                    let px = 6;
+                    var move = setInterval(function () {
+                        pointFloating.style.top = px + "px" // 애니메이션 이동 위치 설정
+                        px -= 0.2;
+                        if (px < -7) {
+                            clearInterval(move);
+                            pointFloating.style.display = "none";
+                        };
+                    }, 10);
+                    break;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
     async function receivePoint(btId, postId) {
         const section = document.querySelector(".battle-card__box[btId='" + btId + "'] .receive_btn");
         const pointFloating = section.querySelector(".pointFloating");
@@ -123,17 +172,27 @@
         selectedState = state;
         requestBattleList();
     }
+    function searchBattle() {
+        searchValue = document.getElementById("s_txt_btn").value;
+        requestBattleList();
+    }
+    function handleKeyUp(event) {
+        if (event.keyCode === 13) {
+            searchBattle();
+        }
+    }
     function requestBattleList() {
         page = 1;
         if (!selectedListCnt) selectedListCnt = 10;
         if (!selectedGame) selectedGame = '30000';
         if (!selectedState) selectedState = 'ALL';
-
+        if (!searchValue) searchValue = "";
         let postData = {
             page: page,
             selectedListCnt: selectedListCnt,
             selectedGame: selectedGame,
-            selectedState: selectedState
+            selectedState: selectedState,
+            searchValue: searchValue
         };
         postDataToBack(postData);
     }
@@ -247,8 +306,8 @@
                             </div>
                             <div class="search uk-width-2-3 height50px">
                                 <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
-                                        placeholder="Search" id="s_txt_btn" value=""></div>
-                                <div class="search__btn"><button type="button" onclick="search_battle()"><i
+                                        placeholder="Search" id="s_txt_btn" value="" onkeyup="handleKeyUp(event)"></div>
+                                <div class="search__btn"><button type="button" onclick="searchBattle()"><i
                                             class="ico_search"></i></button></div>
                             </div>
                         </div>
@@ -316,7 +375,8 @@
                                 </div>
 
 
-                                <div class="battle-card-info" th:attr="btId = ${battle.btId}, postId = ${battle.postId}">
+                                <div class="battle-card-info"
+                                    th:attr="btId = ${battle.btId}, postId = ${battle.postId}">
                                     <div class="info-title"><a
                                             th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
                                             th:text="${battle.title}"></a></div>
@@ -458,7 +518,7 @@
                                             <betting class="betting-input-section">
                                                 <!-- 타임리프 섹션 -->
                                                 <div class="search"
-                                                    th:unless="${battle.state=='T' and (battle.hostNick==nickname or battle.clientNick==nickname)}">
+                                                    th:if="${battle.state!='T' and battle.hostNick!=nickname and battle.clientNick!=nickname and battlePointTOList[iterStat.index].pointDstb == -1}">
                                                     <div class="search__input">
                                                         <i class="fa-solid fa-coins ico_fontawesome"></i>
                                                         <battleStateCheck th:if="${battle.state=='N'}">
@@ -597,6 +657,54 @@
                                                                     </div>
                                                                     <div class="pointFloating"
                                                                         th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </battleStateCheck>
+                                                    </battleStateCheck>
+                                                    <!-- 배틀 당사자 아니고 베팅 당사자 -->
+                                                    <battleStateCheck
+                                                        th:if="${battlePointTOList[iterStat.index].betSuccess==0 and battle.hostNick != nickname and battle.clientNick != nickname}">
+                                                        <!-- 베팅 실패 -->
+                                                        <div class="receive_btn inactive" dead="true">
+                                                            <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                            <div>
+                                                                <div>베팅 실패</div>
+                                                            </div>
+                                                        </div>
+                                                    </battleStateCheck>
+                                                    <battleStateCheck
+                                                        th:if="${battlePointTOList[iterStat.index].betSuccess==1 and battle.hostNick != nickname and battle.clientNick != nickname}">
+                                                        <!-- 베팅 성공 -->
+                                                        <battleStateCheck
+                                                            th:if="${battlePointTOList[iterStat.index].pointReceived==0}">
+                                                            <!-- 미수령 -->
+                                                            <div class="receive_btn" dead="false"
+                                                                th:onclick="'receiveBettingPoint('+${battle.btId}+','+${battle.postId}+')'">
+
+                                                                <div class="click">CLICK!</div>
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div>
+                                                                    <div
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(battlePointTOList[iterStat.index].pointDstb,0),0,'COMMA')}">
+                                                                    </div>
+                                                                    <div class="pointFloating"
+                                                                        th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(battlePointTOList[iterStat.index].pointDstb,0),0,'COMMA')}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck
+                                                            th:if="${battlePointTOList[iterStat.index].pointReceived==1}">
+                                                            <!-- 수령 -->
+                                                            <div class="receive_btn inactive" dead="true">
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div>
+                                                                    <div
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(battlePointTOList[iterStat.index].pointDstb,0),0,'COMMA')}">
+                                                                    </div>
+                                                                    <div class="pointFloating"
+                                                                        th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(battlePointTOList[iterStat.index].pointDstb,0),0,'COMMA')}">
                                                                     </div>
                                                                 </div>
                                                             </div>

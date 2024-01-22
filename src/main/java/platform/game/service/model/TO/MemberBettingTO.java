@@ -1,5 +1,7 @@
 package platform.game.service.model.TO;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import lombok.Data;
 import platform.game.service.entity.Battle;
 import platform.game.service.entity.MemberBetting;
@@ -13,6 +15,8 @@ public class MemberBettingTO {
         this.btPostTitle = battle.getBtPost().getPost().getPostTitle();
         this.betFlag = memberBetting.getBetFlag();
         this.betPoint = memberBetting.getBetPoint();
+        this.pointReceived = memberBetting.getPointReceived();
+        this.pointDstb = memberBetting.getPointDstb();
     }
     private Long HostMemId;
     private Long ClientMemId;
@@ -20,4 +24,6 @@ public class MemberBettingTO {
     private String btPostTitle;
     private int betFlag; //'0': 호스트 / '1': 클라이언트
     private int betPoint;
+    private String pointReceived;
+    private long pointDstb;
 }

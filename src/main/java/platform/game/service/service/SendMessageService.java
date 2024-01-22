@@ -1,5 +1,7 @@
 package platform.game.service.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -7,9 +9,12 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.Data;
+import platform.game.service.entity.MemberBetting;
 import platform.game.service.model.TO.BattleMemberTO;
 import platform.game.service.model.TO.BettingStateInfoTO;
 import platform.game.service.model.TO.HeaderInfoTO;
+import platform.game.service.model.TO.MemberBettingTO;
 
 @Service
 public class SendMessageService {
@@ -76,5 +81,20 @@ public class SendMessageService {
         String topic = "/topic/headerInfo/" + memId;
         messagingTemplate.convertAndSend(topic, jsonString);
 
+    }
+    public void sendMessageToDistributePoint(int btId,List<MemberBettingTO> list) throws JsonProcessingException{
+        DSBTTO to = new DSBTTO();
+        to.setList(list);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(to);
+
+        String topic = "/topic/pointbetting/" + btId;
+        messagingTemplate.convertAndSend(topic, jsonString);
+    }
+
+    @Data
+    class DSBTTO{
+        int endpoint = 2;
+        List<MemberBettingTO> list;
     }
 }

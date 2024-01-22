@@ -187,6 +187,31 @@ function battleCardConnect() {
                         // insertBettingInputsection(state,nickname,hostNick,clientNick,result,btId,postId,point)
                         pointInfo.querySelector(".betting-input-section-web").innerHTML = 
                             insertBettingInputsection(stateTO.state,nickname,host,client,stateTO.result,btId,postId,stateTO.point);
+                    } else if (endpoint === 2){
+                        let dsbtTO = JSON.parse(response.body);
+                        const card = document.querySelector(".battle-card__box[btId='" + btId + "']");
+                        let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
+                        let list = dsbtTO.list;
+                        let point;
+                        list.forEach(function(x){
+                            if(x.member.memNick==nickname){
+                                point = x.pointDstb;
+                                return;
+                            }
+                        })
+                        if(!point){
+                            // 베팅 무관
+                            pointInfo.querySelector(".betting-input-section-web").innerHTML = 
+                                insertBettingInputsection('T',nickname,host,client,"0",btId,postId,point);
+                        }else if(point!==0){
+                            // 베팅 성공
+                            pointInfo.querySelector(".betting-input-section-web").innerHTML = 
+                                insertBettingInputsection('T',nickname,host,client,"-1",btId,postId,point);
+                        }else if(point===0){
+                            // 베팅 실패
+                            pointInfo.querySelector(".betting-input-section-web").innerHTML = 
+                                insertBettingInputsection('T',nickname,host,client,"-2",btId,postId,point);
+                        }
                     }
                 } catch (err) {
                     console.log("에러 : " + err);

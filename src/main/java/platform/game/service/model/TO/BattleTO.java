@@ -12,12 +12,13 @@ import lombok.Data;
 import platform.game.service.entity.Battle;
 import platform.game.service.entity.BattlePost;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberBetting;
 import platform.game.service.entity.Post;
+import platform.game.service.repository.MemberBettingRepository;
 import platform.game.service.service.SendMessageService;
 
 @Data
 public class BattleTO {
-
     public BattleTO(Battle battle,BattlePost battlePost,boolean isList){
         this.host = battle.getHostMember();
         this.client = battle.getClientMember();
@@ -38,6 +39,7 @@ public class BattleTO {
         this.btId = battle.getBtId();
         this.point = battlePost.getBtPostPoint();
         this.pointReceived = battlePost.getBtPostPointReceived();
+
         Post post = battlePost.getPost();
         this.title = post.getPostTitle();
         this.postId = post.getPostId();
@@ -57,7 +59,6 @@ public class BattleTO {
 
     private Member host; // 배틀 주최자
     private Member client; // 배틀 참가자
-
     public String hostNick;
     public int hostWin;
     public int hostLose;
@@ -84,7 +85,6 @@ public class BattleTO {
     Date deadlineDt;
     Date startDt;
     Date btEndDt;
-
     long delay;
 
     String applicantsString;// 신청자들 memId,보류상태,신청시간/memId,보류상태
