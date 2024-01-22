@@ -102,6 +102,9 @@ public class RankController {
             case "fifa":
                 game_cd = "30005";
                 break;
+            case "steam":
+                game_cd = "30006";
+                break;
             default:
                 game_cd = "";
                 break;

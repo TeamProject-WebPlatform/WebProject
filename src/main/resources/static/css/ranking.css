@@ -1,13 +1,56 @@
-/* .profile-header{
-    width: 100%;
-    padding-top:20px;
-    background-size: 230px 230px;
-    background-repeat: no-repeat;
-    background-position: 20px 0;
+.tab {
+    float:left; 
+    width:600px; 
+    height:290px;
+}
 
-    background-position: center;
-    background-size:cover;
-} */
+.tabnav {
+    font-size:0; 
+    width:100%; 
+    border:1px solid #ddd; 
+    padding:0px;
+}
+
+.tabnav li {
+    display: inline-block;  
+    height:46px; 
+    text-align:center; 
+    border-right:1px solid #ddd;
+
+}
+.tabnav li a:before {
+    content:""; 
+    position:absolute; 
+    left:0; 
+    top:0px; 
+    width:100%; 
+    height:3px; 
+
+}
+.tabnav li a.active:before {
+    background:#7ea21e;
+
+}
+.tabnav li a.active {
+    border-bottom:1px solid #fff;
+
+}
+.tabnav li a { 
+    position:relative; 
+    display:block; 
+    background: #0C1826; 
+    color: white; 
+    padding:0 30px; 
+    line-height:46px; 
+    text-decoration:none; 
+    font-size:12px;
+
+}
+.tabnav li a:hover, 
+.tabnav li a.active {
+    background:#fff; 
+    color:#000000; 
+}
 
 .profile-card {
     width:270px;
@@ -43,3 +86,18 @@
     z-index: 99999;
     text-align: center;
 }
+
+.tabnav-game{
+    background-color: black;
+}
+
+#tab, .tabnav {
+    display: flex;
+    align-items: center;
+}
+.tabnav li {
+    flex: 1;
+}
+
+
+
