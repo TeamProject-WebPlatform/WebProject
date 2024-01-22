@@ -1,5 +1,6 @@
 package platform.game.service.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,12 +111,22 @@ public class RankController {
                 break;
         }
 
+        List<String[]> getRankerBadge = new ArrayList<String[]>();
+
         ModelAndView mav = new ModelAndView("levelrank");
         if (game_cd == "") {
             List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelRank();
             List<Object[]> getRankerProfile = rankingRepository.getLevelRankerProfile("0");
+            List<String> getRankerBadgeList = rankingRepository.getLevelRankerBadgeList("0");
+
+            for(int i=0;i<getRankerBadgeList.size();i++){
+                String[] badge = getRankerBadgeList.get(i).split(", ");
+                getRankerBadge.add(badge);
+            }
+
             mav.addObject("level", getLevelTable);
             mav.addObject("profile", getRankerProfile);
+            mav.addObject("badge", getRankerBadge);
         } else {
             List<LevelRankTO> getOtherLevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
             List<Object[]> getOtherRankerProfile = rankingRepository.getLevelRankerProfile(game_cd);
@@ -178,12 +189,22 @@ public class RankController {
                 break;
         }
 
+        List<String[]> getRankerBadge = new ArrayList<String[]>();
+
         ModelAndView mav = new ModelAndView("winraterank");
         if (game_cd == "") {
             List<WinRankTO> getWinRateTable = sqlMapperInter.getWinRateRank();
             List<Object[]> getRankerProfile = rankingRepository.getWinRateRankerProfile("0");
+            List<String> getRankerBadgeList = rankingRepository.getWinRateRankerBadgeList("0");
+
+            for(int i=0;i<getRankerBadgeList.size();i++){
+                String[] badge = getRankerBadgeList.get(i).split(", ");
+                getRankerBadge.add(badge);
+            }
+
             mav.addObject("win", getWinRateTable);
             mav.addObject("profile", getRankerProfile);
+            mav.addObject("badge", getRankerBadge);
         } else {
             List<WinRankTO> getOtherWinRateTable = sqlMapperInter.getOtherWinRateRank(game_cd);
             List<Object[]> getOtherRankerProfile = rankingRepository.getWinRateRankerProfile(game_cd);
@@ -245,12 +266,23 @@ public class RankController {
                 break;
         }
 
+        List<String[]> getRankerBadge = new ArrayList<String[]>();
+
         ModelAndView mav = new ModelAndView("pointrank");
         if (game_cd == "") {
             List<PointRankTO> getPointTable = sqlMapperInter.getPointRank();
             List<Object[]> getRankerProfile = rankingRepository.getPointRankerProfile("0");
+            List<String> getRankerBadgeList = rankingRepository.getPointRankerBadgeList("0");
+
+            for(int i=0;i<getRankerBadgeList.size();i++){
+                String[] badge = getRankerBadgeList.get(i).split(", ");
+                getRankerBadge.add(badge);
+            }
+
             mav.addObject("point", getPointTable);
             mav.addObject("profile", getRankerProfile);
+            mav.addObject("badge", getRankerBadge);
+            
         } else {
             List<PointRankTO> getOtherPointTable = sqlMapperInter.getOtherPointRank(game_cd);
             List<Object[]> getOtherRankerProfile = rankingRepository.getPointRankerProfile(game_cd);

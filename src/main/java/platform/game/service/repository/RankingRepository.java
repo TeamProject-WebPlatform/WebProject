@@ -36,4 +36,14 @@ public interface RankingRepository extends JpaRepository<Ranking, Integer> {
 
     @Query(value="select mp.profile_intro, mp.profile_image, mp.profile_header, mp.profile_card, mp.profile_rep_badge from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='WinRate' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
     List<Object[]> getWinRateRankerProfile(String game_cd);
+
+    // 랭커 뱃지 리스트 따로
+    @Query(value="select mp.profile_badge_list from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='Level' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<String> getLevelRankerBadgeList(String game_cd);
+
+    @Query(value="select mp.profile_badge_list from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='Point' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<String> getPointRankerBadgeList(String game_cd);
+
+    @Query(value="select mp.profile_badge_list from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='WinRate' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<String> getWinRateRankerBadgeList(String game_cd);
 }
