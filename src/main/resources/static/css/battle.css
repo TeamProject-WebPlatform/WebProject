@@ -108,13 +108,24 @@
     font-weight: 800;
 }
 
+.battle-profile-border {
+    display: flex;
+    align-items: center;
+    width: 220px;
+    height: 220px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:cover;
+}
+
 .battle-profile-media {
     display: block;
     position: relative;
     height: 180px;
     overflow: hidden;
     border-radius: 50%;
-    border : 3px solid white;
+    border : 3px solid #0ff;
+    margin:auto;
 }
 
 .battle-profile-media img {
@@ -190,8 +201,8 @@
 }
 
 .battle-profile-media {
-    height: 200px;
-    width: 200px;
+    height: 170px;
+    width: 170px;
 }
 
 .battle-profile-media img {

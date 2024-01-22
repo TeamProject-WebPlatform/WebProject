@@ -213,8 +213,8 @@
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l battle-card-section" id="battleCardSection">
                         <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}" 
-                            th:with="image = ${HostProfileImage[iterStat.index]}, badge = ${HostProfileBadge[iterStat.index]},
-                                     ClImage = ${ClientProfileImage[iterStat.index]}, ClBadge = ${ClientProfileBadge[iterStat.index]} ">
+                            th:with="image = ${HostProfileImage[iterStat.index]}, badge = ${HostProfileBadge[iterStat.index]}, border = ${HostProfileBorder[iterStat.index]},
+                                     ClImage = ${ClientProfileImage[iterStat.index]}, ClBadge = ${ClientProfileBadge[iterStat.index]}, ClBorder = ${ClientProfileBorder[iterStat.index]}">
                             <div class="battle-card__box" th:attr="btId = ${battle.btId}">
                                 <div class="battle-profile-left">
                                     <div class="battle-profile-info">
@@ -275,11 +275,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="battle-profile-media">
-                                        <a href="10_game-profile.html">
-                                            <img th:if="${!image.equals('x')}" th:src="@{'../img/profileimage/' + ${image}}" alt="NO IMG" />
-                                            <img th:if="${image.equals('x')}" src="../img/doyun_icon.png" alt="NO IMG" />
-                                        </a>
+                                    <div class="battle-profile-border" th:if="${!border.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${border} + '.png);'">
+                                        <div class="battle-profile-media" >
+                                            <a href="10_game-profile.html" >
+                                                <img th:if="${!image.equals('x')}" th:src="@{'../img/profileimage/' + ${image}}" alt="NO IMG" />
+                                                <img th:if="${image.equals('x')}" src="../img/doyun_icon.png" alt="NO IMG" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="battle-profile-border" th:if="${border.equals('x')}">
+                                        <div class="battle-profile-media">
+                                            <a href="10_game-profile.html" >
+                                                <img th:if="${!image.equals('x')}" th:src="@{'../img/profileimage/' + ${image}}" alt="NO IMG" />
+                                                <img th:if="${image.equals('x')}" src="../img/doyun_icon.png" alt="NO IMG" />
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -467,14 +477,27 @@
 
 
                                 <div class="battle-profile-right">
-                                    <div class="battle-profile-media">
-                                        <a th:if="${battle.client}" href="10_game-profile.html">
-                                            <img th:if="${!ClImage.equals('x')}" th:src="@{'../img/profileimage/' + ${ClImage}}" alt="NO IMG" />
-                                            <img th:if="${ClImage.equals('x')}" src="../img/doyun_icon.png" alt="NO IMG" />
-                                        </a>
-                                        <a th:unless="${battle.client}">
-                                            <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />
-                                        </a>
+                                    <div class="battle-profile-border" th:if="${!ClBorder.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${ClBorder} + '.png);'">
+                                        <div class="battle-profile-media" >
+                                            <a th:if="${battle.client}" href="10_game-profile.html">
+                                                <img th:if="${!ClImage.equals('x')}" th:src="@{'../img/profileimage/' + ${ClImage}}" alt="NO IMG" />
+                                                <img th:if="${ClImage.equals('x')}" src="../img/doyun_icon.png" alt="NO IMG" />
+                                            </a>
+                                            <a th:unless="${battle.client}">
+                                                <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="battle-profile-border" th:if="${ClBorder.equals('x')}">
+                                        <div class="battle-profile-media" >
+                                            <a th:if="${battle.client}" href="10_game-profile.html">
+                                                <img th:if="${!ClImage.equals('x')}" th:src="@{'../img/profileimage/' + ${ClImage}}" alt="NO IMG" />
+                                                <img th:if="${ClImage.equals('x')}" src="../img/doyun_icon.png" alt="NO IMG" />
+                                            </a>
+                                            <a th:unless="${battle.client}">
+                                                <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="battle-profile-info">
                                         <div class="battle-profile-nickname">

@@ -109,39 +109,48 @@ public class BattleController {
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
 
-        System.out.println(battleTOList.get(0).getClientNick());
-
         // battleTO에 있는 호스트와 클라이언트 유저들 프로필 가져오기
         List<String> battleTOHostProfileImage = new ArrayList<String>();
+        List<String> battleTOHostProfileBorder = new ArrayList<String>();
         List<String[]> battleTOHostProfileBadge = new ArrayList<String[]>();
 
         List<String> battleTOClientProfileImage = new ArrayList<String>();
+        List<String> battleTOClientProfileBorder = new ArrayList<String>();
         List<String[]> battleTOClientProfileBadge = new ArrayList<String[]>();
+
 
         for(int i=0; i<battleTOList.size();i++){
             BattleTO to = battleTOList.get(i);
 
             String HostProfileImage = profileRepository.BattleProfileImage(to.getHostNick());
+            String HostProfileBorder = profileRepository.BattleProfileBorder(to.getHostNick());
             String HostProfileBadgeList = profileRepository.BattleProfileBadgeList(to.getHostNick());
             String[] HostProfileBadge = HostProfileBadgeList.split(", ");
 
             String ClientProfileImage = profileRepository.BattleProfileImage(to.getClientNick());
+            String ClientProfileBorder = profileRepository.BattleProfileBorder(to.getClientNick());
             String ClientProfileBadgeList = profileRepository.BattleProfileBadgeList(to.getClientNick());
             String[] ClientProfileBadge = ClientProfileBadgeList.split(", ");
 
             battleTOHostProfileImage.add(HostProfileImage);
+            battleTOHostProfileBorder.add(HostProfileBorder);
             battleTOHostProfileBadge.add(HostProfileBadge);
 
             battleTOClientProfileImage.add(ClientProfileImage);
+            battleTOClientProfileBorder.add(ClientProfileBorder);
             battleTOClientProfileBadge.add(ClientProfileBadge);
         }
 
         mav.addObject("lastPage", lastPage);
         mav.addObject("battleTOList", battleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
+
         mav.addObject("HostProfileImage", battleTOHostProfileImage);
+        mav.addObject("HostProfileBorder", battleTOHostProfileBorder);
         mav.addObject("HostProfileBadge", battleTOHostProfileBadge);
+
         mav.addObject("ClientProfileImage", battleTOClientProfileImage);
+        mav.addObject("ClientProfileBorder", battleTOClientProfileBorder);
         mav.addObject("ClientProfileBadge", battleTOClientProfileBadge);
         
         // 사이드바에 방문자 수 보여주기
