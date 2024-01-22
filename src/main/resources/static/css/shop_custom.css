@@ -8,6 +8,10 @@
     /* align-items: flex-start; */
 }
 
+li{
+    list-style: none;
+}
+
 
 .user{
     width: 100%;
@@ -46,8 +50,8 @@
 
 .profile-image{
     margin-top: 20px;
-    width: 18vh;
-    height: 18vh;
+    width: 200px;
+    height: 200px;
     margin: 0 auto;
     border-radius: 50%;
     overflow: hidden;
