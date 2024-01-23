@@ -57,7 +57,7 @@ body.dark-theme .board_view_title{
 .contents_sub table { width:100%; border-collapse:collapse; }
 .contents_sub table img { padding-top:2px; }
 
-.board_top { width:100%; overflow:hidden; /*margin:10px 0;*/ }
+.board_top { width:100%; overflow:hidden; margin:10px 0; }
 .board_top .f_search { float:right; width:550px; text-align:right; }
 .board_top .bold { float:left; width:200px; margin:10px 0; }
 
@@ -68,6 +68,8 @@ body.dark-theme .board_view_title{
 .board td { height:30px; border-bottom:1px solid #dadada; color:#797979; text-align:center; padding:5px; word-wrap: break-word; word-break: break-all; }
 .board td.left { text-align:left; }
 .board td.category{ font-weight:bold; }   
+
+.
 
 /* board view */
 
@@ -178,6 +180,9 @@ body.dark-theme .board_top_tr{
     background-color: #171C25;
 }
 
+.board_ccenter_tr_a {
+    display: inline-block;
+}
 .board_ccenter_tr_a:hover {
     color: rgb(0, 177, 177);
     text-decoration: underline;
@@ -279,6 +284,8 @@ body.dark-theme .comment_view{
     color: #F46119;
 }
  */
+
+
 
 .coment_input_text{
     resize: none;
@@ -425,4 +432,4 @@ body.dark-theme .btn_re:hover { background-color:#FEF7F3; color: var( --main-col
 .contents1 .con_txt{ clear:both;}    
 .contents1 {margin-top: 30px;} */
 
-
+table tr td{text-overflow: ellipsis; white-space: nowrap; max-width: 140px;}

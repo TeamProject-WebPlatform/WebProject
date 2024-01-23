@@ -21,7 +21,7 @@ public interface ItemInfoRepository extends JpaRepository<Item, Integer> {
     // 아이템이름 + 종류 검색
     ArrayList<Item> findByItemNmContainingAndItemKindCdContaining(String itemNm, String itemKindCd);
 
-    ArrayList<Item> findByItemNmContaining(String itemNm);
+    ArrayList<Item> findByItemNmContainingIgnoreCase(String itemNm);
 
     // 아이템 갯수 조회
     long count();

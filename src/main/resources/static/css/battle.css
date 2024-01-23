@@ -202,6 +202,9 @@
 .battle-profile-lvl {
     margin-right: 5px;
 }
+.battle-profile-name {
+    margin-top: -20px;
+}
 
 .battle-profile-media {
     position: relative;

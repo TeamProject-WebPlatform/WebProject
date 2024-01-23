@@ -11,6 +11,7 @@ import platform.game.service.entity.Member;
 import platform.game.service.entity.SigninHistory;
 import platform.game.service.repository.SigninHistoryRepository;
 
+
 @Service
 public class SigninHistoryService {
 
@@ -19,14 +20,18 @@ public class SigninHistoryService {
 
     @Transactional
     public boolean isFirstLogin(Member member) {
-        
+
         LocalDateTime currentMidnightDateTime = LocalDate.now().atStartOfDay();
 
         SigninHistory latestSignin = signinHistoryRepository.findTopByMemberOrderByCreatedAtDesc(member);
 
-        if (latestSignin == null || latestSignin.getCreatedAt().isAfter(currentMidnightDateTime)) {
+        if (latestSignin == null || !latestSignin.getCreatedAt().toLocalDate().isEqual(currentMidnightDateTime.toLocalDate())) {
             // 첫 로그인 시 모든 로그인 기록 삭제
             deleteByMember(member);
+
+            // 첫 로그인 시 현재 시간을 저장
+            logFirstLogin(member);
+
             return true;
         }
 
@@ -36,5 +41,21 @@ public class SigninHistoryService {
     @Transactional
     public void deleteByMember(Member member) {
         signinHistoryRepository.deleteByMember(member);
+    }
+
+    private void logFirstLogin(Member member) {
+        // 첫 로그인 시간을 저장
+        LocalDateTime firstLoginTime = LocalDateTime.now();
+
+        // SigninHistory에 저장
+        SigninHistory signinHistory = SigninHistory.builder()
+                .member(member)
+                .createdAt(firstLoginTime)
+                .build();
+
+        signinHistoryRepository.save(signinHistory);
+
+        // 여기에 추가적인 로그 또는 작업을 수행할 수 있습니다.
+        System.out.println("첫 로그인 - 사용자: " + member.getMemId() + ", 날짜: " + firstLoginTime);
     }
 }

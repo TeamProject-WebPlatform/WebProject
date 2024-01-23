@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+
 function battleCardConnect() {
     var socket = new SockJS('/ws');
     battleCardStompClient = Stomp.over(socket);

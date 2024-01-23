@@ -165,15 +165,22 @@ public class LoginController {
 
         // 사용자의 IP 주소 가져오기
         String memIp = IpAction.getIpAddress(request);
-        
+
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        // MemberInfoDetails 객체로부터 Member 정보 추출
-        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
         
         // Principal을 Object로 받음
         if (!(principal instanceof MemberInfoDetails)) {
             // 사용자 정보가 MemberInfoDetails가 아닌 경우에 대한 처리
             System.out.println("올바르지 않은 사용자 정보입니다.");
+            return 1;
+        }
+
+        // MemberInfoDetails 객체로부터 Member 정보 추출
+        Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMember();
+
+        // member가 null이면 처리
+        if (member == null) {
+            System.out.println("사용자 정보가 없습니다.");
             return 1;
         }
 
@@ -190,6 +197,7 @@ public class LoginController {
             }
 
             System.out.println("포인트 증가 성공");
+
         } else {
             System.out.println("이미 로그인한 사용자입니다.");
         }
