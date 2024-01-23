@@ -36,9 +36,6 @@ public class SigninHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long signinHistoryId;
     
-
-    @Column(length = 15) // IPv4 주소는 최대 15자리까지입니다.
-    private String memIp;
     // 날짜 저장
     private LocalDateTime createdAt;
 
