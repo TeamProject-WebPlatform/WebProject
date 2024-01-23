@@ -28,8 +28,6 @@
     <script src="/js/module/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            //console.log = function () {};
-
             const active = document.getElementById("nav-levelrank");
             active.classList.add("uk-active");
             const submenu = active.parentNode;
@@ -78,24 +76,18 @@
                                                     <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
                                                     <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                                 </div>
-                                                <div class="profile-user_info">
-                                                    <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
-                                                    <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
-                                                    <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
-                                                    <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
-                                                </div>
                                             </div>
                                             <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
                                                 <div class="profile-image">
                                                     <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
                                                     <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                                 </div>
-                                                <div class="profile-user_info">
-                                                    <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
-                                                    <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
-                                                    <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
-                                                    <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
-                                                </div>
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
+                                                <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
+                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
                                         </a>
                                             <div class="profile-dividing-line"></div>
@@ -157,24 +149,17 @@
                                                     <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                                 </div>
                                             </div>
-                                                <div class="profile-user_info">
-                                                    <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
-                                                    <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
-                                                    <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
-                                                    <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
-                                                </div>
-
                                             <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
                                                 <div class="profile-image">
                                                     <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
                                                     <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                                 </div>
-                                                <div class="profile-user_info">
-                                                    <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
-                                                    <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
-                                                    <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
-                                                    <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
-                                                </div>
+                                            </div>
+                                            <div class="profile-user_info">
+                                                <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
+                                                <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
+                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
                                         </a>
                                         <div class="profile-dividing-line"></div>

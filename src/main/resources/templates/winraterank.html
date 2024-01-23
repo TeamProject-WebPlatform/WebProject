@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="/css/libs.min.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/main_custom.css">
-    <link rel="stylesheet" href="../css/ranking.css">
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -23,10 +22,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="/css/main_custom.css" />
+    <link rel="stylesheet" href="/css/shop_custom.css" />
+    <link rel="stylesheet" href="../css/ranking.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="/js/module/chart.js"></script>
-    <script src="/js/controller.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const active = document.getElementById("nav-winraterank");
@@ -37,9 +36,7 @@
         Chart.defaults.font.size = 18;
     </script>
 </head>
-
 <body class="page-home dark-theme">
-
     <input id="toggle" type="checkbox">
 
 
@@ -65,38 +62,35 @@
                         </div>
                         <div class="widjet --market">
                             <div class="widjet__body" style="text-align: center; display:block;">
-                                    <canvas id="win" style='width:85%; height:30vh; margin: auto;' ></canvas>
+                                <canvas id="win" style='width:85%; height:30vh; margin: auto;' ></canvas>
 
                                 <script type="text/javascript">
                                     WinRateChart();
                                 </script>
-                                <div></div>
-                                <div th:if="${win!=null and i.index<5}" th:each="to, i:${win}" th:switch="${profile.get(i.index)[3]}" th:with="badge = ${badge[i.index]}" style="display: inline-block;">
+                                <div class="profiles" th:if="${win!=null and i.index<5}" th:each="to, i:${win}" th:switch="${profile.get(i.index)[3]}" th:with="badge = ${badge[i.index]}">
                                     <!-- 통합 랭킹 카드 -->
-                                    <div th:case="x" class="profile-card" style="display: inline-block;">
-                                        <div class="profile-header" th:if="${!profile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.get(i.index)[2]} + '.png);'">
-                                            <div class="profile-image">
-                                                <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
-                                                <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                    <div th:case="x" class="profile-card">
+                                        <a id="profile">
+                                            <div class="profile-header" th:if="${!profile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.get(i.index)[2]} + '.png);'">
+                                                <div class="profile-image">
+                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
+                                                    <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                                </div>
+                                            </div>
+                                            <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
+                                                <div class="profile-image">
+                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
+                                                    <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
+                                                </div>
                                             </div>
                                             <div class="profile-user_info">
-                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
-                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
+                                                <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
                                                 <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
-                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
-                                        </div>
-                                        <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
-                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE"></div>
-                                            <div class="profile-user_info">
-                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
-                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
-                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
-                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
-                                            </div>
-                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
-                                        </div>
+                                            <div><p th:text="'WinRate : '+${to.winrate} + '%'"></p></div>
+                                        </a>
                                         <div class="profile-dividing-line"></div>
                                         <div class="profile-main">
                                             <div class="profile-introduction" th:text="${profile.get(i.index)[0]}"></div>
@@ -154,27 +148,20 @@
                                                 <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
                                                 <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                             </div>
-                                            <div class="profile-user_info">
-                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
-                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
-                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
-                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
-                                            </div>
-                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
                                         </div>
                                         <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
                                             <div class="profile-image">
                                                 <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
                                                 <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                             </div>
-                                            <div class="profile-user_info">
-                                                <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
-                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
-                                                <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
-                                                <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
-                                            </div>
-                                            <p th:text="'승 률 : '+${to.winrate} + '%'"></p>
                                         </div>
+                                        <div class="profile-user_info">
+                                            <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
+                                            <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                            <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
+                                            <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
+                                        </div>
+                                        <div><p th:text="'WinRate : '+${to.winrate} + '%'"></p></div>
                                         <div class="profile-dividing-line"></div>
                                         <div class="profile-main">
                                             <div class="profile-introduction" th:text="${profile.get(i.index)[0]}"></div>
@@ -228,7 +215,7 @@
                                 </div>
 
                                 <!-- 특정 게임 랭크 카드 -->
-                                <div th:if="${otherwin!=null and i.index<5}"  th:each="to, i:${otherwin}" th:switch="${otherprofile.get(i.index)[3]}" style="display: inline-block;">
+                                <!-- <div th:if="${otherwin!=null and i.index<5}"  th:each="to, i:${otherwin}" th:switch="${otherprofile.get(i.index)[3]}" style="display: inline-block;">
                                     <div th:case="x" class="profile-card" style="display: inline-block;">
                                         <div class="profile-header" th:if="${!otherprofile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${otherprofile.get(i.index)[2]} + '.png);'">
                                             <div class="profile-image">
@@ -296,7 +283,7 @@
                                             <div class="profile-introduction" th:text="${otherprofile.get(i.index)[0]}"></div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <br><br><hr><br>
                                 <table class="rank_table">
                                     <tr>
