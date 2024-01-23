@@ -247,6 +247,19 @@ body.dark-theme .coment_input_text{
     /* border: 1px solid white;
 } */
 
+/* 더보기 디자인 */
+.seemore{
+    font-size: 18px;
+    text-decoration: underline;
+}
+
+.seemore:hover{
+    color: #00f0f0;
+}
+body.dark-theme .seemore:hover{
+    color: rgb(0, 177, 177);
+}
+
 
 /* Align*/
 .btn_area {overflow:hidden; margin:10px 0;}

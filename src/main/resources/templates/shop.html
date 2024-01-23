@@ -10,9 +10,11 @@
         <meta name="format-detection" content="telephone=no">
         <meta content="IE=edge" http-equiv="X-UA-Compatible">
         <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
-        <link rel="stylesheet" href="./css/libs.min.css">
-        <link rel="stylesheet" href="./css/main.css">
-        <link rel="stylesheet" href="./css/shop_custom.css" />
+        <link rel="stylesheet" href="../css/libs.min.css">
+        <link rel="stylesheet" href="../css/main.css">
+
+        <link rel="stylesheet" href="../css/shop_custom.css" />
+        <!-- <link rel="stylesheet" href="../css/main_custom.css" /> -->
         
         <script src="./js/libs.js"></script>
         <script src="./js/main.js"></script>
@@ -35,18 +37,18 @@
     <body class="page-store dark-theme">
         <input id="toggle" type="checkbox">
         
-    <!-- Loader-->
-    <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div>
-    <!-- Loader end-->
+        <!-- Loader-->
+        <div th:replace="~{fragments/loader :: loader1Fragment}" id="page-preloader"></div>
+        <!-- Loader end-->
 
-    <div class="page-wrapper">
-        <!-- 헤더 Fragment -->
-        <header th:replace="~{fragments/header :: headerFragment}">헤더 Fragment</header>
-        <!--  -->
-        <div class="page-content">
-            <!-- 사이드바 Fragment -->
-            <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss = "sidebar is-show" id="sidebar">사이드바 Fragment</aside>
-            <!-- 메인 -->
+        <div class="page-wrapper">
+            <!-- 헤더 Fragment -->
+            <header th:replace="~{fragments/header :: headerFragment}">헤더 Fragment</header>
+            <!--  -->
+            <div class="page-content">
+                <!-- 사이드바 Fragment -->
+                <aside th:replace="~{fragments/sidebar :: sidebarFragment}" clsss = "sidebar is-show" id="sidebar">사이드바 Fragment</aside>
+                <!-- 메인 -->
                 <main class="page-main">
                     <div class="flex-container">
                         <div class="widjet-container">
@@ -196,13 +198,6 @@
                                                 <span class="badge shopbadge"></span>
                                             </div>
                                         </div>
-                                        <br>
-                                        <div class="setbtn">
-                                            <ul id="previewList"></ul>
-                                        </div>
-                                        <div class="uk-width-1-1">
-                                            <input class="reset_btn" type='submit' value='초기화' th:onclick="hidePreview()">
-                                        </div>
                                     </div>
                                     <div class="uk-width-1-1" th:if="${memberProfile==null}">
                                         <div class="profile-card uk-width-1-1">
@@ -225,29 +220,35 @@
                                                 <span class="badge shopbadge"></span>
                                             </div>
                                         </div>
-                                        <br>
+
+                                    </div>
+                                    <div class="widjet__head">
+                                        <h3 class="uk-text-lead">Preview</h3>
+                                    </div>
+                                    <div class="game-card uk-width-1-1">
                                         <div class="setbtn">
                                             <ul id="previewList"></ul>
                                         </div>
-                                        <br>
-                                        <div class="uk-width-1-1">
-                                            <input class="reset_btn" type='submit' value='초기화' th:onclick="hidePreview()">
-                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="uk-width-1-1">
+                                        <input class="reset_btn" type='submit' value='초기화' th:onclick="hidePreview()">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+                <br>
+                <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
                 </main>
             </div>
-        <!-- 팝업 내용 -->
+            <!-- 팝업 내용 -->
             <div class="popup" id="popup">
                 <span class="close" onclick="closePopup()">&times;</span>
                 <img class="popup-content" id="popupImage">
             </div>
             <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
+        </div>
     </body>
     
 </html>
