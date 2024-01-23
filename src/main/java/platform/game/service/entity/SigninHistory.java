@@ -44,7 +44,6 @@ public class SigninHistory {
         return "SigninHistory{" +
                 "member=" + member +
                 ", signinHistoryId=" + signinHistoryId +
-                ", memIp='" + memIp + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }
