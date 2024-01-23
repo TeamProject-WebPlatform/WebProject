@@ -134,10 +134,15 @@ public class ShopController {
 
         int point = item.get("Point").asInt();
         String itemCd = item.get("Category").asText();
+        int currentPoint = member.getMemCurPoint();
 
-        if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd) == 1
+        if(currentPoint < point){
+            flag=2;
+        } else {
+            if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd) == 1
                 && memberItemInfoRepository.UpdatePoint(point, member.getMemId()) == 1) {
-            flag = 1;
+                flag = 1;
+            }
         }
 
         return ResponseEntity.ok(String.valueOf(flag));

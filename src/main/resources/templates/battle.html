@@ -215,8 +215,14 @@
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l battle-card-section" id="battleCardSection">
                         <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}" 
-                            th:with="image = ${HostProfileImage[iterStat.index]}, badge = ${HostProfileBadge[iterStat.index]}, border = ${HostProfileBorder[iterStat.index]}, rep = ${HostProfileRep[iterStat.index]},
-                                     ClImage = ${ClientProfileImage[iterStat.index]}, ClBadge = ${ClientProfileBadge[iterStat.index]}, ClBorder = ${ClientProfileBorder[iterStat.index]}, ClRep = ${ClientProfileRep[iterStat.index]},">
+                            th:with="image = ${HostProfileImage[iterStat.index]}, 
+                                    badge = ${HostProfileBadge[iterStat.index]}, 
+                                    border = ${HostProfileBorder[iterStat.index]}, 
+                                    rep = ${HostProfileRep[iterStat.index]},
+                                    ClImage = ${ClientProfileImage[iterStat.index] != null ? ClientProfileImage[iterStat.index] : 'X_img'}, 
+                                    ClBadge = ${ClientProfileBadge[iterStat.index]}, 
+                                    ClBorder = ${ClientProfileBorder[iterStat.index] != null ? ClientProfileBorder[iterStat.index] : 'x'}, 
+                                    ClRep = ${ClientProfileRep[iterStat.index] != null ? ClientProfileRep[iterStat.index] : 'x'}">
                             <div class="battle-card__box" th:attr="btId = ${battle.btId}">
                                 <div class="battle-profile-left">
                                     <div class="battle-profile-info">

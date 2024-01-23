@@ -115,9 +115,8 @@ function closePopup() {
 }
 
 // 아이템 구매
-async function getItem(point,category,pointKindCd) {
+async function getItem(point,category) {
     if (confirm("정말 구매 하시겠습니까??") == true){    //확인
-        sendPointChange(point, pointKindCd);
         try {
             const response = await fetch('/itempurchase', {
                 method:'POST',
@@ -136,6 +135,8 @@ async function getItem(point,category,pointKindCd) {
             if (flag=='1') {
                 alert("아이템을 구매하였습니다.");
                 location.reload();
+            } else if (flag=='2'){
+                alert("포인트가 부족합니다.");
             } else {
                 alert("에러" + error.message);
             }

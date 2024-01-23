@@ -37,7 +37,6 @@ const UserProfileData = async function (Swiper) {
         const data = await response.json();
         for (let i = 0; i < data.length; i++) {
             datalist.push(data[i]);
-            console.log(data[i]);
         }
     } catch (error) {
         console.log("에러", error);
@@ -80,7 +79,6 @@ const setSwiperWrapper = async function () {
     let slideNum = datalist.length
     let html = "";
     for (let i = 0; i < slideNum; i++) {
-        // console.log(datalist[i]);
         html += `
             <div class="swiper-slide">`;
 
@@ -151,12 +149,14 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
         <div class="profile-card" ${memCardStyle}>
             <a>
                 <div class="profile-header" ${memHeaderStyle}>
-                    <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
-                    <div class="profile-user_info">
-                        <div class="profile-user_level"><span>LV : ${memLevel}</span></div>
-                        <div class="profile-user_nick"><span>${memNickname}</span></div>
-                        ${memRepBadgeStyle}
+                    <div class="profile-image">
+                        <img src="../img/${memImageName}" alt="NO-IMAGE">
                     </div>
+                </div>
+                <div class="profile-user_info">
+                    <div class="profile-user_level"><span>LV : ${memLevel}</span></div>
+                    <div class="profile-user_nick"><span>${memNickname}</span></div>
+                    ${memRepBadgeStyle}
                 </div>
             </a>
             <div class="profile-dividing-line"></div>
@@ -187,5 +187,3 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
     `
     return membProfileHTML;
 }
-
-//document.addEventListener("DOMContentLoaded", SwiperData());

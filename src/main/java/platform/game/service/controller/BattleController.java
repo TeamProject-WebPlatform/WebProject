@@ -130,23 +130,40 @@ public class BattleController {
             String HostProfileRep = profileRepository.BattleProfileRepBadge(to.getHostNick());
             String[] HostProfileBadge = HostProfileBadgeList.split(", ");
 
-            String ClientProfileImage = profileRepository.BattleProfileImage(to.getClientNick());
-            String ClientProfileBorder = profileRepository.BattleProfileBorder(to.getClientNick());
-            String ClientProfileBadgeList = profileRepository.BattleProfileBadgeList(to.getClientNick());
-            String ClientProfileRep = profileRepository.BattleProfileRepBadge(to.getClientNick());
-            String[] ClientProfileBadge = ClientProfileBadgeList.split(", ");
+            System.out.println(to.getHostNick() + " : " + to.getClientNick());
+
 
             battleTOHostProfileImage.add(HostProfileImage);
             battleTOHostProfileBorder.add(HostProfileBorder);
             battleTOHostProfileBadge.add(HostProfileBadge);
             battleTOHostProfileRep.add(HostProfileRep);
 
-            battleTOClientProfileImage.add(ClientProfileImage);
-            battleTOClientProfileBorder.add(ClientProfileBorder);
-            battleTOClientProfileBadge.add(ClientProfileBadge);
-            battleTOClientProfileRep.add(ClientProfileRep);
-        }
+            if (to.getClientNick()!=null){
+                String ClientProfileImage = profileRepository.BattleProfileImage(to.getClientNick());
+                String ClientProfileBorder = profileRepository.BattleProfileBorder(to.getClientNick());
+                String ClientProfileBadgeList = profileRepository.BattleProfileBadgeList(to.getClientNick());
+                String ClientProfileRep = profileRepository.BattleProfileRepBadge(to.getClientNick());
+                String[] ClientProfileBadge = ClientProfileBadgeList.split(", ");
 
+                battleTOClientProfileImage.add(ClientProfileImage);
+                battleTOClientProfileBorder.add(ClientProfileBorder);
+                battleTOClientProfileBadge.add(ClientProfileBadge);
+                battleTOClientProfileRep.add(ClientProfileRep);
+            } else {
+                String ClientProfileImage = null;
+                String ClientProfileBorder = null;
+                String ClientProfileRep = null;
+                String ClientProfileBadgeList = "x, x, x, x, x, x, x, x, x";
+                String[] ClientProfileBadge = ClientProfileBadgeList.split(", ");
+
+                battleTOClientProfileImage.add(ClientProfileImage);
+                battleTOClientProfileBorder.add(ClientProfileBorder);
+                battleTOClientProfileBadge.add(ClientProfileBadge);
+                battleTOClientProfileRep.add(ClientProfileRep);
+            }
+
+        }
+        
         mav.addObject("lastPage", lastPage);
         mav.addObject("battleTOList", battleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
