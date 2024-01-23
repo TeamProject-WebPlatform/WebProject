@@ -15,8 +15,8 @@ public class BettingService {
     @Lazy
     AsyncTaskService asyncTaskService;
 
-    public CompletableFuture<Long[]> bettingSchedule(int btId, Date date) {
+    public void bettingSchedule(int btId, Date date) {
         // date는 배틀 시작시간
-        return asyncTaskService.scheduleTask(btId, 0, date, 1);
+        asyncTaskService.scheduleTask(btId, 0, date, 1);
     }
 }

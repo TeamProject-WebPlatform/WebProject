@@ -3,7 +3,7 @@
 
 <body>
     <aside th:fragment="sidebarFragment" class="sidebar is-show" id="sidebar">
-
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -62,9 +62,9 @@
                 <li id="nav-shop" class=""><a th:href="@{/shop}"><i class="ico_store"></i><span>Shop</span></a></li>
                 <!-- Support -->
                 <li class="uk-nav-header">Support</li>
-                <li class=""><a href="#modal-report" data-uk-toggle><i class="ico_report"></i><span>Report</span></a>
+                <li class=""><a href="#modal-report" data-uk-toggle onclick="clearModal()"><i class="ico_report"></i><span>Report</span></a>
                 </li>
-                <li><a href="#modal-help" data-uk-toggle><i class="ico_help"></i><span>Help</span></a></li>
+                <!-- <li><a href="#modal-help" data-uk-toggle><i class="ico_help"></i><span>Help</span></a></li> -->
                 
                 <li class="uk-nav-header">Visiter</li>
                 <div>

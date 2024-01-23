@@ -20,7 +20,7 @@ public class AsyncTaskService {
     @Lazy
     BattleCustomRepositoryImpl battleCustomRepositoryImpl;
 
-    public CompletableFuture<Long[]> scheduleTask(int btId, int postId, Date date,int flag) {
+    public void scheduleTask(int btId, int postId, Date date,int flag) {
         try {
             long startTime = date.getTime();
             long curTime = System.currentTimeMillis();
@@ -52,10 +52,7 @@ public class AsyncTaskService {
                 }
                 executorService.shutdown(); // 작업 완료 후 executor 종료
             }, delay, TimeUnit.MILLISECONDS);
-            Long[] data = new Long[2];
-            data[0] = targetTime;
-            data[1] = delay;
-            return CompletableFuture.completedFuture(data);
+            
         } catch (Exception e) {
             throw new RuntimeException("비동기 작업 중 오류 발생", e);
         }

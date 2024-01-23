@@ -58,6 +58,7 @@ public class WalletController {
             MemberBettingTO to = new MemberBettingTO(battle, battle.getBtPost().getPost(), e);
             memberBettingTOList.add(to);
         }
+        Collections.reverse(memberBettingTOList);
         mav.addObject("nickname", member.getMemNick());
         mav.addObject("memId", member.getMemId());
         mav.addObject("currentPoint", member.getMemCurPoint());

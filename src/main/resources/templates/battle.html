@@ -297,11 +297,11 @@
                                 <select class="js-select uk-flex-1 height95per margintop1per" id="selectState"
                                     style="display: none;" onchange="selectState(this.value)">
                                     <option value="ALL">전체</option>
-                                    <option value="N">매칭</option>
-                                    <option value="A">베팅</option>
-                                    <option value="B">대기</option>
-                                    <option value="P">진행</option>
-                                    <option value="T">종료</option>
+                                    <option value="N">매칭 중</option>
+                                    <option value="A">베팅 가능</option>
+                                    <option value="B">베팅 종료</option>
+                                    <option value="P">진행 중</option>
+                                    <option value="T">종료됨</option>
                                 </select>
                             </div>
                             <div class="search uk-width-2-3 height50px">
@@ -400,7 +400,7 @@
                                         <div class="info-state">
                                             <div th:if="${battle.state=='A'}" class="A th">베팅 가능!</div>
                                             <div th:if="${battle.state=='B'}" class="B th">베팅 종료</div>
-                                            <div th:if="${battle.state=='P'}" class="P th">진행중</div>
+                                            <div th:if="${battle.state=='P'}" class="P th">진행 중</div>
                                             <div th:if="${battle.state=='H'}" class="H th">종료 대기중</div>
                                             <div th:if="${battle.state=='C'}" class="C th">종료 대기중</div>
                                             <div th:if="${battle.state=='T'}" class="T th">종료됨</div>
@@ -409,7 +409,7 @@
 
                                             <div class="A none">베팅 가능!</div>
                                             <div class="B none">베팅 종료</div>
-                                            <div class="P none">진행중</div>
+                                            <div class="P none">진행 중</div>
                                             <div class="H none">종료 대기중</div>
                                             <div class="C none">종료 대기중</div>
                                             <div class="T none">종료됨</div>

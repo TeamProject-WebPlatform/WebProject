@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -226,10 +227,14 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
                 Member client = entityManager.getReference(Member.class, requester);
                 battle.setClientMember(client);
                 battle.setBtState("A");
-                CompletableFuture<Long[]> fData = bettingService.bettingSchedule(btId,btp.getBtStartDt());
-                Long[] data = fData.get();
-                long targetTime = data[0];
-                long delay = data[1];
+
+                long startTime = btp.getBtStartDt().getTime();
+                long curTime = System.currentTimeMillis();
+                long waiting = TimeUnit.MINUTES.toMillis(30);
+                long targetTime = startTime+waiting;
+                long delay = targetTime - curTime;
+
+                bettingService.bettingSchedule(btId,btp.getBtStartDt());
                 btp.setBettingFinTime(targetTime);
                 try{
                     sendMessageService.sendMessageToChangeState(btId, "A",delay,new BattleMemberTO(client));
