@@ -106,10 +106,10 @@ public class MainController {
         String boardCd_free = "20004";
         long id = 0;
 
-        ArrayList<Post> notice_lists = postInfoRepository.findTop10ByBoardCdOrderByPostIdDesc(boardCd_notice);
-        ArrayList<Post> update_lists = postInfoRepository.findTop10ByBoardCdOrderByPostIdDesc(boardCd_update);
-        ArrayList<Post> event_lists = postInfoRepository.findTop10ByBoardCdOrderByPostIdDesc(boardCd_event);
-        ArrayList<Post> free_lists = postInfoRepository.findTop10ByBoardCdOrderByPostIdDesc(boardCd_free);
+        ArrayList<Post> notice_lists = postInfoRepository.findTop10ByBoardCdOrderByCreatedAtDesc(boardCd_notice);
+        ArrayList<Post> update_lists = postInfoRepository.findTop10ByBoardCdOrderByCreatedAtDesc(boardCd_update);
+        ArrayList<Post> event_lists = postInfoRepository.findTop10ByBoardCdOrderByCreatedAtDesc(boardCd_event);
+        ArrayList<Post> free_lists = postInfoRepository.findTop10ByBoardCdOrderByCreatedAtDesc(boardCd_free);
         List<LevelRankTO> getLevelTable = sqlMapperInter.getTop10LevelRanks();
 
         ModelAndView mav = new ModelAndView("index");
