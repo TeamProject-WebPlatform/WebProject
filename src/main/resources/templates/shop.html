@@ -12,7 +12,9 @@
         <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
         <link rel="stylesheet" href="../css/libs.min.css">
         <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/main_custom.css" />
         <link rel="stylesheet" href="../css/shop_custom.css" />
+        <link rel="stylesheet" href="../css/ranking.css" />
         
         <script src="../js/libs.js"></script>
         <script src="../js/main.js"></script>
@@ -122,75 +124,67 @@
                                     <!-- 배경 -->
                                     <div class="uk-width-1-1" th:if="${memberProfile!=null}" th:switch="${memberProfile.profileCard}">
                                         <!-- 프로필 카드 없음-->
-                                        <div th:case="x" class="profile-card uk-width-1-1">
+                                        <div th:case="x" class="profile-card">
                                             <!-- 프로필 사진 테두리 있음-->
-                                            <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
-                                                <div class="profile-image">
-                                                    <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
-                                                    <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                            <a id="profile">
+                                                <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
+                                                    <div class="profile-image">
+                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
+                                                        <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                                    </div>
+                                                </div>
+                                                <!-- 프로필 사진 테두리 기본-->
+                                                <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
+                                                    <div class="profile-image">
+                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
+                                                        <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                                    </div>
                                                 </div>
                                                 <div class="profile-user_info">
-                                                    <p class="profile-user_level" th:text="${'LV : ' + level}"></p>
-                                                    <p class="profile-user_nick" th:text="${nickname}"></p>
+                                                    <div class="profile-user_level"><span th:text="${'LV : ' + level}"></span></div>
+                                                    <div class="profile-user_nick"><span th:text="${nickname}"></span></div>
                                                     <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
                                                     <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
                                                 </div>
-                                            </div>
-                                            <!-- 프로필 사진 테두리 기본-->
-                                            <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
-                                                <div class="profile-image">
-                                                    <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
-                                                    <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
-                                                </div>
-                                                <div class="profile-user_info">
-                                                    <p class="profile-user_level" th:text="${'LV : ' + level}"></p>
-                                                    <p class="profile-user_nick" th:text="${nickname}"></p>
-                                                    <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
-                                                    <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
-                                                </div>
-                                            </div>
-                                            <div class="profile-dividing-line width-1-1"></div>
+                                            </a>
+                                            <div class="profile-dividing-line"></div>
                                             <div class="profile-main">
                                                 <div class="profile-introduction" th:text="${memberProfile.profileIntro}"></div>
                                             </div>
-                                            <div class="profile-dividing-line width-1-1"></div>
+                                            <div class="profile-dividing-line"></div>
                                             <div class="profile-badge-section">
                                                 <span class="badge shopbadge"></span>
                                             </div>
                                         </div>
                                         <!-- 프로필 카드 있음-->
                                         <div th:case="*" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileCard} + '.png);'" class="profile-card uk-width-1-1" >
-                                            <!-- 프로필 사진 테두리 있음-->
-                                            <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
-                                                <div class="profile-image">
-                                                    <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
-                                                    <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                            <a id="profile">
+                                                <!-- 프로필 사진 테두리 있음-->
+                                                <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
+                                                    <div class="profile-image">
+                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
+                                                        <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                                    </div>
+                                                </div>
+                                                <!-- 프로필 사진 테두리 기본-->
+                                                <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
+                                                    <div class="profile-image">
+                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
+                                                        <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                                    </div>
                                                 </div>
                                                 <div class="profile-user_info">
-                                                    <p class="profile-user_level" th:text="${'LV : ' + level}"></p>
-                                                    <p class="profile-user_nick" th:text="${nickname}"></p>
+                                                    <div class="profile-user_level"><span th:text="${'LV : ' + level}"></span></div>
+                                                    <div class="profile-user_nick"><span th:text="${nickname}"></span></div>
                                                     <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
                                                     <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
                                                 </div>
-                                            </div>
-                                            <!-- 프로필 사진 테두리 기본-->
-                                            <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
-                                                <div class="profile-image">
-                                                    <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
-                                                    <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
-                                                </div>
-                                                <div class="profile-user_info">
-                                                    <p class="profile-user_level" th:text="${'LV : ' + level}"></p>
-                                                    <p class="profile-user_nick" th:text="${nickname}"></p>
-                                                    <img class="badge" th:if="${!memberProfile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${memberProfile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
-                                                    <img class="badge" th:if="${memberProfile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
-                                                </div>
-                                            </div>
-                                            <div class="profile-dividing-line width-1-1"></div>
+                                            </a>
+                                            <div class="profile-dividing-line"></div>
                                             <div class="profile-main">
                                                 <div class="profile-introduction" th:text="${memberProfile.profileIntro}"></div>
                                             </div>
-                                            <div class="profile-dividing-line width-1-1"></div>
+                                            <div class="profile-dividing-line"></div>
                                             <div class="profile-badge-section">
                                                 <span class="badge shopbadge"></span>
                                             </div>
