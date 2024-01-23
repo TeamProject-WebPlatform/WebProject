@@ -75,7 +75,7 @@ const setSwiper = function () {
 {/* <div class="recommend-slide row user"> */ }
 const setSwiperWrapper = async function () {
     let datalist = await SwiperData();
-    let userprofile = await UserProfileData(JSON.stringify(datalist));
+    let userprofile = await UserProfileData(await JSON.stringify(datalist));
     let slideNum = datalist.length
     let html = "";
     for (let i = 0; i < slideNum; i++) {
@@ -148,7 +148,7 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
 
     let membProfileHTML = `
         <div class="profile-card" ${memCardStyle}>
-            <a href="/mypage/${memNickname}">
+            <a>
                 <div class="profile-header" ${memHeaderStyle}>
                     <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
                     <div class="profile-user_info">
