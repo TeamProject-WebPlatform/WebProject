@@ -11,10 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import platform.game.service.action.BattleCardAction;
 import platform.game.service.entity.Battle;
@@ -36,6 +42,7 @@ import platform.game.service.entity.Member;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
+import platform.game.service.model.TO.BettingInfoTO;
 import platform.game.service.model.TO.CommentTO;
 import platform.game.service.repository.BattleCustomRepositoryImpl;
 import platform.game.service.repository.BattleRepository;
@@ -72,7 +79,13 @@ public class BattleController {
     CommonCodeRepository commonCodeRepository;
 
     @RequestMapping("")
-    public ModelAndView battle() {
+    public ModelAndView battle(@RequestParam("page") int page, 
+        @RequestParam(value = "selectedListCnt", defaultValue = "10") int selectedListCnt,
+        @RequestParam(value = "selectedGame", defaultValue = "30000") String selectedGame,
+        @RequestParam(value = "selectedState", defaultValue = "ALL") String selectedState,
+        @RequestParam(value = "searchValue", defaultValue = "") String searchValue,
+        @RequestParam(value = "mybattle", defaultValue = "false") Boolean myBattle) {
+        
         long id = 0;
         ModelAndView mav = new ModelAndView("battle");
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
@@ -84,14 +97,24 @@ public class BattleController {
                 id = member.getMemId();
                 mav.addObject("memId", id);
             }
-        } else {
         }
-        List[] battleList = battleCardAction.getBattleList(id);
+        // 리스트 정보취득
+        mav.addObject("page", page);
+        mav.addObject("startPage",((page-1)/6)*6 + 1);
+        mav.addObject("selectedListCnt", selectedListCnt);
+        mav.addObject("selectedGame", selectedGame);
+        mav.addObject("selectedState", selectedState);
+        mav.addObject("searchValue", searchValue);
+        // 리스트 생성
+        Object[] o = battleCardAction.getBattleList(id,page,selectedListCnt,selectedGame,selectedState,searchValue,myBattle);
+        List[] battleList = (List[])o[0];
+        int lastPage = (int)o[1];
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
-
+        mav.addObject("lastPage", lastPage);
         mav.addObject("battleTOList", battleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
+        
         // 사이드바에 방문자 수 보여주기
         CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
         mav.addObject("totalCount", visitCount.getRemark1());
@@ -116,6 +139,10 @@ public class BattleController {
         }
         Post post = new Post();
         post = postInfoRepository.findByPostId(postId);
+        if(post!=null) {
+            post.setPostHit(post.getPostHit()+1);
+            postInfoRepository.save(post);
+        }
         Object[] battleTOs = battleCardAction.getBattleTO(id, postId, btId);
 
         BattleTO bto = (BattleTO) battleTOs[0];
@@ -126,7 +153,15 @@ public class BattleController {
 
         commentTree.sort(Comparator.comparing(commentTO -> commentTO.getComment().getCreatedAt().getTime())); // 최신이 아래로
                                                                                                               // 내려감.
+        // 시간 비교
+        Long startDate = bto.getStartDt().getTime();
+        Long currnetDate = new Date().getTime();
+        if(startDate > currnetDate) mav.addObject("isAfterStartDt", false);
+        else mav.addObject("isAfterStartDt", true);
 
+        Long startDeadline = startDate + 1000 * 60 * 30;
+        mav.addObject("startDeadlineDt", new Date(startDeadline));
+        
         String[][] tmp = bto.getApplicants() != null ? bto.getApplicants() : null;
         if (tmp == null) {
             mav.addObject("applicants", "");
@@ -137,7 +172,7 @@ public class BattleController {
                 Member member = memberInfoRepository.findById(Long.parseLong(s[0])).isPresent()
                         ? memberInfoRepository.findById(Long.parseLong(s[0])).get()
                         : null;
-                applicants[i][0] = s[0]; // memId
+                applicants[i][0] = s[0]; // memId 
                 applicants[i][1] = s[1]; // 보류 상태
                 applicants[i][2] = s[2]; // 신청 시간
                 applicants[i][3] = member != null ? member.getMemNick() : null; // 닉네임
@@ -194,6 +229,7 @@ public class BattleController {
             mav.addObject("content", post.getPostContent());
             mav.addObject("point", battlePost.getBtPostPoint());
             mav.addObject("game", battlePost.getGameCd());
+            mav.addObject("etcGameNm",battlePost.getEtcGameNm()==null?" ":battlePost.getEtcGameNm());
             // ddDate의 연, 월, 일, 시간, 분
             mav.addObject("ddYear", ddDate.getYear());
             mav.addObject("ddMonth", ddDate.getMonthValue());
@@ -216,7 +252,9 @@ public class BattleController {
         String isModify = request.getParameter("isModify");
         long memId = Long.parseLong(request.getParameter("memId"));
         String title = request.getParameter("title");
-        String game = request.getParameter("game");
+        String game = request.getParameter("selectedGame");
+        String etcGame = request.getParameter("selectedGameInput");
+        if(etcGame==null) etcGame="";
         String point = request.getParameter("point");
         String content = request.getParameter("content");
 
@@ -250,7 +288,7 @@ public class BattleController {
                 int dPoint = Integer.parseInt(request.getParameter("dPoint"));
                 int postId = Integer.parseInt(request.getParameter("postId"));
                 int btId = Integer.parseInt(request.getParameter("btId"));
-                data = battleCustomRepositoryImpl.modifyPost(postId, btId, memId, title, game, point, content, ddDate,
+                data = battleCustomRepositoryImpl.modifyPost(postId, btId, memId, title, game,etcGame, point, content, ddDate,
                         stDate);
                 if (dPoint < 0) {
                     // 포인트를 더썼으니까
@@ -260,15 +298,15 @@ public class BattleController {
                     updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50103", dPoint);
                 }
             } else {
-                data = battleCustomRepositoryImpl.writePost(memId, title, game, point, content, ddDate, stDate);
+                data = battleCustomRepositoryImpl.writePost(memId, title, game,etcGame, point, content, ddDate, stDate);
                 updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50101", -Integer.parseInt(point));
             }
         } catch (Exception e) {
+            System.out.println("글쓰기 에러");
             System.out.println(e.getMessage());
         }
-        int postId = data[0];
-        int btId = data[1];
-        return "redirect:/battle/view?postId=" + postId + "&btId=" + btId;
+        // return "redirect:/battle/view?postId=" + data[0] + "&btId=" + data[1];
+        return "redirect:/battle?page=1";
     }
 
     @PostMapping("/delete")
@@ -371,7 +409,20 @@ public class BattleController {
 
         return String.valueOf(flag);
     }
+    @PostMapping("/controlBattle")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String controlBattle(@RequestParam("type") int type,@RequestParam("memId") long memId, @RequestParam("btId") int btId,
+            @RequestParam("postId") int postId) {
+        int flag = 0;
+        try {
+            battleCustomRepositoryImpl.controlBattle(type,btId,postId);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
+        return String.valueOf(flag);
+    }
     @PostMapping("/like")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseBody
@@ -399,7 +450,49 @@ public class BattleController {
         }
         return flag;
     }
-
+    @PostMapping("/receivePoint")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String receivePoint(@RequestParam("btId") int btId,@RequestParam("postId") int postId) {
+        Member member = null;
+        long memId=0;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                memId = member.getMemId();
+            }
+        }
+        int flag = 0;
+        try {
+            flag = battleCustomRepositoryImpl.receivePoint(memId,btId,postId);
+        } catch (Exception e) {
+            flag = -1;
+        }
+        return String.valueOf(flag);
+    }
+    @PostMapping("/receiveBettingPoint")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @ResponseBody
+    public String receiveBettingPoint(@RequestParam("btId") int btId,@RequestParam("postId") int postId) {
+        Member member = null;
+        long memId=0;
+        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getMember();
+            if (member != null) {
+                memId = member.getMemId();
+            }
+        }
+        int flag = 0;
+        try {
+            flag = battleCustomRepositoryImpl.receiveBettingPoint(memId,btId,postId);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            flag = -1;
+        }
+        return String.valueOf(flag);
+    }
     private ArrayList<CommentTO> buildCommentTree(ArrayList<Comment> comments) {
         Map<Integer, CommentTO> commentNodeMap = new HashMap<>();
 

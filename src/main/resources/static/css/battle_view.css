@@ -540,8 +540,60 @@ body.dark-theme .friend-requests-item__action button.reject:hover {
     align-items: center;
     justify-content: center;
 }
+.battle-start_btn{
+    cursor: pointer;
+    margin-top: 30px;
+    height: 70px;
+    color:black;
+    font-size:30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+.battle-start_btn > div{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
 
+}
+.battle-start_btn .start{
+    background-color: #4aa138;
+    box-shadow: rgba(74, 161, 51, 0.4) 0px 4px 22px;
+}
+.battle-start_btn:hover .start{
+    background-color: #60c94b;
+    box-shadow: rgba(74, 161, 51, 0.4) 0px 4px 22px;
+}
+.battle-start_btn .end{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
+    background-color: #4aa138;
+    box-shadow: rgba(74, 161, 51, 0.4) 0px 4px 22px;
+}
+.battle-start_btn:hover .end{
+    background-color: #60c94b;
+    box-shadow: rgba(74, 161, 51, 0.4) 0px 4px 22px;
+}
+.battle-start_btn:hover .end strong{
+    color : rgb(255, 68, 68);
+}
+.battle-start-deadline{
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    margin-top: 10px;
+    color: rgba(0,0,0,0.5);
+}
+.dark-theme .battle-start-deadline{
+    color: rgba(255,255,255,0.5);
+}
 .post-section .betting-section{
     height: auto;
     display: flex;
@@ -597,10 +649,13 @@ body.dark-theme .friend-requests-item__action button.reject:hover {
     
 }
 .battle-info-key{
+    display: flex;
+    justify-content: flex-end;
     width: 40%;
     margin-left : 10%;
     margin-top: 7px;
     margin-bottom : 7px;
+    padding-right: 30px;
 }
 .battle-info-value{
     width: 50%;
@@ -670,3 +725,5 @@ body.dark-theme .friend-requests-item__action button.reject:hover {
     margin-left: 209px !important;
     margin-top: -45px !important;
 }
+
+

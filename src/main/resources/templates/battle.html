@@ -18,6 +18,7 @@
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/battle.js"></script>
+    <script src="../js/betting-input-section.js"></script>
     <script src="../js/scrollToTop.js"></script>
 
 
@@ -29,23 +30,190 @@
 </head>
 
 <script th:inline="javascript">
-    function search_battle(){
-        console.log(1);
-    }
-    function selectBattleGame(){
-        
-    }
-    function selectBattleState(){
+    let nickname;
+    let selectedListCnt;
+    let selectedGame;
+    let selectedState;
+    let page;
+    let searchValue;
+    document.addEventListener("DOMContentLoaded", function () {
 
-    }
-    function search_battle(){
-        console.log(1);
-    }
-    function selectBattleGame(){
-        
-    }
-    function selectBattleState(){
+        nickname = /*[[${nickname}]]*/'';
+        selectedListCnt = /*[[${selectedListCnt}]]*/10;
+        selectedGame = /*[[${selectedGame}]]*/'ALL';
+        selectedState = /*[[${selectedState}]]*/'ALL';
+        searchValue = /*[[${searchValue}]]*/'';
+        page = /*[[${page}]]*/1; // paging은 뒤로가기 때문에 get파라미터로 가지는게 좋아보임 
+        document.querySelectorAll(".battle-card__box").forEach(function (x) {
+            const y = x.querySelector(".point-betting-input");
+            if (y) {
+                y.addEventListener('input', function (event) {
+                    let currentValue = event.target.value;
+                    let sanitizedValue = currentValue.replace(/\D/g, '');
+                    event.target.value = sanitizedValue;
+                })
+            }
+        });
+        document.getElementById("selectListCnt").querySelectorAll("option").forEach(function (option) {
+            if (option.value == selectedListCnt) option.selected = true;
+        })
+        document.getElementById("selectGame").querySelectorAll("option").forEach(function (option) {
+            if (option.value == selectedGame) option.selected = true;
+        })
+        document.getElementById("selectState").querySelectorAll("option").forEach(function (option) {
+            if (option.value == selectedState) option.selected = true;
+        })
 
+        document.querySelectorAll(".pagination-section .pagination > a").forEach(function (x) {
+            if (page == x.querySelector("div").innerHTML) {
+                x.classList.add("active");
+            } else {
+                x.classList.remove("active");
+            }
+        })
+    })
+    async function receiveBettingPoint(btId, postId) {
+        const section = document.querySelector(".battle-card__box[btId='" + btId + "'] .receive_btn");
+        const pointFloating = section.querySelector(".pointFloating");
+        const pointFloatingRect = pointFloating.getBoundingClientRect();
+        if (section.getAttribute("dead") === "true") return;
+        try {
+            const response = await fetch(`/battle/receiveBettingPoint?btId=${btId}&postId=${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                })
+            });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            switch (flag) {
+                case 0:
+                case -1:
+                    alert("알 수 없는 에러");
+                    break;
+                case 1:
+                    section.setAttribute("dead", "true");
+                    section.classList.add("inactive");
+                    section.querySelector(".pointFloating").style.display = "block";
+                    console.log(section.querySelector(".pointFloating"));
+                    // 애니메이션
+                    let px = 6;
+                    var move = setInterval(function () {
+                        pointFloating.style.top = px + "px" // 애니메이션 이동 위치 설정
+                        px -= 0.2;
+                        if (px < -7) {
+                            clearInterval(move);
+                            pointFloating.style.display = "none";
+                        };
+                    }, 10);
+                    break;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+    async function receivePoint(btId, postId) {
+        const section = document.querySelector(".battle-card__box[btId='" + btId + "'] .receive_btn");
+        const pointFloating = section.querySelector(".pointFloating");
+        const pointFloatingRect = pointFloating.getBoundingClientRect();
+        if (section.getAttribute("dead") === "true") return;
+        try {
+            const response = await fetch(`/battle/receivePoint?btId=${btId}&postId=${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                })
+            });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            const flag = await response.json();
+            switch (flag) {
+                case 0:
+                case -1:
+                    alert("알 수 없는 에러");
+                    break;
+                case 1:
+                    section.setAttribute("dead", "true");
+                    section.classList.add("inactive");
+                    section.querySelector(".pointFloating").style.display = "block";
+                    console.log(section.querySelector(".pointFloating"));
+                    // 애니메이션
+                    let px = 6;
+                    var move = setInterval(function () {
+                        pointFloating.style.top = px + "px" // 애니메이션 이동 위치 설정
+                        px -= 0.2;
+                        if (px < -7) {
+                            clearInterval(move);
+                            pointFloating.style.display = "none";
+                        };
+                    }, 10);
+                    break;
+            }
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
+    function selectListCnt(cnt) {
+        selectedListCnt = cnt;
+        requestBattleList();
+    }
+    function selectGame(game) {
+        selectedGame = game;
+        requestBattleList();
+    }
+    function selectState(state) {
+        selectedState = state;
+        requestBattleList();
+    }
+    function searchBattle() {
+        searchValue = document.getElementById("s_txt_btn").value;
+        requestBattleList();
+    }
+    function handleKeyUp(event) {
+        if (event.keyCode === 13) {
+            searchBattle();
+        }
+    }
+    function requestBattleList() {
+        page = 1;
+        if (!selectedListCnt) selectedListCnt = 10;
+        if (!selectedGame) selectedGame = '30000';
+        if (!selectedState) selectedState = 'ALL';
+        if (!searchValue) searchValue = "";
+        let postData = {
+            page: page,
+            selectedListCnt: selectedListCnt,
+            selectedGame: selectedGame,
+            selectedState: selectedState,
+            searchValue: searchValue
+        };
+        postDataToBack(postData);
+    }
+    function postDataToBack(postData) {
+        let form = document.createElement("form");
+        form.method = "get";
+        form.action = "/battle?page=" + page;
+
+        for (var key in postData) {
+            if (postData.hasOwnProperty(key)) {
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = postData[key];
+                form.appendChild(input);
+            }
+        }
+
+        // form을 body에 추가하고 submit
+        document.body.appendChild(form);
+        form.submit();
     }
 </script>
 
@@ -72,58 +240,79 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <a th:href="@{/battle}"><h3 class="uk-text-lead">BATTLE</h3></a>
-                        
+                        <a th:href="@{/battle?page=1}">
+                            <h3 class="uk-text-lead">BATTLE</h3>
+                        </a>
+
                         <div>
                             <div class="button-section">
-                                <div>
-                                    <a th:href="@{/battle}"><input type="button"
-                                            value="목록" class="btn_re"></a>
-                                    <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
-                                        <!-- 로그인 상태인 경우의 링크 -->
-                                        <input type="button" value="쓰기" class="btn_re">
-                                    </a>
-                                    <a th:unless="${nickname}" href="/login">
-                                        <!-- 로그인 상태가 아닌 경우의 링크 -->
-                                        <input type="button" value="쓰기" class="btn_re">
-                                    </a>
-                                </div>
+                                <a th:if="${nickname}"
+                                    th:href="@{'battle?page=1&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}+'&mybattle=true'}">
+                                    <!-- 로그인 상태인 경우의 링크 -->
+                                    <input type="button" value="내글보기" class="btn_re">
+                                </a>
+                                <a th:unless="${nickname}" href="/login">
+                                    <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                    <input type="button" value="내글보기" class="btn_re">
+                                </a>
+                                <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
+                                    <!-- 로그인 상태인 경우의 링크 -->
+                                    <input type="button" value="쓰기" class="btn_re">
+                                </a>
+                                <a th:unless="${nickname}" href="/login">
+                                    <!-- 로그인 상태가 아닌 경우의 링크 -->
+                                    <input type="button" value="쓰기" class="btn_re">
+                                </a>
+
                             </div>
-                            <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleGame(this.value)">
-                                <option value="">10개</option>
-                                <option value="Category 1">20개</option>
-                                <option value="Category 2">30개</option>
+                            <select class="js-select uk-flex-1 height95per margintop1per selectStyle" id="selectListCnt"
+                                style="display: none;" onchange="selectListCnt(this.value)">
+                                <option value="10">10개</option>
+                                <option value="20">20개</option>
+                                <option value="30">30개</option>
                             </select>
-                            <div class="search__refresh"><button type="button" style="float: right;cursor: pointer;" onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div>
+                            <!-- <div class="search__refresh"><button type="button" style="float: right;cursor: pointer;"
+                                    onclick="reSelect()"><i class="fa-solid fa-rotate-right"></i></button></div> -->
 
                         </div>
                     </div>
-                    
+
                     <div class="widjet__body">
-                        <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-4@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                        <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-4@l uk-child-width-1-2@s uk-flex-middle uk-grid-small"
+                            data-uk-grid>
                             <div class="uk-width-1-6 height50px">
-                                <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleGame(this.value)">
-                                    <option value="">ALL(GAME)</option>
-                                    <option value="Category 1">League of Legends</option>
-                                    <option value="Category 2">BattleGround</option>
-                                    <option value="Category 3">Steam</option>
+                                <select class="js-select uk-flex-1 height95per margintop1per" id="selectGame"
+                                    style="display: none;" onchange="selectGame(this.value)">
+                                    <option value="30000">게임</option>
+                                    <option value="30001">LeagueofLegends</option>
+                                    <option value="30002">BattleGround</option>
+                                    <option value="30003">Overwatch</option>
+                                    <option value="30004">Valorant</option>
+                                    <option value="30005">FIFA</option>
+                                    <option value="30006">Steam</option>
+                                    <option value="30099">etc</option>
                                 </select>
                             </div>
                             <div class="uk-width-1-6 height50px">
-                                <select class="js-select uk-flex-1 height95per margintop1per" style="display: none;" onchange="selectBattleState(this.value)">
-                                    <option value="">ALL(상태)</option>
-                                    <option value="Category 1">대기</option>
-                                    <option value="Category 2">진행</option>
-                                    <option value="Category 3">종료</option>
+                                <select class="js-select uk-flex-1 height95per margintop1per" id="selectState"
+                                    style="display: none;" onchange="selectState(this.value)">
+                                    <option value="ALL">전체</option>
+                                    <option value="N">매칭 중</option>
+                                    <option value="A">베팅 가능</option>
+                                    <option value="B">베팅 종료</option>
+                                    <option value="P">진행 중</option>
+                                    <option value="T">종료됨</option>
                                 </select>
                             </div>
                             <div class="search uk-width-2-3 height50px">
-                                    <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Search" id="s_txt_btn" value=""></div>
-                                    <div class="search__btn"><button type="button" onclick="search_battle()"><i class="ico_search"></i></button></div>
+                                <div class="search__input"><i class="ico_search"></i><input type="search" name="search"
+                                        placeholder="Search" id="s_txt_btn" value="" onkeyup="handleKeyUp(event)"></div>
+                                <div class="search__btn"><button type="button" onclick="searchBattle()"><i
+                                            class="ico_search"></i></button></div>
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l battle-card-section" id="battleCardSection">
                         <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}">
@@ -131,9 +320,11 @@
                                 <div class="battle-profile-left">
                                     <div class="battle-profile-info">
                                         <div class="battle-profile-nickname">
-                                            <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.hostLvl}">Lv30
+                                            <div class="lvl-section">
+                                                <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.hostLvl}">Lv30
+                                                </div>
                                             </div>
-                                            <div th:text="${battle.hostNick}"></div>
+                                            <div class="battle-profile-nick" th:text="${battle.hostNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>
@@ -175,17 +366,29 @@
                                         <a href="10_game-profile.html">
                                             <img th:src="@{'../img/' + ${battle.hostImgName}}" alt="NO IMG" />
                                         </a>
+                                        <div th:if="${battle.result=='0' and battle.state=='T'}" class="winner"><i
+                                                class="fa-solid fa-crown ico_fontawesome"></i>
+                                            <div class="glow"></div>
+                                        </div>
                                     </div>
+
                                 </div>
 
 
-                                <div class="battle-card-info" th:attr="btId = ${battle.btId}">
-                                    <div class="info-title"><a th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
+                                <div class="battle-card-info"
+                                    th:attr="btId = ${battle.btId}, postId = ${battle.postId}">
+                                    <div class="info-title"><a
+                                            th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
                                             th:text="${battle.title}"></a></div>
                                     <div class="info-sub">
                                         <div class="info-game">
-                                            <div>BattleGround</div>
-                                            <!-- <div th:if="">여기에 이제 코드 별로</div> -->
+                                            <div th:unless="${battle.gameCd=='30006' or battle.gameCd=='30099'}"
+                                                th:utext="'<script>' +
+                                                'var gameName = getGameName('+${battle.gameCd}+');' +
+                                                'document.write(gameName);' +
+                                                '</script>'"></div>
+                                            <div th:if="${battle.gameCd=='30006' or battle.gameCd=='30099'}"
+                                                th:text="${battle.etcGame}"></div>
                                         </div>
                                         <div class="info-battle-point-section">
                                             <i class="fa-solid fa-trophy"></i>
@@ -197,17 +400,24 @@
                                         <div class="info-state">
                                             <div th:if="${battle.state=='A'}" class="A th">베팅 가능!</div>
                                             <div th:if="${battle.state=='B'}" class="B th">베팅 종료</div>
-                                            <div th:if="${battle.state=='P'}" class="P th">진행중</div>
+                                            <div th:if="${battle.state=='P'}" class="P th">진행 중</div>
+                                            <div th:if="${battle.state=='H'}" class="H th">종료 대기중</div>
+                                            <div th:if="${battle.state=='C'}" class="C th">종료 대기중</div>
                                             <div th:if="${battle.state=='T'}" class="T th">종료됨</div>
+                                            <div th:if="${battle.state=='E'}" class="E th">종료 보류</div>
                                             <div th:if="${battle.state=='N'}" class="N th">매칭 중</div>
 
                                             <div class="A none">베팅 가능!</div>
                                             <div class="B none">베팅 종료</div>
-                                            <div class="P none">진행중</div>
+                                            <div class="P none">진행 중</div>
+                                            <div class="H none">종료 대기중</div>
+                                            <div class="C none">종료 대기중</div>
                                             <div class="T none">종료됨</div>
+                                            <div class="E none">종료 보류</div>
                                             <div class="N none">매칭 중</div>
-                                            
-                                            <div th:if="${battle.state=='A'}" class="left-time" th:attr="delay = ${battle.delay}">30:00</div>
+
+                                            <div th:if="${battle.state=='A'}" class="left-time"
+                                                th:attr="delay = ${battle.delay}">30:00</div>
                                         </div>
                                     </div>
                                     <div class="info-center">
@@ -219,8 +429,8 @@
                                                             <i class="fa-solid fa-coins ico_fontawesome"></i>
                                                         </div>
                                                         <div class="host-total-point" th:utext="'<script>' +
-                                                            'var value = ' + ${battlePointTOList[iterStat.index].hostTotalPoint} + ';' +
-                                                            'var formattedValue = formatNumberTok(value);' +
+                                                            'var pvalue = ' + ${battlePointTOList[iterStat.index].hostTotalPoint} + ';' +
+                                                            'var formattedValue = formatNumberTok(pvalue);' +
                                                             'document.write(formattedValue);' +
                                                             '</script>'">
                                                             72.3</div>
@@ -261,8 +471,8 @@
                                                 <div class="info-point-header-list">
                                                     <div class="info-point-amount">
                                                         <div class="client-total-point" th:utext="'<script>' +
-                                                            'var value = ' + ${battlePointTOList[iterStat.index].clientTotalPoint} + ';' +
-                                                            'var formattedValue = formatNumberTok(value);' +
+                                                            'var pvalue = ' + ${battlePointTOList[iterStat.index].clientTotalPoint} + ';' +
+                                                            'var formattedValue = formatNumberTok(pvalue);' +
                                                             'document.write(formattedValue);' +
                                                             '</script>'">
                                                             72.3</div>
@@ -298,49 +508,217 @@
                                     <div class="betting-section">
                                         <div class="point-betting" th:id="'bettingId' + ${battle.btId}">
                                             <div th:if="${battlePointTOList[iterStat.index].flag==0}"
-                                                class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">HOST
+                                                class="point-betting-button"
+                                                style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">
+                                                HOST
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==0}"
                                                 class="point-betting-button" active="F"
                                                 th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">HOST</div>
-                                            <div class="search">
-                                                <div class="search__input">
-                                                    <i class="fa-solid fa-coins ico_fontawesome"></i>
-                                                    <battleStateCheck th:if="${battle.state=='A'}">
-                                                        <logincheck th:if="${nickname}">
-                                                            <input
-                                                                th:unless="${battlePointTOList[iterStat.index].alreadyBet==1}"
-                                                                class="point-betting-input" type="search" name="search"
-                                                                placeholder="BETTING HERE">
-                                                            <input
-                                                                th:if="${battlePointTOList[iterStat.index].alreadyBet==1}"
-                                                                class="point-betting-input" type="search" name="search"
-                                                                placeholder="YOU ALREADY BET" readonly>
-                                                        </logincheck>
-                                                        <input th:unless="${nickname}" class="point-betting-input"
-                                                            type="search" name="search" placeholder="LOGIN FIRST"
-                                                            readonly>
-                                                    </battleStateCheck>
-                                                    <battleStateCheck th:if="${battle.state=='P'}">
-                                                        <input class="point-betting-input" type="search" name="search"
-                                                            placeholder="PROCEEDING" readonly>
-                                                    </battleStateCheck>
-                                                    <battleStateCheck th:if="${battle.state=='B'}">
-                                                        <input class="point-betting-input" type="search"
-                                                            name="search" placeholder="AWAITING" readonly>
-                                                    </battleStateCheck>
-                                                    <battleStateCheck th:if="${battle.state=='T'}">
-                                                        <input class="point-betting-input" type="search" name="search"
-                                                            placeholder="TERMINATED" readonly>
-                                                    </battleStateCheck>
-                                                    <battleStateCheck th:if="${battle.state=='N'}">
-                                                        <input class="point-betting-input" type="search" name="search"
-                                                            placeholder="MATCHING" readonly>
-                                                    </battleStateCheck>
+                                            <betting class="betting-input-section">
+                                                <!-- 타임리프 섹션 -->
+                                                <div class="search"
+                                                    th:if="${battle.state!='T' and battle.hostNick!=nickname and battle.clientNick!=nickname and battlePointTOList[iterStat.index].pointDstb == -1}">
+                                                    <div class="search__input">
+                                                        <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                        <battleStateCheck th:if="${battle.state=='N'}">
+                                                            <input class="point-betting-input" type="search"
+                                                                name="search" placeholder="MATCHING" readonly>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck th:if="${battle.state=='A'}">
+                                                            <logincheck th:if="${nickname}">
+                                                                <input
+                                                                    th:unless="${battlePointTOList[iterStat.index].alreadyBet==1}"
+                                                                    class="point-betting-input" type="search"
+                                                                    name="search" placeholder="BETTING HERE">
+                                                                <input
+                                                                    th:if="${battlePointTOList[iterStat.index].alreadyBet==1}"
+                                                                    class="point-betting-input" type="search"
+                                                                    name="search" placeholder="YOU ALREADY BET"
+                                                                    readonly>
+                                                            </logincheck>
+                                                            <input th:unless="${nickname}" class="point-betting-input"
+                                                                type="search" name="search" placeholder="LOGIN FIRST"
+                                                                readonly>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck th:if="${battle.state=='P'}">
+                                                            <input class="point-betting-input" type="search"
+                                                                name="search" placeholder="PROCEEDING" readonly>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck th:if="${battle.state=='B'}">
+                                                            <input class="point-betting-input" type="search"
+                                                                name="search" placeholder="AWAITING" readonly>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck
+                                                            th:if="${battle.state=='H' or battle.state=='C' or battle.state=='E'}">
+                                                            <input class="point-betting-input" type="search"
+                                                                name="search" placeholder="TERMINATED" readonly>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck th:if="${battle.state=='T'}">
+                                                            <!-- 배틀 당사자 아닌 경우 -->
+                                                            <battleStateCheck
+                                                                th:unless="${battle.hostNick == nickname or battle.clientNick == nickname}">
+                                                                <input class="point-betting-input" type="search"
+                                                                    name="search" placeholder="TERMINATED" readonly>
+                                                            </battleStateCheck>
+                                                        </battleStateCheck>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                <battleStateCheck th:if="${battle.state=='T'}">
+                                                    <!-- 배틀 당사자 인 경우 -->
+                                                    <battleStateCheck th:if="${battle.hostNick == nickname}">
+                                                        <battleStateCheck th:if="${battle.result}=='0'">
+                                                            <div class="receive_btn" dead="false"
+                                                                th:if="${battle.pointReceived=='0'}"
+                                                                th:onclick="'receivePoint('+${battle.btId}+','+${battle.postId}+')'">
+
+                                                                <div class="click">CLICK!</div>
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div>
+                                                                    <div
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                    <div class="pointFloating"
+                                                                        th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="receive_btn inactive" dead="true"
+                                                                th:if="${battle.pointReceived=='1'}"
+                                                                th:onclick="'receivePoint('+${battle.btId}+','+${battle.postId}+')'">
+
+                                                                <div class="click">CLICK!</div>
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div>
+                                                                    <div
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                    <div class="pointFloating"
+                                                                        th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck th:if="${battle.result}=='1'">
+                                                            <div class="receive_btn inactive" dead="true"
+                                                                th:onclick="'receivePoint('+${battle.btId}+','+${battle.postId}+')'">
+
+                                                                <div class="click">CLICK!</div>
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div>
+                                                                    <div
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                    <div class="pointFloating"
+                                                                        th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </battleStateCheck>
+                                                    </battleStateCheck>
+                                                    <battleStateCheck th:if="${battle.clientNick == nickname}">
+                                                        <battleStateCheck th:if="${battle.result}=='1'">
+                                                            <div class="receive_btn" dead="false"
+                                                                th:if="${battle.pointReceived=='0'}"
+                                                                th:onclick="'receivePoint('+${battle.btId}+','+${battle.postId}+')'">
+
+                                                                <div class="click">CLICK!</div>
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div
+                                                                    th:text="${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                </div>
+                                                                <div class="pointFloating"
+                                                                    th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="receive_btn inactive" dead="true"
+                                                                th:if="${battle.pointReceived=='1'}"
+                                                                th:onclick="'receivePoint('+${battle.btId}+','+${battle.postId}+')'">
+
+                                                                <div class="click">CLICK!</div>
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div
+                                                                    th:text="${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                </div>
+                                                                <div class="pointFloating"
+                                                                    th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                </div>
+                                                            </div>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck th:if="${battle.result}=='0'">
+                                                            <div class="receive_btn inactive" dead="true"
+                                                                th:onclick="'receivePoint('+${battle.btId}+','+${battle.postId}+')'">
+
+                                                                <div class="click">CLICK!</div>
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div>
+                                                                    <div
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                    <div class="pointFloating"
+                                                                        th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(2*battle.point,0),0,'COMMA')}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </battleStateCheck>
+                                                    </battleStateCheck>
+                                                    <!-- 배틀 당사자 아니고 베팅 당사자 -->
+                                                    <battleStateCheck
+                                                        th:if="${battlePointTOList[iterStat.index].betSuccess==0 and battle.hostNick != nickname and battle.clientNick != nickname}">
+                                                        <!-- 베팅 실패 -->
+                                                        <div class="receive_btn inactive" dead="true">
+                                                            <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                            <div>
+                                                                <div>베팅 실패</div>
+                                                            </div>
+                                                        </div>
+                                                    </battleStateCheck>
+                                                    <battleStateCheck
+                                                        th:if="${battlePointTOList[iterStat.index].betSuccess==1 and battle.hostNick != nickname and battle.clientNick != nickname}">
+                                                        <!-- 베팅 성공 -->
+                                                        <battleStateCheck
+                                                            th:if="${battlePointTOList[iterStat.index].pointReceived==0}">
+                                                            <!-- 미수령 -->
+                                                            <div class="receive_btn" dead="false"
+                                                                th:onclick="'receiveBettingPoint('+${battle.btId}+','+${battle.postId}+')'">
+
+                                                                <div class="click">CLICK!</div>
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div>
+                                                                    <div
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(battlePointTOList[iterStat.index].pointDstb,0),0,'COMMA')}">
+                                                                    </div>
+                                                                    <div class="pointFloating"
+                                                                        th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(battlePointTOList[iterStat.index].pointDstb,0),0,'COMMA')}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </battleStateCheck>
+                                                        <battleStateCheck
+                                                            th:if="${battlePointTOList[iterStat.index].pointReceived==1}">
+                                                            <!-- 수령 -->
+                                                            <div class="receive_btn inactive" dead="true">
+                                                                <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                                <div>
+                                                                    <div
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(battlePointTOList[iterStat.index].pointDstb,0),0,'COMMA')}">
+                                                                    </div>
+                                                                    <div class="pointFloating"
+                                                                        th:text="'+'+${#numbers.formatInteger(#numbers.formatInteger(battlePointTOList[iterStat.index].pointDstb,0),0,'COMMA')}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </battleStateCheck>
+                                                    </battleStateCheck>
+                                                </battleStateCheck>
+                                            </betting>
+                                            <betting class="betting-input-section-web">
+                                            </betting>
+
                                             <div th:if="${battlePointTOList[iterStat.index].flag==1}"
-                                                class="point-betting-button" style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">CLIENT
+                                                class="point-betting-button"
+                                                style="background-color: blueviolet; box-shadow: rgba(138,43,226,0.5) 0px 0px 17px 3px;">
+                                                CLIENT
                                             </div>
                                             <div th:unless="${battlePointTOList[iterStat.index].flag==1}"
                                                 class="point-betting-button" active="F"
@@ -358,25 +736,34 @@
                                         <a th:unless="${battle.client}">
                                             <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />
                                         </a>
+                                        <div th:if="${battle.result=='1' and battle.state=='T'}" class="winner"><i
+                                                class="fa-solid fa-crown ico_fontawesome"></i>
+                                            <div class="glow"></div>
+                                        </div>
                                     </div>
                                     <div class="battle-profile-info">
                                         <div class="battle-profile-nickname">
-                                            <div th:if="${battle.client}" class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30</div>
-                                            <div th:unless="${battle.client}" class="battle-profile-lvl"></div>
-                                            
+                                            <div class="lvl-section">
+                                                <div th:if="${battle.client}" class="battle-profile-lvl"
+                                                    th:text="'Lv ' + ${battle.clientLvl}">Lv30</div>
+                                                <div th:unless="${battle.client}" class="battle-profile-lvl"></div>
+                                            </div>
                                             <div class="battle-profile-nick" th:text="${battle.clientNick}"></div>
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>
-                                                <div th:if="${battle.client}" class="battle-profile-win" th:text="${battle.clientWin}+' 승'">77 승
+                                                <div th:if="${battle.client}" class="battle-profile-win"
+                                                    th:text="${battle.clientWin}+' 승'">77 승
                                                 </div>
-                                                <div th:if="${battle.client}" >&nbsp;/&nbsp;</div>
-                                                <div th:if="${battle.client}" class="battle-profile-lose" th:text="${battle.clientLose}+' 패'">25
+                                                <div th:if="${battle.client}">&nbsp;/&nbsp;</div>
+                                                <div th:if="${battle.client}" class="battle-profile-lose"
+                                                    th:text="${battle.clientLose}+' 패'">25
                                                     패</div>
                                                 <div th:unless="${battle.client}" class="battle-profile-win"></div>
-                                                <div th:unless="${battle.client}" class="battle-profile-slash">&nbsp;&nbsp;</div>
-                                                <div th:unless="${battle.client}" class="battle-profile-lose"></div>    
-                                                
+                                                <div th:unless="${battle.client}" class="battle-profile-slash">
+                                                    &nbsp;&nbsp;</div>
+                                                <div th:unless="${battle.client}" class="battle-profile-lose"></div>
+
                                             </div>
                                             <div th:if="${battle.client}"
                                                 th:with="total = ${(battle.clientWin + battle.clientLose)}, rate=${(battle.clientWin * 100.0 / total)}">
@@ -410,7 +797,6 @@
                                         </div>
                                     </div>
 
-
                                 </div>
                             </div>
                         </div>
@@ -418,9 +804,46 @@
                             <div class="button-section">
                                 <div class="btn-top-section">
                                     <i class="fa-solid fa-caret-up ico_fontawesome"></i>
-                                    <input id="scrollToTopBtn" type="button" value="TOP" class="btn_re" onclick="scrollToTop()">
+                                    <input id="scrollToTopBtn" type="button" value="TOP" class="btn_re"
+                                        onclick="scrollToTop()">
                                 </div>
+                                <div class="pagination-section">
+                                    <div class="pagination">
+                                        <a th:if="${startPage>=2}"
+                                            th:href="@{'battle?page='+${startPage-1}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}">
+                                            <div>&laquo;</div>
+                                        </a>
+                                        <a class="active" th:if="${startPage <= lastPage}"
+                                            th:href="@{'battle?page='+${startPage}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}">
+                                            <div th:text="${startPage}">1</div>
+                                        </a>
+                                        <a class="" th:if="${startPage+1 <= lastPage}"
+                                            th:href="@{'battle?page='+${startPage+1}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}">
+                                            <div th:text="${startPage+1}"></div>
+                                        </a>
+                                        <a class="" th:if="${startPage+2 <= lastPage}"
+                                            th:href="@{'battle?page='+${startPage+2}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}">
+                                            <div th:text="${startPage+2}">3</div>
+                                        </a>
+                                        <a class="" th:if="${startPage+3 <= lastPage}"
+                                            th:href="@{'battle?page='+${startPage+3}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}">
+                                            <div th:text="${startPage+3}">4</div>
+                                        </a>
+                                        <a class="" th:if="${startPage+4 <= lastPage}"
+                                            th:href="@{'battle?page='+${startPage+4}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}">
+                                            <div th:text="${startPage+4}">5</div>
+                                        </a>
+                                        <a class="" th:if="${startPage+5 <= lastPage}"
+                                            th:href="@{'battle?page='+${startPage+5}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}">
+                                            <div th:text="${startPage+5}">6</div>
+                                        </a>
+                                        <a th:if="${startPage+6 <= lastPage}"
+                                            th:href="@{'battle?page='+${startPage+6}+'&selectedListCnt='+${selectedListCnt}+'&selectedGame='+${selectedGame}+'&selectedState='+${selectedState}}">
+                                            <div>&raquo;</div>
+                                        </a>
+                                    </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -431,7 +854,7 @@
     </div>
 
     <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
-    
+
 
     <!-- <a href="https://kr.freepik.com/free-vector/letter-x-dry-brush-stroke-typography-vector_36226783.htm#query=x&position=0&from_view=keyword&track=sph&uuid=297639a8-be16-41f2-a58f-22984bdd6a87">작가 rawpixel.com</a> 출처 Freepik -->
 </body>

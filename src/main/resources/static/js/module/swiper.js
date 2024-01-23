@@ -80,7 +80,7 @@ const setSwiperWrapper = async function () {
     let slideNum = datalist.length
     let html = "";
     for (let i = 0; i < slideNum; i++) {
-        console.log(datalist[i]);
+        // console.log(datalist[i]);
         html += `
             <div class="swiper-slide">`;
 

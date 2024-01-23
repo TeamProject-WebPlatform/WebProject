@@ -29,10 +29,37 @@
 
 </head>
 <script th:inline="javascript">
-    let nickname;
-    let btId;
-    let postId;
+    var nickname;
+    var btId;
+    var postId;
+    var gameCd;
+    var isAfterStartDt;
+    var startDeadlineDt;
+    document.addEventListener("DOMContentLoaded", function () {
+        nickname = /*[[${nickname}]]*/'';
+        btId = /*[[${bto.btId}]]*/0;
+        postId = /*[[${post.postId}]]*/0;
+        hostNick = /*[[${post.member.memNick}]]*/'';
+        clientNick = /*[[${bto.clientNick}]]*/'';
+        gameCd = /*[[${bto.gameCd}]]*/'';
+        isAfterStartDt = /*[[${isAfterStartDt}]]*/'';
+        startDeadlineDt = /*[[${startDeadlineDt}]]*/'';
+  
+        
+        if (nickname === hostNick || nickname === clientNick) {
+            document.querySelector(".point-betting-input").readOnly = true;
+        }
+        if (document.getElementById("request_btn")) {
+            document.getElementById("request_btn").addEventListener("click", function () {
+                // 신청 기능
+                if (!memId) {
+                    window.location.href = "/login";
+                }
+                requestBattle();
+            });
+        }
 
+    });
     // 답글 입력 폼의 표시/숨김을 토글
     function toggleReplyForm(span) {
         const commentId = span.getAttribute("data-comment-id");
@@ -64,7 +91,7 @@
                     break;
                 case 1:
                     alert('삭제되었습니다.');
-                    location.href = "../battle";
+                    location.href = "../battle?page=1";
                     break;
             }
         } catch (error) {
@@ -185,19 +212,18 @@
             console.error('DB 호출 중 오류가 발생했습니다.', error);
         }
     }
-    document.addEventListener("DOMContentLoaded", function () {
-        nickname = /*[[${nickname}]]*/'';
-        btId = /*[[${bto.btId}]]*/0;
-        postId = /*[[${post.postId}]]*/0;
-        document.getElementById("request_btn").addEventListener("click", function () {
-            // 신청 기능
-            if (!memId) {
-                window.location.href = "/login";
-            }
-            requestBattle();
-        });
-    });
+    function checkPoint() {
+        let currentPoint = Number(document.getElementById("current-point").getAttribute("point"));
+        let battlePoint = Number(document.getElementById("battle_point").innerHTML);
+        // 포인트와 현재 포인트 비교
+        if (battlePoint > currentPoint) return false;
+        return true;
+    }
     async function requestBattle() {
+        if (!checkPoint()) {
+            alert('보유 포인트가 부족합니다.');
+            return;
+        }
         try {
             const response = await fetch(`/battle/reqeust?memId=${memId}&btId=${btId}&postId=${postId}`, {
                 method: 'POST',
@@ -242,6 +268,47 @@
             div.classList.add("desc");
         }
     }
+    async function controlBattle(type) {
+        var userResponse;
+        if (type === 0){
+            alert('시작 시간 이후에 가능합니다.');
+            return;
+        } else if (type === 1) {
+            userResponse = confirm("시작하시겠습니까?\n시작 시간 30분 이후까지 선택하지 않으면 자동 패배 처리됩니다.");
+            if (!userResponse) {
+                return;
+            }
+        } else if (type === 2) {
+            // 호스트 승리
+            userResponse = confirm("호스트의 승리로 종료하시겠습니까?\n부정한 결과 선택은 추후 제재를 먹을 수 있습니다.");
+            if (!userResponse) {
+                return;
+            }
+        } else if (type === 3) {
+            // 클라이언트 승리
+            userResponse = confirm("클라이언트의 승리로 종료하시겠습니까?\n부정한 결과 선택은 추후 제재를 먹을 수 있습니다.");
+            if (!userResponse) {
+                return;
+            }
+        }
+        try {
+            const response = await fetch(`/battle/controlBattle?type=${type}&memId=${memId}&btId=${btId}&postId=${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                })
+            });
+            if (!response.ok) {
+                throw new Error('서버 응답이 실패했습니다.');
+            }
+            location.href = location.href;
+
+        } catch (error) {
+            console.error('DB 호출 중 오류가 발생했습니다.', error);
+        }
+    }
 </script>
 
 
@@ -269,16 +336,13 @@
             <main class="page-main">
                 <div class="widjet --filters">
                     <div class="widjet__head">
-                        <a th:href="@{/battle}">
+                        <a th:href="@{/battle?page=1}">
                             <h3 class="uk-text-lead">BATTLE</h3>
                         </a>
                     </div>
                 </div>
                 <div class="content">
                     <div class="content-header">
-                        헤더 뭐넣을지 아직
-                        <div th:if="${bto.client}" th:text="${456}"></div>
-                        <div th:unless="${bto.client}" th:text="${123}"></div>
                     </div>
                     <div class="content-main">
                         <div class="uk-grid" data-uk-grid>
@@ -323,6 +387,63 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div th:if="${post.member.memNick==nickname} and ${bto.state=='B' or bto.state=='A'}"
+                                    class="battle-start_btn" id="battle-start_btn" onclick="controlBattle(0)">
+                                    <div class="start">배틀 : 시작</div>
+                                </div>
+                                <div th:if="${post.member.memNick==nickname} and ${bto.state=='B'} and ${isAfterStartDt}"
+                                    class="battle-start_btn" id="battle-start_btn" onclick="controlBattle(1)">
+                                    <div class="start">배틀 : 시작</div>
+                                </div>
+                                <div class="battle-start-deadline" th:if="${post.member.memNick==nickname} and ${bto.state=='B' or bto.state=='A'}" th:text="${#dates.format(startDeadlineDt, 'yyyy-MM-dd HH:mm')} + ' 까지 시작'">배틀 시작 마감</div>
+                                <!-- 호스트 측 -->
+                                <div th:if="${post.member.memNick==nickname} and ${bto.state=='P'or bto.state=='C'}">
+                                    <div class="battle-start_btn" id="battle-start_btn">
+                                        <div class="end" onclick="controlBattle(2)">
+                                            <div>배틀 : 종료</div>
+                                            <div style="font-size:20px;">[<strong style="font-size:23px;">호스트</strong>승리]
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="battle-start_btn" id="battle-start_btn">
+                                        <div class="end" onclick="controlBattle(3)">
+                                            <div>배틀 : 종료</div>
+                                            <div style="font-size:20px;">[<strong style="font-size:23px;">클라이언트</strong>승리]
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:if="${bto.state=='C'}">
+                                        <div class="battle-start-deadline" th:text="'클라이언트측 종료 : '"></div>
+                                        <div class="battle-start-deadline" style="margin-top:0" th:text="${#dates.format(bto.btEndDt, 'yyyy-MM-dd HH:mm')}"></div>
+                                        <div class="battle-start-deadline" style="margin-top:0" th:if="${bto.result=='0'}">[<strong style="font-size:20px;">호스트</strong>] 승</div>
+                                        <div class="battle-start-deadline" style="margin-top:0" th:if="${bto.result=='1'}">[<strong style="font-size:20px;">클라이언트</strong>] 승</div>
+                                    </div> 
+                                </div>
+                                
+                                <!-- 클라이언트 측 -->
+                                <div th:if="${bto.clientNick==nickname} and ${bto.state=='P' or bto.state=='H'}">
+                                    <div class="battle-start_btn" id="battle-start_btn">
+                                        <div class="end" onclick="controlBattle(4)">
+                                            <div>배틀 : 종료</div>
+                                            <div style="font-size:20px;">[<strong style="font-size:23px;">호스트</strong>승리]
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="battle-start_btn" id="battle-start_btn">
+                                        <div class="end" onclick="controlBattle(5)">
+                                            <div>배틀 : 종료</div>
+                                            <div style="font-size:20px;">[<strong style="font-size:23px;">클라이언트</strong>승리]
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:if="${bto.state=='H'}">
+                                        <div class="battle-start-deadline" th:text="'호스트측 종료 : '"></div>
+                                        <div class="battle-start-deadline" style="margin-top:0" th:text="${#dates.format(bto.btEndDt, 'yyyy-MM-dd HH:mm')}"></div>
+                                        <div class="battle-start-deadline" style="margin-top:0" th:if="${bto.result=='0'}">[<strong style="font-size:20px;">호스트</strong>] 승</div>
+                                        <div class="battle-start-deadline" style="margin-top:0" th:if="${bto.result=='1'}">[<strong style="font-size:20px;">클라이언트</strong>] 승</div>
+                                    </div>
+                                </div>
+                                
                             </div>
                             <div class="uk-width-3-5@xl post-section">
                                 <div class="post-info">
@@ -340,7 +461,6 @@
                                             <div class="hit"><span th:text="${'추천 : '+post.postLikeCnt}">추천수</span>
                                             </div>
                                             <div class="hit"><span th:text="${'조회 : '+post.postHit}">조회수</span></div>
-                                            <!-- <div class="hit"><span>조회 : 123123213</span></div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -348,22 +468,28 @@
                                     <div>
                                         <div>
                                             <div class="battle-info-key">게임 : </div>
-                                            <div class="battle-info-value" th:text="${bto.gameCd}">BattleGround</div>
+                                            <div th:unless="${bto.gameCd=='30006' or bto.gameCd=='30099'}"
+                                                class="battle-info-value" th:utext="'<script>' +
+                                                'var gameName = getGameName('+${bto.gameCd}+');' +
+                                                'document.write(gameName);' +
+                                                '</script>'">BattleGround</div>
+                                            <div th:if="${bto.gameCd=='30006' or bto.gameCd=='30099'}"
+                                                class="battle-info-value" th:text="${bto.etcGame}">BattleGround</div>
                                         </div>
                                         <div>
                                             <div class="battle-info-key">포인트 : </div>
-                                            <div class="battle-info-value"
+                                            <div class="battle-info-value" id="battle_point"
                                                 th:text="${#numbers.formatInteger(#numbers.formatInteger(bto.point,0),0,'COMMA')}">
                                                 100,000</div>
                                         </div>
                                         <div>
                                             <div class="battle-info-key">신청 기한 : </div>
-                                            <div class="battle-info-value" th:text="${bto.deadlineDt}">14:00 2024.01.14
+                                            <div class="battle-info-value" th:text="${#dates.format(bto.deadlineDt, 'yyyy-MM-dd HH:mm')}">14:00 2024.01.14
                                             </div>
                                         </div>
                                         <div>
                                             <div class="battle-info-key">시작 시간 : </div>
-                                            <div class="battle-info-value" th:text="${bto.startDt}">15:00 2024.01.14
+                                            <div class="battle-info-value" th:text="${#dates.format(bto.startDt, 'yyyy-MM-dd HH:mm')}">15:00 2024.01.14
                                             </div>
                                         </div>
                                     </div>
@@ -381,14 +507,20 @@
                                                     <div class="info-state">
                                                         <div th:if="${bto.state=='A'}" class="A th">베팅 가능!</div>
                                                         <div th:if="${bto.state=='B'}" class="B th">베팅 종료</div>
-                                                        <div th:if="${bto.state=='P'}" class="P th">진행중</div>
+                                                        <div th:if="${bto.state=='P'}" class="P th">진행 중</div>
+                                                        <div th:if="${bto.state=='H'}" class="H th">종료 대기중</div>
+                                                        <div th:if="${bto.state=='C'}" class="C th">종료 대기중</div>
                                                         <div th:if="${bto.state=='T'}" class="T th">종료됨</div>
+                                                        <div th:if="${bto.state=='E'}" class="E th">종료 보류</div>
                                                         <div th:if="${bto.state=='N'}" class="N th">매칭 중</div>
 
                                                         <div class="A none">베팅 가능!</div>
                                                         <div class="B none">베팅 종료</div>
-                                                        <div class="P none">진행중</div>
+                                                        <div class="P none">진행 중</div>
+                                                        <div class="H none">종료 대기중</div>
+                                                        <div class="C none">종료 대기중</div>
                                                         <div class="T none">종료됨</div>
+                                                        <div class="E none">종료 보류</div>
                                                         <div class="N none">매칭 중</div>
 
                                                         <div th:if="${bto.state=='A'}" class="left-time"
@@ -531,7 +663,7 @@
                                                                     <input class="point-betting-input" type="search"
                                                                         name="search" placeholder="PROCEEDING" readonly>
                                                                 </battleStateCheck>
-                                                                <battleStateCheck th:if="${bto.state=='T'}">
+                                                                <battleStateCheck th:if="${bto.state=='T' or bto.state=='H' or bto.state=='C' or bto.state=='E'}">
                                                                     <input class="point-betting-input" type="search"
                                                                         name="search" placeholder="TERMINATED" readonly>
                                                                 </battleStateCheck>
@@ -562,8 +694,10 @@
                                                             th:text="'Lv ' + ${bto.clientLvl}">Lv30
                                                         </div>
                                                         <div th:unless=${bto.client} class="battle-profile-lvl"></div>
-                                                        <div th:if=${bto.client} th:text="${bto.clientNick}"></div>
-                                                        <div th:unless=${bto.client} th:text="${bto.clientNick}"></div>
+                                                        <div th:if=${bto.client} th:text="${bto.clientNick}"
+                                                            class="profile-user_nick"></div>
+                                                        <div th:unless=${bto.client} th:text="${bto.clientNick}"
+                                                            class="profile-user_nick"></div>
                                                     </div>
                                                     <div class="battle-profile-history">
                                                         <div>
@@ -654,7 +788,7 @@
                                                 <div class="comment-user-info">
                                                     <span th:text="${commentNode.comment.member.memNick}">댓글닉네임</span>
                                                     <span
-                                                        th:text="${'('+#dates.format(commentNode.comment.createdAt, 'yyyy-MM-dd hh:mm')+')'}">댓글
+                                                        th:text="${'('+#dates.format(commentNode.comment.createdAt, 'yyyy-MM-dd HH:mm')+')'}">댓글
                                                         날짜</span>
                                                     <!-- 댓글 삭제 버튼 -->
                                                     <div th:if="${commentNode.comment.member.memNick==nickname}">
@@ -732,7 +866,7 @@
                                                                 <span
                                                                     th:text="${reply.comment.member.memNick}">댓글닉네임</span>
                                                                 <span
-                                                                    th:text="${#dates.format(reply.comment.createdAt, 'yyyy-MM-dd hh:mm')}">댓글
+                                                                    th:text="${#dates.format(reply.comment.createdAt, 'yyyy-MM-dd HH:mm')}">댓글
                                                                     날짜</span>
                                                                 <!-- 댓글 삭제 버튼 -->
                                                                 <div th:if="${reply.comment.member.memNick==nickname}">
@@ -867,7 +1001,8 @@
                         <div class="button-section">
                             <div class="btn-top-section">
                                 <i class="fa-solid fa-caret-up ico_fontawesome"></i>
-                                <input id="scrollToTopBtn" type="button" value="TOP" class="btn_re" onclick="scrollToTop()">
+                                <input id="scrollToTopBtn" type="button" value="TOP" class="btn_re"
+                                    onclick="scrollToTop()">
                             </div>
                             <div>
                                 <div th:if="${post.member.memNick==nickname}">
@@ -889,7 +1024,7 @@
                                     </a>
                                 </div>
                                 <div>
-                                    <a th:href="@{/battle}"><input type="button" value="목록" class="btn_re"></a>
+                                    <a th:href="@{/battle?page=1}"><input type="button" value="목록" class="btn_re"></a>
                                     <a th:if="${nickname}" th:href="@{/battle/write?postId=-1&btId=-1}">
                                         <!-- 로그인 상태인 경우의 링크 -->
                                         <input type="button" value="쓰기" class="btn_re">
@@ -900,7 +1035,7 @@
                                     </a>
                                 </div>
                             </div>
-                            
+
 
                         </div>
                     </div>
