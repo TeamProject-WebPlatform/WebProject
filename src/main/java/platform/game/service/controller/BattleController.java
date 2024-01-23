@@ -251,12 +251,16 @@ public class BattleController {
                     .getMember();
             if (member != null) {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
+                String memberProfileBadgeList = profileRepository.BattleProfileBadgeList(member.getMemNick());
+                String[] memberProfileBadge = memberProfileBadgeList.split(", ");
+
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
                 mav.addObject("memId", id);
                 mav.addObject("level", member.getMemLvl());
                 mav.addObject("memberProfile", memberProfile);
+                mav.addObject("badgelist", memberProfileBadge);
             }
         }
         if (postId != -1 && btId != -1) {
