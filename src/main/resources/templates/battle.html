@@ -213,8 +213,8 @@
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l battle-card-section" id="battleCardSection">
                         <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}" 
-                            th:with="image = ${HostProfileImage[iterStat.index]}, badge = ${HostProfileBadge[iterStat.index]}, border = ${HostProfileBorder[iterStat.index]},
-                                     ClImage = ${ClientProfileImage[iterStat.index]}, ClBadge = ${ClientProfileBadge[iterStat.index]}, ClBorder = ${ClientProfileBorder[iterStat.index]}">
+                            th:with="image = ${HostProfileImage[iterStat.index]}, badge = ${HostProfileBadge[iterStat.index]}, border = ${HostProfileBorder[iterStat.index]}, rep = ${HostProfileRep[iterStat.index]},
+                                     ClImage = ${ClientProfileImage[iterStat.index]}, ClBadge = ${ClientProfileBadge[iterStat.index]}, ClBorder = ${ClientProfileBorder[iterStat.index]}, ClRep = ${ClientProfileRep[iterStat.index]},">
                             <div class="battle-card__box" th:attr="btId = ${battle.btId}">
                                 <div class="battle-profile-left">
                                     <div class="battle-profile-info">
@@ -223,6 +223,8 @@
                                             </div>
                                             <div>&nbsp;/&nbsp;</div>
                                             <div class="battle-profile-nick" th:text="${battle.hostNick}"></div>
+                                            <!-- <img class="badge" th:if="${!rep.equals('x')}" th:src="@{'../img/shop_img/' + ${rep} + '.png'}" alt="NO-SYMBOL">
+                                            <img class="badge" th:if="${rep.equals('x')}" alt="NO-SYMBOL"> -->
                                         </div>
                                         <div class="battle-profile-history">
                                             <div>
@@ -246,30 +248,30 @@
                                                     <img th:if="${!badge[0].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[0].equals('x')}" />
 
-                                                    <img th:if="${!badge[3].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
+                                                    <img th:if="${!badge[3].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[3]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[3].equals('x')}" />
 
-                                                    <img th:if="${!badge[6].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
+                                                    <img th:if="${!badge[6].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[6]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[6].equals('x')}" />
                                                 </div>
                                                 <div class="badge-line">
-                                                    <img th:if="${!badge[1].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
+                                                    <img th:if="${!badge[1].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[1]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[1].equals('x')}" />
 
-                                                    <img th:if="${!badge[4].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
+                                                    <img th:if="${!badge[4].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[4]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[4].equals('x')}" />
 
-                                                    <img th:if="${!badge[7].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
+                                                    <img th:if="${!badge[7].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[7]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[7].equals('x')}" />
                                                 </div>
                                                 <div class="badge-line">
-                                                    <img th:if="${!badge[2].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
+                                                    <img th:if="${!badge[2].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[2]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[2].equals('x')}" />
 
-                                                    <img th:if="${!badge[5].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
+                                                    <img th:if="${!badge[5].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[5]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[5].equals('x')}" />
 
-                                                    <img th:if="${!badge[8].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[0]} + '.png'}" alt="NO IMG" />
+                                                    <img th:if="${!badge[8].equals('x')}" th:src="@{'../img/shop_img/' + ${badge[8]} + '.png'}" alt="NO IMG" />
                                                     <img th:if="${badge[8].equals('x')}" />
                                                 </div>
                                             </div>

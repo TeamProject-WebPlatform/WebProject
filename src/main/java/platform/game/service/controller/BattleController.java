@@ -113,10 +113,12 @@ public class BattleController {
         List<String> battleTOHostProfileImage = new ArrayList<String>();
         List<String> battleTOHostProfileBorder = new ArrayList<String>();
         List<String[]> battleTOHostProfileBadge = new ArrayList<String[]>();
+        List<String> battleTOHostProfileRep = new ArrayList<String>();
 
         List<String> battleTOClientProfileImage = new ArrayList<String>();
         List<String> battleTOClientProfileBorder = new ArrayList<String>();
         List<String[]> battleTOClientProfileBadge = new ArrayList<String[]>();
+        List<String> battleTOClientProfileRep = new ArrayList<String>();
 
 
         for(int i=0; i<battleTOList.size();i++){
@@ -125,20 +127,24 @@ public class BattleController {
             String HostProfileImage = profileRepository.BattleProfileImage(to.getHostNick());
             String HostProfileBorder = profileRepository.BattleProfileBorder(to.getHostNick());
             String HostProfileBadgeList = profileRepository.BattleProfileBadgeList(to.getHostNick());
+            String HostProfileRep = profileRepository.BattleProfileRepBadge(to.getHostNick());
             String[] HostProfileBadge = HostProfileBadgeList.split(", ");
 
             String ClientProfileImage = profileRepository.BattleProfileImage(to.getClientNick());
             String ClientProfileBorder = profileRepository.BattleProfileBorder(to.getClientNick());
             String ClientProfileBadgeList = profileRepository.BattleProfileBadgeList(to.getClientNick());
+            String ClientProfileRep = profileRepository.BattleProfileRepBadge(to.getClientNick());
             String[] ClientProfileBadge = ClientProfileBadgeList.split(", ");
 
             battleTOHostProfileImage.add(HostProfileImage);
             battleTOHostProfileBorder.add(HostProfileBorder);
             battleTOHostProfileBadge.add(HostProfileBadge);
+            battleTOHostProfileRep.add(HostProfileRep);
 
             battleTOClientProfileImage.add(ClientProfileImage);
             battleTOClientProfileBorder.add(ClientProfileBorder);
             battleTOClientProfileBadge.add(ClientProfileBadge);
+            battleTOClientProfileRep.add(ClientProfileRep);
         }
 
         mav.addObject("lastPage", lastPage);
@@ -148,10 +154,12 @@ public class BattleController {
         mav.addObject("HostProfileImage", battleTOHostProfileImage);
         mav.addObject("HostProfileBorder", battleTOHostProfileBorder);
         mav.addObject("HostProfileBadge", battleTOHostProfileBadge);
+        mav.addObject("HostProfileRep", battleTOHostProfileRep);
 
         mav.addObject("ClientProfileImage", battleTOClientProfileImage);
         mav.addObject("ClientProfileBorder", battleTOClientProfileBorder);
         mav.addObject("ClientProfileBadge", battleTOClientProfileBadge);
+        mav.addObject("ClientProfileRep", battleTOClientProfileRep);
         
         // 사이드바에 방문자 수 보여주기
         CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
@@ -186,6 +194,12 @@ public class BattleController {
         BattleTO bto = (BattleTO) battleTOs[0];
         BattlePointTO pto = (BattlePointTO) battleTOs[1];
 
+        // 글쓴이(호스트) 프로필 가져오기
+        MemberProfile HostProfile = profileRepository.BattleProfile(bto.getHostNick());
+        String HostProfileBadgeList = HostProfile.getProfileBadgeList();
+        String[] HostProfileBadges = HostProfileBadgeList.split(", ");
+
+
         ArrayList<Comment> comments = commentInfoRepository.findByPost_PostId(postId);
         ArrayList<CommentTO> commentTree = buildCommentTree(comments);
 
@@ -215,6 +229,11 @@ public class BattleController {
         mav.addObject("pto", pto);
         mav.addObject("post", post);
         mav.addObject("commentTree", commentTree);
+
+        // 호스트 프로필 전달
+        mav.addObject("profile", HostProfile);
+        mav.addObject("badgelist", HostProfileBadges);
+
         // 사이드바에 방문자 수 보여주기
         CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
         mav.addObject("totalCount", visitCount.getRemark1());
