@@ -35,6 +35,7 @@ import platform.game.service.model.TO.BoardCpageTO;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
+import platform.game.service.model.TO.SwiperProfileTO;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
@@ -206,12 +207,11 @@ public class MainController {
 
     @PostMapping("/userprofile")
     @ResponseBody
-    public List<MemberProfile> userProfile(@RequestBody List<RollingRankTO> memId) {
-        List<MemberProfile> list = new ArrayList<MemberProfile>();
+    public List<SwiperProfileTO> userProfile(@RequestBody List<RollingRankTO> SwiperData) {
+        List<SwiperProfileTO> list = new ArrayList<SwiperProfileTO>();
         for (int i = 0; i < 16; i++) {
-            long mem_id = memId.get(i).getMem_id();
-            MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(mem_id);
-            list.add(memberProfile);
+            SwiperProfileTO to = sqlMapperInter.SwiperProfile(SwiperData.get(i).getMem_id());
+            list.add(to);
         }
         return list;
     }

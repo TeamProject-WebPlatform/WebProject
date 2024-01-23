@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import platform.game.service.model.TO.LevelRankTO;
 import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.RollingRankTO;
+import platform.game.service.model.TO.SwiperProfileTO;
 import platform.game.service.model.TO.WinRankTO;
 
 @Mapper
@@ -139,5 +140,9 @@ public interface SqlMapperInter {
 
         @Insert("INSERT INTO member_game_match_record values(#{game_cd},#{mem_id}, default, default, default")
         public int setMatchRecord(String game_cd, long mem_id);
+
+        // 스와이퍼 데이터로 프로필 불러오기
+        @Select("SELECT M.MEM_ID, M.MEM_NICK, M.MEM_LVL, MP.PROFILE_INTRO, MP.PROFILE_IMAGE, MP.PROFILE_HEADER, MP.PROFILE_CARD, MP.PROFILE_REP_BADGE, MP.PROFILE_BADGE_LIST FROM MEMBER M JOIN MEMBER_PROFILE MP ON M.MEM_ID=MP.MEM_ID WHERE M.MEM_ID=#{mem_id}")
+        public SwiperProfileTO SwiperProfile(long mem_id);
 
 }
