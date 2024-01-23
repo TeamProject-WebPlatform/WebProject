@@ -597,7 +597,7 @@ body.dark-theme .battle-card-info .info-title a {
     display: flex;
     align-items: flex-start;
     justify-content: flex-end;
-    min-height: 200px;
+    min-height: calc(100vh - 75px);
     background-color: rgba(244, 97, 25, 0.05);
     border-top: 1px solid rgba(0, 0, 0, 0.3);
     padding: 10px 10px;
