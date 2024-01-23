@@ -304,39 +304,27 @@
                         <div class="uk-grid" data-uk-grid>
                             <div class="uk-width-1-5@xl profile-section">
                                 <div class="profile-card" th:if="${!profile.profileCard.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.profileCard} + '.png);'">
-                                    <a href="">
+                                    <a id="profile">
                                         <div class="profile-header" th:if="${!profile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.profileHeader} + '.png);'">
                                             <div class="profile-image">
                                                 <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
                                                 <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
-                                            <div class="profile-user_info">
-                                                <div class="profile-user-level-icon"><i
-                                                        class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                <div class="profile-user_level"><span
-                                                        th:text="${post.member.memLvl}">99</span></div>
-                                                <div class="profile-user_nick"><span
-                                                        th:text="${post.member.memNick}">타락파워전사선조</span></div>
-                                            </div>
                                         </div>
-
                                         <div class="profile-header" th:if="${profile.profileHeader.equals('x')}">
                                             <div class="profile-image">
                                                 <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
                                                 <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
-                                            <div class="profile-user_info">
-                                                <div class="profile-user-level-icon"><i
-                                                        class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                <div class="profile-user_level"><span
-                                                        th:text="${post.member.memLvl}">99</span></div>
-                                                <div class="profile-user_nick"><span
-                                                        th:text="${post.member.memNick}">타락파워전사선조</span></div>
-                                                <img class="badge" th:if="${!profile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${profile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
-                                                <img class="badge" th:if="${profile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
-                                            </div>
                                         </div>
-
+                                        <div class="profile-user_info">
+                                            <div class="profile-user_level"><span
+                                                    th:text="${'LV : ' + post.member.memLvl}">99</span></div>
+                                            <div class="profile-user_nick"><span
+                                                    th:text="${post.member.memNick}">타락파워전사선조</span></div>
+                                            <img class="badge" th:if="${!profile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${profile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
+                                            <img class="badge" th:if="${profile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
+                                        </div>
                                     </a>
                                     <div class="profile-dividing-line"></div>
                                     <div class="profile-main">
@@ -390,37 +378,26 @@
                                 </div>
 
                                 <div class="profile-card" th:if="${profile.profileCard.equals('x')}">
-                                    <a href="">
+                                    <a id="profile">
                                         <div class="profile-header" th:if="${!profile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.profileHeader} + '.png);'">
                                             <div class="profile-image">
                                                 <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
                                                 <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
-                                            <div class="profile-user_info">
-                                                <div class="profile-user-level-icon"><i
-                                                        class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                <div class="profile-user_level"><span
-                                                        th:text="${post.member.memLvl}">99</span></div>
-                                                <div class="profile-user_nick"><span
-                                                        th:text="${post.member.memNick}">타락파워전사선조</span></div>
-                                            </div>
                                         </div>
-
                                         <div class="profile-header" th:if="${profile.profileHeader.equals('x')}">
                                             <div class="profile-image">
                                                 <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
                                                 <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
-                                            <div class="profile-user_info">
-                                                <div class="profile-user-level-icon"><i
-                                                        class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                <div class="profile-user_level"><span
-                                                        th:text="${post.member.memLvl}">99</span></div>
-                                                <div class="profile-user_nick"><span
-                                                        th:text="${post.member.memNick}">타락파워전사선조</span></div>
-                                                <img class="badge" th:if="${!profile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${profile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
-                                                <img class="badge" th:if="${profile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
-                                            </div>
+                                        </div>
+                                        <div class="profile-user_info">
+                                            <div class="profile-user_level"><span
+                                                    th:text="${'LV : ' + post.member.memLvl}">99</span></div>
+                                            <div class="profile-user_nick"><span
+                                                    th:text="${post.member.memNick}">타락파워전사선조</span></div>
+                                            <img class="badge" th:if="${!profile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${profile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
+                                            <img class="badge" th:if="${profile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
                                         </div>
 
                                     </a>
