@@ -387,7 +387,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div th:if="${post.member.memNick==nickname} and ${bto.state=='B' or bto.state=='A'}"
+                                <div th:if="${post.member.memNick==nickname} and ${bto.state=='B' or bto.state=='A'} and not ${isAfterStartDt}"
                                     class="battle-start_btn" id="battle-start_btn" onclick="controlBattle(0)">
                                     <div class="start">배틀 : 시작</div>
                                 </div>
