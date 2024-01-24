@@ -171,30 +171,33 @@
                                                     <a>&lt;&lt;</a>
                                                 </span>
                                                 <span th:unless="${cpage.startBlock} == 1">
-                                                    <a th:href="@{'list?board_cd=' + ${boardCd} + '&cpage=' + ${(cpage.startBlock - cpage.blockPerPage)}}">&lt;&lt;</a>
+                                                    <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.startBlock - cpage.blockPerPage)}}">&lt;&lt;</a>
                                                 </span>
                                                 &nbsp;
+                                                
                                                 <span th:if="${cpage.cpage} == 1">
                                                     <a>&lt;</a>
                                                 </span>
                                                 <span th:unless="${cpage.cpage} == 1">
-                                                    <a th:href="@{'list?board_cd=' + ${boardCd} + '&cpage=' + ${(cpage.cpage - 1)}}">&lt;</a>
+                                                    <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.cpage - 1)}}">&lt;</a>
                                                 </span>
                                                 &nbsp;&nbsp;
+                                                
                                                 <th:block th:each="i: ${#numbers.sequence(cpage.startBlock, cpage.totalPage)}">
                                                     <span th:if="${i == cpage.cpage}">
                                                         <a th:text="'[' + ${i} + ']'"></a>
                                                     </span>
                                                     <span th:unless="${i == cpage.cpage}">
-                                                        <a th:href="@{'list?board_cd=' + ${boardCd} + '&cpage=' + ${i}}" th:text="${i}"></a>
+                                                        <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${i}}" th:text="${i}"></a>
                                                     </span>
                                                 </th:block>
                                                 &nbsp;&nbsp;
+
                                                 <span th:if="${cpage.cpage == cpage.totalPage}">
                                                     <a>&gt;</a>
                                                 </span>
                                                 <span th:unless="${cpage.cpage == cpage.totalPage}">
-                                                    <a th:href="@{'list?board_cd=' + ${boardCd} +  '&cpage='+ ${(cpage.cpage + 1)}}">&gt;</a>
+                                                    <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage='+ ${(cpage.cpage + 1)}}">&gt;</a>
                                                 </span>
                                                 &nbsp;
 
@@ -202,7 +205,7 @@
                                                     <a>&gt;&gt;</a>
                                                 </span>
                                                 <span th:unless="${cpage.endBlock == cpage.totalPage}">
-                                                    <a th:href="@{'list?board_cd=' + ${boardCd} + '&cpage=' + ${(cpage.startBlock + cpage.blockPerPage)}}">&gt;&gt;</a>
+                                                    <a th:href="@{'list_MixList?board_cd=' + ${boardCd} + '&selectedOption=' + ${(list_search)} + '&searchValue=' + ${(searchValue)} + '&selectedSize=' + ${(recpage)} + '&selectTag=' + ${(list_tag)} + '&cpage=' + ${(cpage.startBlock + cpage.blockPerPage)}}">&gt;&gt;</a>
                                                 </span>
                                             </div>
                                         </div>
