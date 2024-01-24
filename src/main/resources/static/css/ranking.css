@@ -53,6 +53,8 @@
 
 #profile {
     cursor: default;
+    width:90%;
+    height: 90%;
 }
 
 .rank_table {

@@ -147,7 +147,7 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
 
     let membProfileHTML = `
         <div class="profile-card" ${memCardStyle}>
-            <a>
+            <a id="profile">
                 <div class="profile-header" ${memHeaderStyle}>
                     <div class="profile-image">
                         <img src="../img/${memImageName}" alt="NO-IMAGE">
