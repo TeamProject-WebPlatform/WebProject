@@ -74,10 +74,10 @@ public class ProfileController {
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
                 List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
                 List<String> memberFavoriteGames = new ArrayList<String>();
-                if (gameRepository.existsByMemId(member.getMemId())){
+                if (gameRepository.existsByMemId(member.getMemId())) {
                     memberFavoriteGames = gameRepository.FavoriteGameCode(member.getMemId());
                 }
-                
+
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
@@ -212,7 +212,7 @@ public class ProfileController {
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
 
-        String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage\\";
+        String upload = "/home/ubuntu/profile/";
         String filename = member.getMemId() + "_" + image.getOriginalFilename();
 
         try {
