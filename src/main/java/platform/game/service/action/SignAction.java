@@ -139,7 +139,7 @@ public class SignAction {
             cookie = generateToken(authRequest);
             
             // 여기서 회원가입시 포인트 증가 로직  
-            updatePointHistory.insertPointHistoryByMemId(userSignup.getMemId(), "50101", 10);
+            updatePointHistory.insertPointHistoryByMemId(userSignup.getMemId(), "50201", 10);
 
             return cookie;
         } else {

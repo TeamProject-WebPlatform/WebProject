@@ -2456,6 +2456,7 @@ a:hover {
 .widjet__body {
     padding: 20px 30px;
     border-radius: 5px;
+    min-height: 567px;
     background: #fff;
 }
 

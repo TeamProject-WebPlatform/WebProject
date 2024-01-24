@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.transaction.Transactional;
 import platform.game.service.action.BattleCardAction;
+import platform.game.service.action.LoginAction;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
@@ -41,6 +43,8 @@ import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
 import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.PostInfoRepository;
+import platform.game.service.repository.SigninHistoryRepository;
+import platform.game.service.repository.UpdatePointHistory;
 import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.service.SigninHistoryService;
 
@@ -60,6 +64,13 @@ public class MainController {
 
     @Autowired
     RankDAO rankDAO;
+
+    @Autowired
+    @Qualifier("updatePointHistoryImpl")
+    UpdatePointHistory updatePointHistory;
+
+    @Autowired
+    SigninHistoryRepository signinHistoryRepository;
 
     @Autowired
     MemberFavoriteGameRepository memberFavoriteGameRepository;
@@ -115,21 +126,29 @@ public class MainController {
 
         ModelAndView mav = new ModelAndView("index");
         BoardCpageTO cpageTO = new BoardCpageTO();
-
+        
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                    .getMember();
-            boolean isFirstLogin = signinHistoryService.isFirstLogin(member);
-            if (member != null) {
-                MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(member.getMemId());
+            .getMember();
 
-                mav.addObject("nickname", member.getMemNick());
-                mav.addObject("currentPoint", member.getMemCurPoint());
-                mav.addObject("memId", member.getMemId());
+            
+            if (member != null) {
+                LoginAction loginAction = new LoginAction(signinHistoryService, updatePointHistory, signinHistoryRepository);  
+                Object[] o = loginAction.getLogin(member);
+                boolean isFirstLogin = (Boolean)o[0];
+
+                MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(member.getMemId());
+                if(isFirstLogin){ 
+                    mav.addObject("currentPoint", o[1]);
+                }else{ 
+                    mav.addObject("currentPoint", member.getMemCurPoint());
+                }
                 mav.addObject("isFirstLogin", isFirstLogin);
+                mav.addObject("nickname", member.getMemNick());
+                id = member.getMemId();
+                mav.addObject("memId", member.getMemId());
                 mav.addObject("memberProfile",memberProfile);
                 
-                id = member.getMemId();
                 System.out.println("isFirstLogin: " + isFirstLogin);
             }
         } else {
