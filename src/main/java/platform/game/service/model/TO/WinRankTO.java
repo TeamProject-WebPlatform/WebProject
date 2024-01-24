@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class WinRankTO {
     private int rank;
-    private String mem_userid;
+    private String mem_nick;
     private int mem_lvl;
     private long winrate;
 }

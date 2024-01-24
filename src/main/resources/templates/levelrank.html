@@ -85,7 +85,7 @@
                                             </div>
                                             <div class="profile-user_info">
                                                 <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
-                                                <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
+                                                <div class="profile-user_nick"><span th:text="${to.mem_nick}"></span></div>
                                                 <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
@@ -157,7 +157,7 @@
                                             </div>
                                             <div class="profile-user_info">
                                                 <div class="profile-user_level" ><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
-                                                <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
+                                                <div class="profile-user_nick"><span th:text="${to.mem_nick}"></span></div>
                                                 <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
@@ -292,7 +292,7 @@
                                     <!-- 통합 레벨 랭크 테이블 -->
                                     <tr th:if="${level!=null and i.index >=5}" th:each="to, i:${level}">
                                         <td th:text="${to.rank}"></td>
-                                        <td th:text="${to.mem_userid}"></td>
+                                        <td th:text="${to.mem_nick}"></td>
                                         <td th:text="${to.mem_lvl}"></td>
                                     </tr>
                                     <!-- 특정 게임 레벨 랭크 테이블 -->

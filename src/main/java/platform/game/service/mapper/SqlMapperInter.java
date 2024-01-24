@@ -91,31 +91,31 @@ public interface SqlMapperInter {
         int setOtherWinRateRank(String game_cd);
 
         // 구분 없이 레벨 랭킹
-        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
+        @Select("select r.rank, m.mem_nick, m.mem_lvl from ranking r join member m on r.rank_code='Level' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<LevelRankTO> getLevelRank();
 
         // 구분 없이 상위 10명만
-        @Select("SELECT r.rank, m.mem_userid, m.mem_lvl FROM ranking r JOIN member m ON r.rank_code='Level' AND m.mem_id=r.mem_id AND r.game_cd=0 ORDER BY r.rank ASC LIMIT 10")
+        @Select("SELECT r.rank, m.mem_nick, m.mem_lvl FROM ranking r JOIN member m ON r.rank_code='Level' AND m.mem_id=r.mem_id AND r.game_cd=0 ORDER BY r.rank ASC LIMIT 10")
         public List<LevelRankTO> getTop10LevelRanks();
 
         // 구분 없이 승률 랭킹
-        @Select("SELECT r.rank, m.mem_userid, m.mem_lvl, CASE WHEN m.mem_total_game_cnt > 0 THEN round((m.mem_game_win_cnt / m.mem_total_game_cnt) * 100, 2) ELSE 0 END AS winrate FROM ranking r JOIN member m ON r.rank_code = 'WinRate' AND m.mem_id = r.mem_id AND r.game_cd = 0 ORDER BY r.rank;")
+        @Select("SELECT r.rank, m.mem_nick, m.mem_lvl, CASE WHEN m.mem_total_game_cnt > 0 THEN round((m.mem_game_win_cnt / m.mem_total_game_cnt) * 100, 2) ELSE 0 END AS winrate FROM ranking r JOIN member m ON r.rank_code = 'WinRate' AND m.mem_id = r.mem_id AND r.game_cd = 0 ORDER BY r.rank;")
         public List<WinRankTO> getWinRateRank();
 
         // 구분 없이 포인트 랭킹
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
+        @Select("select r.rank, m.mem_nick, m.mem_lvl, m.mem_total_point from ranking r join member m on r.rank_code='Point' and m.mem_id=r.mem_id and r.game_cd=0 order by r.rank")
         public List<PointRankTO> getPointRank();
 
         // 게임 종류 별 레벨 랭킹
-        @Select("select r.rank, m.mem_userid, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='level' order by m.mem_lvl desc;")
+        @Select("select r.rank, m.mem_nick, m.mem_lvl from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='level' order by m.mem_lvl desc;")
         public List<LevelRankTO> getOtherLevelRank(String game_cd);
 
         // 게임 종류 별 포인트 랭킹
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, m.mem_total_point from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='point' order by m.mem_total_point desc;")
+        @Select("select r.rank, m.mem_nick, m.mem_lvl, m.mem_total_point from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='point' order by m.mem_total_point desc;")
         public List<PointRankTO> getOtherPointRank(String game_cd);
 
         // 게임 종류 별 승률 랭킹
-        @Select("select r.rank, m.mem_userid, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='winrate' order by winrate desc;")
+        @Select("select r.rank, m.mem_nick, m.mem_lvl, round((m.mem_game_win_cnt/m.mem_total_game_cnt)*100,2) as winrate from ranking r join member m on r.mem_id = m.mem_id and r.game_cd=#{game_cd} and r.rank_code='winrate' order by winrate desc;")
         public List<WinRankTO> getOtherWinRateRank(String game_cd);
 
         // 비로그인 대상 swiper

@@ -72,7 +72,7 @@
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l uk-width-3-3@m uk-width-3-3@s">
                         <div class="widjet__head">
-                            <h3 class="uk-text-lead">Random Rank</h3>
+                            <h3 class="uk-text-lead">Popular Members</h3>
                         </div>
                         <div class="js-recommend">
                             <div class="profile-background">
@@ -122,7 +122,7 @@
                                                 <!-- 통합 레벨 랭크 테이블 -->
                                                 <tr class="board_center_tr" th:if="${level!=null}" th:each="to, i:${level}">
                                                     <td style="text-align: center;" th:text="${to.rank}"></td>
-                                                    <td style="text-align: center;" th:text="${to.mem_userid}"></td>
+                                                    <td style="text-align: center;" th:text="${to.mem_nick}"></td>
                                                     <td style="text-align: center;" th:text="${to.mem_lvl}"></td>
                                                 </tr>
 
@@ -302,7 +302,7 @@
                     <div>
                         <div class="widjet --filters">
                             <div class="widjet__head">
-                                <h3 class="uk-text-lead">Free</h3>
+                                <h3 class="uk-text-lead">Update</h3>
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>

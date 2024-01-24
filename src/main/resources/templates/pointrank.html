@@ -85,7 +85,7 @@
                                             </div>
                                             <div class="profile-user_info">
                                                 <div class="profile-user_level"><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
-                                                <div class="profile-user_nick"><span th:text="${to.mem_userid}"></span></div>
+                                                <div class="profile-user_nick"><span th:text="${to.mem_nick}"></span></div>
                                                 <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
@@ -158,7 +158,7 @@
                                             </div>
                                             <div class="profile-user_info">
                                                 <div class="profile-user_level"><span th:text="'LV : ' + ${to.mem_lvl}"></span></div>
-                                                <div class="profile-user_nick"><span  th:text="${to.mem_userid}"></span></div>
+                                                <div class="profile-user_nick"><span  th:text="${to.mem_nick}"></span></div>
                                                 <img class="badge" th:if="${!profile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${profile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${profile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
@@ -226,7 +226,7 @@
                                             </div>
                                             <div class="profile-user_info">
                                                 <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
-                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_nick}"></p>
                                                 <img class="badge" th:if="${!otherprofile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${otherprofile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${otherprofile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
@@ -240,7 +240,7 @@
                                             </div>
                                             <div class="profile-user_info">
                                                 <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
-                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_nick}"></p>
                                                 <img class="badge" th:if="${!otherprofile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${otherprofile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${otherprofile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
@@ -261,7 +261,7 @@
                                             </div>
                                             <div class="profile-user_info">
                                                 <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
-                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_nick}"></p>
                                                 <img class="badge" th:if="${!otherprofile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${otherprofile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${otherprofile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
@@ -274,7 +274,7 @@
                                             </div>
                                             <div class="profile-user_info">
                                                 <p class="profile-user_level" th:text="'LV : ' + ${to.mem_lvl}"></p>
-                                                <p class="profile-user_nick" th:text="${to.mem_userid}"></p>
+                                                <p class="profile-user_nick" th:text="${to.mem_nick}"></p>
                                                 <img class="badge" th:if="${!otherprofile.get(i.index)[4].equals('x')}" th:src="@{'../img/shop_img/' + ${otherprofile.get(i.index)[4]} + '.png'}" alt="NO-SYMBOL">
                                                 <img class="badge" th:if="${otherprofile.get(i.index)[4].equals('x')}" alt="NO-SYMBOL">
                                             </div>
@@ -297,14 +297,14 @@
                                     <!-- 통합 포인트 랭크 테이블 -->
                                     <tr th:if="${point!=null and i.index >=5}" th:each="to, i:${point}">
                                         <td th:text="${to.rank}"></td>
-                                        <td th:text="${to.mem_userid}"></td>
+                                        <td th:text="${to.mem_nick}"></td>
                                         <td th:text="${to.mem_lvl}"></td>
                                         <td th:text="${to.mem_total_point}"></td>
                                     </tr>
                                     <!-- 특정 게임 포인트 랭크 테이블 -->
                                     <tr th:if="${otherpoint!=null and i.index>=5}" th:each="to, i:${otherpoint}">
                                         <td th:text="${to.rank}"></td>
-                                        <td th:text="${to.mem_userid}"></td>
+                                        <td th:text="${to.mem_nick}"></td>
                                         <td th:text="${to.mem_lvl}"></td>
                                         <td th:text="${to.mem_total_point}"></td>
                                     </tr>
