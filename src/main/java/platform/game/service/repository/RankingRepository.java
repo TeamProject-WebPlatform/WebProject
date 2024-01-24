@@ -22,7 +22,20 @@ public interface RankingRepository extends JpaRepository<Ranking, Integer> {
     @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_lvl / 5) * 5 AS levelRange FROM member GROUP BY levelRange ORDER BY levelRange")
     List<Integer> GetLevelRank();
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange, ifnull(FLOOR((mem_game_win_cnt / mem_total_game_cnt * 100) / 5) * 5,0) AS winRange FROM member GROUP BY winRange ORDER BY winRange;")
+    @Query(nativeQuery = true, value = "SELECT \r\n" + //
+            "  COUNT(m.mem_game_win_cnt) AS countInRange\r\n" + //
+            "FROM\r\n" + //
+            "  (SELECT 0 AS winRange UNION SELECT 5 UNION SELECT 10 UNION SELECT 15 UNION SELECT 20\r\n" + //
+            "   UNION SELECT 25 UNION SELECT 30 UNION SELECT 35 UNION SELECT 40 UNION SELECT 45\r\n" + //
+            "   UNION SELECT 50 UNION SELECT 55 UNION SELECT 60 UNION SELECT 65 UNION SELECT 70\r\n" + //
+            "   UNION SELECT 75 UNION SELECT 80 UNION SELECT 85 UNION SELECT 90 UNION SELECT 95\r\n" + //
+            "   UNION SELECT 100) AS ranges\r\n" + //
+            "LEFT JOIN\r\n" + //
+            "  member AS m ON FLOOR((m.mem_game_win_cnt / m.mem_total_game_cnt * 100) / 5) * 5 = ranges.winRange\r\n" + //
+            "GROUP BY\r\n" + //
+            "  winRange\r\n" + //
+            "ORDER BY\r\n" + //
+            "  winRange;")
     List<Integer> GetWinRank();
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_total_point / 150) * 150 as point FROM member GROUP BY point ORDER BY point")
