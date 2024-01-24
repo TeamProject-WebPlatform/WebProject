@@ -39,11 +39,15 @@ public class SigninHistory {
     // 날짜 저장
     private LocalDateTime createdAt;
 
+    private String memIp;
+
+
     @Override
     public String toString() {
         return "SigninHistory{" +
                 "member=" + member +
                 ", signinHistoryId=" + signinHistoryId +
+                ", memIp = " + memIp+
                 ", createdAt=" + createdAt +
                 '}';
     }

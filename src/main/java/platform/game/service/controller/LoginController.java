@@ -163,6 +163,7 @@ public class LoginController {
         // 로그인 성공
         response.addCookie(cookie);
 
+        String memIp = IpAction.getIpAddress(request);
         if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
             .getMember();
@@ -190,6 +191,7 @@ public class LoginController {
             SigninHistory signinHistory = SigninHistory.builder()
             .member(member)
             .createdAt(LocalDateTime.now())
+            .memIp(memIp)
             .build();
             
             // SigninHistory 저장
