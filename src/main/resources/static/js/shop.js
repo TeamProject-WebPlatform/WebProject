@@ -13,7 +13,7 @@ function addToPreviewList(itemName, category) {
     }
 
     // 미리보기 목록을 위한 리스트 아이템 생성
-    let listItem = document.createElement('li');
+    let listItem = document.createElement('li'); 
     listItem.textContent = itemName;
     listItem.dataset.category = category; // 카테고리 정보를 dataset으로 추가
     listItem.classList.add('list-item'); // 'list-item' 클래스 추가
@@ -105,7 +105,7 @@ function showPreview(itemName, category) {
     }
 
     // 미리보기 div를 화면에 보이도록 설정
-    PreviewHeader.style.display = 'block';
+    // PreviewHeader.style.display = 'block';
 
      // 미리보기 목록에 아이템 추가하는 함수 호출
     addToPreviewList(itemName, category);
