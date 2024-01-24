@@ -173,11 +173,10 @@ public class LoginController {
             .getMember();
             // 사용자의 IP 주소 가져오기
             if (member != null) {
-                int pointIncreaseResult = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
-                
                 if (signinHistoryService.isFirstLogin(member)) {
                     System.out.println("오늘 첫 로그인입니다.");
                     // 포인트 증가
+                    int pointIncreaseResult = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
                     if (pointIncreaseResult > 0) {
                         System.out.println("포인트 증가 성공");
                     } else {
