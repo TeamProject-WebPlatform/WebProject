@@ -90,7 +90,7 @@
                                 <h3 class="uk-text-lead">Favorite Game List</h3>
                             </div>
                             <div class="widjet__body">
-                                <div th:with="game=${game}" class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                <div th:if="${!game.isEmpty()}" th:with="game=${game}" class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
                                     <div><select id="first-game" class="js-select">
                                             <option value="" th:selected="${game[0]==null}">1순위 선호 게임 </option>
                                             <option value="30001" th:selected="${game[0]=='30001'}">리그 오브 레전드</option>
@@ -117,6 +117,38 @@
                                             <option value="30004" th:selected="${game[2]=='30004'}">발로란트</option>
                                             <option value="30005" th:selected="${game[2]=='30005'}">피파 온라인</option>
                                             <option value="30006" th:selected="${game[2]=='30006'}">스팀</option>
+                                        </select></div>
+                                        <div style="text-align: right;">
+                                            <button id="game-submit" class="uk-button uk-button-secondary">수정</button>
+                                        </div>
+                                </div>
+                                <div th:if="${game.isEmpty()}" th:with="game=${game}" class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                    <div><select id="first-game" class="js-select">
+                                            <option value="">1순위 선호 게임 </option>
+                                            <option value="30001">리그 오브 레전드</option>
+                                            <option value="30002">배틀 그라운드</option>
+                                            <option value="30003">오버워치</option>
+                                            <option value="30004">발로란트</option>
+                                            <option value="30005">피파 온라인</option>
+                                            <option value="30006">스팀</option>
+                                        </select></div>
+                                    <div><select id="second-game" class="js-select">
+                                        <option value="">2순위 선호 게임 </option>
+                                        <option value="30001">리그 오브 레전드</option>
+                                        <option value="30002">배틀 그라운드</option>
+                                        <option value="30003">오버워치</option>
+                                        <option value="30004">발로란트</option>
+                                        <option value="30005">피파 온라인</option>
+                                        <option value="30006">스팀</option>
+                                        </select></div>
+                                    <div><select id="third-game" class="js-select">
+                                            <option value="">3순위 선호 게임</option>
+                                            <option value="30001">리그 오브 레전드</option>
+                                            <option value="30002">배틀 그라운드</option>
+                                            <option value="30003">오버워치</option>
+                                            <option value="30004">발로란트</option>
+                                            <option value="30005">피파 온라인</option>
+                                            <option value="30006">스팀</option>
                                         </select></div>
                                         <div style="text-align: right;">
                                             <button id="game-submit" class="uk-button uk-button-secondary">수정</button>
