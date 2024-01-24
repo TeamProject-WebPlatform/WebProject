@@ -9,6 +9,53 @@
 }
 
 
+.setbtn{
+    width: 100%;
+    min-height: 80px;
+    /* padding-left: -40px; */
+    color: #222;
+    /* outline: 1px solid red; */
+    background-color: #FEF7F3;
+    -webkit-box-shadow: 2px 2px 7px 0px #00000024; 
+}
+body.dark-theme .setbtn{
+    color: #D3D3D3;
+    background-color: #222;
+    -webkit-box-shadow: 2px 2px 7px 0px #00000024; 
+}
+
+.list-item {
+    list-style: none;
+    font-size: 20px;
+    width: 100%;
+    text-decoration-line:underline ;
+    /* height: 25px; */
+    /* margin-bottom: 10px; */
+}
+
+.delete-button {
+    width: 40px;
+    -webkit-box-shadow: 2px 2px 7px 0px #00000024; 
+    background-color: #222; 
+    border: none;
+    border-radius:28px;	
+    float: right;
+    cursor:pointer; 
+    color:#646464; 
+    font-family:Arial; 
+    font-size:10px; 
+    font-weight:bold; 
+    padding:6px 12px; 
+    text-decoration:none; 
+}
+
+body.dark-theme .delete-button { background-color: #0C1826; color:#ffffff; }
+
+.delete-button:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
+
+.delete-button:active { position:relative; top:1px; }
+
+
 .user{
     width: 100%;
     justify-content:space-around;
@@ -38,32 +85,26 @@
     background-repeat: no-repeat;
     background-position: 20px 0;
 
+    background-repeat: no-repeat;
     background-position: center;
     background-size:cover;
-    /* background-position: left; */
-    /* background-image: url("../img/acheivement-2.png"); */
 }
 
 .profile-image{
     margin-top: 20px;
-    width: 18vh;
-    height: 18vh;
-    margin: 0 auto;
+    width: 90%;
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #0ff;
-    z-index: 99999;
-}
-.profile-image img{
-    width:100%;
-    height:100%;
-    z-index: 99999;
+    margin: 0 auto;
 }
 
+
 .profile-user_info {
+    width: 90%;
     height:50px;
     margin: 0 auto;
-    font-size: 20px;
+    font-size: 16px;
     display: flex; 
     align-items: center; 
     justify-content: center;
@@ -114,6 +155,8 @@
     font-size:12px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     padding: 18px;
     padding-top: 5px;
 }
@@ -123,6 +166,9 @@
     /* size: 40px; */
     font-size: 30px;
     margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .body .dark-theme .profile-background{
     background: #0C1826;
@@ -274,6 +320,7 @@ body.dark-theme .select_Get_btn { background-color: #222; color:#ffffff; }
 .flex-container {
     display: flex;
     justify-content: space-between;
+    min-height: calc(100vh - 75px);
 }
 
 .widjet-container{
@@ -333,6 +380,9 @@ body.dark-theme .select_Get_btn { background-color: #222; color:#ffffff; }
 
 .game-card__info {
     padding: 6px;
+    background-color: #F0f0f0;
+}
+body.dark-theme .game-card__info {
     background-color: #040615;
 }
 
@@ -636,4 +686,9 @@ body.dark-theme .game-card__platform {
 
 
     /* 버튼 */
+}
+
+#previewList{
+    padding-left: 0px;
+    margin: 0px;
 }

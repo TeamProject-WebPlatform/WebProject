@@ -1,3 +1,7 @@
+.wallet-main{
+    min-height: calc(100vh - 75px);
+}
+
 .wallet-info-point {
     display: flex;
     align-items: center;
@@ -180,6 +184,7 @@ body.dark-theme .wallet-ph-item {
 }
 
 .wallet-ph-title {
+    
     height : 20%;
     font-size:15px;
     -o-text-overflow: ellipsis;
@@ -331,15 +336,12 @@ body.dark-theme .wallet-ph-item {
     -ms-flex-positive: 1;
     flex-grow: 1;
 }
-.wallet-betting-item__info a{
+.wallet-betting-item__title {
     height : 40%;
     font-size:15px;
-}
-.wallet-betting-item__title {
     -o-text-overflow: ellipsis;
     display: block;
     overflow: hidden;
-    color: #353535;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
@@ -347,7 +349,12 @@ body.dark-theme .wallet-ph-item {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
+.wallet-betting-item__title a{
+    color: #353535;
+}
+.dark-theme .wallet-betting-item__title a{
+    color:white;
+}
 .wallet-betting-item__game {
     height: 20%;
     color: #767676;
@@ -356,10 +363,23 @@ body.dark-theme .wallet-ph-item {
     font-weight: normal;
     line-height: 1.36;
 }
-
-.wallet-betting-item__point {
+.wallet-betting-info{
     height: 40%;
-    color: #E60000;
+}
+.wallet-betting-item__state{
+    color:black;
+    font-size: 13px;
+}
+.wallet-betting-item__state-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; 
+}
+.dark-theme .wallet-betting-item__state{
+    color:wheat;
+}
+.wallet-betting-item__point {
+    color: #ff79ac;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -443,3 +463,105 @@ body.dark-theme .wallet-ph-item__game {
     }
 }
 
+.receive_btn{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #ffbf00;
+    color: black;
+    box-shadow: #ffbf00 0px 0px 37px 1px;
+    cursor: pointer;
+}
+.receive_btn > div{
+    
+    width: 100%;
+    display: flex;
+    margin-left : 20px;
+}
+.receive_btn > i{
+    margin-left : 10px;
+}
+.receive_btn .check{
+    display: none;
+
+}
+.receive_btn .click{
+    user-select: none;
+    margin-left: 0px;
+    position: absolute;
+    width: auto;
+    color: rgb(147, 112, 216);
+    font-size: 17px;
+    top: 11%;
+    left: 58%;
+    transform: rotate(20deg);
+    animation: clickGlow 1s infinite alternate;
+}
+.receive_btn:active{
+    background: #ffe189;
+    box-shadow: #ffe189 0px 0px 37px 1px;
+}
+@keyframes clickGlow {
+    0% {
+        color: rgba(147,112,216,1);
+    }
+    20% {
+        color: rgba(147,112,216,1);
+    }
+    100% {
+        color: rgba(147,112,216,0);
+    }
+}
+.btn-pnr{
+    background-color: white;
+    color : black;
+
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    border-radius: 5px;
+    font-size: 15px;
+    margin-right: 10px;
+}
+.dark-theme .btn-pnr{
+    background-color: #1A2634;
+    color:white;
+}
+.nice-select{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    border:1px solid;
+}
+.pointFloating{
+    position:absolute; 
+    display: none; 
+    top: 7px;
+    left: 45px;
+    color:#ffbf00;
+}
+.inactive .click{
+    display: none;
+}
+.inactive{
+    color : grey;
+    background-color : #4f3b00;
+    box-shadow : none;
+    cursor : auto;
+}
+.inactive:active{
+    background: #4f3b00;
+    box-shadow: none;
+    
+}
+.inactive .click{
+    display: none;
+}

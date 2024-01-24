@@ -64,13 +64,14 @@ public class WalletController {
         }
         MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
 
+        Collections.reverse(memberBettingTOList);
         mav.addObject("nickname", member.getMemNick());
         mav.addObject("memId", member.getMemId());
         mav.addObject("currentPoint", member.getMemCurPoint());
         mav.addObject("totalPoint", member.getMemTotalPoint());
         mav.addObject("memberBettingTOList", memberBettingTOList);
         mav.addObject("memberProfile", memberProfile);
-        
+
         // 포인트 히스토리 정렬
         List<PointHistory> list = member.getMemPointHistoryList();
         Collections.sort(list, Collections.reverseOrder(Comparator.comparing(PointHistory::getPointHistoryId)));

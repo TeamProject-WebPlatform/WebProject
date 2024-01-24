@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
     });
-    const active = document.getElementById("nav-battle");
-    active.classList.add("uk-active");
 
     const pointBarLefts = document.querySelectorAll(".info-center-left .info-point-bar");
     const pointBarRights = document.querySelectorAll(".info-center-right .info-point-bar");
@@ -47,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".left-time").forEach(function (x) {
 
         let delay = x.getAttribute("delay");        
-
+        console.log(delay);
         updateTimerDisplay(delay,x);
         const timerInterval = setInterval(() => {
             // 남은 시간 갱신 0.01초마다 갱신
@@ -62,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }, 10);
     });
-
 });
 
 
@@ -75,7 +72,6 @@ function battleCardConnect() {
     battleCardStompClient.connect({}, function (frame) {
         cards.forEach(function (card) {
             let btId = card.getAttribute("btId");
-            let postId = card.getAttribute("postId");
             battleCardStompClient.subscribe(`/topic/pointbetting/` + btId, function (response) {
                 try {
                     let endpoint = JSON.parse(response.body).endpoint;
@@ -125,8 +121,8 @@ function battleCardConnect() {
                             }
                         }
                     } else if (endpoint === 1) {
+                        console.log("베팅 상태 변화");
                         let stateTO = JSON.parse(response.body);
-                        const card = document.querySelector(".battle-card__box[btId='" + btId + "']");
                         let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
                         const section = pointInfo.querySelector(".info-state");
                         section.querySelectorAll("div").forEach(function (x) {
@@ -137,16 +133,16 @@ function battleCardConnect() {
                             // 클라이언트 추가됨.
                             const clientSection = document.querySelector(".battle-card__box[btId='" + btId + "'] .battle-profile-right");
                             clientSection.querySelectorAll(".battle-profile-lvl").forEach(function (x) {
-                                x.innerHTML = "Lv "+stateTO.client.level;
+                                x.innerHTML = stateTO.client.level;
                             });
                             clientSection.querySelectorAll(".battle-profile-nick").forEach(function (x) {
                                 x.innerHTML = stateTO.client.nickname;
                             });
                             clientSection.querySelectorAll(".battle-profile-win").forEach(function (x) {
-                                x.innerHTML = stateTO.client.win +" 승";
+                                x.innerHTML = stateTO.client.win;
                             });
                             clientSection.querySelectorAll(".battle-profile-lose").forEach(function (x) {
-                                x.innerHTML = stateTO.client.lose+" 패";
+                                x.innerHTML = stateTO.client.lose;
                             });
                             clientSection.querySelectorAll(".battle-profile-slash").forEach(function (x) {
                                 x.innerHTML = "&nbsp;/&nbsp;"
@@ -156,7 +152,7 @@ function battleCardConnect() {
                             let rate = stateTO.client.win * 100.0 / total;
                             let formattedRate = rate.toFixed(2);
                             clientSection.querySelectorAll(".battle-profile-win-rate").forEach(function (x) {
-                                x.innerHTML = formattedRate+"%";
+                                x.innerHTML = formattedRate;
                             });
                             if (stateTO.state === 'A') {
                                 // 시간 작업
@@ -179,40 +175,6 @@ function battleCardConnect() {
                                 }, 10);
                             }
 
-                        }
-                        console.log("상태 값 변경 : "+stateTO.state);
-                        // 베팅 입력란 변경
-                        // 기존 타임리프 태그 none
-                        pointInfo.querySelector(".betting-input-section").style.display = "none";
-                        let host = card.querySelectorAll(".battle-profile-nick")[0].innerHTML;
-                        let client = card.querySelectorAll(".battle-profile-nick")[1].innerHTML;
-                        // insertBettingInputsection(state,nickname,hostNick,clientNick,result,btId,postId,point)
-                        pointInfo.querySelector(".betting-input-section-web").innerHTML = 
-                            insertBettingInputsection(stateTO.state,nickname,host,client,stateTO.result,btId,postId,stateTO.point);
-                    } else if (endpoint === 2){
-                        let dsbtTO = JSON.parse(response.body);
-                        const card = document.querySelector(".battle-card__box[btId='" + btId + "']");
-                        let pointInfo = document.querySelector(".battle-card-info[btId='" + btId + "']");
-                        let list = dsbtTO.list;
-                        let point;
-                        list.forEach(function(x){
-                            if(x.member.memNick==nickname){
-                                point = x.pointDstb;
-                                return;
-                            }
-                        })
-                        if(!point){
-                            // 베팅 무관
-                            pointInfo.querySelector(".betting-input-section-web").innerHTML = 
-                                insertBettingInputsection('T',nickname,host,client,"0",btId,postId,point);
-                        }else if(point!==0){
-                            // 베팅 성공
-                            pointInfo.querySelector(".betting-input-section-web").innerHTML = 
-                                insertBettingInputsection('T',nickname,host,client,"-1",btId,postId,point);
-                        }else if(point===0){
-                            // 베팅 실패
-                            pointInfo.querySelector(".betting-input-section-web").innerHTML = 
-                                insertBettingInputsection('T',nickname,host,client,"-2",btId,postId,point);
                         }
                     }
                 } catch (err) {
@@ -246,14 +208,8 @@ function updateTimerDisplay(remainingTime, timeDisplay) {
 function betPoint(btId, flag) {
     // 포인트 배팅
     // flag : 0-왼 , 1-오
-    const section = document.querySelector(".battle-card__box[btId='" + btId + "']");
+    const section = document.getElementById("bettingId" + btId);
     let pointInputs = section.querySelector(".point-betting-input");
-    let host = section.querySelectorAll(".battle-profile-nick")[0].innerHTML;
-    let client = section.querySelectorAll(".battle-profile-nick")[1].innerHTML;
-    if(nickname === host || nickname === client){
-        alert('자신의 배틀에는 베팅할 수 없습니다.');
-        return;
-    }
     let point = pointInputs.value;
     if (point === "" | isNaN(point)) {
         return;
@@ -290,13 +246,20 @@ function betPoint(btId, flag) {
         button.style.color = "white";
     }
 }
-function getGameName(code){
-    let gameName = "";
-    if(code=='30001') gameName = 'LeagueofLegends';
-    if(code=='30002') gameName = 'BattleGround';
-    if(code=='30003') gameName = 'Overwatch';
-    if(code=='30004') gameName = 'Valorant';
-    if(code=='30005') gameName = 'FIFA';
-
-    return gameName;
+function formatNumberTok(value) {
+    var formattedValue = value > 999999 ? (value / 1000000).toFixed(1) + 'm' : (value > 999 ? (value / 1000).toFixed(1) + 'k' : value);
+    return formattedValue;
+}
+function getColorRatio(bettingRatio) {
+    if (bettingRatio >= 90) {
+        return '#FF0000'; // 빨간색
+    } else if (bettingRatio >= 70) {
+        return '#FFA500'; // 주황색
+    } else if (bettingRatio >= 50) {
+        return '#00FF00'; // 연두색
+    } else if (bettingRatio >= 30) {
+        return '#00F0FF'; // 민트색
+    } else {
+        return '#0FCFA5'; // 검은색
+    }
 }

@@ -37,7 +37,7 @@ public class UpdateMemberRepositoryImpl implements UpdateMemberRepository{
     public int insertData(int point, long memId, int btId, int flag) {
         Query query = entityManager.createNativeQuery(
                 "INSERT INTO member_betting " +
-                "VALUES(now(),:point,:memId,:btId,:flag)");
+                "VALUES(now(),:point,:memId,:btId,:flag,0,'-1')");
         query.setParameter("point", point);
         query.setParameter("memId", memId);
         query.setParameter("btId", btId);

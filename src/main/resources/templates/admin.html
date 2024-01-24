@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="uk-grid uk-child-width-1-2@xl uk-child-width-1-2@l uk-child-width-1-2@s uk-grid-small" data-uk-grid>
+                <div class="uk-grid uk-child-width-1-2@xl uk-child-width-1-2@l uk-child-width-1-2@s uk-grid-small" data-uk-grid style="min-height:600px;">
                     <!--좌측 부분-->
                     <div>
                         <div class="widjet__head">
@@ -136,8 +136,10 @@
                         </div>
                     </div>
                 </div>
+                <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
             </main>
         </div>
+        
     </div>
     <script>
         document.getElementById("memInfo_value").addEventListener("keyup", function(event){
@@ -158,30 +160,8 @@
             location.href = "./list";
         }
     </script>
-                    </div>
-                    <div class="widjet__head">
-                        <h3 class="uk-text-lead">FavoriteGame</h3>
-                    </div>
-                    <div class="widjet__body">
-                        <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
-                            <div th:text="${'1번 게임: ' + mostFavoriteGame[0][0] + ' ' + mostFavoriteGame[0][1] + '명'}">
-                            </div>
-                        </div>
-                        <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
-                            <div th:text="${'2번 게임: ' + mostFavoriteGame[1][0] + ' ' + mostFavoriteGame[1][1] + '명'}">
-                            </div>
-                        </div>
-                        <div class="uk-grid uk-flex-middle uk-grid-small" data-uk-grid>
-                            <div th:text="${'3번 게임: ' + mostFavoriteGame[2][0] + ' ' + mostFavoriteGame[2][1] + '명'}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <footer th:replace="~{fragments/footer :: footerFragment}"></footer>
+            
 
-            </main>
-        </div>
-    </div>
     <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
 
 </body>

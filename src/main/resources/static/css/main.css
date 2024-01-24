@@ -5941,6 +5941,7 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
     bottom: 0;
     left: 0;
     width: 100%;
+
 }
 
 .page-footer__inner {
@@ -5953,6 +5954,7 @@ html body.dark-theme .chat-user-list__head a.ico_edit {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    /* width: 100%; */
     margin: 0 -45px -50px -45px;
     height: 85px;
     text-align: center;

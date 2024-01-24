@@ -12,6 +12,34 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script src="../js/module/cookie.js"></script>
         <link rel="stylesheet" href="../css/header_point.css" />
+        <style>
+            .page-header__content .fa-coins {
+                color: #ffbf00;
+            }
+
+            .glowCoin {
+                animation: glowCoinAnime 1s infinite alternate;
+            }
+            .dark-theme .glowCoin{
+                animation: glowCoinAnime2 1s infinite alternate;
+            }
+            @keyframes glowCoinAnime {
+                0%,20% {
+                    color: #ffbf00;
+                }
+                100% {
+                    color: #fff;
+                }
+            }
+            @keyframes glowCoinAnime2 {
+                0%,20% {
+                    color: #ffbf00;
+                }
+                100% {
+                    color: #0C1826;
+                }
+            }
+        </style>
         <script th:inline="javascript">
             let now;
             let max;
@@ -34,11 +62,12 @@
                 // 1800 일때 now는 200임
                 // 1900 되니까 now 에서 100을 더해줘서 키워되야됨 300
                 const handle = setInterval(() => {
-                    if (now > 0) $counter.innerHTML = Math.ceil(max - now);
-                    else if (now < 0) $counter.innerHTML = Math.floor(max - now);
+                    if (now > 0) $counter.innerHTML = Math.ceil(max - now).toLocaleString();
+                    else if (now < 0) $counter.innerHTML = Math.floor(max - now).toLocaleString();
                     // 목표수치에 도달하면 정지
                     if ((now < 1 && now >= 0) || (now > -1 && now <= 0)) {
                         clearInterval(handle);
+                        document.querySelector(".page-header__content .fa-coins").classList.remove("glowCoin");
                         now = 0;
                         isIntervalRunning = false;
                     }
@@ -134,9 +163,10 @@
                                 let targetPoint = headerInfo.currentPoint;
                                 const $counter = document.querySelector("#current-point");
                                 max = targetPoint;
+                                document.querySelector(".page-header__content .fa-coins").classList.add("glowCoin");
+                                document.getElementById("current-point").setAttribute("point", targetPoint);
                                 setTimeout(() => counter($counter), 10);
 
-                                document.getElementById("current-point").setAttribute("point", targetPoint);
                             } else if (headerInfo.flag === 0 || headerInfo.flag === -1) {
                                 // 에러
                                 alert("에러");
@@ -210,7 +240,9 @@
                     <div onclick="sendPointChange(-100,'50001')">100 포인트 감소</div>
                     <a th:if="${nickname}" class="action-btn wallet" th:href="@{/wallet}"><i
                             class="fa-solid fa-coins ico_fontawesome"></i></a>
-                    <div id="current-point" point="" th:text="${currentPoint}"></div>
+                    <div id="current-point" point=""
+                        th:utext="'<script>var currentPointNum = '+${currentPoint}+';var currentPointComma = currentPointNum.toLocaleString(); document.write(currentPointComma);</script>'">
+                    </div>
 
                     <!-- <a th:if="${nickname}" class="action-btn" href="06_chats.html"><i class="ico_message"></i><span
                             class="animation-ripple-delay1"></span></a>

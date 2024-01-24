@@ -1,5 +1,3 @@
-
-// 미리보기 목록에 아이템을 추가하는 함수
 function addToPreviewList(itemName, category) {
     let previewList = document.getElementById('previewList');
     let PreviewHeader = document.querySelector('.profile-header');
@@ -7,29 +5,60 @@ function addToPreviewList(itemName, category) {
     let PreviewShopBadge = document.querySelector('.shopbadge');
 
     category = category.replace(/"/g, '');
+
+    // 중복 체크
+    if (isItemAlreadyInPreview(itemName, category)) {
+        alert("이미 미리보기 목록에 추가된 아이템입니다.");
+        return;
+    }
+
     // 미리보기 목록을 위한 리스트 아이템 생성
     let listItem = document.createElement('li');
     listItem.textContent = itemName;
+    listItem.dataset.category = category; // 카테고리 정보를 dataset으로 추가
+    listItem.classList.add('list-item'); // 'list-item' 클래스 추가
 
     // 리스트 아이템에 해당 아이템을 제거하는 버튼 생성
     let deleteButton = document.createElement('button');
     deleteButton.textContent = 'x';
+    deleteButton.classList.add('delete-button'); // 'delete-button' 클래스 추가
 
     // 클릭 이벤트를 연결하여 해당 아이템을 제거하는 함수 호출
-    deleteButton.addEventListener('click', function () {
+    deleteButton.addEventListener('click', function (event) {
+        event.stopPropagation(); // 이벤트 버블링 방지
         removeFromPreviewList(listItem);
         switch (category) {
-            case '801' : PreviewHeader.style.backgroundImage = ""; break;
-            case '802' : PreviewCard.style.backgroundImage = ""; break;
-            case '803' : PreviewShopBadge.style.backgroundImage = ""; break
+            case '801': PreviewHeader.style.backgroundImage = ""; break;
+            case '802': PreviewCard.style.backgroundImage = ""; break;
+            case '803': PreviewShopBadge.style.backgroundImage = ""; break;
         }
     });
 
     // 제거 버튼을 리스트 아이템에 추가
     listItem.appendChild(deleteButton);
 
-    // 리스트 아이템을 미리보기 목록에 추가
-    previewList.appendChild(listItem);
+    // 추가 전에 중복 체크
+    if (!isItemAlreadyInPreview(itemName, category)) {
+        // 리스트 아이템을 미리보기 목록에 추가
+        previewList.appendChild(listItem);
+    }
+}
+
+// 중복 체크 함수
+function isItemAlreadyInPreview(itemName, category) {
+    let previewList = document.getElementById('previewList');
+    let listItems = previewList.getElementsByClassName('list-item');
+
+    for (let i = 0; i < listItems.length; i++) {
+        let listItem = listItems[i];
+
+        // 아이템 이름과 카테고리가 둘 다 동일한 경우 중복으로 처리
+        if (listItem.textContent === itemName && listItem.dataset.category === category) {
+            return true; // 이미 미리보기 목록에 있는 아이템
+        }
+    }
+
+    return false; // 중복 없음
 }
 
 function showPreview(itemName, category) {
@@ -143,6 +172,7 @@ async function getItem(point,category) {
         } catch (error) {
             console.error("Error: " + error);
         }
+        sendPointChange(point, pointKindCd);
     }else{   //취소
         return false;
     }
@@ -150,20 +180,37 @@ async function getItem(point,category) {
 
 // 데이터 전송
 
-function changeCategori(){
+function changeCategori() {
     var ItemSearch = document.getElementById("ItemSearch").value;
     var categorySelect = document.getElementById("categorySelect").value;
+
+    // ItemSearch가 빈 문자열이면 검색어를 비워서 전달하도록 처리
+    if (ItemSearch == "") {
+        ItemSearch = ""; // 빈 문자열로 설정
+    }
+
     console.log(ItemSearch);
     console.log(categorySelect);
 
-    if(ItemSearch==""){
+    if (ItemSearch == "" && categorySelect != "all") {
         location.href = "./shop_search?categorySelect=" + categorySelect;
-    }
-    if(categorySelect=="all"){
+    } else if (categorySelect == "all") {
         location.href = "./shop";
-    }else{
-        location.href = "./shop_search?ItemSearch=" + ItemSearch +"&categorySelect=" + categorySelect;
+    } else {
+        location.href = "./shop_search?ItemSearch=" + ItemSearch + "&categorySelect=" + categorySelect;
     }
+}
+
+function changeCategori2() {
+    var ItemSearch = document.getElementById("ItemSearch").value;
+    // ItemSearch가 빈 문자열이면 검색어를 비워서 전달하도록 처리
+    if (ItemSearch == "") {
+        ItemSearch = ""; // 빈 문자열로 설정
+    }
+
+    console.log(ItemSearch);
+
+    location.href = "./shop_search?ItemSearch=" + ItemSearch;
 }
 
 

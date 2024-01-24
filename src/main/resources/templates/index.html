@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="./css/libs.min.css">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/main_custom.css" />
-    <link rel="stylesheet" href="./css/main_list_custom.css" />
     <link rel="stylesheet" href="./css/main_list_battle_custom.css">
+    <link rel="stylesheet" href="./css/main_list_custom.css" />
 
     <link rel="stylesheet" href="./css/shop_custom.css" />
     <link rel="stylesheet" href="./css/ranking.css" />
@@ -28,7 +28,7 @@
     <script src="./js/module/chart.js"></script>
     <script src="./js/main.js"></script>
 
-    <script src="/js/module/chart.js"></script>
+    <script src="/js/main_battle.js"></script>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -71,6 +71,9 @@
             <main class="page-main">
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l uk-width-3-3@m uk-width-3-3@s">
+                        <div class="widjet__head">
+                            <h3 class="uk-text-lead">Random Rank</h3>
+                        </div>
                         <div class="js-recommend">
                             <div class="profile-background">
                             <div class="swiper">
@@ -100,7 +103,7 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                    <canvas id="levels" style='width:90%; height:20vh; margin: auto;'></canvas>
+                                    <canvas id="levels" style='width:90%; height:24vh; margin: auto;'></canvas>
                                     <script type="text/javascript">
                                         LevelChart();
                                     </script>   
@@ -143,96 +146,31 @@
                                     <!-- <div class="con_txt"> -->
                                         <div class="widjet_size widjet-game__title">
                                             <div class="uk-width-1-1@xl" id="battleCardSection">
+                                                <a th:href="@{'/battle'}" class="align_right seemore">더 보기</a>
                                                 <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}" th:limit="3">
                                                     <div class="battle-card__box">
                                                         <div class="battle-profile-left">
                                                             <div class="battle-profile-info">
-                                                                <div class="battle-profile-media">
-                                                                    <a href="10_game-profile.html">
-                                                                        <img th:src="@{'../img/' + ${battle.hostImgName}}" alt="NO IMG" />
-                                                                    </a>
+                                                                <div class="battle-profile-nickname uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                                                    <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.hostLvl}">Lv30</div>
+                                                                    <div class="battle_profile-name" th:text="${battle.hostNick}"></div>
                                                                 </div>
-                                                                <div class="battle-profile-nickname">
-                                                                    <div class="battle-profile-lvl" th:text="'Lv ' + ${battle.hostLvl}">Lv30
-                                                                    </div>
-                                                                    <div th:text="${battle.hostNick}"></div>
-                                                                </div>
-                                                                <div class="profile-dividing-line"></div>
-                                                                <div class="battle-profile-history">
-                                                                    <div>
-                                                                        <div class="battle-profile-win" th:text="${battle.hostWin}+' 승'">77 승
-                                                                        </div>
-                                                                        <div>&nbsp;/&nbsp;</div>
-                                                                        <div class="battle-profile-lose" th:text="${battle.hostLose}+' 패'">25 패
-                                                                        </div>
-                                                                    </div>
-                                                                    <div
-                                                                        th:with="total = ${(battle.hostWin + battle.hostLose)}, rate=${(battle.hostWin * 100.0 / total)}">
-                                                                        <div th:if="${total > 0}" class="battle-profile-win-rate"
-                                                                            th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
-                                                                        <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
-                                                                    </div>
-                                                                </div>
-                  
                                                             </div>
-                                            
-                                                        </div>
+                                                            <div class="battle-profile-media">
+                                                                <a href="10_game-profile.html">
+                                                                    <img th:src="@{'../img/' + ${battle.hostImgName}}" alt="NO IMG" />
+                                                                </a>
+                                                            </div>
+                                                        </div>      
                         
-                        
-                                                        <div class="battle-card-info" th:attr="btId = ${battle.btId}">
+                                                        <div class="battle-card-info uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-right uk-grid-small" data-uk-grid th:attr="btId = ${battle.btId}">
                                                             <div class="info-title"><a th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
                                                                     th:text="${battle.title}"></a></div>
-                                                            <div class="uk-width-1-1 uk-flex info-sub">
-                                                                <div class="info-game">
-                                                                    <div>BattleGround</div>
-                                                                    <!-- <div th:if="">여기에 이제 코드 별로</div> -->
-                                                                </div>
-                                                                <div class="info-battle-point-section">
-                                                                    <i class="fa-solid fa-trophy"></i>
-                                                                    <div class="info-battle-point"
-                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(battle.point,0),0,'COMMA')}">
-                                                                        100000</div>
-                                                                    <i class="fa-solid fa-trophy"></i>
-                                                                </div>
-                                                                <div class="info-state">
-                                                                    <div th:if="${battle.state=='A'}" class="A">베팅 가능!</div>
-                                                                    <div th:if="${battle.state=='P'}" class="P">진행중</div>
-                                                                    <div th:if="${battle.state=='T'}" class="T">종료됨</div>
-                                                                    <div th:if="${battle.state=='N'}" class="N">매칭 중</div>
-                                                                </div>
-                                                            </div>
-                                                            <br>
                                                             <div class="info-center">
                                                                 <div class="info-center-left">
                                                                     <div class="info-center-header">
                                                                         <div class="info-point-header-list">
-                                                                            <div class="info-point-amount">
-                                                                                <div class="icon_box">
-                                                                                    <i class="fa-solid fa-coins ico_fontawesome"></i>
-                                                                                </div>
-                                                                                <div class="host-total-point" th:utext="'<script>' +
-                                                                                    'var value = ' + ${battlePointTOList[iterStat.index].hostTotalPoint} + ';' +
-                                                                                    'var formattedValue = formatNumberTok(value);' +
-                                                                                    'document.write(formattedValue);' +
-                                                                                    '</script>'">
-                                                                                    72.3</div>
-                                                                            </div>
-                                                                            <div class="info-point-pno">
-                                                                                <div class="icon_box">
-                                                                                    <i class="fa-solid fa-user ico_fontawesome"></i>
-                                                                                </div>
-                                                                                <div class="host-total-mem-no"
-                                                                                    th:text="${battlePointTOList[iterStat.index].hostTotalMemNo}">
-                                                                                    0</div>
-                                                                            </div>
-                                                                            <div class="info-point-ratio">
-                                                                                <div class="icon_box">
-                                                                                    <i class="fa-solid fa-gem ico_fontawesome"></i>
-                                                                                </div>
-                                                                                <div class="host-point-reward-ratio"
-                                                                                    th:text="${'X '+battlePointTOList[iterStat.index].hostPointRewardRatio}">
-                                                                                </div>
-                                                                            </div>
+                                                                            
                                                                         </div>
                                                                         <div class="info-point-percent host-point-ratio"
                                                                             th:text="${battlePointTOList[iterStat.index].hostPointRatio+'%'}">
@@ -251,33 +189,7 @@
                                                                             th:text="${battlePointTOList[iterStat.index].clientPointRatio+'%'}">
                                                                             25%</div>
                                                                         <div class="info-point-header-list">
-                                                                            <div class="info-point-amount">
-                                                                                <div class="client-total-point" th:utext="'<script>' +
-                                                                                    'var value = ' + ${battlePointTOList[iterStat.index].clientTotalPoint} + ';' +
-                                                                                    'var formattedValue = formatNumberTok(value);' +
-                                                                                    'document.write(formattedValue);' +
-                                                                                    '</script>'">
-                                                                                    72.3</div>
-                                                                                <div class="icon_box">
-                                                                                    <i class="fa-solid fa-coins ico_fontawesome"></i>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="info-point-pno">
-                                                                                <div class="client-total-mem-no"
-                                                                                    th:text="${battlePointTOList[iterStat.index].clientTotalMemNo}">
-                                                                                    0</div>
-                                                                                <div class="icon_box">
-                                                                                    <i class="fa-solid fa-user ico_fontawesome"></i>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="info-point-ratio">
-                                                                                <div class="client-point-reward-ratio"
-                                                                                    th:text="${battlePointTOList[iterStat.index].clientPointRewardRatio+' X'}">
-                                                                                </div>
-                                                                                <div class="icon_box">
-                                                                                    <i class="fa-solid fa-gem ico_fontawesome"></i>
-                                                                                </div>
-                                                                            </div>
+                                                                
                                                                         </div>
                                                                     </div>
                                                                     <div class="info-point-bar-box">
@@ -285,57 +197,50 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                        
-                        
-                                                        <div class="battle-profile-right">
-                                                            <div class="battle-profile-info">
-                                                                <div class="battle-profile-media">
-                                                                    <a th:if="${battle.client}" href="10_game-profile.html">
-                                                                        <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" />
-                                                                    </a>
-                                                                    <a th:unless="${battle.client}">
-                                                                        <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />
-                                                                    </a>
+                                                            <br>
+                                                            <div class="uk-width-1-1 uk-flex uk-flex-center info-sub">
+                                                                <div></div>
+                                                                <div class="info-battle-point-section">
+                                                                    <i class="fa-solid fa-trophy"></i>
+                                                                    <div class="info-battle-point"
+                                                                        th:text="${#numbers.formatInteger(#numbers.formatInteger(battle.point,0),0,'COMMA')}">
+                                                                        100000</div>
+                                                                    <i class="fa-solid fa-trophy"></i>
                                                                 </div>
-                                                                <div class="battle-profile-nickname">
+                                                                <div></div>
+                                                            </div>  
+                                                        </div>
+                                                        
+                                                        <div class="battle-profile-right">
+                                                            <div class="battle-profile-media">
+                                                                <a th:if="${battle.client}" href="10_game-profile.html">
+                                                                    <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" />
+                                                                </a>
+                                                                <a th:unless="${battle.client}">
+                                                                    <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />
+                                                                </a>
+                                                            </div>
+                                                            <div class="battle-profile-info2">
+                                                                
+                                                                <div class="battle-profile-nickname2 uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-lift uk-grid-small" data-uk-grid>
                                                                     <div th:if="${battle.client}" class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30</div>
                                                                     <div th:unless="${battle.client}" class="battle-profile-lvl"></div>
                                                                     
                                                                     <div th:text="${battle.clientNick}"></div>
                                                                 </div>
-                                                                <div class="profile-dividing-line"></div>
+                                                                <!-- <div class="profile-dividing-line"></div> -->
                                                                 <div class="battle-profile-history">
-                                                                    <div>
-                                                                        <div th:if="${battle.client}" class="battle-profile-win" th:text="${battle.clientWin}+' 승'">77 승
-                                                                        </div>
-                                                                        <div th:if="${battle.client}" >&nbsp;/&nbsp;</div>
-                                                                        <div th:if="${battle.client}" class="battle-profile-lose" th:text="${battle.clientLose}+' 패'">25
-                                                                            패</div>
-                                                                        <div th:unless="${battle.client}" class="battle-profile-win"></div>
-                                                                        <div th:unless="${battle.client}" >&nbsp;&nbsp;</div>
-                                                                        <div th:unless="${battle.client}" class="battle-profile-lose"></div>    
-                                                                        
-                                                                    </div>
-                                                                    <div th:if="${battle.client}"
-                                                                        th:with="total = ${(battle.clientWin + battle.clientLose)}, rate=${(battle.clientWin * 100.0 / total)}">
-                                                                        <div th:if="${total > 0}" class="battle-profile-win-rate"
-                                                                            th:text="${#numbers.formatPercent(rate / 100, 2, 2)}">75.4%</div>
-                                                                        <div th:if="${total == 0}" class="battle-profile-win-rate">0%</div>
-                                                                    </div>
-                                                                    <div th:unless="${battle.client}">
-                                                                        <div class="battle-profile-win-rate"></div>
-                                                                    </div>
-                                                                </div>
+
+                                                                </div> 
 
                                                             </div>
                                                         </div>
                                                         
-                                                    </div>
+                                                    </div> 
                                                 </div>
                                             </div>
                                         </div>
-                                </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -346,43 +251,46 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                        <!--게시판 코드 들어가는 장소-->
-                                        <!-- <div class="con_txt"> -->
-                                        <div class="widjet_size widjet-game__title">
-                                            <div class="board_top">
-                                                <table width="100%">
-                                                    <tr class="board_top_tr">
-                                                        <th width="13%" >번호</th>
-                                                        <th width="45%">제목</th>
-                                                        <th width="12%" >글쓴이</th>
-                                                        <th width="20%" >등록일</th>
-                                                        <th width="10%" >조회</th>
-                                                    </tr>
-                                                    <tr class="board_center_tr" th:each="post, rowStat : ${notice_lists}">
-                                                        <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
-                                                        <td class="left">
-                                                            <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                            <a class="board_ccenter_tr_a" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
+                                    <!--게시판 코드 들어가는 장소-->
+                                    <!-- <div class="con_txt"> -->
+                                    <div class="widjet_size widjet-game__title">
+                                        <div class="board_top">
+                                            <a th:href="@{'/board/list?board_cd=20001'}" class="align_right seemore">더 보기</a>
+                                            <table width="100%">
+                                                <tr class="board_top_tr">
+                                                    <th width="13%" >번호</th>
+                                                    <th width="45%">제목</th>
+                                                    <th width="12%" >글쓴이</th>
+                                                    <th width="20%" >등록일</th>
+                                                    <th width="10%" >조회</th>
+                                                </tr>
+                                                <tr class="board_center_tr" th:each="post, rowStat : ${notice_lists}">
+                                                    <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
+                                                    <td class="left">
+                                                        <!--게시물 클릭시 이동하도록 하는 구문-->
+                                                        <a class="board_ccenter_tr_a ellipsis" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
+                                                            <span class="" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
                                                             <!--게시물 댓글 갯수-->
                                                             <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                             <!--새로운 글 작성시 보여지는 new 표시-->
                                                             <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
                                                                 <img src="../img/icon_new.gif" alt="NEW">
                                                             </span>
-                                                        </td>
-                                                        <!--닉네임-->
-                                                        <td style="text-align: center;" th:text="${post.member.memNick}"></td>
-                                                        <!--글쓴 날짜-->
-                                                        <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
-                                                        <!--조회수-->
-                                                        <td style="text-align: center;" th:text="${post.postHit}"></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <!--게시판-->
-                                            <!-- <div class="board">
-                                            </div> -->
+                                                        </a>
+                                                    </td>
+                                                    <!--닉네임-->
+                                                    <td style="text-align: center;" th:text="${post.member.memNick}"></td>
+                                                    <!--글쓴 날짜-->
+                                                    <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
+                                                    <!--조회수-->
+                                                    <td style="text-align: center;" th:text="${post.postHit}"></td>
+                                                </tr>
+                                            </table>
                                         </div>
+                                        <!--게시판-->
+                                        <!-- <div class="board">
+                                        </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -391,47 +299,51 @@
                     <div>
                         <div class="widjet --filters">
                             <div class="widjet__head">
-                                <h3 class="uk-text-lead">Update</h3>
+                                <h3 class="uk-text-lead">Free</h3>
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                        <!--게시판 코드 들어가는 장소-->
-                                        <!-- <div class="con_txt"> -->
-                                        <div class="widjet_size widjet-game__title">
-                                            <div class="board_top">
-                                                <table width="100%">
-                                                    <tr class="board_top_tr">
-                                                        <th width="13%" >번호</th>
-                                                        <th width="45%">제목</th>
-                                                        <th width="12%" >글쓴이</th>
-                                                        <th width="20%" >등록일</th>
-                                                        <th width="10%" >조회</th>
-                                                    </tr>
-                                                    <tr class="board_center_tr" th:each="post, rowStat : ${update_lists}">
-                                                        <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
-                                                        <td class="left">
-                                                            <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                            <a class="board_ccenter_tr_a" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
+                                    <!--게시판 코드 들어가는 장소-->
+                                    <!-- <div class="con_txt"> -->
+                                    <div class="widjet_size widjet-game__title">
+                                        <div class="board_top">
+                                            <a th:href="@{'/board/list?board_cd=20002'}" class="align_right seemore">더 보기</a>
+
+                                            <table width="100%">
+                                                <tr class="board_top_tr">
+                                                    <th width="13%" >번호</th>
+                                                    <th width="45%">제목</th>
+                                                    <th width="12%" >글쓴이</th>
+                                                    <th width="20%" >등록일</th>
+                                                    <th width="10%" >조회</th>
+                                                </tr>
+                                                <tr class="board_center_tr" th:each="post, rowStat : ${update_lists}">
+                                                    <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
+                                                    <td class="left">
+                                                        <!--게시물 클릭시 이동하도록 하는 구문-->
+                                                        <a class="board_ccenter_tr_a ellipsis" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
+                                                            <span class="" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
                                                             <!--게시물 댓글 갯수-->
                                                             <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                             <!--새로운 글 작성시 보여지는 new 표시-->
                                                             <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
                                                                 <img src="../img/icon_new.gif" alt="NEW">
                                                             </span>
-                                                        </td>
-                                                        <!--닉네임-->
-                                                        <td style="text-align: center;" th:text="${post.member.memNick}"></td>
-                                                        <!--글쓴 날짜-->
-                                                        <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
-                                                        <!--조회수-->
-                                                        <td style="text-align: center;" th:text="${post.postHit}"></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <!--게시판-->
-                                            <!-- <div class="board">
-                                            </div> -->
+                                                        </a>
+                                                    </td>
+                                                    <!--닉네임-->
+                                                    <td style="text-align: center;" th:text="${post.member.memNick}"></td>
+                                                    <!--글쓴 날짜-->
+                                                    <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
+                                                    <!--조회수-->
+                                                    <td style="text-align: center;" th:text="${post.postHit}"></td>
+                                                </tr>
+                                            </table>
                                         </div>
+                                        <!--게시판-->
+                                        <!-- <div class="board">
+                                        </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -444,43 +356,46 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                        <!--게시판 코드 들어가는 장소-->
-                                        <!-- <div class="con_txt"> -->
-                                        <div class="widjet_size widjet-game__title">
-                                            <div class="board_top">
-                                                <table width="100%">
-                                                    <tr class="board_top_tr">
-                                                        <th width="13%" >번호</th>
-                                                        <th width="45%">제목</th>
-                                                        <th width="12%" >글쓴이</th>
-                                                        <th width="20%" >등록일</th>
-                                                        <th width="10%" >조회</th>
-                                                    </tr>
-                                                    <tr class="board_center_tr" th:each="post, rowStat : ${event_lists}">
-                                                        <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
-                                                        <td class="left">
-                                                            <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                            <a class="board_ccenter_tr_a" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
+                                    <!--게시판 코드 들어가는 장소-->
+                                    <!-- <div class="con_txt"> -->
+                                    <div class="widjet_size widjet-game__title">
+                                        <div class="board_top">
+                                            <a class="align_right seemore" th:href="@{'/board/list?board_cd=20003'}" >더 보기</a>
+                                            <table width="100%">
+                                                <tr class="board_top_tr">
+                                                    <th width="13%" >번호</th>
+                                                    <th width="45%">제목</th>
+                                                    <th width="12%" >글쓴이</th>
+                                                    <th width="20%" >등록일</th>
+                                                    <th width="10%" >조회</th>
+                                                </tr>
+                                                <tr class="board_center_tr" th:each="post, rowStat : ${event_lists}">
+                                                    <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
+                                                    <td class="left">
+                                                        <!--게시물 클릭시 이동하도록 하는 구문-->
+                                                        <a class="board_ccenter_tr_a ellipsis" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
+                                                            <span class="" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
                                                             <!--게시물 댓글 갯수-->
                                                             <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                             <!--새로운 글 작성시 보여지는 new 표시-->
                                                             <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
                                                                 <img src="../img/icon_new.gif" alt="NEW">
                                                             </span>
-                                                        </td>
-                                                        <!--닉네임-->
-                                                        <td style="text-align: center;" th:text="${post.member.memNick}"></td>
-                                                        <!--글쓴 날짜-->
-                                                        <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
-                                                        <!--조회수-->
-                                                        <td style="text-align: center;" th:text="${post.postHit}"></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <!--게시판-->
-                                            <!-- <div class="board">
-                                            </div> -->
+                                                        </a>
+                                                    </td>
+                                                    <!--닉네임-->
+                                                    <td style="text-align: center;" th:text="${post.member.memNick}"></td>
+                                                    <!--글쓴 날짜-->
+                                                    <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
+                                                    <!--조회수-->
+                                                    <td style="text-align: center;" th:text="${post.postHit}"></td>
+                                                </tr>
+                                            </table>
                                         </div>
+                                        <!--게시판-->
+                                        <!-- <div class="board">
+                                        </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -492,43 +407,47 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                        <!--게시판 코드 들어가는 장소-->
-                                        <!-- <div class="con_txt"> -->
-                                        <div class="widjet_size widjet-game__title">
-                                            <div class="board_top">
-                                                <table width="100%">
-                                                    <tr class="board_top_tr">
-                                                        <th width="13%" >번호</th>
-                                                        <th width="45%">제목</th>
-                                                        <th width="12%" >글쓴이</th>
-                                                        <th width="20%" >등록일</th>
-                                                        <th width="10%" >조회</th>
-                                                    </tr>
-                                                    <tr class="board_center_tr" th:each="post, rowStat : ${free_lists}">
-                                                        <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
-                                                        <td class="left">
-                                                            <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                            <a class="board_ccenter_tr_a" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
+                                    <!--게시판 코드 들어가는 장소-->
+                                    <!-- <div class="con_txt"> -->
+                                    <div class="widjet_size widjet-game__title">
+                                        <div class="board_top">
+                                            <a th:href="@{'/board/list?board_cd=20004'}" class="align_right seemore">더 보기</a>
+
+                                            <table width="100%">
+                                                <tr class="board_top_tr">
+                                                    <th width="13%" >번호</th>
+                                                    <th width="45%">제목</th>
+                                                    <th width="12%" >글쓴이</th>
+                                                    <th width="20%" >등록일</th>
+                                                    <th width="10%" >조회</th>
+                                                </tr>
+                                                <tr class="board_center_tr" th:each="post, rowStat : ${free_lists}">
+                                                    <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
+                                                    <td class="left">
+                                                        <!--게시물 클릭시 이동하도록 하는 구문-->
+                                                        <a class="board_ccenter_tr_a ellipsis" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
+                                                            <span class="" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
                                                             <!--게시물 댓글 갯수-->
                                                             <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
                                                             <!--새로운 글 작성시 보여지는 new 표시-->
                                                             <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
                                                                 <img src="../img/icon_new.gif" alt="NEW">
                                                             </span>
-                                                        </td>
-                                                        <!--닉네임-->
-                                                        <td style="text-align: center;" th:text="${post.member.memNick}"></td>
-                                                        <!--글쓴 날짜-->
-                                                        <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
-                                                        <!--조회수-->
-                                                        <td style="text-align: center;" th:text="${post.postHit}"></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <!--게시판-->
-                                            <!-- <div class="board">
-                                            </div> -->
+                                                        </a>
+                                                    </td>
+                                                    <!--닉네임-->
+                                                    <td style="text-align: center;" th:text="${post.member.memNick}"></td>
+                                                    <!--글쓴 날짜-->
+                                                    <td style="text-align: center;" th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd')}"></td>
+                                                    <!--조회수-->
+                                                    <td style="text-align: center;" th:text="${post.postHit}"></td>
+                                                </tr>
+                                            </table>
                                         </div>
+                                        <!--게시판-->
+                                        <!-- <div class="board">
+                                        </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -540,7 +459,10 @@
             </main>
         </div>
     </div>
-    
+    <div class="popup" id="modal">
+        <span class="close" onclick="closePopup()">X</span>
+        <img id="popupImage" alt="Popup Image" class="popup-content">
+    </div>
     
     <div th:replace="~{fragments/mainModal :: mainModalFragment}"></div>
     

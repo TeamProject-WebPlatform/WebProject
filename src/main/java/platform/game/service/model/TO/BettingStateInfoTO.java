@@ -10,4 +10,6 @@ public class BettingStateInfoTO {
     int btId;
     String state;
     BattleMemberTO client;
+    String result;
+    int point;
 }
