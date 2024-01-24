@@ -142,7 +142,7 @@ public interface SqlMapperInter {
         public int setMatchRecord(String game_cd, long mem_id);
 
         // 스와이퍼 데이터로 프로필 불러오기
-        @Select("SELECT M.MEM_ID, M.MEM_NICK, M.MEM_LVL, MP.PROFILE_INTRO, MP.PROFILE_IMAGE, MP.PROFILE_HEADER, MP.PROFILE_CARD, MP.PROFILE_REP_BADGE, MP.PROFILE_BADGE_LIST FROM MEMBER M JOIN MEMBER_PROFILE MP ON M.MEM_ID=MP.MEM_ID WHERE M.MEM_ID=#{mem_id}")
+        @Select("SELECT m.mem_id, m.mem_nick, m.mem_lvl, mp.profile_intro, mp.profile_image, mp.profile_header, mp.profile_card, mp.profile_rep_badge, mp.profile_badge_list FROM member m JOIN member_profile mp ON m.mem_id = mp.mem_id WHERE m.mem_id = #{mem_id};")
         public SwiperProfileTO SwiperProfile(long mem_id);
 
 }
