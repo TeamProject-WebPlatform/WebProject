@@ -21,7 +21,7 @@ public class MemberBettingTO {
         this.pointReceived = memberBetting.getPointReceived();
         this.pointDstb = memberBetting.getPointDstb();
 
-        this.postId = post.getPostId();
+        if(post!=null) this.postId = post.getPostId();
         this.btId = battle.getBtId();
         this.state = battle.getBtState();
     }

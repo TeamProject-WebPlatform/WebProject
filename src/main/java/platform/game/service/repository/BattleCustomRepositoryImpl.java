@@ -419,6 +419,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
     @Transactional
     @Override
     public int distributePoint(int btId) {
+
         Battle battle = battleRepository.findById(btId).orElse(null);
         if (battle == null)
             return -1;
@@ -436,6 +437,7 @@ public class BattleCustomRepositoryImpl implements BattleCustomRepository {
         double clientMul = totalPoint * 1.0 / clientPoint;
         // 호스트에 3000 클라에 1000 달려이씅면 총 4000 호스트MUL : 4/3, 클라 MUL : 4
         // 클라에 300 700 두명이 걸었으면 1200 2800
+
         if (battle.getBtResult().equals("0")) {
             // 호스트 승
             for (int i = 0; i < betMemberList.size(); i++) {

@@ -696,6 +696,15 @@ body.dark-theme .battle-card-info .info-title a {
     color: #ffbf00;
     animation: crownMovingAnimation 2s infinite alternate;
 }
+.battle-profile-right .winner{
+    position: absolute;
+    top: 6px;
+    right: calc(100% - 60px);
+    font-size: 40px;
+    border-radius: 10px;
+    color: #ffbf00;
+    animation: crownMovingAnimation 2s infinite alternate;
+}
 .winner .glow{
     position: absolute;
     left: 50%;
@@ -714,6 +723,7 @@ body.dark-theme .battle-card-info .info-title a {
 }
 
 .receive_btn{
+    width: 100% !important;
     position: relative;
     display: flex;
     align-items: center;
@@ -730,7 +740,6 @@ body.dark-theme .battle-card-info .info-title a {
 .receive_btn > div{
     
     width: 100%;
-    display: flex;
     margin-left : 20px;
 }
 .receive_btn > i{
@@ -774,7 +783,9 @@ body.dark-theme .battle-card-info .info-title a {
     left: 45px;
     color:#ffbf00;
 }
-
+.betting-input-section{
+    width: 56%;
+}
 .inactive{
     color : grey;
     background-color : #4f3b00;
