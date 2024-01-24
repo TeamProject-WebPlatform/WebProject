@@ -50,8 +50,11 @@ body.dark-theme .board_view_title{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    /* max-width: 200px; */
+    max-width: 300px;
 }
+/* .board_ccenter_tr_span{
+    float: right;
+} */
 
 /* .board_write { border-top:1px solid #464646; } */
 .board_write th, .board_write td {height:25px; text-align:left; padding:8px; border-bottom:1px solid #dadada;}
