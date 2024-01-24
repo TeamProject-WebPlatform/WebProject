@@ -210,8 +210,7 @@
                                                                 <div></div>
                                                             </div>  
                                                         </div>
-                        
-                        
+                                                        
                                                         <div class="battle-profile-right">
                                                             <div class="battle-profile-media">
                                                                 <a th:if="${battle.client}" href="10_game-profile.html">
@@ -267,17 +266,17 @@
                                                 </tr>
                                                 <tr class="board_center_tr" th:each="post, rowStat : ${notice_lists}">
                                                     <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
-                                                    <td class="left ellipsis">
+                                                    <td class="left">
                                                         <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                        <a class="board_ccenter_tr_a" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
+                                                        <a class="board_ccenter_tr_a ellipsis" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
                                                             <span class="" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
+                                                            <!--게시물 댓글 갯수-->
+                                                            <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
+                                                            <!--새로운 글 작성시 보여지는 new 표시-->
+                                                            <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
+                                                                <img src="../img/icon_new.gif" alt="NEW">
+                                                            </span>
                                                         </a>
-                                                        <!--게시물 댓글 갯수-->
-                                                        <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
-                                                        <!--새로운 글 작성시 보여지는 new 표시-->
-                                                        <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
-                                                            <img src="../img/icon_new.gif" alt="NEW">
-                                                        </span>
                                                     </td>
                                                     <!--닉네임-->
                                                     <td style="text-align: center;" th:text="${post.member.memNick}"></td>
@@ -300,7 +299,7 @@
                     <div>
                         <div class="widjet --filters">
                             <div class="widjet__head">
-                                <h3 class="uk-text-lead">Update</h3>
+                                <h3 class="uk-text-lead">Free</h3>
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
@@ -309,6 +308,7 @@
                                     <div class="widjet_size widjet-game__title">
                                         <div class="board_top">
                                             <a th:href="@{'/board/list?board_cd=20002'}" class="align_right seemore">더 보기</a>
+
                                             <table width="100%">
                                                 <tr class="board_top_tr">
                                                     <th width="13%" >번호</th>
@@ -319,15 +319,17 @@
                                                 </tr>
                                                 <tr class="board_center_tr" th:each="post, rowStat : ${update_lists}">
                                                     <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
-                                                    <td class="left ellipsis">
+                                                    <td class="left">
                                                         <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                        <a class="board_ccenter_tr_a" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
-                                                        <!--게시물 댓글 갯수-->
-                                                        <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
-                                                        <!--새로운 글 작성시 보여지는 new 표시-->
-                                                        <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
-                                                            <img src="../img/icon_new.gif" alt="NEW">
-                                                        </span>
+                                                        <a class="board_ccenter_tr_a ellipsis" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
+                                                            <span class="" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
+                                                            <!--게시물 댓글 갯수-->
+                                                            <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
+                                                            <!--새로운 글 작성시 보여지는 new 표시-->
+                                                            <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
+                                                                <img src="../img/icon_new.gif" alt="NEW">
+                                                            </span>
+                                                        </a>
                                                     </td>
                                                     <!--닉네임-->
                                                     <td style="text-align: center;" th:text="${post.member.memNick}"></td>
@@ -354,13 +356,11 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
-                                    
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
                                     <div class="widjet_size widjet-game__title">
                                         <div class="board_top">
                                             <a class="align_right seemore" th:href="@{'/board/list?board_cd=20003'}" >더 보기</a>
-
                                             <table width="100%">
                                                 <tr class="board_top_tr">
                                                     <th width="13%" >번호</th>
@@ -371,15 +371,17 @@
                                                 </tr>
                                                 <tr class="board_center_tr" th:each="post, rowStat : ${event_lists}">
                                                     <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
-                                                    <td class="left ellipsis">
+                                                    <td class="left">
                                                         <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                        <a class="board_ccenter_tr_a" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
-                                                        <!--게시물 댓글 갯수-->
-                                                        <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
-                                                        <!--새로운 글 작성시 보여지는 new 표시-->
-                                                        <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
-                                                            <img src="../img/icon_new.gif" alt="NEW">
-                                                        </span>
+                                                        <a class="board_ccenter_tr_a ellipsis" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
+                                                            <span class="" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
+                                                            <!--게시물 댓글 갯수-->
+                                                            <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
+                                                            <!--새로운 글 작성시 보여지는 new 표시-->
+                                                            <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
+                                                                <img src="../img/icon_new.gif" alt="NEW">
+                                                            </span>
+                                                        </a>
                                                     </td>
                                                     <!--닉네임-->
                                                     <td style="text-align: center;" th:text="${post.member.memNick}"></td>
@@ -421,15 +423,17 @@
                                                 </tr>
                                                 <tr class="board_center_tr" th:each="post, rowStat : ${free_lists}">
                                                     <td th:text="${boardCd + post.postId}" style="text-align: center;"></td>
-                                                    <td class="left ellipsis">
+                                                    <td class="left">
                                                         <!--게시물 클릭시 이동하도록 하는 구문-->
-                                                        <a class="board_ccenter_tr_a" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></a>
-                                                        <!--게시물 댓글 갯수-->
-                                                        <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
-                                                        <!--새로운 글 작성시 보여지는 new 표시-->
-                                                        <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
-                                                            <img src="../img/icon_new.gif" alt="NEW">
-                                                        </span>
+                                                        <a class="board_ccenter_tr_a ellipsis" th:href="@{board/view(board_cd=${post.boardCd}, post_id=${post.postId}, cpage=${cpage.cpage})}">
+                                                            <span class="" th:text="'[' + ${post.postTags} + '] ' + ${post.postTitle}"></span>
+                                                            <!--게시물 댓글 갯수-->
+                                                            <span th:text="'[' + ${post.postCommentCnt}  + ']'"></span>
+                                                            <!--새로운 글 작성시 보여지는 new 표시-->
+                                                            <span th:if="${#dates.format(#dates.createNow(), 'yyyy-MM-dd') == #dates.format(post.createdAt, 'yyyy-MM-dd')}">
+                                                                <img src="../img/icon_new.gif" alt="NEW">
+                                                            </span>
+                                                        </a>
                                                     </td>
                                                     <!--닉네임-->
                                                     <td style="text-align: center;" th:text="${post.member.memNick}"></td>
