@@ -103,13 +103,15 @@
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                    
+                                    <a th:href="@{/levelrank}" class="align_right seemore" style="text-align: right; margin-right: 15px;">더 보기</a>
                                     <canvas id="levels" style='width:90%; height:24vh; margin: auto;'></canvas>
                                     <script type="text/javascript">
                                         LevelChart();
-                                    </script>   
+                                        </script>   
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
-                                    <div class="widjet_size widjet-game__title">
+                                        <div class="widjet_size widjet-game__title">
                                         <div class="board_top3">
                                             <table width="100%">
                                                 <tr class="board_top_tr">
@@ -145,8 +147,9 @@
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
                                         <div class="widjet_size widjet-game__title">
+                                            <a th:href="@{/battle?page=1}" class="align_right seemore">더 보기</a>
+                                            <br>
                                             <div class="uk-width-1-1@xl" id="battleCardSection">
-                                                <a th:href="@{'/battle'}" class="align_right seemore">더 보기</a>
                                                 <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}" th:limit="3">
                                                     <div class="battle-card__box">
                                                         <div class="battle-profile-left">
@@ -254,8 +257,8 @@
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
                                     <div class="widjet_size widjet-game__title">
+                                        <a th:href="@{'/board/list?board_cd=20001'}" class="align_right seemore">더 보기</a>
                                         <div class="board_top">
-                                            <a th:href="@{'/board/list?board_cd=20001'}" class="align_right seemore">더 보기</a>
                                             <table width="100%">
                                                 <tr class="board_top_tr">
                                                     <th width="13%" >번호</th>
@@ -306,8 +309,8 @@
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
                                     <div class="widjet_size widjet-game__title">
+                                        <a th:href="@{'/board/list?board_cd=20002'}" class="align_right seemore">더 보기</a>
                                         <div class="board_top">
-                                            <a th:href="@{'/board/list?board_cd=20002'}" class="align_right seemore">더 보기</a>
 
                                             <table width="100%">
                                                 <tr class="board_top_tr">
@@ -359,8 +362,8 @@
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
                                     <div class="widjet_size widjet-game__title">
+                                        <a class="align_right seemore" th:href="@{'/board/list?board_cd=20003'}" >더 보기</a>
                                         <div class="board_top">
-                                            <a class="align_right seemore" th:href="@{'/board/list?board_cd=20003'}" >더 보기</a>
                                             <table width="100%">
                                                 <tr class="board_top_tr">
                                                     <th width="13%" >번호</th>

@@ -252,7 +252,9 @@ body.dark-theme .coment_input_text{
 
 /* 더보기 디자인 */
 .seemore{
+    color: #fff;
     font-size: 18px;
+    /* padding-right:; */
     text-decoration: underline;
 }
 
