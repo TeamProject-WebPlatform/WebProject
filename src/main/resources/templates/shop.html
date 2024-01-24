@@ -12,6 +12,7 @@
         <link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
         <link rel="stylesheet" href="../css/libs.min.css">
         <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/main_custom.css" />
         <link rel="stylesheet" href="../css/shop_custom.css" />
         <link rel="stylesheet" href="../css/ranking.css" />
         
@@ -192,16 +193,18 @@
                                     </div>
                                     <div class="uk-width-1-1" th:if="${memberProfile==null}">
                                         <div class="profile-card uk-width-1-1">
-                                            <div class="profile-header">
-                                                <div class="profile-image">
-                                                    <img src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                            <a id="profile">
+                                                <div class="profile-header">
+                                                    <div class="profile-image">
+                                                        <img src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                                    </div>
                                                 </div>
                                                 <div class="profile-user_info">
-                                                    <p class="profile-user_level">LV : 0</p>
-                                                    <p class="profile-user_nick">NickName</p>
+                                                    <div class="profile-user_level"><span>LV : 0</span></div>
+                                                    <div class="profile-user_nick"><span>Nickname</span></div>
                                                     <img class="badge" alt="NO-SYMBOL">
                                                 </div>
-                                            </div>
+                                            </a>
                                             <div class="profile-dividing-line width-1-1"></div>
                                             <div class="profile-main">
                                                 <div class="profile-introduction">소개글을 입력해주세요</div>
