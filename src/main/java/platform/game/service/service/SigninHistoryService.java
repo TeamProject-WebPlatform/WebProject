@@ -35,6 +35,7 @@ public class SigninHistoryService {
 
     private void logFirstLogin(Member member, LocalDateTime loginTime) {
         // SigninHistory에 저장
+        
         SigninHistory signinHistory = SigninHistory.builder()
                 .member(member)
                 .createdAt(loginTime)
