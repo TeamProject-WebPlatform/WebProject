@@ -498,7 +498,7 @@
                                     </div>
                                 </div>
 
-                                <div th:if="${post.member.memNick==nickname} and ${bto.state=='B' or bto.state=='A'}"
+                                <div th:if="${post.member.memNick==nickname} and ${bto.state=='B' or bto.state=='A'} and not ${isAfterStartDt}"
                                     class="battle-start_btn" id="battle-start_btn" onclick="controlBattle(0)">
                                     <div class="start">배틀 : 시작</div>
                                 </div>
@@ -1104,8 +1104,12 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div th:unless="${post.member.memNick==nickname}" class="request_btn" id="request_btn">
-                                    신&nbsp;청</div>
+                                <stateCheck th:if="${bto.state=='N'}">
+                                    <div th:unless="${post.member.memNick==nickname}" class="request_btn" id="request_btn">
+                                    
+                                    <stateCheck th:if="${bto.state=='N'}">신&nbsp;청</stateCheck>
+                                    </div>
+                                </stateCheck>
                             </div>
                         </div>
                     </div>
