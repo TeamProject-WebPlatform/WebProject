@@ -29,13 +29,6 @@ function hidePreview() {
     
 }
 
-// 미리보기 목록에서 아이템을 제거하는 함수
-function removeFromPreviewList(listItem) {
-    let previewList = document.getElementById('previewList');
-    // 미리보기 목록에서 해당 리스트 아이템 제거
-    previewList.removeChild(listItem);
-}
-
 // 팝업 띄우기
 function openPopup(imgElement) {
     var popup = document.getElementById('popup');

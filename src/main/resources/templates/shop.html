@@ -43,33 +43,55 @@
             category = category.replace(/"/g, '');
 
             // 미리보기 목록을 위한 리스트 아이템 생성
-            if(!document.getElementById(category)){
+            console.log(document.getElementById(category));
+            if(document.getElementById(category)==null){
                 listItem = document.createElement('li'); 
                 listItem.textContent = itemName;
                 listItem.id = category; // 카테고리 정보를 dataset으로 추가
                 listItem.classList.add('list-item'); // 'list-item' 클래스 추가
+
+                deleteButton = document.createElement('button');
+                deleteButton.textContent = 'x';
+                deleteButton.classList.add('delete-button'); // 'delete-button' 클래스 추가
+
+                    // 클릭 이벤트를 연결하여 해당 아이템을 제거하는 함수 호출
+                deleteButton.addEventListener('click', function (event) {
+                    event.stopPropagation(); // 이벤트 버블링 방지
+                    removeFromPreviewList(listItem);
+                    switch (category) {
+                        case '801': PreviewHeader.style.backgroundImage = ""; break;
+                        case '802': PreviewCard.style.backgroundImage = ""; break;
+                        case '803': PreviewShopBadge.style.backgroundImage = ""; break;
+                    }
+                });
+
+                // 제거 버튼을 리스트 아이템에 추가
+                listItem.appendChild(deleteButton);
+                previewList.appendChild(listItem);
             } else {
                 listItem = document.getElementById(category);
                 listItem.textContent = itemName;
+
+                deleteButton = document.createElement('button');
+                deleteButton.textContent = 'x';
+                deleteButton.classList.add('delete-button'); // 'delete-button' 클래스 추가
+
+                    // 클릭 이벤트를 연결하여 해당 아이템을 제거하는 함수 호출
+                deleteButton.addEventListener('click', function (event) {
+                    event.stopPropagation(); // 이벤트 버블링 방지
+                    removeFromPreviewList(listItem);
+                    switch (category) {
+                        case '801': PreviewHeader.style.backgroundImage = ""; break;
+                        case '802': PreviewCard.style.backgroundImage = ""; break;
+                        case '803': PreviewShopBadge.style.backgroundImage = ""; break;
+                    }
+                });
+
+                // 제거 버튼을 리스트 아이템에 추가
+                listItem.appendChild(deleteButton);
             }
 
-            deleteButton = document.createElement('button');
-            deleteButton.textContent = 'x';
-            deleteButton.classList.add('delete-button'); // 'delete-button' 클래스 추가
-
-                // 클릭 이벤트를 연결하여 해당 아이템을 제거하는 함수 호출
-            deleteButton.addEventListener('click', function (event) {
-                event.stopPropagation(); // 이벤트 버블링 방지
-                removeFromPreviewList(listItem);
-                switch (category) {
-                    case '801': PreviewHeader.style.backgroundImage = ""; break;
-                    case '802': PreviewCard.style.backgroundImage = ""; break;
-                    case '803': PreviewShopBadge.style.backgroundImage = ""; break;
-                }
-            });
-
-            // 제거 버튼을 리스트 아이템에 추가
-            listItem.appendChild(deleteButton);
+            
         } 
 
         function showPreview(itemName, category) {
@@ -126,6 +148,13 @@
                     beforeitem.innerHTML="";
                 }
             }
+        }
+
+        // 미리보기 목록에서 아이템을 제거하는 함수
+        function removeFromPreviewList(listItem) {
+            let previewList = document.getElementById('previewList');
+            // 미리보기 목록에서 해당 리스트 아이템 제거
+            previewList.removeChild(listItem);
         }
     </script>
 
