@@ -47,12 +47,14 @@
 }
 
 .profile-image {
-    margin-bottom: 30px;
+    margin-bottom: 45px;
     border: none;
 }
 
 #profile {
     cursor: default;
+    width:90%;
+    height: 90%;
 }
 
 .rank_table {
