@@ -169,6 +169,7 @@
                                                         <div class="battle-card-info uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-right uk-grid-small" data-uk-grid th:attr="btId = ${battle.btId}">
                                                             <div class="info-title"><a th:href="@{'/battle/view?postId='+${battle.postId}+'&btId='+${battle.btId}}"
                                                                     th:text="${battle.title}"></a></div>
+                                                                    <br>
                                                             <div class="info-center">
                                                                 <div class="info-center-left">
                                                                     <div class="info-center-header">
@@ -413,8 +414,8 @@
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
                                     <div class="widjet_size widjet-game__title">
+                                        <a th:href="@{'/board/list?board_cd=20004'}" class="align_right seemore">더 보기</a>
                                         <div class="board_top">
-                                            <a th:href="@{'/board/list?board_cd=20004'}" class="align_right seemore">더 보기</a>
 
                                             <table width="100%">
                                                 <tr class="board_top_tr">

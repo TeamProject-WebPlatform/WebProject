@@ -164,45 +164,7 @@ public class LoginController {
         }
         // 로그인 성공
         response.addCookie(cookie);
-
-        String memIp = IpAction.getIpAddress(request);
-
-        if (!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
-            Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                    .getMember();
-            if (member != null) {
-                // 첫 로그인 여부 업데이트 및 포인트 증가
-                if (signinHistoryService.isFirstLogin(member)) {
-                    System.out.println("오늘 첫 로그인입니다.");
-                    // 포인트 증가 로직
-                    int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
-
-                    if (updatedPoints < 0) {
-                        // 포인트 증가 실패
-                        System.out.println("포인트 증가 실패");
-                        return 1; // 실패 시 처리 (원하는 값 또는 의미 있는 값을 반환)
-                    }
-                    System.out.println("포인트 증가 성공");
-                } else {
-                    System.out.println("이미 로그인한 사용자입니다.");
-                }
-
-                System.out.println("로그인 성공");
-
-                // SigninHistory 저장
-                SigninHistory signinHistory = SigninHistory.builder()
-                        .member(member)
-                        .memIp(memIp)
-                        .createdAt(LocalDateTime.now())
-                        .build();
-
-                // SigninHistory 저장
-                signinHistoryRepository.save(signinHistory);
-            }
-        } else {
-            System.out.println("멤버 없음");
-        }
-
+        
         return 0;
     }
 
