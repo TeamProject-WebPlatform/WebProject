@@ -1,6 +1,7 @@
 package platform.game.service.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +73,11 @@ public class ProfileController {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
                 List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
-                List<String> memberFavoriteGames = gameRepository.FavoriteGameCode(member.getMemId());
+                List<String> memberFavoriteGames = new ArrayList<String>();
+                if (gameRepository.existsByMemId(member.getMemId())){
+                    memberFavoriteGames = gameRepository.FavoriteGameCode(member.getMemId());
+                }
+                
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
