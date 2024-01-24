@@ -94,10 +94,12 @@ public class ShopController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = memberProfileRepository.findProfileIntroByMemId(member.getMemId());
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
+                modelAndView.addObject("memberProfile",memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
@@ -137,10 +139,15 @@ public class ShopController {
 
         int point = item.get("Point").asInt();
         String itemCd = item.get("Category").asText();
+        int currentPoint = member.getMemCurPoint();
 
-        if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd) == 1
+        if(currentPoint < point){
+            flag=2;
+        } else {
+            if (memberItemInfoRepository.PurchaseItem(member.getMemId(), itemCd) == 1
                 && memberItemInfoRepository.UpdatePoint(point, member.getMemId()) == 1) {
-            flag = 1;
+                flag = 1;
+            }
         }
 
         return ResponseEntity.ok(String.valueOf(flag));

@@ -24,7 +24,7 @@ const SwiperData = async function () {
     return datalist;
 }
 
-const UserProfileData = async function (memId) {
+const UserProfileData = async function (Swiper) {
     let datalist = [];
     try {
         const response = await fetch("/userprofile", {
@@ -32,7 +32,7 @@ const UserProfileData = async function (memId) {
             headers : {
                 'Content-Type': 'application/json'
             },
-            body:memId
+            body:Swiper
         });
         const data = await response.json();
         for (let i = 0; i < data.length; i++) {
@@ -75,17 +75,15 @@ const setSwiper = function () {
 {/* <div class="recommend-slide row user"> */ }
 const setSwiperWrapper = async function () {
     let datalist = await SwiperData();
-    let profiledata = JSON.stringify(datalist);
-    let userprofile = await UserProfileData(profiledata);
+    let userprofile = await UserProfileData(JSON.stringify(datalist));
     let slideNum = datalist.length
     let html = "";
     for (let i = 0; i < slideNum; i++) {
-        // console.log(datalist[i]);
         html += `
             <div class="swiper-slide">`;
 
-        html += createSwiperProfile(datalist[i].mem_lvl, datalist[i].mem_nick, userprofile[i].profileIntro, userprofile[i].profileHeader, 
-            userprofile[i].profileCard, userprofile[i].profileRepBadge, userprofile[i].profileImage, userprofile[i].profileBadgeList);
+        html += createSwiperProfile(datalist[i].mem_lvl, datalist[i].mem_nick, userprofile[i].profile_intro, userprofile[i].profile_header, 
+            userprofile[i].profile_card, userprofile[i].profile_rep_badge, userprofile[i].profile_image, userprofile[i].profile_badge_list);
 
         html += `   
             </div>`;
@@ -149,14 +147,16 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
 
     let membProfileHTML = `
         <div class="profile-card" ${memCardStyle}>
-            <a href="/mypage/${memNickname}">
+            <a>
                 <div class="profile-header" ${memHeaderStyle}>
-                    <div class="profile-image"><img src="../img/${memImageName}" alt="NO-IMAGE"></div>
-                    <div class="profile-user_info">
-                        <div class="profile-user_level"><span>LV : ${memLevel}</span></div>
-                        <div class="profile-user_nick"><span>${memNickname}</span></div>
-                        ${memRepBadgeStyle}
+                    <div class="profile-image">
+                        <img src="../img/${memImageName}" alt="NO-IMAGE">
                     </div>
+                </div>
+                <div class="profile-user_info">
+                    <div class="profile-user_level"><span>LV : ${memLevel}</span></div>
+                    <div class="profile-user_nick"><span>${memNickname}</span></div>
+                    ${memRepBadgeStyle}
                 </div>
             </a>
             <div class="profile-dividing-line"></div>
@@ -187,5 +187,3 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
     `
     return membProfileHTML;
 }
-
-document.addEventListener("DOMContentLoaded", SwiperData());

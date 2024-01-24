@@ -193,7 +193,7 @@
                 </div>
 
                 <!-- 장착 아이템 정보-->
-                <div class="widjet__body" style="display: inline-block;" id="equip_information">
+                <div class="widjet__body" id="equip_information">
                     <div class="user-info" style="display: inline-block;" >
                         <h3 class="uk-text-lead" id="equipitem">Equipped Items</h3>
                         <div class="user-info__box">
@@ -211,15 +211,19 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <div>
+                        <button id="profile" class="uk-button uk-button-secondary" type="button">프로필 사진 변경</button>
+                    </div>
                 </div>
             </div>
-            <h3 class="uk-text-lead">Profile Header</h3>
+            <h3 class="uk-text-lead">Profile Border</h3>
             <div class="widjet__body" id="header_select_body">
                 <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="header_select" data-uk-grid>
                     <div>
                         <select id="headeritem" class="js-select" onchange="HeaderPreview()">
-                            <option value="x">프로필 사진 테두리 선택</option>
-                            <option th:each="result:${header}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                            <option value="x" th:selected="${memberProfile.profileHeader=='x'}">프로필 사진 테두리 선택</option>
+                            <option th:each="result:${header}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == memberProfile.profileHeader}"></option>
                         </select>
                     </div>
                 </div>
@@ -231,8 +235,8 @@
                 <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="card_select" data-uk-grid>
                     <div>
                         <select id="carditem" class="js-select" onchange="CardPreview()">
-                            <option value="x">프로필 카드 테두리 선택</option>
-                            <option th:each="result:${card}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                            <option value="x" th:selected="${memberProfile.profileCard=='x'}">프로필 카드 테두리 선택</option>
+                            <option th:each="result:${card}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == memberProfile.profileCard}"></option>
                         </select>
                     </div>
                 </div>
@@ -244,8 +248,8 @@
                 <div class="uk-grid uk-child-width-3-4@s uk-flex-middle uk-grid-small" id="badgerep_select" data-uk-grid>
                     <div>
                         <select id="repbadge" class="js-select" onchange="RepBadgePreview()">
-                            <option value="x">대표 뱃지 선택</option>
-                            <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                            <option value="x" th:selected="${memberProfile.ProfileRepBadge=='x'}">대표 뱃지 선택</option>
+                            <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == memberProfile.ProfileRepBadge}"></option>
                         </select>
                     </div>
                 </div>
@@ -259,60 +263,60 @@
                         <tr>
                             <td>                        
                                 <select id="badges1" class="js-select" onchange="BadgePreview(1)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[0]=='x'}">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[0]}"></option>
                                 </select>
                             </td>
                             <td>                        
                                 <select id="badges4" class="js-select" onchange="BadgePreview(4)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[3]=='x'}">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[3]}"></option>
                                 </select>
                             </td>
                             <td>                        
                                 <select id="badges7" class="js-select" onchange="BadgePreview(7)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[6]=='x'}">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[6]}"></option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>                        
                                 <select id="badges2" class="js-select" onchange="BadgePreview(2)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[1]=='x'}">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[1]}"></option>
                                 </select>
                             </td>
                             <td>                        
                                 <select id="badges5" class="js-select" onchange="BadgePreview(5)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[4]=='x'}">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[4]}"></option>
                                 </select>
                             </td>
                             <td>                        
                                 <select id="badges8" class="js-select" onchange="BadgePreview(8)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[7]=='x'}">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[7]}"></option>
                                 </select>
                             </td>
                         </tr>                        
                         <tr>
                             <td>                        
                                 <select id="badges3" class="js-select" onchange="BadgePreview(3)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[2]=='x'}">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[2]}"></option>
                                 </select>
                             </td>
                             <td>                        
                                 <select id="badges6" class="js-select" onchange="BadgePreview(6)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[5]=='x'}"> 뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[5]}"></option>
                                 </select>
                             </td>
                             <td>                        
                                 <select id="badges9" class="js-select" onchange="BadgePreview(9)">
-                                    <option value="x">뱃지 선택</option>
-                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}"></option>
+                                    <option value="x" th:selected="${badgelist[8]=='x'}">뱃지 선택</option>
+                                    <option th:each="result:${badge}" th:value="${result[0]}" th:text="${result[1]}" th:selected="${result[0] == badgelist[8]}"></option>
                                 </select>
                             </td>
                         </tr>

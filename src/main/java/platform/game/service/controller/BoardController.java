@@ -29,6 +29,7 @@ import jakarta.transaction.Transactional;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BoardCpageTO;
 import platform.game.service.model.TO.CommentTO;
@@ -36,6 +37,7 @@ import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.UpdatePointHistory;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.CommonCodeRepository;
+import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -56,6 +58,9 @@ public class BoardController {
 
     @Autowired
     private CommonCodeRepository commonCodeRepository;
+
+    @Autowired
+    private MemberProfileRepository profileRepository;
 
     @GetMapping("/list")
     public ModelAndView list(@RequestParam("board_cd") String boardCd, HttpServletRequest request) {
@@ -100,10 +105,12 @@ public class BoardController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
+                modelAndView.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
@@ -205,10 +212,12 @@ public class BoardController {
             member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 modelAndView.addObject("nickname", member.getMemNick());
                 modelAndView.addObject("level", member.getMemLvl());
                 modelAndView.addObject("currentPoint", member.getMemCurPoint());
                 modelAndView.addObject("memId", member.getMemId());
+                modelAndView.addObject("memberProfile", memberProfile);
             }
             id = member.getMemId();
         }
@@ -287,10 +296,12 @@ public class BoardController {
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
         if (member != null) {
+            MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
             modelAndView.addObject("nickname", member.getMemNick());
             modelAndView.addObject("level", member.getMemLvl());
             modelAndView.addObject("currentPoint", member.getMemCurPoint());
             modelAndView.addObject("memId", member.getMemId());
+            modelAndView.addObject("memberProfile", memberProfile);
         }
         modelAndView.setViewName("board_write");
         modelAndView.addObject("board_cd", boardCd);
@@ -418,10 +429,12 @@ public class BoardController {
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
         if (member != null) {
+            MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
             modelAndView.addObject("nickname", member.getMemNick());
             modelAndView.addObject("level", member.getMemLvl());
             modelAndView.addObject("currentPoint", member.getMemCurPoint());
             modelAndView.addObject("memId", member.getMemId());
+            modelAndView.addObject("memberProfile", memberProfile);
         }
         modelAndView.setViewName("board_modify");
         modelAndView.addObject("post", post);
@@ -527,10 +540,12 @@ public class BoardController {
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
         if (member != null) {
+            MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
             modelAndView.addObject("nickname", member.getMemNick());
             modelAndView.addObject("level", member.getMemLvl());
             modelAndView.addObject("currentPoint", member.getMemCurPoint());
             modelAndView.addObject("memId", member.getMemId());
+            modelAndView.addObject("memberProfile", memberProfile);
         }
         modelAndView.setViewName("board_delete");
         modelAndView.addObject("post", post);

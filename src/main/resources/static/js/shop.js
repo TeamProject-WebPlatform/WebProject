@@ -158,6 +158,8 @@ async function getItem(point,category) {
             if (flag=='1') {
                 alert("아이템을 구매하였습니다.");
                 location.reload();
+            } else if (flag=='2'){
+                alert("포인트가 부족합니다.");
             } else {
                 alert("에러" + error.message);
             }

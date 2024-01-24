@@ -39,6 +39,7 @@ import platform.game.service.entity.BattlePost;
 import platform.game.service.entity.Comment;
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.Post;
 import platform.game.service.model.TO.BattlePointTO;
 import platform.game.service.model.TO.BattleTO;
@@ -49,6 +50,7 @@ import platform.game.service.repository.BattleRepository;
 import platform.game.service.repository.CommentInfoRepository;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberInfoRepository;
+import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.repository.PostInfoRepository;
 import platform.game.service.repository.UpdatePointHistoryImpl;
 import platform.game.service.service.MemberInfoDetails;
@@ -74,6 +76,8 @@ public class BattleController {
     BattleCustomRepositoryImpl battleCustomRepositoryImpl;
     @Autowired
     private UpdatePointHistoryImpl updatePointHistoryImpl;
+    @Autowired
+    MemberProfileRepository profileRepository;
 
     @Autowired
     CommonCodeRepository commonCodeRepository;
@@ -92,10 +96,12 @@ public class BattleController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
                 mav.addObject("memId", id);
+                mav.addObject("memberProfile", memberProfile);
             }
         }
         // 리스트 정보취득
@@ -111,9 +117,75 @@ public class BattleController {
         int lastPage = (int)o[1];
         List<BattleTO> battleTOList = battleList[0];
         List<BattlePointTO> battlePointTOList = battleList[1];
+
+        // battleTO에 있는 호스트와 클라이언트 유저들 프로필 가져오기
+        List<String> battleTOHostProfileImage = new ArrayList<String>();
+        List<String> battleTOHostProfileBorder = new ArrayList<String>();
+        List<String[]> battleTOHostProfileBadge = new ArrayList<String[]>();
+        List<String> battleTOHostProfileRep = new ArrayList<String>();
+
+        List<String> battleTOClientProfileImage = new ArrayList<String>();
+        List<String> battleTOClientProfileBorder = new ArrayList<String>();
+        List<String[]> battleTOClientProfileBadge = new ArrayList<String[]>();
+        List<String> battleTOClientProfileRep = new ArrayList<String>();
+
+
+        for(int i=0; i<battleTOList.size();i++){
+            BattleTO to = battleTOList.get(i);
+
+            String HostProfileImage = profileRepository.BattleProfileImage(to.getHostNick());
+            String HostProfileBorder = profileRepository.BattleProfileBorder(to.getHostNick());
+            String HostProfileBadgeList = profileRepository.BattleProfileBadgeList(to.getHostNick());
+            String HostProfileRep = profileRepository.BattleProfileRepBadge(to.getHostNick());
+            String[] HostProfileBadge = HostProfileBadgeList.split(", ");
+
+            System.out.println(to.getHostNick() + " : " + to.getClientNick());
+
+
+            battleTOHostProfileImage.add(HostProfileImage);
+            battleTOHostProfileBorder.add(HostProfileBorder);
+            battleTOHostProfileBadge.add(HostProfileBadge);
+            battleTOHostProfileRep.add(HostProfileRep);
+
+            if (to.getClientNick()!=null){
+                String ClientProfileImage = profileRepository.BattleProfileImage(to.getClientNick());
+                String ClientProfileBorder = profileRepository.BattleProfileBorder(to.getClientNick());
+                String ClientProfileBadgeList = profileRepository.BattleProfileBadgeList(to.getClientNick());
+                String ClientProfileRep = profileRepository.BattleProfileRepBadge(to.getClientNick());
+                String[] ClientProfileBadge = ClientProfileBadgeList.split(", ");
+
+                battleTOClientProfileImage.add(ClientProfileImage);
+                battleTOClientProfileBorder.add(ClientProfileBorder);
+                battleTOClientProfileBadge.add(ClientProfileBadge);
+                battleTOClientProfileRep.add(ClientProfileRep);
+            } else {
+                String ClientProfileImage = null;
+                String ClientProfileBorder = null;
+                String ClientProfileRep = null;
+                String ClientProfileBadgeList = "x, x, x, x, x, x, x, x, x";
+                String[] ClientProfileBadge = ClientProfileBadgeList.split(", ");
+
+                battleTOClientProfileImage.add(ClientProfileImage);
+                battleTOClientProfileBorder.add(ClientProfileBorder);
+                battleTOClientProfileBadge.add(ClientProfileBadge);
+                battleTOClientProfileRep.add(ClientProfileRep);
+            }
+
+        }
+        
         mav.addObject("lastPage", lastPage);
         mav.addObject("battleTOList", battleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
+
+        mav.addObject("HostProfileImage", battleTOHostProfileImage);
+        mav.addObject("HostProfileBorder", battleTOHostProfileBorder);
+        mav.addObject("HostProfileBadge", battleTOHostProfileBadge);
+        mav.addObject("HostProfileRep", battleTOHostProfileRep);
+
+        mav.addObject("ClientProfileImage", battleTOClientProfileImage);
+        mav.addObject("ClientProfileBorder", battleTOClientProfileBorder);
+        mav.addObject("ClientProfileBadge", battleTOClientProfileBadge);
+        mav.addObject("ClientProfileRep", battleTOClientProfileRep);
         
         // 사이드바에 방문자 수 보여주기
         CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
@@ -131,10 +203,12 @@ public class BattleController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
                 mav.addObject("memId", id);
+                mav.addObject("memberProfile", memberProfile);
             }
         }
         Post post = new Post();
@@ -147,6 +221,12 @@ public class BattleController {
 
         BattleTO bto = (BattleTO) battleTOs[0];
         BattlePointTO pto = (BattlePointTO) battleTOs[1];
+
+        // 글쓴이(호스트) 프로필 가져오기
+        MemberProfile HostProfile = profileRepository.BattleProfile(bto.getHostNick());
+        String HostProfileBadgeList = HostProfile.getProfileBadgeList();
+        String[] HostProfileBadges = HostProfileBadgeList.split(", ");
+
 
         ArrayList<Comment> comments = commentInfoRepository.findByPost_PostId(postId);
         ArrayList<CommentTO> commentTree = buildCommentTree(comments);
@@ -185,6 +265,11 @@ public class BattleController {
         mav.addObject("pto", pto);
         mav.addObject("post", post);
         mav.addObject("commentTree", commentTree);
+
+        // 호스트 프로필 전달
+        mav.addObject("profile", HostProfile);
+        mav.addObject("badgelist", HostProfileBadges);
+
         // 사이드바에 방문자 수 보여주기
         CommonCode visitCount = commonCodeRepository.findByCdOrderByCd("99001");
         mav.addObject("totalCount", visitCount.getRemark1());
@@ -201,11 +286,17 @@ public class BattleController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
+                String memberProfileBadgeList = profileRepository.BattleProfileBadgeList(member.getMemNick());
+                String[] memberProfileBadge = memberProfileBadgeList.split(", ");
+
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 id = member.getMemId();
                 mav.addObject("memId", id);
                 mav.addObject("level", member.getMemLvl());
+                mav.addObject("memberProfile", memberProfile);
+                mav.addObject("badgelist", memberProfileBadge);
             }
         }
         if (postId != -1 && btId != -1) {

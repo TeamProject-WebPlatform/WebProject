@@ -18,13 +18,10 @@ public interface MemberFavoriteGameRepository extends JpaRepository<MemberFavori
     boolean existsByMemId(long mem_id);
 
     // 멤버 ID 기준으로 선호하는 게임 1,2,3순위 가져오기
-    @Query(value = "select * from member_favorite_game m where m.mem_id=:mem_id", nativeQuery = true)
-    List<MemberFavoriteGame> findByMemID(@Param("mem_id") long mem_id);
+    @Query(value = "select game_cd from member_favorite_game m where m.mem_id=:mem_id", nativeQuery = true)
+    List<String> FavoriteGameCode(@Param("mem_id") long mem_id);
 
     MemberFavoriteGame[] findByMemId(long memId);
-
-    @Query(value = "insert into member_favorite_game values(:rank ,:mem_id,default)", nativeQuery = true)
-    Integer setAddUserFavGame(int rank, long mem_id);
 
     @Query(value = "insert into member_favorite_game values (:rank,:mem_id,:game_cd)", nativeQuery = true)
     void RegisterGame(int rank, long mem_id, String game_cd);

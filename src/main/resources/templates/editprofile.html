@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="HandheldFriendly" content="true">
     <meta name="format-detection" content="telephone=no">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="IE=edge; chrome=1" http-equiv="X-UA-Compatible">
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/libs.min.css">
     <link rel="stylesheet" href="/css/main.css">
@@ -41,10 +41,7 @@
                 <div class="user-info__box">
                     <div class="user-info__detail" th:text="${'아이디 : ' + member.memUserid}"></div>
                     <div class="user-info__detail" th:text="${'닉네임 : ' + member.memNick}">d</div>
-                    <div class="user-info__detail" th:text="${'레&nbsp&nbsp&nbsp벨 : ' + member.memLvl}">d</div>
                     <div class="user-info__detail" th:text="${'이메일 : ' + member.memEmail}">d</div>
-                    <div class="user-info__detail" th:text="${'현재 포인트 : ' + member.memCurPoint}">d</div>
-                    <div class="user-info__detail" th:text="${'누적 포인트 : ' + member.memTotalPoint}">d</div>
                 </div>
             </div>
             <br>
@@ -54,7 +51,7 @@
         </div>
         <hr>
         <h6 class="uk-text-lead">Change the Nickname</h6>
-        <p>닉네임은 4자 이상 10자 이하, 문자나 숫자로만 조합이 가능합니다.</p>
+        <p>닉네임은 4자 이상 8자 이하, 문자나 숫자로만 조합이 가능합니다.</p>
         <div class="uk-grid uk-child-width-1-4@xl uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
             <div class="user-info">
                 <div id="label">새 닉네임 &emsp;&emsp;&emsp;&nbsp;</div>

@@ -42,7 +42,7 @@ public interface MemberItemInfoRepository extends JpaRepository<MemberItem, Memb
     Integer UpdatePoint(int point, long mem_id);
 
     // 갖고 있는 뱃지들
-    @Query(value = "select i.item_nm from item i join member_item mi on mi.item_cd = i.item_cd and i.item_cd like '803%' join member m on mi.mem_id = m.mem_id and m.mem_id=:mem_id", nativeQuery = true)
+    @Query(value="select i.item_nm from item i join member_item mi on mi.item_cd = i.item_cd and i.item_cd like '803%' join member m on mi.mem_id = m.mem_id and m.mem_id=:mem_id",nativeQuery = true)
     List<String> getHaveBadges(long mem_id);
 
     // 아이템 이름 불러오기

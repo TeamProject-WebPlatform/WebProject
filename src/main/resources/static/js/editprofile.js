@@ -55,8 +55,8 @@ const DuplicateNickCheck = async function (){
     
     if (regex.test(Nickname)) {
         alert("특수문자는 사용할 수 없습니다.")
-    } else if (Nickname.length < 4 || Nickname.length > 10){
-        alert("닉네임은 4~10자 만 설정 가능합니다.");
+    } else if (Nickname.length < 4 || Nickname.length > 8){
+        alert("닉네임은 4~8자 만 설정 가능합니다.");
     } else {
         try {
             const response = await fetch('/login/DuplicateNickCheck', {

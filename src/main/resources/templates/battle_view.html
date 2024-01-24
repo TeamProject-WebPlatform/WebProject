@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="../css/main_custom.css" />
     <link rel="stylesheet" href="../css/battle.css" />
     <link rel="stylesheet" href="../css/battle_view.css" />
+    <link rel="stylesheet" href="../css/shop_custom.css" />
+    <link rel="stylesheet" href="../css/ranking.css" />
 
     <script src="../js/libs.js"></script>
     <script src="../js/main.js"></script>
@@ -347,46 +349,155 @@
                     <div class="content-main">
                         <div class="uk-grid" data-uk-grid>
                             <div class="uk-width-1-5@xl profile-section">
-                                <div class="profile-card">
-                                    <a href="">
-                                        <div class="profile-header">
-                                            <div class="profile-image"><img src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                <div class="profile-card" th:if="${!profile.profileCard.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.profileCard} + '.png);'">
+                                    <a id="profile">
+                                        <div class="profile-header" th:if="${!profile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.profileHeader} + '.png);'">
+                                            <div class="profile-image">
+                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
+                                                <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
-                                            <div class="profile-user_info">
-                                                <div class="profile-user-level-icon"><i
-                                                        class="fa-solid fa-star-of-david ico_fontawesome"></i></div>
-                                                <div class="profile-user_level"><span
-                                                        th:text="${post.member.memLvl}">99</span></div>
-                                                <div class="profile-user_nick"><span
-                                                        th:text="${post.member.memNick}">타락파워전사선조</span></div>
+                                        </div>
+                                        <div class="profile-header" th:if="${profile.profileHeader.equals('x')}">
+                                            <div class="profile-image">
+                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
+                                                <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
+                                        </div>
+                                        <div class="profile-user_info">
+                                            <div class="profile-user_level"><span
+                                                    th:text="${'LV : ' + post.member.memLvl}">99</span></div>
+                                            <div class="profile-user_nick"><span
+                                                    th:text="${post.member.memNick}">타락파워전사선조</span></div>
+                                            <img class="badge" th:if="${!profile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${profile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
+                                            <img class="badge" th:if="${profile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
                                         </div>
                                     </a>
                                     <div class="profile-dividing-line"></div>
                                     <div class="profile-main">
-                                        <div class="profile-introduction">
-                                            간단한 소개글
-                                        </div>
+                                        <div class="profile-introduction" th:text="${profile.profileIntro}"></div>
                                         <div class="profile-dividing-line"></div>
                                         <div class="profile-badge-section">
                                             <div class="badge-line">
-                                                <span class="badge">&#127774;</span>
-                                                <span class="badge">&#127775;</span>
-                                                <span class="badge">&#127806;</span>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[0].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[0]} + '.png'}">
+                                                    <img th:if="${badgelist[0].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[3].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[3]} + '.png'}">
+                                                    <img th:if="${badgelist[3].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[6].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[6]} + '.png'}">
+                                                    <img th:if="${badgelist[6].equals('x')}" alt="">
+                                                </div>
                                             </div>
                                             <div class="badge-line">
-                                                <span class="badge">&#127851;</span>
-                                                <span class="badge">&#127774;</span>
-                                                <span class="badge">&#127775;</span>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[1].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[1]} + '.png'}">
+                                                    <img th:if="${badgelist[1].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[4].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[4]} + '.png'}">
+                                                    <img th:if="${badgelist[4].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[7].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[7]} + '.png'}">
+                                                    <img th:if="${badgelist[7].equals('x')}" alt="">
+                                                </div>
                                             </div>
                                             <div class="badge-line">
-                                                <span class="badge">&#127806;</span>
-                                                <span class="badge">&#127851;</span>
-                                                <span class="badge">&#127774;</span>
+                                                <div class="badge">
+                                                    <img th:if="${!badgelist[2].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[2]} + '.png'}">
+                                                    <img th:if="${badgelist[2].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge">
+                                                    <img th:if="${!badgelist[5].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[5]} + '.png'}">
+                                                    <img th:if="${badgelist[5].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge">
+                                                    <img th:if="${!badgelist[8].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[8]} + '.png'}">
+                                                    <img th:if="${badgelist[8].equals('x')}" alt="">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="profile-card" th:if="${profile.profileCard.equals('x')}">
+                                    <a id="profile">
+                                        <div class="profile-header" th:if="${!profile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.profileHeader} + '.png);'">
+                                            <div class="profile-image">
+                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
+                                                <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                            </div>
+                                        </div>
+                                        <div class="profile-header" th:if="${profile.profileHeader.equals('x')}">
+                                            <div class="profile-image">
+                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
+                                                <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
+                                            </div>
+                                        </div>
+                                        <div class="profile-user_info">
+                                            <div class="profile-user_level"><span
+                                                    th:text="${'LV : ' + post.member.memLvl}">99</span></div>
+                                            <div class="profile-user_nick"><span
+                                                    th:text="${post.member.memNick}">타락파워전사선조</span></div>
+                                            <img class="badge" th:if="${!profile.ProfileRepBadge.equals('x')}" th:src="@{'../img/shop_img/' + ${profile.ProfileRepBadge} + '.png'}" alt="NO-SYMBOL">
+                                            <img class="badge" th:if="${profile.ProfileRepBadge.equals('x')}" alt="NO-SYMBOL">
+                                        </div>
+
+                                    </a>
+                                    <div class="profile-dividing-line"></div>
+                                    <div class="profile-main">
+                                        <div class="profile-introduction" th:text="${profile.profileIntro}"></div>
+                                        <div class="profile-dividing-line"></div>
+                                        <div class="profile-badge-section">
+                                            <div class="badge-line">
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[0].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[0]} + '.png'}">
+                                                    <img th:if="${badgelist[0].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[3].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[3]} + '.png'}">
+                                                    <img th:if="${badgelist[3].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[6].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[6]} + '.png'}">
+                                                    <img th:if="${badgelist[6].equals('x')}" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="badge-line">
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[1].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[1]} + '.png'}">
+                                                    <img th:if="${badgelist[1].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[4].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[4]} + '.png'}">
+                                                    <img th:if="${badgelist[4].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[7].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[7]} + '.png'}">
+                                                    <img th:if="${badgelist[7].equals('x')}" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="badge-line">
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[2].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[2]} + '.png'}">
+                                                    <img th:if="${badgelist[2].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[5].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[5]} + '.png'}">
+                                                    <img th:if="${badgelist[5].equals('x')}" alt="">
+                                                </div>
+                                                <div class="badge" >
+                                                    <img th:if="${!badgelist[8].equals('x')}" th:src="@{'../img/shop_img/' + ${badgelist[8]} + '.png'}">
+                                                    <img th:if="${badgelist[8].equals('x')}" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div th:if="${post.member.memNick==nickname} and ${bto.state=='B' or bto.state=='A'}"
                                     class="battle-start_btn" id="battle-start_btn" onclick="controlBattle(0)">
                                     <div class="start">배틀 : 시작</div>
@@ -444,6 +555,7 @@
                                     </div>
                                 </div>
                                 
+
                             </div>
                             <div class="uk-width-3-5@xl post-section">
                                 <div class="post-info">

@@ -1,5 +1,6 @@
 package platform.game.service.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.mapper.SqlMapperInter;
 import platform.game.service.model.DAO.RankDAO;
 import platform.game.service.model.TO.LevelRankTO;
@@ -24,6 +26,8 @@ import platform.game.service.model.TO.PointRankTO;
 import platform.game.service.model.TO.WinRankTO;
 import platform.game.service.repository.CommonCodeRepository;
 import platform.game.service.repository.MemberFavoriteGameRepository;
+import platform.game.service.repository.MemberProfileRepository;
+import platform.game.service.repository.RankingRepository;
 import platform.game.service.service.MemberInfoDetails;
 
 @Controller
@@ -36,10 +40,16 @@ public class RankController {
     RankDAO rankDAO;
 
     @Autowired
+    RankingRepository rankingRepository;
+
+    @Autowired
     MemberFavoriteGameRepository memberFavoriteGameRepository;
 
     @Autowired
     CommonCodeRepository commonCodeRepository;
+
+    @Autowired
+    MemberProfileRepository profileRepository;
 
     @GetMapping("/getRankFragment")
     public String getRankFragment(@RequestParam("board_cd") String boardCd, Model model) {
@@ -93,18 +103,35 @@ public class RankController {
             case "fifa":
                 game_cd = "30005";
                 break;
+            case "steam":
+                game_cd = "30006";
+                break;
             default:
                 game_cd = "";
                 break;
         }
 
+        List<String[]> getRankerBadge = new ArrayList<String[]>();
+
         ModelAndView mav = new ModelAndView("levelrank");
         if (game_cd == "") {
             List<LevelRankTO> getLevelTable = sqlMapperInter.getLevelRank();
+            List<Object[]> getRankerProfile = rankingRepository.getLevelRankerProfile("0");
+            List<String> getRankerBadgeList = rankingRepository.getLevelRankerBadgeList("0");
+
+            for(int i=0;i<getRankerBadgeList.size();i++){
+                String[] badge = getRankerBadgeList.get(i).split(", ");
+                getRankerBadge.add(badge);
+            }
+
             mav.addObject("level", getLevelTable);
+            mav.addObject("profile", getRankerProfile);
+            mav.addObject("badge", getRankerBadge);
         } else {
             List<LevelRankTO> getOtherLevelTable = sqlMapperInter.getOtherLevelRank(game_cd);
+            List<Object[]> getOtherRankerProfile = rankingRepository.getLevelRankerProfile(game_cd);
             mav.addObject("otherlevel", getOtherLevelTable);
+            mav.addObject("otherprofile", getOtherRankerProfile);
         }
 
         mav.addObject("navRank", navRank);
@@ -113,9 +140,11 @@ public class RankController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memId", member.getMemId());
+                mav.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
@@ -160,13 +189,27 @@ public class RankController {
                 break;
         }
 
+        List<String[]> getRankerBadge = new ArrayList<String[]>();
+
         ModelAndView mav = new ModelAndView("winraterank");
         if (game_cd == "") {
             List<WinRankTO> getWinRateTable = sqlMapperInter.getWinRateRank();
+            List<Object[]> getRankerProfile = rankingRepository.getWinRateRankerProfile("0");
+            List<String> getRankerBadgeList = rankingRepository.getWinRateRankerBadgeList("0");
+
+            for(int i=0;i<getRankerBadgeList.size();i++){
+                String[] badge = getRankerBadgeList.get(i).split(", ");
+                getRankerBadge.add(badge);
+            }
+
             mav.addObject("win", getWinRateTable);
+            mav.addObject("profile", getRankerProfile);
+            mav.addObject("badge", getRankerBadge);
         } else {
             List<WinRankTO> getOtherWinRateTable = sqlMapperInter.getOtherWinRateRank(game_cd);
+            List<Object[]> getOtherRankerProfile = rankingRepository.getWinRateRankerProfile(game_cd);
             mav.addObject("otherwin", getOtherWinRateTable);
+            mav.addObject("otherprofile", getOtherRankerProfile);
         }
 
         mav.addObject("navRank", navRank);
@@ -175,9 +218,11 @@ public class RankController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memId", member.getMemId());
+                mav.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");
@@ -221,13 +266,28 @@ public class RankController {
                 break;
         }
 
+        List<String[]> getRankerBadge = new ArrayList<String[]>();
+
         ModelAndView mav = new ModelAndView("pointrank");
         if (game_cd == "") {
             List<PointRankTO> getPointTable = sqlMapperInter.getPointRank();
+            List<Object[]> getRankerProfile = rankingRepository.getPointRankerProfile("0");
+            List<String> getRankerBadgeList = rankingRepository.getPointRankerBadgeList("0");
+
+            for(int i=0;i<getRankerBadgeList.size();i++){
+                String[] badge = getRankerBadgeList.get(i).split(", ");
+                getRankerBadge.add(badge);
+            }
+
             mav.addObject("point", getPointTable);
+            mav.addObject("profile", getRankerProfile);
+            mav.addObject("badge", getRankerBadge);
+            
         } else {
             List<PointRankTO> getOtherPointTable = sqlMapperInter.getOtherPointRank(game_cd);
+            List<Object[]> getOtherRankerProfile = rankingRepository.getPointRankerProfile(game_cd);
             mav.addObject("otherpoint", getOtherPointTable);
+            mav.addObject("otherprofile", getOtherRankerProfile);
         }
 
         mav.addObject("navRank", navRank);
@@ -236,9 +296,11 @@ public class RankController {
             Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                     .getMember();
             if (member != null) {
+                MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memId", member.getMemId());
+                mav.addObject("memberProfile", memberProfile);
             }
         } else {
             System.out.println("멤버 없음");

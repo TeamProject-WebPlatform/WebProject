@@ -1,12 +1,9 @@
 package platform.game.service.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import platform.game.service.entity.Post;
 import platform.game.service.entity.Ranking;
 
 @Repository
@@ -30,4 +27,23 @@ public interface RankingRepository extends JpaRepository<Ranking, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) AS countInRange , floor(mem_total_point / 150) * 150 as point FROM member GROUP BY point ORDER BY point")
     List<Integer> GetPointRank();
+
+    @Query(value="select mp.profile_intro, mp.profile_image, mp.profile_header, mp.profile_card, mp.profile_rep_badge from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='level' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<Object[]> getLevelRankerProfile(String game_cd);
+
+    @Query(value="select mp.profile_intro, mp.profile_image, mp.profile_header, mp.profile_card, mp.profile_rep_badge from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='Point' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<Object[]> getPointRankerProfile(String game_cd);
+
+    @Query(value="select mp.profile_intro, mp.profile_image, mp.profile_header, mp.profile_card, mp.profile_rep_badge from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='WinRate' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<Object[]> getWinRateRankerProfile(String game_cd);
+
+    // 랭커 뱃지 리스트 따로
+    @Query(value="select mp.profile_badge_list from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='Level' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<String> getLevelRankerBadgeList(String game_cd);
+
+    @Query(value="select mp.profile_badge_list from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='Point' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<String> getPointRankerBadgeList(String game_cd);
+
+    @Query(value="select mp.profile_badge_list from member_profile mp join member m on mp.mem_id = m.mem_id join ranking r on r.rank_code='WinRate' and mp.mem_id=r.mem_id and r.game_cd=:game_cd order by r.rank limit 5", nativeQuery = true)
+    List<String> getWinRateRankerBadgeList(String game_cd);
 }

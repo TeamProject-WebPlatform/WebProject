@@ -75,16 +75,4 @@ public class MemberInfoService implements UserDetailsService {
             return false;
         }
     }
-
-    public boolean addUserFavGame(Member member) {
-        try {
-            favoriteGameRepository.setAddUserFavGame(1, member.getMemId());
-            favoriteGameRepository.setAddUserFavGame(2, member.getMemId());
-            favoriteGameRepository.setAddUserFavGame(3, member.getMemId());
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }

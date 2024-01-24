@@ -19,9 +19,11 @@ import platform.game.service.entity.Battle;
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberBetting;
+import platform.game.service.entity.MemberProfile;
 import platform.game.service.entity.PointHistory;
 import platform.game.service.model.TO.MemberBettingTO;
 import platform.game.service.repository.CommonCodeRepository;
+import platform.game.service.repository.MemberProfileRepository;
 import platform.game.service.service.LevelService;
 import platform.game.service.service.MemberInfoDetails;
 
@@ -34,6 +36,8 @@ public class WalletController {
     LevelService levelService;
     @Autowired
     CommonCodeRepository commonCodeRepository;
+    @Autowired
+    MemberProfileRepository profileRepository;
 
     @Transactional
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -58,12 +62,16 @@ public class WalletController {
             MemberBettingTO to = new MemberBettingTO(battle, battle.getBtPost().getPost(), e);
             memberBettingTOList.add(to);
         }
+        MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
+
         Collections.reverse(memberBettingTOList);
         mav.addObject("nickname", member.getMemNick());
         mav.addObject("memId", member.getMemId());
         mav.addObject("currentPoint", member.getMemCurPoint());
         mav.addObject("totalPoint", member.getMemTotalPoint());
         mav.addObject("memberBettingTOList", memberBettingTOList);
+        mav.addObject("memberProfile", memberProfile);
+
         // 포인트 히스토리 정렬
         List<PointHistory> list = member.getMemPointHistoryList();
         Collections.sort(list, Collections.reverseOrder(Comparator.comparing(PointHistory::getPointHistoryId)));

@@ -21,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-import net.minidev.json.JSONObject;
 import platform.game.service.entity.CommonCode;
 import platform.game.service.entity.Member;
 import platform.game.service.entity.MemberProfile;
@@ -73,11 +72,13 @@ public class ProfileController {
                 MemberProfile memberProfile = profileRepository.findProfileIntroByMemId(member.getMemId());
                 List<MemberRanking> memberRanking = rankingRepository.findByMemId(member.getMemId());
                 List<String> memberItems = itemInfoRepository.getHaveBadges(member.getMemId());
+                List<String> memberFavoriteGames = gameRepository.FavoriteGameCode(member.getMemId());
                 mav.addObject("nickname", member.getMemNick());
                 mav.addObject("memberProfile", memberProfile);
                 mav.addObject("memberRanking", memberRanking);
                 mav.addObject("currentPoint", member.getMemCurPoint());
                 mav.addObject("memberItems", memberItems);
+                mav.addObject("game", memberFavoriteGames);
             }
         } else {
             System.out.println("멤버 없음");

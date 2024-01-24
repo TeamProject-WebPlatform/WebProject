@@ -282,6 +282,23 @@ body.dark-theme .close {
     text-decoration:none; 
 }
 
+/* 보유 중 버튼 */
+.have_item {
+    width: 90px;
+    -webkit-box-shadow: 2px 2px 7px 0px #00000024; 
+    background-color: #D3D3D3; 
+    border: none;
+    border-radius:28px;	
+    display:inline-block; 
+    cursor:pointer; 
+    color:#646464; 
+    font-family:Arial; 
+    font-size:13px; 
+    font-weight:bold; 
+    padding:6px 12px; 
+    text-decoration:none; 
+}
+
 
 
 body.dark-theme .reset_btn { background-color: #222; color:#ffffff; }
