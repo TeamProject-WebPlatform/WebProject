@@ -556,10 +556,20 @@
                                                 th:onclick="'betPoint(' + ${battle.btId} + ', 0)'">HOST</div>
                                             <betting class="betting-input-section">
                                                 <!-- 타임리프 섹션 -->
-                                                <div class="search"
+                                                <div class="search" th:unless="${nickname}">
+                                                    <div class="search__input">
+                                                        <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                        <input class="point-betting-input"
+                                                                type="search" name="search" placeholder="LOGIN FIRST"
+                                                                readonly>
+                                                    </div>
+                                                </div>
+                                                <logincheck th:if="${nickname}">
+                                                    <div class="search"
                                                     th:if="${battle.state!='T' and battle.hostNick!=nickname and battle.clientNick!=nickname and battlePointTOList[iterStat.index].pointDstb == -1}">
                                                     <div class="search__input">
                                                         <i class="fa-solid fa-coins ico_fontawesome"></i>
+                                                        
                                                         <battleStateCheck th:if="${battle.state=='N'}">
                                                             <input class="point-betting-input" type="search"
                                                                 name="search" placeholder="MATCHING" readonly>
@@ -576,9 +586,7 @@
                                                                     name="search" placeholder="YOU ALREADY BET"
                                                                     readonly>
                                                             </logincheck>
-                                                            <input th:unless="${nickname}" class="point-betting-input"
-                                                                type="search" name="search" placeholder="LOGIN FIRST"
-                                                                readonly>
+                                                            
                                                         </battleStateCheck>
                                                         <battleStateCheck th:if="${battle.state=='P'}">
                                                             <input class="point-betting-input" type="search"
@@ -750,6 +758,8 @@
                                                         </battleStateCheck>
                                                     </battleStateCheck>
                                                 </battleStateCheck>
+                                                </logincheck>
+                                                
                                             </betting>
                                             <betting class="betting-input-section-web">
                                             </betting>

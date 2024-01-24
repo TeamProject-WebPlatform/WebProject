@@ -72,7 +72,7 @@
                 <div class="uk-grid" data-uk-grid>
                     <div class="uk-width-2-3@l uk-width-3-3@m uk-width-3-3@s">
                         <div class="widjet__head">
-                            <h3 class="uk-text-lead">Random Rank</h3>
+                            <h3 class="uk-text-lead">Popular Members</h3>
                         </div>
                         <div class="js-recommend">
                             <div class="profile-background">
@@ -100,12 +100,13 @@
                         <div class="widjet --filters">
                             <div class="widjet__head">
                                 <h3 class="uk-text-lead">Rank</h3>
+                                <a th:href="@{/levelrank}" class="align_right seemore">More</a>
                             </div>
-                            <div class="widjet__body">
-                                <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                            <div class="widjet__body" style="height:542px;">
+                                <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small asdf" data-uk-grid>
                                     
-                                    <a th:href="@{/levelrank}" class="align_right seemore" style="text-align: right; margin-right: 15px;">더 보기</a>
-                                    <canvas id="levels" style='width:90%; height:24vh; margin: auto;'></canvas>
+                                    
+                                    <canvas id="levels" style='width:90%; margin: auto; height:244px;'></canvas>
                                     <script type="text/javascript">
                                         LevelChart();
                                         </script>   
@@ -141,14 +142,13 @@
                         <div class="widjet --filters">
                             <div class="widjet__head">
                                 <h3 class="uk-text-lead">Battle</h3>
+                                <a th:href="@{/battle?page=1}" class="align_right seemore">More</a>
                             </div>
-                            <div class="widjet__body">
+                            <div class="widjet__body" style="height:542px;">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid >
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
-                                        <div class="widjet_size widjet-game__title">
-                                            <a th:href="@{/battle?page=1}" class="align_right seemore">더 보기</a>
-                                            <br>
+                                        <div class="widjet_size widjet-game__title asdf">
                                             <div class="uk-width-1-1@xl" id="battleCardSection">
                                                 <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}" th:limit="3">
                                                     <div class="battle-card__box">
@@ -223,9 +223,9 @@
                                                                     <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />
                                                                 </a>
                                                             </div>
-                                                            <div class="battle-profile-info2">
+                                                            <div class="battle-profile-info">
                                                                 
-                                                                <div class="battle-profile-nickname2 uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-lift uk-grid-small" data-uk-grid>
+                                                                <div class="battle-profile-nickname uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-lift uk-grid-small" data-uk-grid>
                                                                     <div th:if="${battle.client}" class="battle-profile-lvl" th:text="'Lv ' + ${battle.clientLvl}">Lv30</div>
                                                                     <div th:unless="${battle.client}" class="battle-profile-lvl"></div>
                                                                     
@@ -251,13 +251,13 @@
                         <div class="widjet --filters">
                             <div class="widjet__head">
                                 <h3 class="uk-text-lead">Notice</h3>
+                                <a th:href="@{'/board/list?board_cd=20001'}" class="align_right seemore">More</a>
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
-                                    <div class="widjet_size widjet-game__title">
-                                        <a th:href="@{'/board/list?board_cd=20001'}" class="align_right seemore">더 보기</a>
+                                    <div class="widjet_size widjet-game__title asdf">
                                         <div class="board_top">
                                             <table width="100%">
                                                 <tr class="board_top_tr">
@@ -303,13 +303,13 @@
                         <div class="widjet --filters">
                             <div class="widjet__head">
                                 <h3 class="uk-text-lead">Free</h3>
+                                <a th:href="@{'/board/list?board_cd=20002'}" class="align_right seemore">More</a>
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
-                                    <div class="widjet_size widjet-game__title">
-                                        <a th:href="@{'/board/list?board_cd=20002'}" class="align_right seemore">더 보기</a>
+                                    <div class="widjet_size widjet-game__title asdf">
                                         <div class="board_top">
 
                                             <table width="100%">
@@ -356,13 +356,13 @@
                         <div class="widjet --filters">
                             <div class="widjet__head">
                                 <h3 class="uk-text-lead">Event</h3>
+                                <a class="align_right seemore" th:href="@{'/board/list?board_cd=20003'}" >More</a>
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
-                                    <div class="widjet_size widjet-game__title">
-                                        <a class="align_right seemore" th:href="@{'/board/list?board_cd=20003'}" >더 보기</a>
+                                    <div class="widjet_size widjet-game__title asdf">
                                         <div class="board_top">
                                             <table width="100%">
                                                 <tr class="board_top_tr">
@@ -407,14 +407,14 @@
                         <div class="widjet --filters">
                             <div class="widjet__head">
                                 <h3 class="uk-text-lead">Free</h3>
+                                <a th:href="@{'/board/list?board_cd=20004'}" class="align_right seemore">More</a>
                             </div>
                             <div class="widjet__body">
                                 <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
-                                    <div class="widjet_size widjet-game__title">
+                                    <div class="widjet_size widjet-game__title asdf">
                                         <div class="board_top">
-                                            <a th:href="@{'/board/list?board_cd=20004'}" class="align_right seemore">더 보기</a>
 
                                             <table width="100%">
                                                 <tr class="board_top_tr">

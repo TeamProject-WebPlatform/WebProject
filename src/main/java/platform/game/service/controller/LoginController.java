@@ -36,7 +36,7 @@ import platform.game.service.model.TO.KakaoTO.KakaoOAuthTokenTO;
 import platform.game.service.action.IpAction;
 import platform.game.service.repository.MemberInfoRepository;
 import platform.game.service.repository.SigninHistoryRepository;
-import platform.game.service.repository.UpdatePointHistory;
+import platform.game.service.repository.UpdatePointHistoryImpl;
 import platform.game.service.service.MemberInfoDetails;
 import platform.game.service.service.SigninHistoryService;
 import platform.game.service.service.jwt.SecurityPassword;
@@ -70,9 +70,9 @@ public class LoginController {
     @Autowired
     private SigninHistoryRepository signinHistoryRepository;
 
+    // @Qualifier("UpdatePointHistoryImpl")
     @Autowired
-    @Qualifier("updatePointHistoryImpl")
-    private UpdatePointHistory updatePointHistory;
+    private UpdatePointHistoryImpl updatePointHistoryImpl;
 
     @Autowired
     private SigninHistoryService signinHistoryService;
@@ -174,8 +174,9 @@ public class LoginController {
                 // 첫 로그인 여부 업데이트 및 포인트 증가
                 if (signinHistoryService.isFirstLogin(member)) {
                     System.out.println("오늘 첫 로그인입니다.");
+                    System.out.println(member.getMemId());
                     // 포인트 증가 로직
-                    int updatedPoints = updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50101", 10);
+                    int updatedPoints = updatePointHistoryImpl.insertPointHistoryByMemId(member.getMemId(), "50201", 10);
 
                     if (updatedPoints < 0) {
                         // 포인트 증가 실패
@@ -186,9 +187,6 @@ public class LoginController {
                 } else {
                     System.out.println("이미 로그인한 사용자입니다.");
                 }
-
-                System.out.println("로그인 성공");
-
                 // SigninHistory 저장
                 SigninHistory signinHistory = SigninHistory.builder()
                         .member(member)

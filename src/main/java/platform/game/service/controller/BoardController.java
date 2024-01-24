@@ -348,14 +348,14 @@ public class BoardController {
             // 변경: 첫 번째 글 작성 시에는 특정 포인트를 주기
             if (isFirstPost(posts)) {
                 int firstPostPoint = 100; // 첫 번째 글 작성 시 부여할 포인트
-                updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50103", firstPostPoint);
+                updatePointHistory.insertPointHistoryByMemId(post.getMember().getMemId(), "50203", firstPostPoint);
                 flag = 0;
                 System.out.println("첫 번째 글 작성 포인트 지급");
                 int point = 1;
                 return "redirect:./point_ok?board_cd=" + request.getParameter("board_cd") + "&point=" + point;
             } else if (isMultipleOfFivePosts(posts)) {
                 int additionalPostPoint = 50;
-                updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50104", additionalPostPoint);
+                updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50204", additionalPostPoint);
                 flag = 0;
 
                 System.out.println("5개의 글 작성 포인트 지급");
@@ -609,13 +609,13 @@ public class BoardController {
         List<Comment> userComments = commentInfoRepository.findByMember_MemId(member.getMemId());
         if (isFirstComment(userComments)) {
             int commentPoint = 50; // 첫 댓글 작성 시 부여할 포인트
-            updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50105", commentPoint);
+            updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50205", commentPoint);
             System.out.println("첫 댓글 작성 포인트 지급");
             int point = 1;
             return "redirect:./point_ok?board_cd=" + boardCd + "&point=" + point;
         } else if (isMultipleOfFiveComments(userComments)) {
             int commentPoint = 25; // 5개 단위 댓글 작성 시 부여할 포인트
-            updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50106", commentPoint);
+            updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50206", commentPoint);
             System.out.println("5개의 배수로 댓글 작성 포인트 지급");
             int point = 1;
             return "redirect:./point_ok?board_cd=" + boardCd + "&point=" + point;

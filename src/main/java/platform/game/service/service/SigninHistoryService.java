@@ -27,7 +27,7 @@ public class SigninHistoryService {
         if (latestSignin == null || !latestSignin.getCreatedAt().toLocalDate().isEqual(currentDateTime.toLocalDate())) {
             // 첫 로그인 시 현재 시간을 저장
             logFirstLogin(member, currentDateTime);
-
+            System.out.println("첫 로그인");
             return true;
         }
         return false;
