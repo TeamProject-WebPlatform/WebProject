@@ -5,3 +5,6 @@
 
 
 컨트롤러에서 경로 수정 후 templates안의 html 페이지에서 profileimage 경로 수정 필요
+
+
+security/WebConfig.java 파일 -> 외부 폴더 접근용 파일이니 필요없으면 삭제해도 됨
