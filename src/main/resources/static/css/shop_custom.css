@@ -28,31 +28,37 @@ body.dark-theme .setbtn{
     list-style: none;
     font-size: 20px;
     width: 100%;
-    text-decoration-line:underline ;
     /* height: 25px; */
     /* margin-bottom: 10px; */
 }
 
-
+.list-item:first-child{
+    margin-top : 0px;
+}
 .delete-button {
-    width: 40px;
-    -webkit-box-shadow: 2px 2px 7px 0px #00000024; 
-    background-color: #222; 
-    border: none;
-    border-radius:28px;	
+    width: 35px;
+    /* -webkit-box-shadow: 2px 2px 7px 0px #00000024; */
+    /* background-color: #222; */
+    /* border: none; */
+    border-radius: 50%;
     float: right;
-    cursor:pointer; 
-    color:#646464; 
-    font-family:Arial; 
-    font-size:10px; 
-    font-weight:bold; 
-    padding:6px 12px; 
-    text-decoration:none; 
+    cursor: pointer;
+    /* color: #646464; */
+    font-family: Arial;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 6px 12px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    background-color: #000;
+    color:#fff;
 }
 
-body.dark-theme .delete-button { background-color: #0C1826; color:#ffffff; }
+body.dark-theme .delete-button { background-color: #fff; color:#000; }
 
-.delete-button:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
 
 .delete-button:active { position:relative; top:1px; }
 
@@ -312,9 +318,9 @@ body.dark-theme .select_btn { background-color: #222; color:#ffffff;  }
 body.dark-theme .select_Get_btn { background-color: #222; color:#ffffff; }
 
 
-.reset_btn:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
-.select_btn:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
-.select_Get_btn:hover { background-color:#FEF7F3; color: var( --main-color-dark); }
+.reset_btn:hover { background-color:#FEF7F3; color: var( --main-color-now); }
+.select_btn:hover { background-color:#FEF7F3; color: var( --main-color-now); }
+.select_Get_btn:hover { background-color:#FEF7F3; color: var( --main-color-now); }
 
 
 .reset_btn:active { position:relative; top:1px; }
@@ -703,4 +709,5 @@ body.dark-theme .game-card__platform {
 #previewList{
     padding-left: 0px;
     margin: 0px;
+    padding : 10px;
 }

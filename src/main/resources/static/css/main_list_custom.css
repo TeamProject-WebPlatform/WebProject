@@ -257,13 +257,16 @@ body.dark-theme .coment_input_text{
     font-size: 18px;
     /* padding-right:; */
     text-decoration: underline;
+    text-align: right;
+    margin-bottom: -20px;
+    color: black !important;
+    margin-right: 10px;
 }
-
+.dark-theme .seemore{
+    color:wheat !important;
+}
 .seemore:hover{
-    color: #00f0f0;
-}
-body.dark-theme .seemore:hover{
-    color: rgb(0, 177, 177);
+    color: var( --main-color-now) !important;
 }
 
 

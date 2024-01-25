@@ -207,18 +207,27 @@
     }
     function checkDate(ddDate, stDate) {
         let curDate = new Date();
+        
+        // let ddDatePlus15Min = ddDate.setMinutes(ddDate.getMinutes() + 15);
+        let ddDatePlus15Min = new Date(ddDate.getFullYear(), ddDate.getMonth(), ddDate.getDate(), ddDate.getHours(), ddDate.getMinutes()+15);
+        // let curDatePlus1Hour = curDate.setHours(curDate.getHours() + 1);
+        let curDatePlus1Hour = new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate(), curDate.getHours()+1, curDate.getMinutes());
 
-        let ddDatePlus15Min = ddDate.setMinutes(ddDate.getMinutes() + 15);
-        let curDatePlust1Hour = curDate.setHours(curDate.getHours() + 1);
 
-        if (curDatePlust1Hour > ddDate) {
+        // ddDate = ddDate.setHours(ddDate.getHours());
+        console.log("지금시간 +1시간 " +curDatePlus1Hour);
+        console.log("배틀 시작시간 : "+stDate.getTime());
+        console.log("마감 기한+15분 " +ddDatePlus15Min);
+        
+        if (stDate.getTime() < ddDatePlus15Min.getTime()) {
+            console.log("최소 15분 차이 : "+(stDate.getTime()-ddDatePlus15Min.getTime()));
+            return false;
+        }
+        if (ddDate.getTime() < curDatePlus1Hour.getTime()) {
             console.log("신청 기간은 최소 1시간");
             return false;
         }
-        if (ddDatePlus15Min > stDate) {
-            console.log("최소 15분 차이");
-            return false;
-        }
+        
         return true;
     }
     function selectGame(value){

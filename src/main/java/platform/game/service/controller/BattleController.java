@@ -383,14 +383,14 @@ public class BattleController {
                         stDate);
                 if (dPoint < 0) {
                     // 포인트를 더썼으니까
-                    updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50104", dPoint);
+                    updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50204", dPoint);
                 } else if (dPoint > 0) {
                     // 포인트를 줄였으니까
-                    updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50103", dPoint);
+                    updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50203", dPoint);
                 }
             } else {
                 data = battleCustomRepositoryImpl.writePost(memId, title, game,etcGame, point, content, ddDate, stDate);
-                updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50101", -Integer.parseInt(point));
+                updatePointHistoryImpl.insertPointHistoryByMemId(memId, "50201", -Integer.parseInt(point));
             }
         } catch (Exception e) {
             System.out.println("글쓰기 에러");
