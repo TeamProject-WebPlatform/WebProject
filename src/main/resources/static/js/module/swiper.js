@@ -130,7 +130,7 @@ const createSwiperProfile = function (level, nickname, introduce, header, card, 
     } 
 
     if(profileimage!='x'){
-        memImageName= `profileimage/${profileimage}`;
+        memImageName= `${profileimage}`;
     }
 
     if (badgelist != 'x'){
