@@ -114,20 +114,7 @@
             }
         })
 
-        // 시간 선택을 위한 옵션 동적 생성
-        let hourSelects = document.querySelectorAll('.hour');
-        hourSelects.forEach(function (hourSelect) {
-            for (let hour = 0; hour <= 23; hour++) {
-                let option = document.createElement('option');
-                option.value = hour;
-                option.text = hour + "시";
-                hourSelect.add(option);
-
-                if (!isModify && hour == (curHour+1)%24) option.selected = true;
-                if (isModify && hourSelect.name === 'ddhour' && hour === ddhour) option.selected = true;
-                if (isModify && hourSelect.name === 'sthour' && hour === sthour) option.selected = true;
-            }
-        })
+        let addHour = 1;
         // 분 선택을 위한 옵션 동적 생성
         let minuteSelects = document.querySelectorAll('.minute');
         minuteSelects.forEach(function (minuteSelect) {
@@ -138,13 +125,36 @@
                 minuteSelect.add(option);
 
                 if (!isModify && minuteSelect.name === 'ddminute' && minute == curMinute) option.selected = true;
-                if (!isModify && minuteSelect.name === 'stminute' && minute == (curMinute+15)%60) option.selected = true;
+                if (!isModify && minuteSelect.name === 'stminute' && minute == (curMinute+15)%60) {
+                    option.selected = true;
+                    if((curMinute+45)/60 >= 1){
+                        addHour += 1;
+                    }
+                }
 
                 if (isModify && minuteSelect.name === 'ddminute' && minute === ddminute) option.selected = true;
                 if (isModify && minuteSelect.name === 'stminute' && minute === stminute) option.selected = true;
             }
         })
+        // 시간 선택을 위한 옵션 동적 생성
+        let hourSelects = document.querySelectorAll('.hour');
+        hourSelects.forEach(function (hourSelect) {
+            for (let hour = 0; hour <= 23; hour++) {
+                let option = document.createElement('option');
+                option.value = hour;
+                option.text = hour + "시";
+                hourSelect.add(option);
 
+                if (!isModify && hour == (curHour+addHour)%24) {
+                    option.selected = true;
+                    if((curHour+addHour)/24==1){
+
+                    } 
+                }
+                if (isModify && hourSelect.name === 'ddhour' && hour === ddhour) option.selected = true;
+                if (isModify && hourSelect.name === 'sthour' && hour === sthour) option.selected = true;
+            }
+        })
         // 폼 제출 시 선택된 날짜 및 시간 가져오기
         document.getElementById('btn-write').addEventListener('click', function (e) {
 

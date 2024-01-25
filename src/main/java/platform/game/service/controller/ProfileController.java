@@ -211,8 +211,10 @@ public class ProfileController {
         int flag = 0;
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
-
-        String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage\\";
+        String path = System.getProperty("user.dir");
+        System.out.println("현재 작업 경로: " + path);
+        String upload = path+"/src/main/resources/static/img/profileimage/";
+        // String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage\\";
         String filename = member.getMemId() + "_" + image.getOriginalFilename();
 
         try {
