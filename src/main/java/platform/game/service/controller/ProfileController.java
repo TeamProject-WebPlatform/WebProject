@@ -1,6 +1,7 @@
 package platform.game.service.controller;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -202,6 +203,8 @@ public class ProfileController {
         mav.addObject("badge", BadgeList);
         mav.addObject("badgelist", Badge);
 
+        String cu = Paths.get("").toAbsolutePath().toString();
+        System.out.println(cu);
         return mav;
     }
 
