@@ -102,17 +102,17 @@
                                 <h3 class="uk-text-lead">Rank</h3>
                             </div>
                             <div class="widjet__body">
-                                <div class="widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
+                                <div class="board_top3 widjet_color uk-grid uk-child-width-1-1@xl uk-child-width-1-1@xl uk-child-width-1-1@s uk-flex-middle uk-grid-small" data-uk-grid>
                                     
                                     <a th:href="@{/levelrank}" class="align_right seemore" style="text-align: right; margin-right: 15px;">더 보기</a>
-                                    <canvas id="levels" style='width:90%; height:24vh; margin: auto;'></canvas>
+                                    <canvas id="levels" style='width:90%; max-height: 216px; margin: auto;'></canvas>
                                     <script type="text/javascript">
                                         LevelChart();
                                         </script>   
                                     <!--게시판 코드 들어가는 장소-->
                                     <!-- <div class="con_txt"> -->
                                         <div class="widjet_size widjet-game__title">
-                                        <div class="board_top3">
+                                        <div class="">
                                             <table width="100%">
                                                 <tr class="board_top_tr">
                                                     <th width="25%" >순위</th>
