@@ -35,7 +35,7 @@
             <h3 id="user_information"class="uk-text-lead">User Information</h3>
             <div class="user-info">
                 <div class="user-info__avatar" style="border:3px solid white">
-                    <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="profile">
+                    <img th:if="${!profile.profileImage.equals('x')}" th:src="'/image/' + ${profile.profileImage}" alt="profile">
                     <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="profile">
                 </div>
                 <div class="user-info__box">

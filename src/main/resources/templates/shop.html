@@ -254,14 +254,14 @@
                                             <a id="profile">
                                                 <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
                                                     <div class="profile-image">
-                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
+                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'/image/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
                                                         <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                                     </div>
                                                 </div>
                                                 <!-- 프로필 사진 테두리 기본-->
                                                 <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
                                                     <div class="profile-image">
-                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
+                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'/image/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
                                                         <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                                     </div>
                                                 </div>
@@ -287,14 +287,14 @@
                                                 <!-- 프로필 사진 테두리 있음-->
                                                 <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
                                                     <div class="profile-image">
-                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
+                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'/image/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
                                                         <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                                     </div>
                                                 </div>
                                                 <!-- 프로필 사진 테두리 기본-->
                                                 <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
                                                     <div class="profile-image">
-                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
+                                                        <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'/image/' + ${memberProfile.profileImage}" alt="NO-IMAGE">
                                                         <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                                     </div>
                                                 </div>
