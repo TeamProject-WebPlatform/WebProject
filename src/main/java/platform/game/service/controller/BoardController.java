@@ -608,13 +608,13 @@ public class BoardController {
         // 댓글 작성 후 포인트 지급
         List<Comment> userComments = commentInfoRepository.findByMember_MemId(member.getMemId());
         if (isFirstComment(userComments)) {
-            int commentPoint = 50; // 첫 댓글 작성 시 부여할 포인트
+            int commentPoint = 100; // 첫 댓글 작성 시 부여할 포인트
             updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50205", commentPoint);
             System.out.println("첫 댓글 작성 포인트 지급");
             int point = 1;
             return "redirect:./point_ok?board_cd=" + boardCd + "&point=" + point;
         } else if (isMultipleOfFiveComments(userComments)) {
-            int commentPoint = 25; // 5개 단위 댓글 작성 시 부여할 포인트
+            int commentPoint = 50; // 5개 단위 댓글 작성 시 부여할 포인트
             updatePointHistory.insertPointHistoryByMemId(member.getMemId(), "50206", commentPoint);
             System.out.println("5개의 배수로 댓글 작성 포인트 지급");
             int point = 1;

@@ -30,11 +30,6 @@ body.dark-theme .setbtn{
     width: 100%;
     /* height: 25px; */
     /* margin-bottom: 10px; */
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top : 10px;
 }
 
 .list-item:first-child{
@@ -704,6 +699,12 @@ body.dark-theme .game-card__platform {
 
     /* 버튼 */
 }
+
+.thumbnail{
+    position: sticky;
+    top: 0;
+}
+
 
 #previewList{
     padding-left: 0px;
