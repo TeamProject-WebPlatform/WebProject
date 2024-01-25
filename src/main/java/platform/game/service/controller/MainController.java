@@ -175,6 +175,28 @@ public class MainController {
         int limit = Math.min(battleTOList.size(), 4);
         List<BattleTO> limitedBattleTOList = battleTOList.subList(0, limit);
 
+        // battleTO에 있는 호스트와 클라이언트 유저들 프로필 가져오기
+        List<String> battleTOHostProfileImage = new ArrayList<String>();
+
+        List<String> battleTOClientProfileImage = new ArrayList<String>();
+
+        for(int i=0; i<limitedBattleTOList.size();i++){
+            BattleTO to = limitedBattleTOList.get(i);
+
+            String HostProfileImage = memberProfileRepository.BattleProfileImage(to.getHostNick());
+
+            battleTOHostProfileImage.add(HostProfileImage);
+
+            if (to.getClientNick()!=null){
+                String ClientProfileImage = memberProfileRepository.BattleProfileImage(to.getClientNick());
+                battleTOClientProfileImage.add(ClientProfileImage);
+
+            } else {
+                String ClientProfileImage = null;
+                battleTOClientProfileImage.add(ClientProfileImage);
+            }
+        }
+
         mav.addObject("notice_lists", notice_lists);
         mav.addObject("update_lists", update_lists);
         mav.addObject("event_lists", event_lists);
@@ -184,7 +206,8 @@ public class MainController {
         mav.addObject("level", getLevelTable);
         mav.addObject("battleTOList", limitedBattleTOList);
         mav.addObject("battlePointTOList", battlePointTOList);
-
+        mav.addObject("HostProfileImage", battleTOHostProfileImage);
+        mav.addObject("ClientProfileImage", battleTOClientProfileImage);
         return mav;
     }
 
