@@ -267,9 +267,9 @@
                     </div>
                 </div>
                 <div class="content">
-                    <div class="content-header">
+                    <!-- <div class="content-header">
                         
-                    </div>
+                    </div> -->
                     <div class="content-main">
                         <div class="uk-grid" data-uk-grid>
                             <div class="uk-width-1-5@xl profile-section">
@@ -277,13 +277,13 @@
                                     <a id="profile">
                                         <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
                                             <div class="profile-image">
-                                                <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
+                                                <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'/image/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
                                                 <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" class="profile">
                                             </div>
                                         </div>
                                         <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
                                             <div class="profile-image">
-                                                <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
+                                                <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'/image/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
                                                 <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" class="profile">
                                             </div>
                                         </div>
@@ -349,13 +349,13 @@
                                     <a id="profile">
                                         <div class="profile-header" th:if="${!memberProfile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${memberProfile.profileHeader} + '.png);'">
                                             <div class="profile-image">
-                                                <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
+                                                <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'/image/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
                                                 <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" class="profile">
                                             </div>
                                         </div>
                                         <div class="profile-header" th:if="${memberProfile.profileHeader.equals('x')}">
                                             <div class="profile-image">
-                                                <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
+                                                <img th:if="${!memberProfile.profileImage.equals('x')}" th:src="'/image/' + ${memberProfile.profileImage}" alt="NO-IMAGE" class="profile">
                                                 <img th:if="${memberProfile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" class="profile">
                                             </div>
                                         </div>

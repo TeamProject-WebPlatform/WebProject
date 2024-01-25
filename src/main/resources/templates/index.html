@@ -150,7 +150,9 @@
                                     <!-- <div class="con_txt"> -->
                                         <div class="widjet_size widjet-game__title asdf">
                                             <div class="uk-width-1-1@xl" id="battleCardSection">
-                                                <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}" th:limit="3">
+                                                <div class="battle-card --horizontal hot-battle" th:each="battle, iterStat : ${battleTOList}" th:limit="3"
+                                                            th:with="image = ${HostProfileImage[iterStat.index]}, 
+                                                            ClImage = ${ClientProfileImage[iterStat.index] != null ? ClientProfileImage[iterStat.index] : 'X_img'}">
                                                     <div class="battle-card__box">
                                                         <div class="battle-profile-left">
                                                             <div class="battle-profile-info">
@@ -160,8 +162,8 @@
                                                                 </div>
                                                             </div>
                                                             <div class="battle-profile-media">
-                                                                <a href="10_game-profile.html">
-                                                                    <img th:src="@{'../img/' + ${battle.hostImgName}}" alt="NO IMG" />
+                                                                <a>
+                                                                    <img th:src="@{'/image/' + ${image}}" alt="NO IMG" />
                                                                 </a>
                                                             </div>
                                                         </div>      
@@ -217,8 +219,8 @@
                                                         
                                                         <div class="battle-profile-right">
                                                             <div class="battle-profile-media">
-                                                                <a th:if="${battle.client}" href="10_game-profile.html">
-                                                                    <img th:src="@{'../img/' + ${battle.clientImgName}}" alt="NO IMG" />
+                                                                <a th:if="${battle.client}">
+                                                                    <img th:src="@{'/image/' + ${ClImage}}" alt="NO IMG" />
                                                                 </a>
                                                                 <a th:unless="${battle.client}">
                                                                     <img th:src="@{/img/X_img.jpg}" alt="NO IMG" />

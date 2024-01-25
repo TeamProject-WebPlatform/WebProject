@@ -1,6 +1,7 @@
 package platform.game.service.controller;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -202,6 +203,8 @@ public class ProfileController {
         mav.addObject("badge", BadgeList);
         mav.addObject("badgelist", Badge);
 
+        String cu = Paths.get("").toAbsolutePath().toString();
+        System.out.println(cu);
         return mav;
     }
 
@@ -212,7 +215,8 @@ public class ProfileController {
         Member member = ((MemberInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getMember();
 
-        String upload = "/home/ubuntu/profile/";
+        String Path = System.getProperty("user.dir");
+        String upload = Path + "/profileimage/";
         String filename = member.getMemId() + "_" + image.getOriginalFilename();
 
         try {
@@ -301,7 +305,8 @@ public class ProfileController {
     // 설정한 프로필 사진 파일이 있는지 여부 확인
     private File findExistingFile(String memberId) {
 
-        String upload = "C:\\teamp\\WebProject\\src\\main\\resources\\static\\img\\profileimage";
+        String Path = System.getProperty("user.dir");
+        String upload = Path + "/profileimage/";
         File[] files = new File(upload).listFiles();
 
         if (files != null) {

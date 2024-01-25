@@ -344,8 +344,8 @@
                     </div>
                 </div>
                 <div class="content">
-                    <div class="content-header">
-                    </div>
+                    <!-- <div class="content-header">
+                    </div> -->
                     <div class="content-main">
                         <div class="uk-grid" data-uk-grid>
                             <div class="uk-width-1-5@xl profile-section">
@@ -353,13 +353,13 @@
                                     <a id="profile">
                                         <div class="profile-header" th:if="${!profile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.profileHeader} + '.png);'">
                                             <div class="profile-image">
-                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
+                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'/image/' + ${profile.profileImage}" alt="NO-IMAGE">
                                                 <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
                                         </div>
                                         <div class="profile-header" th:if="${profile.profileHeader.equals('x')}">
                                             <div class="profile-image">
-                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
+                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'/image/' + ${profile.profileImage}" alt="NO-IMAGE">
                                                 <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
                                         </div>
@@ -427,13 +427,13 @@
                                     <a id="profile">
                                         <div class="profile-header" th:if="${!profile.profileHeader.equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.profileHeader} + '.png);'">
                                             <div class="profile-image">
-                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
+                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'/image/' + ${profile.profileImage}" alt="NO-IMAGE">
                                                 <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
                                         </div>
                                         <div class="profile-header" th:if="${profile.profileHeader.equals('x')}">
                                             <div class="profile-image">
-                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'../img/profileimage/' + ${profile.profileImage}" alt="NO-IMAGE">
+                                                <img th:if="${!profile.profileImage.equals('x')}" th:src="'/image/' + ${profile.profileImage}" alt="NO-IMAGE">
                                                 <img th:if="${profile.profileImage.equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE">
                                             </div>
                                         </div>

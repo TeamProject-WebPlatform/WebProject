@@ -73,13 +73,13 @@
                                         <a id="profile">
                                             <div class="profile-header" th:if="${!profile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.get(i.index)[2]} + '.png);'">
                                                 <div class="profile-image">
-                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
+                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'/image/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
                                                     <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                                 </div>
                                             </div>
                                             <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
                                                 <div class="profile-image">
-                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
+                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'/image/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE" >
                                                     <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                                 </div>
                                             </div>
@@ -145,13 +145,13 @@
                                         <a id="profile">
                                             <div class="profile-header" th:if="${!profile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${profile.get(i.index)[2]} + '.png);'">
                                                 <div class="profile-image">
-                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'/image/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
                                                     <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                                 </div>
                                             </div>
                                             <div class="profile-header" th:if="${profile.get(i.index)[2].equals('x')}">
                                                 <div class="profile-image">
-                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                    <img th:if="${!profile.get(i.index)[1].equals('x')}" th:src="'/image/' + ${profile.get(i.index)[1]}" alt="NO-IMAGE">
                                                     <img th:if="${profile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                                 </div>
                                             </div>
@@ -219,7 +219,7 @@
                                     <div th:case="x" class="profile-card" style="display: inline-block;">
                                         <div class="profile-header" th:if="${!otherprofile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${otherprofile.get(i.index)[2]} + '.png);'">
                                             <div class="profile-image">
-                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'/image/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
                                                 <img th:if="${otherprofile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE"> 
                                             </div>
                                             <div class="profile-user_info">
@@ -232,7 +232,7 @@
 
                                         <div class="profile-header" th:if="${otherprofile.get(i.index)[2].equals('x')}">
                                             <div class="profile-image">
-                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'/image/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
                                                 <img th:if="${otherprofile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                             </div>
                                             <div class="profile-user_info">
@@ -252,7 +252,7 @@
                                     <div th:case="*" class="profile-card" th:style="'display: inline-block; background-image: url(../img/shop_img/' + ${otherprofile.get(i.index)[3]} + '.png);'">
                                         <div class="profile-header" th:if="${!otherprofile.get(i.index)[2].equals('x')}" th:style="'background-image: url(../img/shop_img/' + ${otherprofile.get(i.index)[2]} + '.png);'">
                                             <div class="profile-image">
-                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'/image/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
                                                 <img th:if="${otherprofile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE"> 
                                             </div>
                                             <div class="profile-user_info">
@@ -265,7 +265,7 @@
 
                                         <div class="profile-header" th:if="${otherprofile.get(i.index)[2].equals('x')}">
                                             <div class="profile-image">
-                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'../img/profileimage/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
+                                                <img th:if="${!otherprofile.get(i.index)[1].equals('x')}" th:src="'/image/' + ${otherprofile.get(i.index)[1]}" alt="NO-IMAGE">
                                                 <img th:if="${otherprofile.get(i.index)[1].equals('x')}" src="../img/doyun_icon.png" alt="NO-IMAGE" > 
                                             </div>
                                             <div class="profile-user_info">
