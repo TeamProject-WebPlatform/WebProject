@@ -33,6 +33,7 @@ body.dark-theme .setbtn{
     /* margin-bottom: 10px; */
 }
 
+
 .delete-button {
     width: 40px;
     -webkit-box-shadow: 2px 2px 7px 0px #00000024; 
@@ -692,6 +693,12 @@ body.dark-theme .game-card__platform {
 
     /* 버튼 */
 }
+
+.thumbnail{
+    position: sticky;
+    top: 0;
+}
+
 
 #previewList{
     padding-left: 0px;
